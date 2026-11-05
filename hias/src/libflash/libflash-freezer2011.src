@@ -1,0 +1,141 @@
+;  libflash-freezer2011 - code for Turbo Freezer 2011 cartemu
+;
+;  Copyright (C) 2004-2010 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+FRBANKREG	= $D590
+BANKSIZ	= 8	; 8k banks
+BANKBAS	= $A000	; base address
+
+; Turbo Freezer CartEmu control registers
+
+; enable/disable CartEmu
+FRENABLE = $D591
+
+; sram at $8000 bank
+FRSBANK	= $D592
+; sram at $8000 enable
+FRSENAB	= $D593
+
+FRMODE	= $D594
+; 0 = off
+; 1 = 8k
+; 2 = 8k legacy (Freezer 2005)
+; 3 = 16k
+; 4 = oss
+; 5 = Atarimax 8MBit
+
+; config register:
+FRCFG	= $D595
+; bit 2: 0=normal cartemu, 1=use menu
+; bit 1: 0=source ROM 1=source RAM
+; bit 0: 0=write protect ROM 1=write enable
+
+FRSDX	= $D596
+; 0 = off
+; 1 = SDX ROM 0
+; 2 = SDX ROM 64
+; 3 = SDX RAM 0
+
+; TODO
+
+; keep or reset settings on reset
+;FRMODKEEP = $D583
+;FRMODRES = $D582
+
+; enable/disable write access
+;FRWREN	= $D585
+;FRWRDIS	= $D584
+
+; mode RAM/ROM
+;FRMODROM = $D586
+;FRMODRAM = $D587
+
+; cart type 8k/16k/OSS/SDX
+;FRMOD8K	= $D588
+;FRMOD16K = $D589
+;FRMODOSS = $D58A
+;FRMODSDX = $D58B
+
+; set bank number from X
+	.MACRO SBANKX
+	STX FRBANKREG
+	.ENDM
+
+; set bank number from memory location
+	.MACRO SBANK ; parameter: address
+	LDX [%1]
+	SBANKX
+	.ENDM
+
+; disable cartemu
+	.MACRO SBANKOFF
+	LDA #0
+	STA FRENABLE
+	.ENDM
+
+; calculate bank number (in: A, out: A)
+	.MACRO CBANK
+	AND #$7F	; 128 8k banks
+	.ENDM
+
+; calculate base bank number (in: A, out: A)
+	.MACRO CBASE
+	AND #$40	; 2 512k chips
+	.ENDM
+
+; init flash library
+FINIT   INC $42
+	LDA #1
+	STA FRMODE
+	SBANKOFF
+	LDA #0		; (normal cartemu, source ROM, write protect)
+	STA FRCFG
+	LDA #0
+	STA FRSDX	; disable SDX
+	STA FRSENAB	; disable RAM at $8000
+	LDA $D013
+	STA $3FA
+	DEC $42
+	JMP ?FINIT
+
+; enable flash access
+FENABLE	INC $42
+	LDX #0
+	SBANKX
+	LDA FRCFG
+	AND #$F8
+	ORA #1
+	BIT ?FRAMMOD
+	BMI ?FENAB1
+	ORA #2
+?FENAB1	STA FRCFG
+	LDA $D013
+	STA $3FA
+	DEC $42
+	RTS
+
+; disable flash access
+FDISABLE INC $42
+	SBANKOFF
+	LDA FRCFG
+	AND #$F8
+	STA FRCFG
+	LDA $D013
+	STA $3FA
+	DEC $42
+	RTS
+

@@ -1,0 +1,1370 @@
+;  cartemu - cartemu configuration program
+;
+;  Copyright (C) 2004-2012 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+	.include "cio.inc"
+.if .def FREEZER2005
+	.include "flash05.inc"
+.endif
+.if .def FREEZER2011
+	.include "flash11.inc"
+.endif
+
+	* = $140
+
+MODE	* = *+1
+BANK	* = *+1
+SRC	* = *+1
+.if .def FREEZER2011
+SDX     * = *+1
+.else
+KEEP	* = *+1
+.endif
+BOOT	* = *+1
+
+EXEC	= *
+
+STATLIN	* = *+40
+
+DECBUF	* = *+3
+DECIDX	* = *+1	; cursor position for inputting bank number
+
+RAMDL	= *
+
+; display flags
+FBANK	= 1
+FSRC	= 2
+FKEEP	= 4
+FBOOT	= 8
+FSDX	= 16
+
+.if .def FREEZER2011
+FALL	= FBANK+FSRC+FBOOT+FSDX
+FOFF	= FSDX+FBOOT
+FPDOS	= 0
+.else
+FALL	= 15
+FOFF	= FBOOT+FKEEP
+FPDOS	= FKEEP
+.endif
+
+; delete key
+KDEL	= 126
+
+; MyPicoDos start address
+MYSTART	= $1000
+; MyPicoDos setup routine
+MYRUNA	= $0F00
+; temp vectors for MyPicoDos
+SRCADR	= $E0
+DSTADR	= $E2
+
+	* = $A000
+
+BARLINE	.BYTE 0
+	.DC 8 $FF
+	.BYTE 0
+	.SBYTE "  TURBO  CARTRIDGE  "
+	.SBYTE "     (c) 2005-2012  MATTHIAS REICHL     "
+;THELPT	.SBYTE "      HELP      "
+
+.if .def FREEZER2011
+;	        0123456789012345678901234567890123456789
+MENU	.SBYTE "      MODE   BANK  SRC   SDX   BOOT     "
+
+OMODE	= 4
+OBANK	= 13
+OSRC	= 19
+OSDX	= 24
+OBOOT	= 31
+
+THELP
+	.DC 4 0
+	.BYTE 66
+	.SBYTE +$80,"M"
+	.BYTE 86
+	.SBYTE "mode "
+
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"B"
+	.BYTE 86
+	.SBYTE "bank "
+
+	.BYTE 66
+	.SBYTE +$80,"S"
+	.BYTE 86
+	.SBYTE "src "
+
+	.BYTE 66
+	.SBYTE +$80,"X"
+	.BYTE 86
+	.SBYTE "sdx "
+
+	.DC 3 0
+
+; line 2
+	.DC 4 0
+
+	.BYTE 66
+	.SBYTE +$80,"D"
+	.BYTE 86
+	.SBYTE "default "
+
+	.BYTE 66
+	.SBYTE +$80,"P"
+	.BYTE 86
+	.SBYTE "PicoDos "
+
+	.DC 4 0
+
+	.BYTE 66
+	.SBYTE +$80,"O"
+	.BYTE 86
+	.SBYTE "off "
+
+	.DC 3 0
+
+; line 3
+	.DC 4 0
+
+	.BYTE 66
+	.SBYTE +$80,"T"
+	.BYTE 86
+	.SBYTE "boot "
+
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,27
+	.BYTE 86
+	.SBYTE "exit "
+
+	.BYTE 66
+	.SBYTE +$80,"RETURN"
+	.BYTE 86
+	.SBYTE "start "
+
+	.DC 3 0
+
+THELPM
+	.DC 4 0
+	.BYTE 66
+	.SBYTE +$80,"1"
+	.BYTE 86
+	.SBYTE "8k      "
+; 11
+	.BYTE 66
+	.SBYTE +$80,"2"
+	.BYTE 86
+	.SBYTE "8k+ram   "
+; 23
+	.BYTE 66
+	.SBYTE +$80,"3"
+	.BYTE 86
+	.SBYTE "8k old"
+; 32
+	.DC 4 0
+
+; line 2
+	.DC 4 0
+	.BYTE 66
+	.SBYTE +$80,"4"
+	.BYTE 86
+	.SBYTE "16k     "
+
+	.BYTE 66
+	.SBYTE +$80,"5"
+	.BYTE 86
+	.SBYTE "AtariMax "
+
+	.BYTE 66
+	.SBYTE +$80,"6"
+	.BYTE 86
+	.SBYTE "oss   "
+	.DC 4 0
+
+; line 3
+	.DC 4 0
+	.BYTE 66
+	.SBYTE +$80,"7"
+	.BYTE 86
+	.SBYTE "PicoDos "
+
+	.BYTE 66
+	.SBYTE +$80,"0"
+	.BYTE 86
+	.SBYTE "off      "
+
+	.BYTE 66
+	.SBYTE +$80,27
+	.BYTE 86
+	.SBYTE "back  "
+	.DC 4 0
+
+THELPB	
+	.SBYTE "                                        "
+	.SBYTE "       enter bank number (0-127)        "
+	.SBYTE "                                        "
+
+THELPS	
+	.SBYTE "               SDX mode                 "
+	.DC 7 0
+; line 2
+	.BYTE 66
+	.SBYTE +$80,"1"
+	.BYTE 86
+	.SBYTE "rom/0 "
+
+	.BYTE 66
+	.SBYTE +$80,"2"
+	.BYTE 86
+	.SBYTE "rom/64 "
+
+	.BYTE 66
+	.SBYTE +$80,"3"
+	.BYTE 86
+	.SBYTE "ram "
+	.DC 7 0
+; line 3
+	.DC 7 0
+	.BYTE 66
+	.SBYTE +$80,"0"
+	.BYTE 86
+	.SBYTE "off "
+
+	.DC 12 0
+
+	.BYTE 66
+	.SBYTE +$80,27
+	.BYTE 86
+	.SBYTE "back"
+	.DC 7 0
+
+BANKL	= 3	; 3-digit bank number
+
+TSDX	.SBYTE " OFF    "
+	.SBYTE "ROM 0   "
+	.SBYTE "ROM 64  "
+	.SBYTE " RAM    "
+	.SBYTE "------  "
+
+SDXL	= 6
+
+TMODE	.SBYTE "  OFF   "
+	.SBYTE "   8K   "
+	.SBYTE " 8K+RAM "
+	.SBYTE " 8K old "
+	.SBYTE "  16K   "
+	.SBYTE "AtariMax"
+	.SBYTE "  OSS   "
+	.SBYTE "PicoDos "
+
+MODEL	= 8	; 8 character mode display
+
+MODEPDOS = 7
+
+DISTAB	.BYTE FOFF, FALL, FALL, FALL, FALL, FALL, FALL, FPDOS
+MODETAB	.BYTE CE_MODE_OFF
+	.BYTE CE_MODE_8K
+	.BYTE CE_MODE_8K_RAM
+	.BYTE CE_MODE_8K_OLD
+	.BYTE CE_MODE_16K
+	.BYTE CE_MODE_AMAX
+	.BYTE CE_MODE_OSS
+	.BYTE CE_MODE_OFF		; picodos
+
+MODTABR	.BYTE 0	; off
+	.BYTE 1	; 8k
+	.BYTE 2 ; 8k+ram
+	.BYTE 3 ; 8k old
+	.BYTE 4 ; 16k
+	.BYTE 6 ; atarimax
+	.BYTE 5 ; oss
+	.BYTE 0 ; reserved
+
+SDXTAB	.BYTE CE_SDX_OFF
+	.BYTE CE_SDX_ROM1
+	.BYTE CE_SDX_ROM2
+	.BYTE CE_SDX_RAM
+
+; and the reverse
+SDXTABR	.BYTE 0,3,1,2
+
+.else
+
+;	        0123456789012345678901234567890123456789
+MENU	.SBYTE "      MODE  BANK  SRC  KEEP  BOOT       " 
+
+OMODE	= 6
+OBANK	= 13
+OSRC	= 18
+OKEEP	= 23
+OBOOT	= 29
+
+THELP
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"M"
+	.BYTE 86
+	.SBYTE "mode "
+
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"B"
+	.BYTE 86
+	.SBYTE "bank "
+
+	.BYTE 66
+	.SBYTE +$80,"S"
+	.BYTE 86
+	.SBYTE "src "
+
+	.BYTE 66
+	.SBYTE +$80,"K"
+	.BYTE 86
+	.SBYTE "keep "
+
+	.DC 3 0
+
+; line 2
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"D"
+	.BYTE 86
+	.SBYTE "default "
+
+	.BYTE 66
+	.SBYTE +$80,"P"
+	.BYTE 86
+	.SBYTE "PicoDos "
+
+	.DC 4 0
+
+	.BYTE 66
+	.SBYTE +$80,"O"
+	.BYTE 86
+	.SBYTE "off "
+
+	.DC 4 0
+
+
+; line 3
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"T"
+	.BYTE 86
+	.SBYTE "boot "
+
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,27
+	.BYTE 86
+	.SBYTE "exit "
+
+	.BYTE 66
+	.SBYTE +$80,"RETURN"
+	.BYTE 86
+	.SBYTE "start "
+
+	.DC 4 0
+
+THELPM
+
+	.DC 6 0
+	.BYTE 66
+	.SBYTE +$80,"1"
+	.BYTE 86
+	.SBYTE "8k  "
+
+	.BYTE 66
+	.SBYTE +$80,"2"
+	.BYTE 86
+	.SBYTE "16k "
+
+	.BYTE 66
+	.SBYTE +$80,"3"
+	.BYTE 86
+	.SBYTE "oss "
+
+	.BYTE 66
+	.SBYTE +$80,"4"
+	.BYTE 86
+	.SBYTE "sdx "
+	.DC 6 0
+
+
+	.DC 6 0
+	.BYTE 66
+	.SBYTE +$80,"5"
+	.BYTE 86
+	.SBYTE "PicoDos "
+
+	.DC 3 0
+
+	.BYTE 66
+	.SBYTE +$80,"0"
+	.BYTE 86
+	.SBYTE "off "
+
+	.BYTE 66
+	.SBYTE +$80,27
+	.BYTE 86
+	.SBYTE "back  "
+	.DC 6 0
+
+
+	.SBYTE "                                        "
+
+THELPB	.SBYTE "                                        "
+	.SBYTE "       enter bank number (0-63)         "
+	.SBYTE "                                        "
+
+BANKL	= 2	; 2-digit bank number
+
+TMODE	.SBYTE "OFF "
+	.SBYTE " 8K "
+	.SBYTE "16K "
+	.SBYTE "OSS "
+	.SBYTE "SDX "
+	.SBYTE "PDOS"
+
+MODEL	= 4	; 4 characters mode
+
+MODEPDOS = 5
+
+DISTAB	.BYTE FOFF, FALL, FALL, FALL, FALL, FPDOS
+
+.endif
+
+TKEEP	.SBYTE " NO "
+	.SBYTE "YES "
+	.SBYTE "----"
+
+KEEPL	= 4
+
+TSRC	.SBYTE "ROM "
+	.SBYTE "RAM "
+	.SBYTE "--- "
+
+SRCL	= 3
+
+TBOOT	.SBYTE "COLD"
+	.SBYTE "WARM"
+	.SBYTE "----"
+
+BOOTL	= 4
+
+COLTAB	.BYTE $D8,$0A,$C2,$88,$C2
+
+ROMDL	.DC 10 $70
+	;.BYTE 48
+	.BYTE $49
+	.WORD BARLINE
+	.BYTE 6,2,$49
+	.WORD BARLINE
+	.BYTE $42
+	.WORD MENU
+	.BYTE $42
+	.WORD STATLIN
+	.BYTE $49
+	.WORD BARLINE
+	
+	.DC 8 $70
+;	.BYTE $49
+;	.WORD BARLINE
+	.BYTE $42
+ROMDLH	.WORD THELP
+	.BYTE 0,2,0,2
+;	.BYTE $49
+;	.WORD BARLINE
+	.BYTE $41
+	.WORD RAMDL
+ROMDLL	= * - ROMDL
+
+DLHELP	= ROMDLH-ROMDL+RAMDL
+
+; signature in NVRAM
+CSIG	.BYTE "HiassofT"
+CSIGL	= * - CSIG
+
+START	JSR DEFAULT
+.if .def FREEZER2011
+; set CartEmu config to 8k+RAM mode
+	LDA #CE_MENU_BANK
+	STA CE_BANK
+	LDA #CE_MENU_RAM_BANK
+	STA CE_RBANK
+	LDA #CE_MODE_8K_RAM
+	STA CE_MODE
+	LDA #CE_SDX_OFF
+	STA CE_SDX
+	LDA #0
+	STA CE_CFG	; defaut config
+
+; check RAM bank for signature
+	LDX #CSIGL-1
+GCFG2	LDA NVSIG,X
+	CMP CSIG,X
+	BNE GCFGX
+	DEX
+	BPL GCFG2
+
+; found signature, get config from NVRAM
+	LDA NVMODE
+	AND #7
+	CMP #7
+	BNE GCFG3
+	LDA #0
+GCFG3	STA MODE
+	LDA NVBANK
+	AND #$7F
+	STA BANK
+	LDA NVSRC
+	AND #1
+	STA SRC
+	LDA NVSDX
+	AND #3
+	STA SDX
+	LDA NVBOOT
+	AND #1
+	STA BOOT
+GCFGX
+.endif
+
+; clear screen
+	LDX #39
+	LDA #0
+CLSLP	STA STATLIN,X
+	DEX
+	BPL CLSLP
+
+; copy display list to RAM
+	LDX #0
+CPDL	LDA ROMDL,X
+	STA RAMDL,X
+	INX
+	CPX #ROMDLL
+	BNE CPDL
+
+; init os stuff
+	LDA #$E0	; character set
+	STA 756
+
+	LDA #$CC	; alternate character set
+	STA 619 
+	LDA #2		; character control
+	STA 755
+
+	LDA 16		; enable keyboard and break interrupts
+	ORA #$C0
+	STA 16
+	STA $D20E 
+
+	LDA #$40	; enable VBI
+	STA $D40E
+
+	LDA #$22	; standard screen
+	STA 559
+	LDA #<RAMDL	; set display list
+	STA 560
+	LDA #>RAMDL
+	STA 561
+
+	LDX #4   ; set colors
+SETCOL	LDA COLTAB,X
+	STA 708,X
+	DEX
+	BPL SETCOL
+
+LOOP	JSR W20
+	LDA #<THELP
+	STA DLHELP
+	LDA #>THELP
+	STA DLHELP+1
+	JSR DISPLAY
+
+LOOPK	JSR GETCHAR
+	CPY #$80
+	BNE NOBRK
+
+DOXIT	LDX #0
+	STX BOOT
+	STX MODE
+.if .def FREEZER2011
+	STX SDX
+.else
+	INX
+	STX KEEP
+.endif
+	JMP GO
+
+NOBRK	
+	LDY MODE
+
+	CMP #27		; ESC
+	BEQ DOXIT
+
+	CMP #'B
+	BNE NOKB
+
+	LDA DISTAB,Y
+	AND #FBANK
+	BEQ LOOPK
+	JMP IBANK
+
+NOKB	
+	CMP #'S
+	BNE NOKS
+
+	LDA DISTAB,Y
+	AND #FSRC
+	BEQ LOOPK
+	LDA SRC
+	EOR #1
+	STA SRC
+	JMP LOOP
+
+NOKS	
+	CMP #'T
+	BNE NOKT
+
+	LDA DISTAB,Y
+	AND #FBOOT
+	BEQ LOOPK
+	LDA BOOT
+	EOR #1
+	STA BOOT
+	JMP LOOP
+
+NOKT
+.if .def FREEZER2011
+	CMP #'X
+	BNE NOKX
+
+	LDA DISTAB,Y
+	AND #FSDX
+	BEQ LOOPK
+	JMP ISDX
+NOKX
+.else
+	CMP #'K
+	BNE NOKK
+
+	LDA DISTAB,Y
+	AND #FKEEP
+	BEQ LOOPK
+	LDA KEEP
+	EOR #1
+	STA KEEP
+	JMP LOOP
+
+NOKK
+.endif
+	CMP #'O
+	BNE NOKO
+	LDA #0
+	STA MODE
+	STA BANK
+	STA SRC
+.if .def FREEZER2011
+	STA SDX
+.endif
+	JMP LOOP
+
+NOKO	
+	CMP #'P
+	BNE NOKP
+	LDA #MODEPDOS
+	STA MODE
+
+.if .def FREEZER2011
+	LDA #0
+	STA SDX
+.endif
+	JMP LOOP
+
+NOKP
+	CMP #'M
+	BNE NOKM
+	JMP IMODE
+NOKM
+	CMP #'D
+	BNE NOKD
+	JSR DEFAULT
+	JMP LOOP
+
+NOKD
+	CMP #155
+	BNE NOKRET
+	JMP GOSAVE
+NOKRET
+	JMP LOOPK
+
+; set default values
+DEFAULT
+	LDX #0
+	STX BANK
+	STX SRC
+	STX BOOT
+.if .def FREEZER2011
+	STX SDX
+	LDA #CE_MODE_8K
+	STA MODE
+.else
+	INX
+	STX KEEP
+	STX MODE
+.endif
+	RTS
+
+; input mode
+IMODE
+	JSR W20
+	LDA #<THELPM
+	STA DLHELP
+	LDA #>THELPM
+	STA DLHELP+1
+
+IMODEL	JSR GETCHAR
+	CPY #128
+	BNE IMODE1
+IMODEX	JMP LOOP
+IMODE1	CMP #27
+	BEQ IMODEX
+	CMP #'0
+	BCC IMODEL
+	CMP #'1+MODEPDOS
+	BCS IMODEL
+	SEC
+	SBC #'0
+	STA MODE
+	JMP LOOP
+
+
+; input bank number
+; note: DECIDX has to be set up (done in PBANK)
+IBANK	JSR W20
+	LDA #<THELPB
+	STA DLHELP
+	LDA #>THELPB
+	STA DLHELP+1
+	LDA #0
+	BEQ IBANK1
+
+IBANKL	LDA #$80
+IBANK1	STA DECBUF	; flag first key (=0)
+
+	LDX DECIDX	; display cursor
+	LDA #$80
+	STA STATLIN+OBANK,X
+
+	JSR GETCHAR
+	CPY #128
+	BNE IBANK2
+IBANKX	JMP LOOP
+
+IBANK2	CMP #27		; ESC
+	BEQ IBANKX
+
+	CMP #155	; Return
+	BEQ IBANKE
+
+	CMP #126	; delete
+	BNE IBANK3
+
+	LDX DECIDX
+	BEQ IBANKL
+	LDA #0		; clear cursor
+	STA STATLIN+OBANK,X
+	DEX
+	STX DECIDX
+	JMP IBANKL
+
+IBANK3	CMP #$30
+	BCC IBANKL
+	CMP #$3A
+	BCS IBANKL
+
+	BIT DECBUF
+	BMI IBANK6	; not first keypress, normal input
+
+; first keypress - clear old bank
+	PHA
+	LDA #0
+	TAX
+IBANK4	STA STATLIN+OBANK,X
+	INX
+	CPX #BANKL+1
+	BNE IBANK4
+	PLA
+	LDX #0
+
+IBANK5	SEC
+	SBC #$20
+	STA STATLIN+OBANK,X
+	INX
+	STX DECIDX
+	JMP IBANKL
+
+IBANK6	LDX DECIDX
+	CPX #BANKL
+	BCC IBANK5
+	JMP IBANKL
+
+IBANKE	LDA DECIDX
+	BEQ IBANKEX
+	JSR DECBIN
+	BCS IBANKEX
+.if .def FREEZER2011
+	CMP #128
+.else
+	CMP #64
+.endif
+	BCS IBANKEX
+	STA BANK
+IBANKEX	JMP LOOP
+
+.if .def FREEZER2011
+; input SDX mode
+ISDX
+	JSR W20
+	LDA #<THELPS
+	STA DLHELP
+	LDA #>THELPS
+	STA DLHELP+1
+
+ISDXL	JSR GETCHAR
+	CPY #128
+	BNE ISDX1
+ISDXX	JMP LOOP
+ISDX1	CMP #27
+	BEQ ISDXX
+	CMP #'0
+	BCC ISDXL
+	CMP #'4
+	BCS ISDXL
+	SEC
+	SBC #'0
+	STA SDX
+	JMP LOOP
+.endif
+
+W20	LDA 20
+W201	CMP 20
+	BEQ W201
+	RTS
+
+GOSAVE
+.if .def FREEZER2011
+; save current setup to NVRAM
+	LDX #CSIGL-1
+GOS1	LDA CSIG,X
+	STA NVSIG,X
+	DEX
+	BPL GOS1
+	LDA MODE
+	STA NVMODE
+	LDA BANK
+	STA NVBANK
+	LDA SRC
+	STA NVSRC
+	LDA SDX
+	STA NVSDX
+	LDA BOOT
+	STA NVBOOT
+.endif
+GO	LDA $D20F
+	AND #4
+	BEQ GO ; wait for key release
+
+	LDA #0
+	STA 559
+	JSR W20
+	SEI
+	LDA #0
+	STA $D40E
+
+	LDX MODE
+	CPX #MODEPDOS
+	BNE GO1
+
+	JMP RUNMYPD
+GO1	
+.if .def FREEZER2011
+	LDA MODETAB,X
+	STA MODE
+	LDX SDX
+	LDA SDXTAB,X
+	STA SDX
+
+	LDA #0
+; build freezer configuration and store it in SRC
+	LDX SRC
+	BEQ GOC1
+	ORA #CE_CFG_SRC
+GOC1	STA SRC
+	LDX #RUNCFGL-1
+GOC2	LDA RUNCFG,X
+	STA EXEC,X
+	DEX
+	BPL GOC2
+
+	JMP EXEC
+
+RUNCFG	LDA #0
+	STA CE_BANK
+	STA CE_ENABLE
+	STA CE_RBANK
+	STA CE_RENABLE
+	LDA SDX
+	STA CE_SDX
+	CMP #CE_SDX_OFF
+	BEQ RUNC1
+	LDA #0
+	STA SDXBANKCTL
+RUNC1
+	LDA SRC
+	STA CE_CFG
+	LDA MODE
+	STA CE_MODE
+	CMP #CE_MODE_OFF
+	BEQ RUNC2
+	LDX BANK
+	STX CE_BANK
+	CMP #CE_MODE_OSS
+	BNE RUNC2
+	STA OSSBANK1
+RUNC2	LDA BOOT
+	BEQ RUNCOLD
+	LDA $D013	; copy TRIG3 to GINTLK
+	STA $03FA
+	LDA #0
+	TAX
+	CLC
+RUNC3	ADC $BFF0,X
+	INX
+	BNE RUNC3
+	STA $03EB
+	JMP $E474
+RUNCOLD	JMP $E477
+
+RUNCFGL	= * - RUNCFG
+
+.else
+	LDX #RUNCFGL-1
+GOCL	LDA RUNCFG,X
+	STA EXEC,X
+	DEX
+	BPL GOCL
+
+	STA WRDIS
+	STA MODKEEP
+	LDA KEEP
+	BNE GO2
+	STA MODRES
+GO2
+	JMP EXEC
+
+RUNCFG	STA MODEROM
+	LDX MODE
+	BNE RUNC1
+	STA DISABLE
+	BEQ RUNCX
+RUNC1	LDY BANK
+	STA BANKREG,Y
+	LDA SRC
+	BEQ RUNC2
+	STA MODERAM
+RUNC2
+	CPX #1
+	BNE RUNC3
+	STA MODE8K
+	BEQ RUNCX
+RUNC3	CPX #2
+	BNE RUNC4
+	STA MODE16K
+	BEQ RUNCX
+RUNC4	CPX #3
+	BNE RUNC5
+	STA MODEOSS
+	STA OSSBNK1
+	BEQ RUNCX
+RUNC5	STA MODESDX
+	STA SDXBANK
+RUNCX	LDA BOOT
+	BEQ RUNCOLD
+	JMP $E474
+RUNCOLD	JMP $E477
+RUNCFGL	= * - RUNCFG
+
+.endif
+
+; start MyPicoDos
+RUNMYPD
+
+RUNMY	LDX #MYSETL
+	LDY #0
+MYLP1	LDA MYSETUP,Y	; copy init routine
+	STA MYRUNA,Y
+	INY
+	DEX
+	BNE MYLP1
+	LDA #<MYPDOS
+	STA SRCADR
+	LDA #>MYPDOS
+	STA SRCADR+1
+	LDA #<MYSTART
+	STA DSTADR
+	LDA #>MYSTART
+	STA DSTADR+1
+	LDX #MYPDPG
+	LDY #0
+MYLP2	LDA (SRCADR),Y	; copy MyPicoDos code
+	STA (DSTADR),Y
+	INY
+	BNE MYLP2
+	INC SRCADR+1
+	INC DSTADR+1
+	DEX
+	BNE MYLP2
+	JMP MYRUNA
+
+; MyPicoDos init routine:
+; disable cartridge emu and basic, open screen and
+; then run MyPicoDos
+
+MYSETUP	
+.if .def FREEZER2011
+	LDA #CE_MODE_OFF
+	STA CE_MODE
+	LDA #CE_SDX_OFF
+	STA CE_SDX
+	LDA #0
+	STA CE_CFG
+.else
+	STA DISABLE
+	STA MODKEEP
+	LDA KEEP
+	BNE MYS1
+	STA MODRES
+MYS1
+.endif
+	LDA $D013
+	STA $3FA
+
+	LDA $D301
+	ORA #2
+	STA $D301
+	LDA $BFFF
+	EOR #$FF
+	STA $BFFF
+	CMP $BFFF
+	BNE NBASOFF
+
+	LDA #$C0
+	STA 106
+	STA 740
+	LDA #1
+	STA 1016
+	LDA #$90
+	STA DSTADR+1
+	LDX #48
+	LDA #0
+	STA DSTADR
+	TAY
+CLRLP	STA (DSTADR),Y
+	DEY
+	BNE CLRLP
+	INC DSTADR+1
+	DEX
+	BNE CLRLP
+NBASOFF	CLI
+	LDA #$40
+	STA $D40E
+
+	OPEN 0,12,0,EDITOR-MYSETUP+MYRUNA
+	JMP MYSTART
+EDITOR	.BYTE "E:", 155
+MYSETL	= * - MYSETUP
+
+GETCHAR	LDA #0
+	STA 77		; disable atract mode
+	LDA 764
+	CMP #255
+	BEQ GETCHAR
+
+	LDA $E425
+	PHA
+	LDA $E424
+	PHA
+	RTS
+
+; display current status
+DISPLAY	JSR PMODE
+	JSR PBANK
+	JSR PSRC
+	JSR PBOOT
+.if .def FREEZER2011
+	JSR PSDX
+.else
+	JSR PKEEP
+.endif
+	RTS
+
+; display current mode
+PMODE	LDA MODE
+	ASL
+	ASL
+.if .def FREEZER2011
+	ASL
+.endif
+	TAX
+	LDY #0
+PMODE1	LDA TMODE,X
+	STA STATLIN+OMODE,Y
+	INX
+	INY
+	CPY #MODEL
+	BNE PMODE1
+	RTS
+
+; display bank number and setup DECIDX
+PBANK	
+; check if bank display/input is enabled
+	LDY MODE
+	LDA DISTAB,Y
+	AND #FBANK
+	BNE PBANK2
+; no - display "---"
+	LDA #$0D
+	LDY #0
+PBANK1	STA STATLIN+OBANK,Y
+	INY
+	CPY #BANKL
+	BNE PBANK1
+	BEQ PBANK4
+
+PBANK2	LDA BANK
+	JSR TODEC
+	TXA
+	EOR #3
+	STA DECIDX
+	LDY #0
+PBANK3	LDA DECBUF,X
+	STA STATLIN+OBANK,Y
+	INX
+	INY
+	CPX #3
+	BNE PBANK3
+PBANK4	LDA #0
+PBANK5	STA STATLIN+OBANK,Y
+	INY
+	CPY #BANKL+1
+	BNE PBANK5
+	RTS
+
+; display source
+PSRC	LDX SRC
+	LDY MODE
+	LDA DISTAB,Y
+	AND #FSRC
+	BNE PSRC1
+	LDX #2		; SRC disabled
+PSRC1	TXA
+	ASL
+	ASL
+	TAX
+	LDY #0
+PSRC2	LDA TSRC,X
+	STA STATLIN+OSRC,Y
+	INX
+	INY
+	CPY #SRCL
+	BNE PSRC2
+	RTS
+
+.if .def FREEZER2011
+; display SDX
+PSDX	LDX SDX
+	LDY MODE
+	LDA DISTAB,Y
+	AND #FSDX
+	BNE PSDX1
+	LDX #4		; SDX disabled
+PSDX1	TXA
+	ASL
+	ASL
+	ASL
+	TAX
+	LDY #0
+PSDX2	LDA TSDX,X
+	STA STATLIN+OSDX,Y
+	INX
+	INY
+	CPY #SDXL
+	BNE PSDX2
+	RTS
+.else
+; display keep
+PKEEP	LDX KEEP
+	LDY MODE
+	LDA DISTAB,Y
+	AND #FKEEP
+	BNE PKEEP1
+	LDX #2		; KEEP disabled
+PKEEP1	TXA
+	ASL
+	ASL
+	TAX
+	LDY #0
+PKEEP2	LDA TKEEP,X
+	STA STATLIN+OKEEP,Y
+	INX
+	INY
+	CPY #KEEPL
+	BNE PKEEP2
+	RTS
+.endif
+
+; display boot
+PBOOT	LDX BOOT
+	LDY MODE
+	LDA DISTAB,Y
+	AND #FBOOT
+	BNE PBOOT1
+	LDX #2		; BOOT disabled
+PBOOT1	TXA
+	ASL
+	ASL
+	TAX
+	LDY #0
+PBOOT2	LDA TBOOT,X
+	STA STATLIN+OBOOT,Y
+	INX
+	INY
+	CPY #BOOTL
+	BNE PBOOT2
+	RTS
+
+; decimal input/output helper code
+; TODEC: convert A into 3 digit decimal number in DECBUF
+; return: X = starting digit to display (0-2), skipping leading zeroes
+TODEC	LDX #0		; digit counter
+TODEC1	LDY #$10	; screen code of "0" 
+TODEC2	CMP DECVAL,X
+	BCC TODEC3
+	SBC DECVAL,X
+	INY
+	BNE TODEC2	; always
+TODEC3	PHA
+	TYA
+	STA DECBUF,X
+	PLA
+	INX
+	CPX #2
+	BNE TODEC1
+	CLC
+	ADC #$10
+	STA DECBUF,X
+; now check if the first one or two digits are 0
+	LDX #0
+	LDA DECBUF
+	CMP #$10
+	BNE TODEC4
+	INX
+	LDA DECBUF+1
+	CMP #$10
+	BNE TODEC4
+	INX
+TODEC4	RTS
+
+DECVAL	.BYTE 100,10
+
+; convert bank number in screen line to binary number
+; in:
+; STATLIN+OBANK : decimal number, in screen code
+; DECIDX : current cursor position (0-3)
+; return: C=0 = OK, value in A, C=1 = error
+DECBIN	LDX #0
+	STX DECBUF	; use DECBUF as temporary storage
+DECBIN1	CPX DECIDX	; reached end of input?
+	BEQ DECBIN9	; yes, exit
+
+; multiply DECBUF by 10
+	LDA DECBUF
+	ASL
+	BCS DECBINX
+	STA DECBUF+1
+	ASL
+	BCS DECBINX
+	ASL
+	BCS DECBINX
+	ADC DECBUF+1
+	BCS DECBINX
+	STA DECBUF
+
+; add current digit
+	SEC
+	LDA STATLIN+OBANK,X
+	SBC #$10
+	CLC
+	ADC DECBUF
+	BCS DECBINX
+	STA DECBUF
+	INX
+	BNE DECBIN1	; always
+
+DECBIN9	CLC
+	LDA DECBUF
+DECBINX	RTS
+
+MYPDOS	= *
+	.incbin "mypdos-code.bin"
+MYPDPG	= (*-MYPDOS+255) / 256
+
+XEND	= *
+
+.if .def FREEZER2011
+; NVRAM locations in Freezer RAM
+	* = $8000
+
+NVSIG	* = *+CSIGL	; signature ("HiassofT")
+NVFLAG	* = *+1
+NVMODE	* = *+1
+NVBANK	* = *+1
+NVSRC	* = *+1
+NVSDX	* = *+1
+NVBOOT	* = *+1
+
+.endif
+
+	
+	* = $BFFA
+	.WORD START
+	.BYTE 0
+	; bibomon sometimes doesn't init a cart, so also run it
+	;.BYTE 0
+	.BYTE 4	; init+run
+	.WORD START
+

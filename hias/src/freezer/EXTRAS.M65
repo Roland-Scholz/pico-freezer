@@ -1,0 +1,101 @@
+;-------------------------------
+
+;DISPLAY/ALTER CPU REGISTERS
+
+CPU   CMP #'<-$20
+      BEQ CPU01            ; ALTER
+      CMP #'E-$20
+      BNE CPU0
+      CPX #'N-$20
+      BNE CPU0
+      JMP RENCMD          ; RENAME FILE
+
+CPU0  JSR EATSPC
+      LDA #'<
+      JSR MATCH
+      BCS CPU6
+
+CPU01 LDA #3
+      STA NCOUNT
+      BNE CPU6
+
+CPU1  JSR SCROLL
+      LDY #6
+      JSR PRTSTR
+      JSR SCROLL
+      JSR CPU3
+      LDA REGA
+      JSR CPU2
+      LDA REGX
+      JSR CPU2
+      LDA REGY
+      JSR CPU2
+      LDA REGS
+      JSR CPU2
+      LDA #1
+      STA RPNT+1
+      CLC 
+      ADC REGS
+      STA RPNT
+      LDY #0
+      JSR GETBYT
+      JSR CPU4
+      JSR CPU3
+      INC RPNT
+      LDY #0
+      JSR GETBYT
+      PHA 
+      INC RPNT
+      LDY #0
+      JSR GETBYT
+      TAX 
+      PLA 
+      JSR PRTADR
+      JMP DEBU3
+
+CPU2  JSR PRTBYT
+CPU3  LDA #$20
+      JMP PUTBYT
+CPU4  LDX #8
+CPU5  ASL A
+      PHA 
+      LDA #$30
+      ADC #0
+      JSR PUTBYT
+      PLA 
+      DEX 
+      BNE CPU5
+      RTS 
+
+;ALTER CPU REGISTERS
+
+CPU6  JSR PARBYT          ; PARSE BYTE
+      BCC CPU7
+      STA REGA
+CPU7  JSR PARBYT
+      BCC CPU8
+      STA REGX
+CPU8  JSR PARBYT
+      BCC CPU9
+      STA REGY
+CPU9  JSR PARBYT
+      BCC CP10
+      STA REGS
+CP10  LDA #1
+      STA RPNT+1
+      CLC 
+      ADC REGS
+      STA RPNT
+      JSR PARBYT
+      BCC CP11
+      LDY #0
+      JSR STOBYT
+CP11  JMP CPU1
+
+;PARSE BYTE
+
+PARBYT LDA #0
+      JSR MATCH
+      INC NCOUNT          ; IGNORE SEPERATOR
+      RTS 
+

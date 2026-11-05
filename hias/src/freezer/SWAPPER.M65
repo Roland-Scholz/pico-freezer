@@ -1,0 +1,46 @@
+;-------------------------------
+;SWAPPER: swap Atari memory with freezer RAM or ramdisk
+;-------------------------------
+
+SWAP
+      DBGT4 4,"Chip"
+      LDX #CHIPLEN-1
+SWAP1 LDA SGTIA,X
+      STA DBUF,X
+      DEX 
+      BPL SWAP1
+      JSR SSWAP
+      LDX #CHIPLEN-1
+SWAP2 LDA DBUF,X
+      STA SGTIA,X
+      DEX 
+      BPL SWAP2
+
+SWAP3 LDA #0
+      STA RPNT
+      STA RPNT+1
+      STA MAPIDX
+      LDA #$80
+      STA MAPMSK
+      LDA NCOUNT
+      STA DCOUNT
+
+SWAP4
+      DBGADR 4,RPNT
+      JSR TOBUF
+      JSR SSWAP
+      JSR TORAM
+      JSR ADVPNT
+      BCC SWAP4
+
+      LDA #$FF
+      STA PORTB
+      JMP DMAON
+
+;JUMP TO DEVICE HANDLERS TO
+;SWAP DBUF WITH FREEZER RAM / RAMDISK
+
+SSWAP LDX DEVICE
+      BEQ SSWAP1
+      JMP SWFRZ
+SSWAP1 JMP SWRAMD

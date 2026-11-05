@@ -1,0 +1,291 @@
+Turbo-Freezer XL/XE 2005 and 2011 addendum
+(c) 2006-2012 by Matthias Reichl <hias@horus.com>
+
+This document describes the changes in the Turbo-Freezer software
+since the original release (version 3.01)
+
+0. Important note on the debugger
+
+Software versions below 3.04 did not support accessing the OS,
+Selftest and BASIC ROM area - only the RAM below could be accessed.
+
+This has changed with version 3.04, the PB command gives full
+control over the PORTB value used during memory access. It is
+initialized with the PIA PORTB state when the freezer was activated,
+so by default you "see" the same memory as the currently running
+program.
+
+
+1. New features in the main menu
+
+1.1 Saving a snapshot to a bootdisk
+
+Since software version 3.02 a special boot code is written to
+snapshots created with Save Extern->Boot so that the snapshot
+can be loaded without a Turbo-Freezer.
+
+This doesn't work with all programs since the boot code needs
+approximately 2k of memory. So if you've got a program that uses
+all of the RAM, this will fail.
+
+By default the loader uses the memory from $C000-$C6FF. This
+guarantees that it will work with most of the older programs
+which only require 48k of RAM. In case this conflicts with your
+program, you can change the address very easily:
+
+The first byte of the boot sector contains the starting page
+of the loader (default: $C0). Changing this byte is quite easy
+with the Turbo-Freezer: Enter the debugger, then load the
+first sector, change the first byte to the desired value,
+and write the sector back to disk. Please note: only
+values from $05 to $C9 and from $D0 to $F9 are allowed. If
+you use any other value, booting the disk will result in an
+"BOOT ERROR".
+
+For example: if you want to set the loader address to $F0,
+enter the following commands in the debugger
+SR 1
+C D700<F0
+SW 1
+
+
+1.2 Swap function
+
+The new "swap" function in the main menu enables you to exchange
+a snapshot stored either in the Turbo-Freezer RAM or in the
+ramdisk with the current Atari state. The current state is saved
+to the Turbo-Freezer RAM (or ramdisk) and the old snapshot is
+loaded. Using this feature you can quickly switch between two
+programs. Just be sure you already saved a snapshot to the
+Turbo-Freezer RAM (or ramdisk), otherwise your Atari will crash.
+
+The Shift (clear P/M collision register) and Control (don't start
+the snapshot after swapping) modifiers are also available with
+the swap function.
+
+1.3 Start cartridge emulation menu
+
+The 'K' command immediately exits the TurboFreezer menu and
+tries to enable the cartridge emulation using the following method:
+- enable cartridge emulation with default menu bank (62)
+- disable IRQs and NMIs
+- enable OS ROM
+- set the return address to $E477
+- start the normal resume (like the 'space' key)
+
+If the Atari locks up instead of showing the cartemu menu, press
+reset.
+
+Pressing 'shift-K' results in a warmstart (JMP $E474) instead
+of a coldstart and thus doesn't clear the memory.
+
+
+2. New features of the debugger
+
+2.1 Online help
+
+Whenever you press the HELP key in the debugger, a short
+online help is displayed. Use the number keys to select
+a help page, 'del' takes you to the previous page,
+'space' or 'help' to the next page, any other key exits
+online help and takes you back to the debugger prompt.
+
+
+2.2 Memory Map
+
+The new 'M' command of the debugger displays a map of used
+and unused pages. If a page contains only zero bytes, a
+dot '.' is printed, if a page contains at least one other
+byte an asterisk '*' is printed. You might find this feature
+useful when searching for a free memory block to be used by
+the boot-loader.
+
+
+2.3 Block move / set / compare
+
+The block move syntax is: 'BM start,end,dest'. This will copy
+the memory area start..end to dest..dest+(end-start).
+Memory regions may overlap (eg dest = start+1).
+
+For example: 'BM D700,D7FF,8000' will copy the sector buffer
+$D700..$D7FF to $8000..$80FF.
+
+Block set syntax is similar: 'BS start,end,value'. This will
+set all bytes in start..end to the given value.
+
+For example: 'BS 8000,CFFF,0' with set $8000..$CFFF to zero.
+
+Block compare 'BC' compares two memory blocks and outputs the
+differences.  The syntax is: 'BC start,end,adr2'.
+
+
+2.4 Extensions to 'LOA' (load file) command
+
+If you append the option '/N' to the filename, the com file won't
+be loaded into memory and the LOA command just displays the memory
+blocks of the COM file. You can use this feature to 'trace' COM files.
+For example: 'LOA TEST.COM/N'
+
+'LOA' now also supports loading of raw data files without a COM header.
+Obviously, this requires an additional parameter, the starting address
+where the Turbo-Freezer should store the data block.
+For example: 'LOA FONT.DAT,8000'
+
+
+2.5 PORTB control for memory access
+
+The debugger functions of the Turbo-Freezer now support setting
+PORTB ($D301) for memory access in the $4000-$CFFF and $D800-$FFFF
+memory range, thus allowing you to control BASIC/OS/selftest RAM/ROM
+and memory upgrades.
+
+On freezer activation this value is initialized with the current
+PIA PORTB state, you "see" the same data as the currently running
+program.
+
+The 'PB' command can be used to display / change the value:
+
+'PB' displays the current value
+'PB<byte' changes the PORTB value for memory access.
+
+Note: The 'MAP' debugger command and the 'clear OS RAM' and
+save/load snapshot main menu items are not affected by the
+PB commands - they still access the base Atari RAM.
+
+
+2.6 Overview of OS vectors
+
+The 'VEC' command in the debugger displays the most important
+(OS-) vectors in page 0 and 2 in a nice, formatted way: first the
+symbolic name of the vector, then the address of that vector
+and at last the contents of the vector.
+
+
+2.7 Handler table (HATABS)
+
+The 'HAT' command prints the entries of HATABS ($031A-$033A)
+in a nice, formatted way: Frist the address and the 3 bytes, then
+the device letter (or "--" if the entry is empty/zero) and then the
+address of the device handler table.
+
+
+2.8 Cartrige emulation commands
+
+A whole set of commands, all starting with 'K', is available to easily
+control the builtin cartridge emulation. These commands are identically
+to manually changing the $D5xx configuration registers, but most people
+seem to prefer short mnemonics over hex addresses :-)
+
+So here's a list of all commands and their corresponding $D5xx adresses
+
+2.8.1 Turbo Freezer 2005 CartEmu commands
+
+- KON: enable CartEmu ($D581)
+
+- KOF: disable CartEmu ($D580)
+
+- KM <mode>: set CartEmu Mode ($D588...$D58A). <mode> must be one of:
+  '8' (8k), '1' (16k), 'O' (OSS) or 'S' (SDX)
+  When setting the mode to OSS, the first OSS bank ($D500) is also
+  selected automatically.
+  When setting the mode to SDX, the first SDX bank ($D5E0) is selected.
+
+- KB <bank>: set CartEmu bank ($D540...$D57F)
+
+- KOS <bank>: set OSS BANK. <bank> must be '1','2','3' or 'O' (off) and
+  result in memory writes to $D500, $D509, $D501 and $D508, respectively.
+
+- KSD <bank>: set SDX bank ('0'..'7' or 'O' for off). Writes to
+  $D5E0...$D5E7 (0-7) or $D5E8 (off)
+
+- KRA: set memory source to Freezer RAM ($D587)
+
+- KRO: set memory source to Freezer Flash ROM ($D586)
+
+- KKE: set keep settings on ($D583)
+
+- KRE: keep settings off on reset ($D582)
+
+- KWE: enable writes ($D585). This is only useful to change contents
+  of the Freezer RAM, the flash ROM cannot be changed from within
+  the debugger. Note: don't forget to issue a write protect commands
+  afterwards, otherwise the contents might get accidentially erased!
+
+- KWP: disable writes / write protect ($D584)
+
+- KDE: configure CartEmu to default settings, like when the computer is
+  powered up with the CartEmu switch set to on. The follwing settings
+  are configured:
+  - writes disabled
+  - keep on
+  - CartEmu enabled
+  - memory source flash ROM
+  - mode 8k
+  - bank 62 ($3E) - the bank of the CartEmu menu
+
+2.8.2 Turbo Freezer 2011 CartEmu commands
+
+- K: display CartEmu configuration
+- K<0: reset CartEmu to "all off" state: set mode and SDX to "OFF",
+  all bank registers to 0 and source to ROM.
+- KM<mode: set CartEmu mode (address $D594). The following modes are allowed:
+  '8': 8k mode, '8R': 8k mode with optional RAM bank at $8000,
+  '8O': old Turbo Freezer 2005 8k mode with banking via $D540-$D581
+  '16': 16k mode, 'O': OSS mode, 'A': AtariMax mode (banking via $D500-$D580)
+- KB<byte: set main bank ($00-$7F, address $D590).
+- KBE<byte: enable/disable main bank (1/0, address $D591).
+- KR<byte: set optional 8k RAM-bank ($00-$3D, address $D592).
+- KRE<byte: enable/disable optional RAM bank (1/0, address $D593).
+- KX<byte: SDX configuration. '0': SDX OFF, '1': SDX in ROM bank 0,
+  '2: = SDX im ROM bank 64, '3' = SDX im RAM bank 0 (address $D596).
+- KXB<byte: SDX Bank setzen ($00-$3F, bit 0-5 of $D5E0). Only available
+  if SDX has been enabled with 'KX' before.
+- KXM<mode: SDX cart control. '0': = SDX and stacked cart OFF, '1': SDX ON,
+  stacked Cart OFF, 'C': SDX OFF, stacked cart ON (bit 6,7 of $D5E0).
+  Only available if SDX has been enabled with 'KX' before. 
+- KO<byte: set OSS bank. '0': OSS OFF (address $D508),
+  '1': bank 1 (address $D500), '2': bank 2 (address $D509),
+  '3': bank 3 (address $D501). Only available if OSS mode has been
+  enabled before (with 'KM<O').
+- KW<byte: enable/disable CartEmu write access (1/0, bit 0 of $D595).
+- KS<byte: CartEmu source. '0': ROM. '1': RAM (bit 1 of $D595).
+- KN<byte: CartEmu menu control: '0': standard CartEmu operation, menu off,
+  '1': CartEmu disabled, menu enabled.
+
+
+2.9 Extension of 'D' and 'I' commands.
+
+'D adr,' and 'D,' now display a screen full of data (128 bytes),
+compared to a line of data (8 bytes) in case of 'D adr' and 'D'.
+This extension is also available in the 'I' command.
+
+2.10 Printer output
+
+All text that is output to the debugger screen can now be
+sent to the printer, too. This feature can be enabled with
+'PR<1' to 'PR<8', and disabled with 'PR<0'. 'PR<1' uses the
+default printer, "P:" / "P1:".
+
+Comments can be printed to both the debugger screen and the
+printer using the ';' command - all text following the semicolon
+will be printed as is.
+
+
+3. New features in FLASH.COM
+
+3.1 Starting a cartridge after programming
+
+After programming data to the flash ROM or Freezer RAM you may either
+run this (cart-) data by pressing 'R' or go back in the main menu by
+pressing any other key. The bank number is set to the starting bank
+and FLASH.COM asks for the CartEmu mode. If you press an invalid key
+at the mode selection, the function is aborted.
+
+4. New features in the cartridge emulation menu
+
+4.1 Quick exit
+
+Pressing "ESC" or "BREAK" now provides a quick way to completely
+disable the cartridge emulation: The cartridge emulation is turned
+off, "keep settings" is turned on and a cold boot is performed.
+

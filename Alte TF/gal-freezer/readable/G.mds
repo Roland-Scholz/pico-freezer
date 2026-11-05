@@ -1,0 +1,13 @@
+CHIP GAL_G GAL16V8 Complex_Mode
+
+A10 A9 A8 A1 A3 A5 A7 A6 A4 GND G_i11 
+G_o12 G_o13 G_i14 G_o15 RamA4 RamA5 RamA6 RamA7 VCC 
+
+RamA7 = A7 & G_i11;
+RamA6 = A6 & G_i11;
+RamA5 = A5 & G_i11;
+RamA4 = A4 & G_i11 +
+		 /A10 &  /A9 &  /A8 & A4;
+/G_o15 = A10 & A9 & A8 &  /G_i11;
+G_o13 =  /A10 & A9 & A8 &  /A1 &  /G_i11;
+/G_o12 = A10 & A9 & A8 & A3 & A5 & A7 & A6 & A4 & G_i14;

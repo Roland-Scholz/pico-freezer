@@ -1,0 +1,2033 @@
+#$ TOOL ispLEVER 4.1.00.22.28.04_Synplify_Pack
+#$ DATE Wed May 04 18:07:02 2005
+#$ PROPERTY LATTICE SLEW DEFAULT = SLOW
+#$ PROPERTY LATTICE PULL DEFAULT = HOLD
+#$ PROPERTY LATTICE POWER DEFAULT = HIGH
+#$ PROPERTY LATTICE USERCODE HIAS,ASCII
+#$ MODULE turbofreezerxl
+#$ PINS 34 a_in_12_:27'ke'  a_in_11_:31'ke'  a_in_15_:25'ke'  a_in_10_:30'ke'  a_in_9_:36'ke'  \
+#  ram_rom_a_18_:4'ke'  a_in_8_:37'ke'  phi2:33'ke'  a_in_7_:38'ke'  reset:14'ke'  a_in_6_:40'ke'  \
+#  rw_in:11'ke'  a_in_5_:24'ke'  os_select:29'ke'  a_in_4_:21'ke'  activate_in:6'ke'  a_in_3_:20'ke'  \
+#  poweron:5'ke'  a_in_2_:19'ke'  flash_enable_in:8'ke'  a_in_1_:18'ke'  flash_writable_in:7'ke'  \
+#  a_in_0_:17'ke'  refresh:9'ke'  ram_rom_a_17_:43'ke'  ram_ce:3'ke'  ram_rom_a_16_:15'ke'  \
+#  rom_ce:42'ke'  ram_rom_a_15_:2'ke'  ram_rom_a_14_:41'ke'  ram_rom_a_13_:39'ke'  \
+#  ram_rom_a_12_:16'ke'  a_in_14_:26'ke'  a_in_13_:28'ke' 
+#$ NODES 498 cart_bank_0_15__un0_n flash_enable_0_un3_n flash_enable_0_un1_n \
+#  inst_use_vector_bankno flash_enable_0_un0_n inst_cart_keepsettings \
+#  freezer_ram_bank_0_15__un3_n inst_cart_mode_ram freezer_ram_bank_0_15__un1_n \
+#  cart_mode_0_ freezer_ram_bank_0_15__un0_n cart_mode_1_ \
+#  freezer_rom_bank_0_18__un3_n oss_bank_12_ freezer_rom_bank_0_18__un1_n \
+#  oss_bank_13_ freezer_rom_bank_0_18__un0_n a_0_ freezer_rom_bank_0_16__un3_n a_1_ \
+#  freezer_rom_bank_0_16__un1_n a_2_ freezer_rom_bank_0_16__un0_n a_3_ \
+#  cart_bank_0_16__un3_n a_4_ cart_bank_0_16__un1_n a_5_ cart_bank_0_16__un0_n a_6_ \
+#  cart_bank_0_18__un3_n a_7_ cart_bank_0_18__un1_n a_8_ cart_bank_0_18__un0_n a_9_ \
+#  freezer_ram_bank_0_14__un3_n a_10_ freezer_ram_bank_0_14__un1_n a_11_ \
+#  freezer_ram_bank_0_14__un0_n a_12_ freezer_ram_bank_0_16__un3_n a_13_ \
+#  freezer_ram_bank_0_16__un1_n a_14_ freezer_ram_bank_0_16__un0_n a_15_ \
+#  oss_bank_0_12__un3_n rw oss_bank_0_12__un1_n activate_inputreg \
+#  oss_bank_0_12__un0_n cart_bank_select_un63_cart_mode_n oss_bank_0_13__un3_n \
+#  check_reset_cartemu_un1_reset_cartemu_n oss_bank_0_13__un1_n \
+#  inst_cart_write_enable oss_bank_0_13__un0_n reset_cartemu cart_mode_0_0__un3_n \
+#  freezer_rom_bank_select_std_match_8_result_3_n poweron_c cart_mode_0_0__un1_n \
+#  un1_un63_cart_mode cart_mode_0_0__un0_n inst_sdx_enable flash_enable_in_c \
+#  cart_mode_0_1__un3_n un1_cart_mode_2 cart_mode_0_1__un1_n cart_bank_5_14_ \
+#  flash_writable_in_c cart_mode_0_1__un0_n freezer_rom_bank_0_13__un3_n \
+#  ram_rom_a_1_c_12__n freezer_rom_bank_0_13__un1_n inst_flash_enable \
+#  freezer_rom_bank_0_13__un0_n un1_cart_mode_4 N_206_i_0_c \
+#  freezer_rom_bank_0_14__un3_n tmp_cart_access_5 freezer_rom_bank_0_14__un1_n \
+#  un1_freezer_state_4 ram_rom_a_1_c_14__n freezer_rom_bank_0_14__un0_n \
+#  tmp_cart_access_1 freezer_rom_bank_0_15__un3_n un1_freezer_state_7 \
+#  ram_rom_a_1_c_15__n freezer_rom_bank_0_15__un1_n cart_rom_access \
+#  freezer_rom_bank_0_15__un0_n un1_tmp_cart_access_1 ram_rom_a_1_c_16__n \
+#  freezer_rom_bank_0_17__un3_n un1_freezer_state_10 freezer_rom_bank_0_17__un1_n \
+#  cart_bank_13_ ram_rom_a_1_c_17__n freezer_rom_bank_0_17__un0_n cart_a_4_14__n \
+#  freezer_ram_bank_0_12__un3_n cart_a_4_15__n ram_rom_a_1_c_18__n \
+#  freezer_ram_bank_0_12__un1_n cart_a_4_16__n freezer_ram_bank_0_12__un0_n \
+#  cart_bank_14_ freezer_ram_bank_0_13__un3_n cart_bank_15_ \
+#  freezer_ram_bank_0_13__un1_n cart_bank_16_ freezer_ram_bank_0_13__un0_n \
+#  cart_bank_17_ N_241 vector_a2_0_un3_n cart_bank_18_ N_235_i vector_a2_0_un1_n \
+#  freezer_rom_bank_select_std_match_result_n N_83_i vector_a2_0_un0_n \
+#  cart_bank_select_std_match_result_n flash_enable_i cart_bank_0_14__un3_n \
+#  cart_access_un17_tmp_cart_access_n check_flash_enable_un3_flash_enable_in_i_n \
+#  cart_bank_0_14__un1_n freezer_ram_bank_12_ N_243 cart_bank_0_14__un0_n \
+#  freezer_ram_bank_13_ N_244 cart_mode_ram_0_un3_n freezer_ram_bank_14_ N_150_i \
+#  cart_mode_ram_0_un1_n freezer_ram_bank_15_ N_151_i cart_mode_ram_0_un0_n \
+#  freezer_ram_bank_16_ N_245 cart_keepsettings_0_un3_n \
+#  check_d700_d71f_access_std_match_result_n N_221_i cart_keepsettings_0_un1_n \
+#  freezer_ram_bank_select_std_match_result_n N_246 cart_keepsettings_0_un0_n \
+#  inst_vector_a2 cart_a_4_i_14__n cart_bank_0_17__un3_n cart_ram_access N_207_i \
+#  cart_bank_0_17__un1_n check_oss_bank_std_match_result_n N_208_i \
+#  cart_bank_0_17__un0_n freezer_activation_un5_d700_d71f_access_n N_250 \
+#  use_vector_bankno_0_un3_n freezer_ram_mode_select_un17_d700_d71f_access_n \
+#  freezer_rom_bank_m_i_18__n use_vector_bankno_0_un1_n \
+#  check_cartemu_reset_mode_un69_flash_config_access_n vector_a2_m_1_i \
+#  use_vector_bankno_0_un0_n check_vector_access_un1_activate_n N_254 un1_result_2 \
+#  cart_a_4_i_m_i_18__n freezer_rom_bank_13_ cart_a_iv_i_18__n freezer_rom_bank_14_ \
+#  ram_access_std_match_result_1_i_n freezer_rom_bank_15_ \
+#  ram_access_std_match_result_i_n freezer_rom_bank_16_ N_256 freezer_rom_bank_17_ \
+#  cart_rom_access_i freezer_rom_bank_18_ \
+#  activate_freezer_chips_un10_freezer_rom_access_i_c_n un1_os_select_1 N_77_i N_258 \
+#  N_73_i N_74_i cart_ram_access_i N_48_m_i \
+#  activate_freezer_chips_un10_freezer_ram_access_i_c_n N_76_i N_78_i N_264 \
+#  disable_atari_un36_freezer_rom_access_i_n \
+#  disable_atari_un38_freezer_rom_access_i_c_n N_219_i N_220_i N_218_i \
+#  cart_a_4_i_13__n N_200_i N_223_i N_224_i N_272 N_222_i N_231_i N_273 oss_bank_i_12__n \
+#  oss_bank_i_13__n N_274 N_275 N_209_i N_210_i freezer_state_0_ N_277 freezer_state_1_ \
+#  vector_a2_m_i reset_freezer_banks freezer_rom_bank_m_i_17__n freezer_state_d_3__n \
+#  a_1_m_0_i_4__n cart_a_4_m_i_17__n a_1_m_i_4__n N_75 N_283 N_83 \
+#  freezer_ram_bank_m_i_12__n a_1_m_12__n a_1_m_0_i_12__n freezer_rom_bank_m_15__n \
+#  cart_access_tmp_cart_a_10_m_i_12__n freezer_rom_bank_m_16__n a_1_m_i_12__n \
+#  freezer_rom_bank_m_17__n freezer_rom_bank_m_i_16__n a_1_m_4__n \
+#  freezer_ram_bank_m_i_16__n cart_a_4_m_17__n freezer_rom_bank_m_i_15__n \
+#  a_1_m_0_4__n freezer_ram_bank_m_i_15__n vector_a2_m cart_a_4_i_15__n \
+#  freezer_ram_bank_m_12__n N_294 freezer_ram_bank_m_15__n cart_a_4_i_16__n \
+#  freezer_ram_bank_m_16__n N_295 N_90 N_214_i a_1_m_0_12__n N_216_i \
+#  cart_access_tmp_cart_a_10_m_12__n N_296 check_vector_access_un1_activate_9_n \
+#  un1_freezer_state_4_i ram_access_std_match_result_2_1_n un1_freezer_state_7_i \
+#  check_vector_access_un1_activate_2_n N_297 check_vector_access_un1_activate_4_n \
+#  un1_cart_mode_2_i un1_os_select_1_1 un1_un63_cart_mode_i un1_os_select_1_2 \
+#  un1_cart_mode_4_i vector_a2_m_1 check_reset_cartemu_un1_reset_cartemu_i_n \
+#  un1_freezer_state_7_1 poweron_c_i N_153 N_299 N_154 N_295_1 flash_config_access_5 \
+#  N_295_2 flash_config_access_3 N_295_3 flash_config_access_2 N_294_1 N_159 N_294_2 \
+#  check_flash_config_access_std_match_6_result_3_n N_294_3 flash_config_access \
+#  check_oss_bank_std_match_result_1_n N_191 check_oss_bank_std_match_result_2_n \
+#  N_192 check_oss_bank_std_match_result_3_n N_193 \
+#  check_oss_bank_std_match_result_4_n N_206 check_oss_bank_std_match_result_5_n \
+#  N_207 check_oss_bank_std_match_result_6_n N_209 \
+#  freezer_rom_bank_select_std_match_result_1_n N_210 \
+#  freezer_rom_bank_select_std_match_result_2_n ram_access_std_match_result_n \
+#  freezer_rom_bank_select_std_match_result_3_n N_214 N_283_1 N_215 N_283_2 N_216 \
+#  N_283_3 cart_a_4_13__n N_283_4 N_218 un1_os_select_1_1_0 N_219 un1_os_select_1_2_0 \
+#  N_220 check_vector_access_un1_activate_1_n N_222 \
+#  check_vector_access_un1_activate_2_0_n N_223 \
+#  check_vector_access_un1_activate_3_n N_224 \
+#  check_vector_access_un1_activate_4_0_n N_226 \
+#  check_vector_access_un1_activate_5_n N_227 check_vector_access_un1_activate_6_n \
+#  N_228 check_vector_access_un1_activate_7_n cart_access_un13_flash_enable_n \
+#  check_cartemu_reset_mode_un69_flash_config_access_1_n \
+#  cart_access_un22_flash_enable_n \
+#  check_cartemu_reset_mode_un69_flash_config_access_2_n N_231 \
+#  cart_access_tmp_cart_a_10_m_1_12__n N_234 cart_access_tmp_cart_a_10_m_2_12__n \
+#  N_235 cart_access_tmp_cart_a_10_m_3_12__n N_154_1 \
+#  cart_access_tmp_cart_a_10_m_4_12__n ram_access_std_match_13_result_3_n \
+#  vector_a2_m_1_0 N_33_d N_277_1 ram_access_std_match_result_1_n N_277_2 \
+#  ram_access_freezer_ram_mask_a5a73_n N_277_3 N_82 N_277_4 \
+#  disable_atari_un36_freezer_rom_access_n N_277_5 N_78 \
+#  cart_access_un17_tmp_cart_access_1_n N_76 cart_access_un17_tmp_cart_access_2_n \
+#  N_74 N_275_1 N_48_m un1_freezer_state_7_1_1 N_73 un1_freezer_state_7_1_2 N_77 \
+#  un1_freezer_state_7_1_3 freezer_rom_bank_m_18__n un1_freezer_state_7_1_0 \
+#  cart_a_4_i_m_18__n un1_freezer_state_7_2 cart_a_iv_18__n un1_un63_cart_mode_1 \
+#  N_152 un1_cart_mode_2_1 N_208 N_206_1 N_190 N_206_2 N_221 N_206_3 cart_bank_5_15__n \
+#  N_206_4 N_150 N_235_1 N_151 N_154_1_0 flash_config_access_1 \
+#  disable_atari_un38_freezer_rom_access_i_c_1_n \
+#  check_flash_enable_un3_flash_enable_in_n \
+#  disable_atari_un38_freezer_rom_access_i_c_2_n \
+#  check_flash_enable_un30_flash_enable_in_n \
+#  disable_atari_un38_freezer_rom_access_i_c_3_n \
+#  cart_bank_select_std_match_result_5_n N_264_1 \
+#  check_sdx_enable_std_match_result_n N_74_1 flash_enable_4 \
+#  disable_atari_un36_freezer_rom_access_1_n flash_enable_4_f1 \
+#  activate_freezer_chips_un10_freezer_ram_access_i_c_1_n cart_bank_5_13_ N_258_1 \
+#  check_flash_enable_un1_flash_enable_in_n N_254_1 \
+#  cart_bank_select_un62_cart_mode_n N_254_2 flash_enable_in_i N_254_3 \
+#  flash_writable_in_i N_152_1 cart_mode_ram_i N_250_1 \
+#  cart_bank_select_std_match_result_i_n N_250_2 \
+#  cart_bank_select_un62_cart_mode_i_n N_250_3 a_1_i_3__n flash_config_access_1_0 \
+#  check_flash_enable_un30_flash_enable_in_i_n flash_config_access_2_0 a_1_i_9__n \
+#  flash_config_access_3_0 a_1_i_4__n flash_config_access_4 a_1_i_7__n \
+#  check_flash_enable_un3_flash_enable_in_1_n a_1_i_2__n \
+#  check_flash_enable_un3_flash_enable_in_2_n a_1_i_5__n \
+#  check_flash_enable_un3_flash_enable_in_3_n a_1_i_6__n \
+#  check_flash_enable_un30_flash_enable_in_1_n a_1_i_1__n \
+#  check_flash_enable_un30_flash_enable_in_2_n a_1_i_14__n \
+#  check_flash_enable_un30_flash_enable_in_3_n a_1_i_15__n \
+#  freezer_rom_bank_select_std_match_8_result_3_1_n cart_bank_i_18__n \
+#  cart_bank_select_std_match_result_1_n freezer_state_i_0_0__n \
+#  cart_bank_select_std_match_result_2_n freezer_state_i_0_1__n \
+#  check_d700_d71f_access_std_match_result_1_n rw_1_i \
+#  check_d700_d71f_access_std_match_result_2_n \
+#  freezer_activation_un5_d700_d71f_access_i_0_n \
+#  check_d700_d71f_access_std_match_result_3_n N_75_i \
+#  check_d700_d71f_access_std_match_result_4_n os_select_i \
+#  check_d700_d71f_access_std_match_result_5_n a_1_i_12__n \
+#  freezer_ram_bank_select_std_match_result_1_n a_1_i_13__n \
+#  freezer_ram_bank_select_std_match_result_2_n cart_mode_i_0__n \
+#  freezer_ram_bank_select_std_match_result_3_n cart_mode_i_1__n \
+#  check_sdx_enable_std_match_result_1_n un1_freezer_state_7_1_i \
+#  check_sdx_enable_std_match_result_2_n un1_os_select_1_i \
+#  check_sdx_enable_std_match_result_3_n a_1_i_11__n \
+#  check_sdx_enable_std_match_result_4_n a_1_i_0__n N_222_1 a_1_i_10__n N_219_1 \
+#  a_1_i_8__n N_215_1 use_vector_bankno_i N_214_1 activate_inputreg_1_i \
+#  ram_access_std_match_result_1_0_n phi2_i N_210_1 reset_i N_207_1 \
+#  cart_access_un17_tmp_cart_access_i_n N_153_1 cart_keepsettings_i \
+#  sdx_enable_0_un3_n phi2_c sdx_enable_0_un1_n sdx_enable_0_un0_n reset_c \
+#  cart_write_enable_0_un3_n cart_write_enable_0_un1_n cart_write_enable_0_un0_n \
+#  cart_bank_0_13__un3_n os_select_c cart_bank_0_13__un1_n cart_bank_0_13__un0_n \
+#  cart_bank_0_15__un3_n cart_bank_0_15__un1_n
+.model turbofreezerxl
+.inputs a_in_15_.BLIF phi2.BLIF reset.BLIF rw_in.BLIF os_select.BLIF \
+activate_in.BLIF poweron.BLIF flash_enable_in.BLIF flash_writable_in.BLIF \
+a_in_14_.BLIF a_in_13_.BLIF a_in_12_.BLIF a_in_11_.BLIF a_in_10_.BLIF \
+a_in_9_.BLIF a_in_8_.BLIF a_in_7_.BLIF a_in_6_.BLIF a_in_5_.BLIF a_in_4_.BLIF \
+a_in_3_.BLIF a_in_2_.BLIF a_in_1_.BLIF a_in_0_.BLIF cart_bank_0_15__un0_n.BLIF \
+flash_enable_0_un3_n.BLIF flash_enable_0_un1_n.BLIF \
+inst_use_vector_bankno.BLIF flash_enable_0_un0_n.BLIF \
+inst_cart_keepsettings.BLIF freezer_ram_bank_0_15__un3_n.BLIF \
+inst_cart_mode_ram.BLIF freezer_ram_bank_0_15__un1_n.BLIF cart_mode_0_.BLIF \
+freezer_ram_bank_0_15__un0_n.BLIF cart_mode_1_.BLIF \
+freezer_rom_bank_0_18__un3_n.BLIF oss_bank_12_.BLIF \
+freezer_rom_bank_0_18__un1_n.BLIF oss_bank_13_.BLIF \
+freezer_rom_bank_0_18__un0_n.BLIF a_0_.BLIF freezer_rom_bank_0_16__un3_n.BLIF \
+a_1_.BLIF freezer_rom_bank_0_16__un1_n.BLIF a_2_.BLIF \
+freezer_rom_bank_0_16__un0_n.BLIF a_3_.BLIF cart_bank_0_16__un3_n.BLIF \
+a_4_.BLIF cart_bank_0_16__un1_n.BLIF a_5_.BLIF cart_bank_0_16__un0_n.BLIF \
+a_6_.BLIF cart_bank_0_18__un3_n.BLIF a_7_.BLIF cart_bank_0_18__un1_n.BLIF \
+a_8_.BLIF cart_bank_0_18__un0_n.BLIF a_9_.BLIF \
+freezer_ram_bank_0_14__un3_n.BLIF a_10_.BLIF freezer_ram_bank_0_14__un1_n.BLIF \
+a_11_.BLIF freezer_ram_bank_0_14__un0_n.BLIF a_12_.BLIF \
+freezer_ram_bank_0_16__un3_n.BLIF a_13_.BLIF freezer_ram_bank_0_16__un1_n.BLIF \
+a_14_.BLIF freezer_ram_bank_0_16__un0_n.BLIF a_15_.BLIF \
+oss_bank_0_12__un3_n.BLIF rw.BLIF oss_bank_0_12__un1_n.BLIF \
+activate_inputreg.BLIF oss_bank_0_12__un0_n.BLIF \
+cart_bank_select_un63_cart_mode_n.BLIF oss_bank_0_13__un3_n.BLIF \
+check_reset_cartemu_un1_reset_cartemu_n.BLIF oss_bank_0_13__un1_n.BLIF \
+inst_cart_write_enable.BLIF oss_bank_0_13__un0_n.BLIF reset_cartemu.BLIF \
+cart_mode_0_0__un3_n.BLIF freezer_rom_bank_select_std_match_8_result_3_n.BLIF \
+poweron_c.BLIF cart_mode_0_0__un1_n.BLIF un1_un63_cart_mode.BLIF \
+cart_mode_0_0__un0_n.BLIF inst_sdx_enable.BLIF flash_enable_in_c.BLIF \
+cart_mode_0_1__un3_n.BLIF un1_cart_mode_2.BLIF cart_mode_0_1__un1_n.BLIF \
+cart_bank_5_14_.BLIF flash_writable_in_c.BLIF cart_mode_0_1__un0_n.BLIF \
+freezer_rom_bank_0_13__un3_n.BLIF ram_rom_a_1_c_12__n.BLIF \
+freezer_rom_bank_0_13__un1_n.BLIF inst_flash_enable.BLIF \
+freezer_rom_bank_0_13__un0_n.BLIF un1_cart_mode_4.BLIF N_206_i_0_c.BLIF \
+freezer_rom_bank_0_14__un3_n.BLIF tmp_cart_access_5.BLIF \
+freezer_rom_bank_0_14__un1_n.BLIF un1_freezer_state_4.BLIF \
+ram_rom_a_1_c_14__n.BLIF freezer_rom_bank_0_14__un0_n.BLIF \
+tmp_cart_access_1.BLIF freezer_rom_bank_0_15__un3_n.BLIF \
+un1_freezer_state_7.BLIF ram_rom_a_1_c_15__n.BLIF \
+freezer_rom_bank_0_15__un1_n.BLIF cart_rom_access.BLIF \
+freezer_rom_bank_0_15__un0_n.BLIF un1_tmp_cart_access_1.BLIF \
+ram_rom_a_1_c_16__n.BLIF freezer_rom_bank_0_17__un3_n.BLIF \
+un1_freezer_state_10.BLIF freezer_rom_bank_0_17__un1_n.BLIF cart_bank_13_.BLIF \
+ram_rom_a_1_c_17__n.BLIF freezer_rom_bank_0_17__un0_n.BLIF cart_a_4_14__n.BLIF \
+freezer_ram_bank_0_12__un3_n.BLIF cart_a_4_15__n.BLIF ram_rom_a_1_c_18__n.BLIF \
+freezer_ram_bank_0_12__un1_n.BLIF cart_a_4_16__n.BLIF \
+freezer_ram_bank_0_12__un0_n.BLIF cart_bank_14_.BLIF \
+freezer_ram_bank_0_13__un3_n.BLIF cart_bank_15_.BLIF \
+freezer_ram_bank_0_13__un1_n.BLIF cart_bank_16_.BLIF \
+freezer_ram_bank_0_13__un0_n.BLIF cart_bank_17_.BLIF N_241.BLIF \
+vector_a2_0_un3_n.BLIF cart_bank_18_.BLIF N_235_i.BLIF vector_a2_0_un1_n.BLIF \
+freezer_rom_bank_select_std_match_result_n.BLIF N_83_i.BLIF \
+vector_a2_0_un0_n.BLIF cart_bank_select_std_match_result_n.BLIF \
+flash_enable_i.BLIF cart_bank_0_14__un3_n.BLIF \
+cart_access_un17_tmp_cart_access_n.BLIF \
+check_flash_enable_un3_flash_enable_in_i_n.BLIF cart_bank_0_14__un1_n.BLIF \
+freezer_ram_bank_12_.BLIF N_243.BLIF cart_bank_0_14__un0_n.BLIF \
+freezer_ram_bank_13_.BLIF N_244.BLIF cart_mode_ram_0_un3_n.BLIF \
+freezer_ram_bank_14_.BLIF N_150_i.BLIF cart_mode_ram_0_un1_n.BLIF \
+freezer_ram_bank_15_.BLIF N_151_i.BLIF cart_mode_ram_0_un0_n.BLIF \
+freezer_ram_bank_16_.BLIF N_245.BLIF cart_keepsettings_0_un3_n.BLIF \
+check_d700_d71f_access_std_match_result_n.BLIF N_221_i.BLIF \
+cart_keepsettings_0_un1_n.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+N_246.BLIF cart_keepsettings_0_un0_n.BLIF inst_vector_a2.BLIF \
+cart_a_4_i_14__n.BLIF cart_bank_0_17__un3_n.BLIF cart_ram_access.BLIF \
+N_207_i.BLIF cart_bank_0_17__un1_n.BLIF check_oss_bank_std_match_result_n.BLIF \
+N_208_i.BLIF cart_bank_0_17__un0_n.BLIF \
+freezer_activation_un5_d700_d71f_access_n.BLIF N_250.BLIF \
+use_vector_bankno_0_un3_n.BLIF \
+freezer_ram_mode_select_un17_d700_d71f_access_n.BLIF \
+freezer_rom_bank_m_i_18__n.BLIF use_vector_bankno_0_un1_n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_n.BLIF vector_a2_m_1_i.BLIF \
+use_vector_bankno_0_un0_n.BLIF check_vector_access_un1_activate_n.BLIF \
+N_254.BLIF un1_result_2.BLIF cart_a_4_i_m_i_18__n.BLIF \
+freezer_rom_bank_13_.BLIF cart_a_iv_i_18__n.BLIF freezer_rom_bank_14_.BLIF \
+ram_access_std_match_result_1_i_n.BLIF freezer_rom_bank_15_.BLIF \
+ram_access_std_match_result_i_n.BLIF freezer_rom_bank_16_.BLIF N_256.BLIF \
+freezer_rom_bank_17_.BLIF cart_rom_access_i.BLIF freezer_rom_bank_18_.BLIF \
+activate_freezer_chips_un10_freezer_rom_access_i_c_n.BLIF un1_os_select_1.BLIF \
+N_77_i.BLIF N_258.BLIF N_73_i.BLIF N_74_i.BLIF cart_ram_access_i.BLIF \
+N_48_m_i.BLIF activate_freezer_chips_un10_freezer_ram_access_i_c_n.BLIF \
+N_76_i.BLIF N_78_i.BLIF N_264.BLIF \
+disable_atari_un36_freezer_rom_access_i_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_n.BLIF N_219_i.BLIF N_220_i.BLIF \
+N_218_i.BLIF cart_a_4_i_13__n.BLIF N_200_i.BLIF N_223_i.BLIF N_224_i.BLIF \
+N_272.BLIF N_222_i.BLIF N_231_i.BLIF N_273.BLIF oss_bank_i_12__n.BLIF \
+oss_bank_i_13__n.BLIF N_274.BLIF N_275.BLIF N_209_i.BLIF N_210_i.BLIF \
+freezer_state_0_.BLIF N_277.BLIF freezer_state_1_.BLIF vector_a2_m_i.BLIF \
+reset_freezer_banks.BLIF freezer_rom_bank_m_i_17__n.BLIF \
+freezer_state_d_3__n.BLIF a_1_m_0_i_4__n.BLIF cart_a_4_m_i_17__n.BLIF \
+a_1_m_i_4__n.BLIF N_75.BLIF N_283.BLIF N_83.BLIF \
+freezer_ram_bank_m_i_12__n.BLIF a_1_m_12__n.BLIF a_1_m_0_i_12__n.BLIF \
+freezer_rom_bank_m_15__n.BLIF cart_access_tmp_cart_a_10_m_i_12__n.BLIF \
+freezer_rom_bank_m_16__n.BLIF a_1_m_i_12__n.BLIF freezer_rom_bank_m_17__n.BLIF \
+freezer_rom_bank_m_i_16__n.BLIF a_1_m_4__n.BLIF \
+freezer_ram_bank_m_i_16__n.BLIF cart_a_4_m_17__n.BLIF \
+freezer_rom_bank_m_i_15__n.BLIF a_1_m_0_4__n.BLIF \
+freezer_ram_bank_m_i_15__n.BLIF vector_a2_m.BLIF cart_a_4_i_15__n.BLIF \
+freezer_ram_bank_m_12__n.BLIF N_294.BLIF freezer_ram_bank_m_15__n.BLIF \
+cart_a_4_i_16__n.BLIF freezer_ram_bank_m_16__n.BLIF N_295.BLIF N_90.BLIF \
+N_214_i.BLIF a_1_m_0_12__n.BLIF N_216_i.BLIF \
+cart_access_tmp_cart_a_10_m_12__n.BLIF N_296.BLIF \
+check_vector_access_un1_activate_9_n.BLIF un1_freezer_state_4_i.BLIF \
+ram_access_std_match_result_2_1_n.BLIF un1_freezer_state_7_i.BLIF \
+check_vector_access_un1_activate_2_n.BLIF N_297.BLIF \
+check_vector_access_un1_activate_4_n.BLIF un1_cart_mode_2_i.BLIF \
+un1_os_select_1_1.BLIF un1_un63_cart_mode_i.BLIF un1_os_select_1_2.BLIF \
+un1_cart_mode_4_i.BLIF vector_a2_m_1.BLIF \
+check_reset_cartemu_un1_reset_cartemu_i_n.BLIF un1_freezer_state_7_1.BLIF \
+poweron_c_i.BLIF N_153.BLIF N_299.BLIF N_154.BLIF N_295_1.BLIF \
+flash_config_access_5.BLIF N_295_2.BLIF flash_config_access_3.BLIF \
+N_295_3.BLIF flash_config_access_2.BLIF N_294_1.BLIF N_159.BLIF N_294_2.BLIF \
+check_flash_config_access_std_match_6_result_3_n.BLIF N_294_3.BLIF \
+flash_config_access.BLIF check_oss_bank_std_match_result_1_n.BLIF N_191.BLIF \
+check_oss_bank_std_match_result_2_n.BLIF N_192.BLIF \
+check_oss_bank_std_match_result_3_n.BLIF N_193.BLIF \
+check_oss_bank_std_match_result_4_n.BLIF N_206.BLIF \
+check_oss_bank_std_match_result_5_n.BLIF N_207.BLIF \
+check_oss_bank_std_match_result_6_n.BLIF N_209.BLIF \
+freezer_rom_bank_select_std_match_result_1_n.BLIF N_210.BLIF \
+freezer_rom_bank_select_std_match_result_2_n.BLIF \
+ram_access_std_match_result_n.BLIF \
+freezer_rom_bank_select_std_match_result_3_n.BLIF N_214.BLIF N_283_1.BLIF \
+N_215.BLIF N_283_2.BLIF N_216.BLIF N_283_3.BLIF cart_a_4_13__n.BLIF \
+N_283_4.BLIF N_218.BLIF un1_os_select_1_1_0.BLIF N_219.BLIF \
+un1_os_select_1_2_0.BLIF N_220.BLIF check_vector_access_un1_activate_1_n.BLIF \
+N_222.BLIF check_vector_access_un1_activate_2_0_n.BLIF N_223.BLIF \
+check_vector_access_un1_activate_3_n.BLIF N_224.BLIF \
+check_vector_access_un1_activate_4_0_n.BLIF N_226.BLIF \
+check_vector_access_un1_activate_5_n.BLIF N_227.BLIF \
+check_vector_access_un1_activate_6_n.BLIF N_228.BLIF \
+check_vector_access_un1_activate_7_n.BLIF cart_access_un13_flash_enable_n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_1_n.BLIF \
+cart_access_un22_flash_enable_n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_2_n.BLIF N_231.BLIF \
+cart_access_tmp_cart_a_10_m_1_12__n.BLIF N_234.BLIF \
+cart_access_tmp_cart_a_10_m_2_12__n.BLIF N_235.BLIF \
+cart_access_tmp_cart_a_10_m_3_12__n.BLIF N_154_1.BLIF \
+cart_access_tmp_cart_a_10_m_4_12__n.BLIF \
+ram_access_std_match_13_result_3_n.BLIF vector_a2_m_1_0.BLIF N_33_d.BLIF \
+N_277_1.BLIF ram_access_std_match_result_1_n.BLIF N_277_2.BLIF \
+ram_access_freezer_ram_mask_a5a73_n.BLIF N_277_3.BLIF N_82.BLIF N_277_4.BLIF \
+disable_atari_un36_freezer_rom_access_n.BLIF N_277_5.BLIF N_78.BLIF \
+cart_access_un17_tmp_cart_access_1_n.BLIF N_76.BLIF \
+cart_access_un17_tmp_cart_access_2_n.BLIF N_74.BLIF N_275_1.BLIF N_48_m.BLIF \
+un1_freezer_state_7_1_1.BLIF N_73.BLIF un1_freezer_state_7_1_2.BLIF N_77.BLIF \
+un1_freezer_state_7_1_3.BLIF freezer_rom_bank_m_18__n.BLIF \
+un1_freezer_state_7_1_0.BLIF cart_a_4_i_m_18__n.BLIF \
+un1_freezer_state_7_2.BLIF cart_a_iv_18__n.BLIF un1_un63_cart_mode_1.BLIF \
+N_152.BLIF un1_cart_mode_2_1.BLIF N_208.BLIF N_206_1.BLIF N_190.BLIF \
+N_206_2.BLIF N_221.BLIF N_206_3.BLIF cart_bank_5_15__n.BLIF N_206_4.BLIF \
+N_150.BLIF N_235_1.BLIF N_151.BLIF N_154_1_0.BLIF flash_config_access_1.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_1_n.BLIF \
+check_flash_enable_un3_flash_enable_in_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_2_n.BLIF \
+check_flash_enable_un30_flash_enable_in_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_3_n.BLIF \
+cart_bank_select_std_match_result_5_n.BLIF N_264_1.BLIF \
+check_sdx_enable_std_match_result_n.BLIF N_74_1.BLIF flash_enable_4.BLIF \
+disable_atari_un36_freezer_rom_access_1_n.BLIF flash_enable_4_f1.BLIF \
+activate_freezer_chips_un10_freezer_ram_access_i_c_1_n.BLIF \
+cart_bank_5_13_.BLIF N_258_1.BLIF \
+check_flash_enable_un1_flash_enable_in_n.BLIF N_254_1.BLIF \
+cart_bank_select_un62_cart_mode_n.BLIF N_254_2.BLIF flash_enable_in_i.BLIF \
+N_254_3.BLIF flash_writable_in_i.BLIF N_152_1.BLIF cart_mode_ram_i.BLIF \
+N_250_1.BLIF cart_bank_select_std_match_result_i_n.BLIF N_250_2.BLIF \
+cart_bank_select_un62_cart_mode_i_n.BLIF N_250_3.BLIF a_1_i_3__n.BLIF \
+flash_config_access_1_0.BLIF check_flash_enable_un30_flash_enable_in_i_n.BLIF \
+flash_config_access_2_0.BLIF a_1_i_9__n.BLIF flash_config_access_3_0.BLIF \
+a_1_i_4__n.BLIF flash_config_access_4.BLIF a_1_i_7__n.BLIF \
+check_flash_enable_un3_flash_enable_in_1_n.BLIF a_1_i_2__n.BLIF \
+check_flash_enable_un3_flash_enable_in_2_n.BLIF a_1_i_5__n.BLIF \
+check_flash_enable_un3_flash_enable_in_3_n.BLIF a_1_i_6__n.BLIF \
+check_flash_enable_un30_flash_enable_in_1_n.BLIF a_1_i_1__n.BLIF \
+check_flash_enable_un30_flash_enable_in_2_n.BLIF a_1_i_14__n.BLIF \
+check_flash_enable_un30_flash_enable_in_3_n.BLIF a_1_i_15__n.BLIF \
+freezer_rom_bank_select_std_match_8_result_3_1_n.BLIF cart_bank_i_18__n.BLIF \
+cart_bank_select_std_match_result_1_n.BLIF freezer_state_i_0_0__n.BLIF \
+cart_bank_select_std_match_result_2_n.BLIF freezer_state_i_0_1__n.BLIF \
+check_d700_d71f_access_std_match_result_1_n.BLIF rw_1_i.BLIF \
+check_d700_d71f_access_std_match_result_2_n.BLIF \
+freezer_activation_un5_d700_d71f_access_i_0_n.BLIF \
+check_d700_d71f_access_std_match_result_3_n.BLIF N_75_i.BLIF \
+check_d700_d71f_access_std_match_result_4_n.BLIF os_select_i.BLIF \
+check_d700_d71f_access_std_match_result_5_n.BLIF a_1_i_12__n.BLIF \
+freezer_ram_bank_select_std_match_result_1_n.BLIF a_1_i_13__n.BLIF \
+freezer_ram_bank_select_std_match_result_2_n.BLIF cart_mode_i_0__n.BLIF \
+freezer_ram_bank_select_std_match_result_3_n.BLIF cart_mode_i_1__n.BLIF \
+check_sdx_enable_std_match_result_1_n.BLIF un1_freezer_state_7_1_i.BLIF \
+check_sdx_enable_std_match_result_2_n.BLIF un1_os_select_1_i.BLIF \
+check_sdx_enable_std_match_result_3_n.BLIF a_1_i_11__n.BLIF \
+check_sdx_enable_std_match_result_4_n.BLIF a_1_i_0__n.BLIF N_222_1.BLIF \
+a_1_i_10__n.BLIF N_219_1.BLIF a_1_i_8__n.BLIF N_215_1.BLIF \
+use_vector_bankno_i.BLIF N_214_1.BLIF activate_inputreg_1_i.BLIF \
+ram_access_std_match_result_1_0_n.BLIF phi2_i.BLIF N_210_1.BLIF reset_i.BLIF \
+N_207_1.BLIF cart_access_un17_tmp_cart_access_i_n.BLIF N_153_1.BLIF \
+cart_keepsettings_i.BLIF sdx_enable_0_un3_n.BLIF phi2_c.BLIF \
+sdx_enable_0_un1_n.BLIF sdx_enable_0_un0_n.BLIF reset_c.BLIF \
+cart_write_enable_0_un3_n.BLIF cart_write_enable_0_un1_n.BLIF \
+cart_write_enable_0_un0_n.BLIF cart_bank_0_13__un3_n.BLIF os_select_c.BLIF \
+cart_bank_0_13__un1_n.BLIF cart_bank_0_13__un0_n.BLIF \
+cart_bank_0_15__un3_n.BLIF cart_bank_0_15__un1_n.BLIF
+.outputs ram_rom_a_18_ refresh ram_ce rom_ce ram_rom_a_17_ ram_rom_a_16_ \
+ram_rom_a_15_ ram_rom_a_14_ ram_rom_a_13_ ram_rom_a_12_ freezer_state_1_.D \
+freezer_state_1_.C freezer_state_1_.AR freezer_state_0_.D freezer_state_0_.C \
+freezer_state_0_.AR freezer_ram_bank_13_.D freezer_ram_bank_13_.C \
+freezer_ram_bank_13_.AR freezer_ram_bank_14_.D freezer_ram_bank_14_.C \
+freezer_ram_bank_14_.AR freezer_ram_bank_15_.D freezer_ram_bank_15_.C \
+freezer_ram_bank_15_.AR freezer_ram_bank_16_.D freezer_ram_bank_16_.C \
+freezer_ram_bank_16_.AR oss_bank_12_.D oss_bank_12_.C oss_bank_13_.D \
+oss_bank_13_.C freezer_rom_bank_13_.D freezer_rom_bank_13_.C \
+freezer_rom_bank_13_.AR freezer_rom_bank_14_.D freezer_rom_bank_14_.C \
+freezer_rom_bank_14_.AR freezer_rom_bank_15_.D freezer_rom_bank_15_.C \
+freezer_rom_bank_15_.AP freezer_rom_bank_16_.D freezer_rom_bank_16_.C \
+freezer_rom_bank_16_.AP freezer_rom_bank_17_.D freezer_rom_bank_17_.C \
+freezer_rom_bank_17_.AP freezer_rom_bank_18_.D freezer_rom_bank_18_.C \
+freezer_rom_bank_18_.AP freezer_ram_bank_12_.D freezer_ram_bank_12_.C \
+freezer_ram_bank_12_.AR cart_mode_0_.D cart_mode_0_.C cart_mode_0_.AR \
+cart_mode_1_.D cart_mode_1_.C cart_mode_1_.AR inst_cart_keepsettings.D \
+inst_cart_keepsettings.C inst_cart_keepsettings.AP inst_sdx_enable.D \
+inst_sdx_enable.C cart_bank_18_.D cart_bank_18_.C cart_bank_18_.AP \
+cart_bank_17_.D cart_bank_17_.C cart_bank_17_.AP cart_bank_16_.D \
+cart_bank_16_.C cart_bank_16_.AP a_0_.D a_0_.LH inst_flash_enable.D \
+inst_flash_enable.C inst_flash_enable.AR inst_flash_enable.AP a_1_.D a_1_.LH \
+inst_use_vector_bankno.D inst_use_vector_bankno.C inst_use_vector_bankno.AR \
+a_2_.D a_2_.LH inst_vector_a2.D inst_vector_a2.C a_3_.D a_3_.LH \
+cart_bank_15_.D cart_bank_15_.C cart_bank_15_.AP a_4_.D a_4_.LH \
+cart_bank_14_.D cart_bank_14_.C cart_bank_14_.AP a_5_.D a_5_.LH \
+cart_bank_13_.D cart_bank_13_.C cart_bank_13_.AR a_6_.D a_6_.LH \
+inst_cart_write_enable.D inst_cart_write_enable.C inst_cart_write_enable.AR \
+a_7_.D a_7_.LH inst_cart_mode_ram.D inst_cart_mode_ram.C inst_cart_mode_ram.AR \
+a_8_.D a_8_.LH activate_inputreg.D activate_inputreg.C rw.D rw.LH a_9_.D \
+a_9_.LH a_10_.D a_10_.LH a_11_.D a_11_.LH a_12_.D a_12_.LH a_13_.D a_13_.LH \
+a_14_.D a_14_.LH a_15_.D a_15_.LH cart_bank_0_15__un0_n flash_enable_0_un3_n \
+flash_enable_0_un1_n flash_enable_0_un0_n freezer_ram_bank_0_15__un3_n \
+freezer_ram_bank_0_15__un1_n freezer_ram_bank_0_15__un0_n \
+freezer_rom_bank_0_18__un3_n freezer_rom_bank_0_18__un1_n \
+freezer_rom_bank_0_18__un0_n freezer_rom_bank_0_16__un3_n \
+freezer_rom_bank_0_16__un1_n freezer_rom_bank_0_16__un0_n \
+cart_bank_0_16__un3_n cart_bank_0_16__un1_n cart_bank_0_16__un0_n \
+cart_bank_0_18__un3_n cart_bank_0_18__un1_n cart_bank_0_18__un0_n \
+freezer_ram_bank_0_14__un3_n freezer_ram_bank_0_14__un1_n \
+freezer_ram_bank_0_14__un0_n freezer_ram_bank_0_16__un3_n \
+freezer_ram_bank_0_16__un1_n freezer_ram_bank_0_16__un0_n oss_bank_0_12__un3_n \
+oss_bank_0_12__un1_n oss_bank_0_12__un0_n cart_bank_select_un63_cart_mode_n \
+oss_bank_0_13__un3_n check_reset_cartemu_un1_reset_cartemu_n \
+oss_bank_0_13__un1_n oss_bank_0_13__un0_n reset_cartemu cart_mode_0_0__un3_n \
+freezer_rom_bank_select_std_match_8_result_3_n poweron_c cart_mode_0_0__un1_n \
+un1_un63_cart_mode cart_mode_0_0__un0_n flash_enable_in_c cart_mode_0_1__un3_n \
+un1_cart_mode_2 cart_mode_0_1__un1_n flash_writable_in_c cart_mode_0_1__un0_n \
+freezer_rom_bank_0_13__un3_n ram_rom_a_1_c_12__n freezer_rom_bank_0_13__un1_n \
+freezer_rom_bank_0_13__un0_n un1_cart_mode_4 N_206_i_0_c \
+freezer_rom_bank_0_14__un3_n tmp_cart_access_5 freezer_rom_bank_0_14__un1_n \
+un1_freezer_state_4 ram_rom_a_1_c_14__n freezer_rom_bank_0_14__un0_n \
+tmp_cart_access_1 freezer_rom_bank_0_15__un3_n un1_freezer_state_7 \
+ram_rom_a_1_c_15__n freezer_rom_bank_0_15__un1_n cart_rom_access \
+freezer_rom_bank_0_15__un0_n un1_tmp_cart_access_1 ram_rom_a_1_c_16__n \
+freezer_rom_bank_0_17__un3_n un1_freezer_state_10 freezer_rom_bank_0_17__un1_n \
+ram_rom_a_1_c_17__n freezer_rom_bank_0_17__un0_n cart_a_4_14__n \
+freezer_ram_bank_0_12__un3_n cart_a_4_15__n ram_rom_a_1_c_18__n \
+freezer_ram_bank_0_12__un1_n cart_a_4_16__n freezer_ram_bank_0_12__un0_n \
+freezer_ram_bank_0_13__un3_n freezer_ram_bank_0_13__un1_n \
+freezer_ram_bank_0_13__un0_n N_241 vector_a2_0_un3_n N_235_i vector_a2_0_un1_n \
+freezer_rom_bank_select_std_match_result_n N_83_i vector_a2_0_un0_n \
+cart_bank_select_std_match_result_n flash_enable_i cart_bank_0_14__un3_n \
+cart_access_un17_tmp_cart_access_n check_flash_enable_un3_flash_enable_in_i_n \
+cart_bank_0_14__un1_n N_243 cart_bank_0_14__un0_n N_244 cart_mode_ram_0_un3_n \
+N_150_i cart_mode_ram_0_un1_n N_151_i cart_mode_ram_0_un0_n N_245 \
+cart_keepsettings_0_un3_n check_d700_d71f_access_std_match_result_n N_221_i \
+cart_keepsettings_0_un1_n freezer_ram_bank_select_std_match_result_n N_246 \
+cart_keepsettings_0_un0_n cart_a_4_i_14__n cart_bank_0_17__un3_n \
+cart_ram_access N_207_i cart_bank_0_17__un1_n \
+check_oss_bank_std_match_result_n N_208_i cart_bank_0_17__un0_n \
+freezer_activation_un5_d700_d71f_access_n N_250 use_vector_bankno_0_un3_n \
+freezer_ram_mode_select_un17_d700_d71f_access_n freezer_rom_bank_m_i_18__n \
+use_vector_bankno_0_un1_n check_cartemu_reset_mode_un69_flash_config_access_n \
+vector_a2_m_1_i use_vector_bankno_0_un0_n check_vector_access_un1_activate_n \
+N_254 un1_result_2 cart_a_4_i_m_i_18__n cart_a_iv_i_18__n \
+ram_access_std_match_result_1_i_n ram_access_std_match_result_i_n N_256 \
+cart_rom_access_i activate_freezer_chips_un10_freezer_rom_access_i_c_n \
+un1_os_select_1 N_77_i N_258 N_73_i N_74_i cart_ram_access_i N_48_m_i \
+activate_freezer_chips_un10_freezer_ram_access_i_c_n N_76_i N_78_i N_264 \
+disable_atari_un36_freezer_rom_access_i_n \
+disable_atari_un38_freezer_rom_access_i_c_n N_219_i N_220_i N_218_i \
+cart_a_4_i_13__n N_200_i N_223_i N_224_i N_272 N_222_i N_231_i N_273 \
+oss_bank_i_12__n oss_bank_i_13__n N_274 N_275 N_209_i N_210_i N_277 \
+vector_a2_m_i reset_freezer_banks freezer_rom_bank_m_i_17__n \
+freezer_state_d_3__n a_1_m_0_i_4__n cart_a_4_m_i_17__n a_1_m_i_4__n N_75 N_283 \
+N_83 freezer_ram_bank_m_i_12__n a_1_m_12__n a_1_m_0_i_12__n \
+freezer_rom_bank_m_15__n cart_access_tmp_cart_a_10_m_i_12__n \
+freezer_rom_bank_m_16__n a_1_m_i_12__n freezer_rom_bank_m_17__n \
+freezer_rom_bank_m_i_16__n a_1_m_4__n freezer_ram_bank_m_i_16__n \
+cart_a_4_m_17__n freezer_rom_bank_m_i_15__n a_1_m_0_4__n \
+freezer_ram_bank_m_i_15__n vector_a2_m cart_a_4_i_15__n \
+freezer_ram_bank_m_12__n N_294 freezer_ram_bank_m_15__n cart_a_4_i_16__n \
+freezer_ram_bank_m_16__n N_295 N_90 N_214_i a_1_m_0_12__n N_216_i \
+cart_access_tmp_cart_a_10_m_12__n N_296 check_vector_access_un1_activate_9_n \
+un1_freezer_state_4_i ram_access_std_match_result_2_1_n un1_freezer_state_7_i \
+check_vector_access_un1_activate_2_n N_297 \
+check_vector_access_un1_activate_4_n un1_cart_mode_2_i un1_os_select_1_1 \
+un1_un63_cart_mode_i un1_os_select_1_2 un1_cart_mode_4_i vector_a2_m_1 \
+check_reset_cartemu_un1_reset_cartemu_i_n un1_freezer_state_7_1 poweron_c_i \
+N_153 N_299 N_154 N_295_1 flash_config_access_5 N_295_2 flash_config_access_3 \
+N_295_3 flash_config_access_2 N_294_1 N_159 N_294_2 \
+check_flash_config_access_std_match_6_result_3_n N_294_3 flash_config_access \
+check_oss_bank_std_match_result_1_n N_191 check_oss_bank_std_match_result_2_n \
+N_192 check_oss_bank_std_match_result_3_n N_193 \
+check_oss_bank_std_match_result_4_n N_206 check_oss_bank_std_match_result_5_n \
+N_207 check_oss_bank_std_match_result_6_n N_209 \
+freezer_rom_bank_select_std_match_result_1_n N_210 \
+freezer_rom_bank_select_std_match_result_2_n ram_access_std_match_result_n \
+freezer_rom_bank_select_std_match_result_3_n N_214 N_283_1 N_215 N_283_2 N_216 \
+N_283_3 cart_a_4_13__n N_283_4 N_218 un1_os_select_1_1_0 N_219 \
+un1_os_select_1_2_0 N_220 check_vector_access_un1_activate_1_n N_222 \
+check_vector_access_un1_activate_2_0_n N_223 \
+check_vector_access_un1_activate_3_n N_224 \
+check_vector_access_un1_activate_4_0_n N_226 \
+check_vector_access_un1_activate_5_n N_227 \
+check_vector_access_un1_activate_6_n N_228 \
+check_vector_access_un1_activate_7_n cart_access_un13_flash_enable_n \
+check_cartemu_reset_mode_un69_flash_config_access_1_n \
+cart_access_un22_flash_enable_n \
+check_cartemu_reset_mode_un69_flash_config_access_2_n N_231 \
+cart_access_tmp_cart_a_10_m_1_12__n N_234 cart_access_tmp_cart_a_10_m_2_12__n \
+N_235 cart_access_tmp_cart_a_10_m_3_12__n N_154_1 \
+cart_access_tmp_cart_a_10_m_4_12__n ram_access_std_match_13_result_3_n \
+vector_a2_m_1_0 N_33_d N_277_1 ram_access_std_match_result_1_n N_277_2 \
+ram_access_freezer_ram_mask_a5a73_n N_277_3 N_82 N_277_4 \
+disable_atari_un36_freezer_rom_access_n N_277_5 N_78 \
+cart_access_un17_tmp_cart_access_1_n N_76 cart_access_un17_tmp_cart_access_2_n \
+N_74 N_275_1 N_48_m un1_freezer_state_7_1_1 N_73 un1_freezer_state_7_1_2 N_77 \
+un1_freezer_state_7_1_3 freezer_rom_bank_m_18__n un1_freezer_state_7_1_0 \
+cart_a_4_i_m_18__n un1_freezer_state_7_2 cart_a_iv_18__n un1_un63_cart_mode_1 \
+N_152 un1_cart_mode_2_1 N_208 N_206_1 N_190 N_206_2 N_221 N_206_3 \
+cart_bank_5_15__n N_206_4 N_150 N_235_1 N_151 N_154_1_0 flash_config_access_1 \
+disable_atari_un38_freezer_rom_access_i_c_1_n \
+check_flash_enable_un3_flash_enable_in_n \
+disable_atari_un38_freezer_rom_access_i_c_2_n \
+check_flash_enable_un30_flash_enable_in_n \
+disable_atari_un38_freezer_rom_access_i_c_3_n \
+cart_bank_select_std_match_result_5_n N_264_1 \
+check_sdx_enable_std_match_result_n N_74_1 flash_enable_4 \
+disable_atari_un36_freezer_rom_access_1_n flash_enable_4_f1 \
+activate_freezer_chips_un10_freezer_ram_access_i_c_1_n N_258_1 \
+check_flash_enable_un1_flash_enable_in_n N_254_1 \
+cart_bank_select_un62_cart_mode_n N_254_2 flash_enable_in_i N_254_3 \
+flash_writable_in_i N_152_1 cart_mode_ram_i N_250_1 \
+cart_bank_select_std_match_result_i_n N_250_2 \
+cart_bank_select_un62_cart_mode_i_n N_250_3 a_1_i_3__n flash_config_access_1_0 \
+check_flash_enable_un30_flash_enable_in_i_n flash_config_access_2_0 a_1_i_9__n \
+flash_config_access_3_0 a_1_i_4__n flash_config_access_4 a_1_i_7__n \
+check_flash_enable_un3_flash_enable_in_1_n a_1_i_2__n \
+check_flash_enable_un3_flash_enable_in_2_n a_1_i_5__n \
+check_flash_enable_un3_flash_enable_in_3_n a_1_i_6__n \
+check_flash_enable_un30_flash_enable_in_1_n a_1_i_1__n \
+check_flash_enable_un30_flash_enable_in_2_n a_1_i_14__n \
+check_flash_enable_un30_flash_enable_in_3_n a_1_i_15__n \
+freezer_rom_bank_select_std_match_8_result_3_1_n cart_bank_i_18__n \
+cart_bank_select_std_match_result_1_n freezer_state_i_0_0__n \
+cart_bank_select_std_match_result_2_n freezer_state_i_0_1__n \
+check_d700_d71f_access_std_match_result_1_n rw_1_i \
+check_d700_d71f_access_std_match_result_2_n \
+freezer_activation_un5_d700_d71f_access_i_0_n \
+check_d700_d71f_access_std_match_result_3_n N_75_i \
+check_d700_d71f_access_std_match_result_4_n os_select_i \
+check_d700_d71f_access_std_match_result_5_n a_1_i_12__n \
+freezer_ram_bank_select_std_match_result_1_n a_1_i_13__n \
+freezer_ram_bank_select_std_match_result_2_n cart_mode_i_0__n \
+freezer_ram_bank_select_std_match_result_3_n cart_mode_i_1__n \
+check_sdx_enable_std_match_result_1_n un1_freezer_state_7_1_i \
+check_sdx_enable_std_match_result_2_n un1_os_select_1_i \
+check_sdx_enable_std_match_result_3_n a_1_i_11__n \
+check_sdx_enable_std_match_result_4_n a_1_i_0__n N_222_1 a_1_i_10__n N_219_1 \
+a_1_i_8__n N_215_1 use_vector_bankno_i N_214_1 activate_inputreg_1_i \
+ram_access_std_match_result_1_0_n phi2_i N_210_1 reset_i N_207_1 \
+cart_access_un17_tmp_cart_access_i_n N_153_1 cart_keepsettings_i \
+sdx_enable_0_un3_n phi2_c sdx_enable_0_un1_n sdx_enable_0_un0_n reset_c \
+cart_write_enable_0_un3_n cart_write_enable_0_un1_n cart_write_enable_0_un0_n \
+cart_bank_0_13__un3_n os_select_c cart_bank_0_13__un1_n cart_bank_0_13__un0_n \
+cart_bank_0_15__un3_n cart_bank_0_15__un1_n cart_bank_5_14_ cart_bank_5_13_
+.names N_264.BLIF freezer_state_1_.D
+0 1
+.names N_258.BLIF freezer_state_0_.D
+0 1
+.names freezer_ram_bank_0_13__un1_n.BLIF freezer_ram_bank_0_13__un0_n.BLIF \
+freezer_ram_bank_13_.D
+1- 1
+-1 1
+.names freezer_ram_bank_0_14__un1_n.BLIF freezer_ram_bank_0_14__un0_n.BLIF \
+freezer_ram_bank_14_.D
+1- 1
+-1 1
+.names freezer_ram_bank_0_15__un1_n.BLIF freezer_ram_bank_0_15__un0_n.BLIF \
+freezer_ram_bank_15_.D
+1- 1
+-1 1
+.names freezer_ram_bank_0_16__un1_n.BLIF freezer_ram_bank_0_16__un0_n.BLIF \
+freezer_ram_bank_16_.D
+1- 1
+-1 1
+.names oss_bank_0_12__un1_n.BLIF oss_bank_0_12__un0_n.BLIF oss_bank_12_.D
+1- 1
+-1 1
+.names oss_bank_0_13__un1_n.BLIF oss_bank_0_13__un0_n.BLIF oss_bank_13_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_13__un1_n.BLIF freezer_rom_bank_0_13__un0_n.BLIF \
+freezer_rom_bank_13_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_14__un1_n.BLIF freezer_rom_bank_0_14__un0_n.BLIF \
+freezer_rom_bank_14_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_15__un1_n.BLIF freezer_rom_bank_0_15__un0_n.BLIF \
+freezer_rom_bank_15_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_16__un1_n.BLIF freezer_rom_bank_0_16__un0_n.BLIF \
+freezer_rom_bank_16_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_17__un1_n.BLIF freezer_rom_bank_0_17__un0_n.BLIF \
+freezer_rom_bank_17_.D
+1- 1
+-1 1
+.names freezer_rom_bank_0_18__un1_n.BLIF freezer_rom_bank_0_18__un0_n.BLIF \
+freezer_rom_bank_18_.D
+1- 1
+-1 1
+.names freezer_ram_bank_0_12__un1_n.BLIF freezer_ram_bank_0_12__un0_n.BLIF \
+freezer_ram_bank_12_.D
+1- 1
+-1 1
+.names cart_mode_0_0__un1_n.BLIF cart_mode_0_0__un0_n.BLIF cart_mode_0_.D
+1- 1
+-1 1
+.names cart_mode_0_1__un1_n.BLIF cart_mode_0_1__un0_n.BLIF cart_mode_1_.D
+1- 1
+-1 1
+.names cart_keepsettings_0_un1_n.BLIF cart_keepsettings_0_un0_n.BLIF \
+inst_cart_keepsettings.D
+1- 1
+-1 1
+.names sdx_enable_0_un1_n.BLIF sdx_enable_0_un0_n.BLIF inst_sdx_enable.D
+1- 1
+-1 1
+.names cart_bank_0_18__un1_n.BLIF cart_bank_0_18__un0_n.BLIF cart_bank_18_.D
+1- 1
+-1 1
+.names cart_bank_0_17__un1_n.BLIF cart_bank_0_17__un0_n.BLIF cart_bank_17_.D
+1- 1
+-1 1
+.names cart_bank_0_16__un1_n.BLIF cart_bank_0_16__un0_n.BLIF cart_bank_16_.D
+1- 1
+-1 1
+.names flash_enable_0_un1_n.BLIF flash_enable_0_un0_n.BLIF inst_flash_enable.D
+1- 1
+-1 1
+.names flash_enable_in_c.BLIF reset_cartemu.BLIF inst_flash_enable.AR
+11 1
+.names flash_enable_in_i.BLIF reset_cartemu.BLIF inst_flash_enable.AP
+11 1
+.names use_vector_bankno_0_un1_n.BLIF use_vector_bankno_0_un0_n.BLIF \
+inst_use_vector_bankno.D
+1- 1
+-1 1
+.names vector_a2_0_un1_n.BLIF vector_a2_0_un0_n.BLIF inst_vector_a2.D
+1- 1
+-1 1
+.names cart_bank_0_15__un1_n.BLIF cart_bank_0_15__un0_n.BLIF cart_bank_15_.D
+1- 1
+-1 1
+.names cart_bank_0_14__un1_n.BLIF cart_bank_0_14__un0_n.BLIF cart_bank_14_.D
+1- 1
+-1 1
+.names cart_bank_0_13__un1_n.BLIF cart_bank_0_13__un0_n.BLIF cart_bank_13_.D
+1- 1
+-1 1
+.names cart_write_enable_0_un1_n.BLIF cart_write_enable_0_un0_n.BLIF \
+inst_cart_write_enable.D
+1- 1
+-1 1
+.names cart_mode_ram_0_un1_n.BLIF cart_mode_ram_0_un0_n.BLIF \
+inst_cart_mode_ram.D
+1- 1
+-1 1
+.names cart_bank_5_15__n.BLIF cart_bank_0_15__un3_n.BLIF cart_bank_0_15__un0_n
+11 1
+.names check_flash_enable_un1_flash_enable_in_n.BLIF flash_enable_0_un3_n
+0 1
+.names flash_enable_4.BLIF check_flash_enable_un1_flash_enable_in_n.BLIF \
+flash_enable_0_un1_n
+11 1
+.names inst_flash_enable.BLIF flash_enable_0_un3_n.BLIF flash_enable_0_un0_n
+11 1
+.names freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_15__un3_n
+0 1
+.names a_3_.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_15__un1_n
+11 1
+.names freezer_ram_bank_15_.BLIF freezer_ram_bank_0_15__un3_n.BLIF \
+freezer_ram_bank_0_15__un0_n
+11 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_18__un3_n
+0 1
+.names a_5_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_18__un1_n
+11 1
+.names freezer_rom_bank_18_.BLIF freezer_rom_bank_0_18__un3_n.BLIF \
+freezer_rom_bank_0_18__un0_n
+11 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_16__un3_n
+0 1
+.names a_3_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_16__un1_n
+11 1
+.names freezer_rom_bank_16_.BLIF freezer_rom_bank_0_16__un3_n.BLIF \
+freezer_rom_bank_0_16__un0_n
+11 1
+.names cart_bank_select_std_match_result_n.BLIF cart_bank_0_16__un3_n
+0 1
+.names a_3_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_0_16__un1_n
+11 1
+.names cart_bank_16_.BLIF cart_bank_0_16__un3_n.BLIF cart_bank_0_16__un0_n
+11 1
+.names cart_bank_select_std_match_result_n.BLIF cart_bank_0_18__un3_n
+0 1
+.names a_5_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_0_18__un1_n
+11 1
+.names cart_bank_18_.BLIF cart_bank_0_18__un3_n.BLIF cart_bank_0_18__un0_n
+11 1
+.names freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_14__un3_n
+0 1
+.names a_2_.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_14__un1_n
+11 1
+.names freezer_ram_bank_14_.BLIF freezer_ram_bank_0_14__un3_n.BLIF \
+freezer_ram_bank_0_14__un0_n
+11 1
+.names freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_16__un3_n
+0 1
+.names a_4_.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_16__un1_n
+11 1
+.names freezer_ram_bank_16_.BLIF freezer_ram_bank_0_16__un3_n.BLIF \
+freezer_ram_bank_0_16__un0_n
+11 1
+.names check_oss_bank_std_match_result_n.BLIF oss_bank_0_12__un3_n
+0 1
+.names a_1_i_3__n.BLIF check_oss_bank_std_match_result_n.BLIF \
+oss_bank_0_12__un1_n
+11 1
+.names oss_bank_12_.BLIF oss_bank_0_12__un3_n.BLIF oss_bank_0_12__un0_n
+11 1
+.names cart_mode_0_.BLIF cart_mode_1_.BLIF cart_bank_select_un63_cart_mode_n
+11 1
+.names check_oss_bank_std_match_result_n.BLIF oss_bank_0_13__un3_n
+0 1
+.names cart_keepsettings_i.BLIF reset_i.BLIF \
+check_reset_cartemu_un1_reset_cartemu_n
+11 1
+.names a_0_.BLIF check_oss_bank_std_match_result_n.BLIF oss_bank_0_13__un1_n
+11 1
+.names oss_bank_13_.BLIF oss_bank_0_13__un3_n.BLIF oss_bank_0_13__un0_n
+11 1
+.names N_299.BLIF reset_cartemu
+0 1
+.names N_153.BLIF cart_mode_0_0__un3_n
+0 1
+.names freezer_rom_bank_select_std_match_8_result_3_1_n.BLIF a_8_.BLIF \
+freezer_rom_bank_select_std_match_8_result_3_n
+11 1
+.names a_0_.BLIF N_153.BLIF cart_mode_0_0__un1_n
+11 1
+.names un1_un63_cart_mode_1.BLIF cart_bank_select_un63_cart_mode_n.BLIF \
+un1_un63_cart_mode
+11 1
+.names cart_mode_0_.BLIF cart_mode_0_0__un3_n.BLIF cart_mode_0_0__un0_n
+11 1
+.names N_153.BLIF cart_mode_0_1__un3_n
+0 1
+.names un1_cart_mode_2_1.BLIF cart_mode_i_0__n.BLIF un1_cart_mode_2
+11 1
+.names a_1_.BLIF N_153.BLIF cart_mode_0_1__un1_n
+11 1
+.names cart_mode_1_.BLIF cart_mode_0_1__un3_n.BLIF cart_mode_0_1__un0_n
+11 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_13__un3_n
+0 1
+.names N_283.BLIF ram_rom_a_1_c_12__n
+0 1
+.names a_0_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_13__un1_n
+11 1
+.names freezer_rom_bank_13_.BLIF freezer_rom_bank_0_13__un3_n.BLIF \
+freezer_rom_bank_0_13__un0_n
+11 1
+.names un1_cart_mode_4_i.BLIF un1_cart_mode_4
+0 1
+.names N_206.BLIF N_206_i_0_c
+0 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_14__un3_n
+0 1
+.names N_275.BLIF tmp_cart_access_5
+0 1
+.names a_1_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_14__un1_n
+11 1
+.names use_vector_bankno_i.BLIF vector_a2_m_1.BLIF un1_freezer_state_4
+11 1
+.names N_250.BLIF ram_rom_a_1_c_14__n
+0 1
+.names freezer_rom_bank_14_.BLIF freezer_rom_bank_0_14__un3_n.BLIF \
+freezer_rom_bank_0_14__un0_n
+11 1
+.names cart_access_un13_flash_enable_n.BLIF tmp_cart_access_5.BLIF \
+tmp_cart_access_1
+11 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_15__un3_n
+0 1
+.names un1_freezer_state_7_1_0.BLIF un1_freezer_state_7_2.BLIF \
+un1_freezer_state_7
+11 1
+.names N_294.BLIF ram_rom_a_1_c_15__n
+0 1
+.names a_2_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_15__un1_n
+11 1
+.names cart_mode_ram_i.BLIF tmp_cart_access_1.BLIF cart_rom_access
+11 1
+.names freezer_rom_bank_15_.BLIF freezer_rom_bank_0_15__un3_n.BLIF \
+freezer_rom_bank_0_15__un0_n
+11 1
+.names inst_cart_mode_ram.BLIF tmp_cart_access_1.BLIF un1_tmp_cart_access_1
+11 1
+.names N_295.BLIF ram_rom_a_1_c_16__n
+0 1
+.names freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_17__un3_n
+0 1
+.names N_297.BLIF un1_freezer_state_10
+0 1
+.names a_4_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_0_17__un1_n
+11 1
+.names N_277.BLIF ram_rom_a_1_c_17__n
+0 1
+.names freezer_rom_bank_17_.BLIF freezer_rom_bank_0_17__un3_n.BLIF \
+freezer_rom_bank_0_17__un0_n
+11 1
+.names cart_bank_14_.BLIF tmp_cart_access_1.BLIF cart_a_4_14__n
+11 1
+.names freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_12__un3_n
+0 1
+.names cart_bank_15_.BLIF tmp_cart_access_1.BLIF cart_a_4_15__n
+11 1
+.names N_254.BLIF ram_rom_a_1_c_18__n
+0 1
+.names a_0_.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_12__un1_n
+11 1
+.names cart_bank_16_.BLIF tmp_cart_access_1.BLIF cart_a_4_16__n
+11 1
+.names freezer_ram_bank_12_.BLIF freezer_ram_bank_0_12__un3_n.BLIF \
+freezer_ram_bank_0_12__un0_n
+11 1
+.names freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_13__un3_n
+0 1
+.names a_1_.BLIF freezer_ram_bank_select_std_match_result_n.BLIF \
+freezer_ram_bank_0_13__un1_n
+11 1
+.names freezer_ram_bank_13_.BLIF freezer_ram_bank_0_13__un3_n.BLIF \
+freezer_ram_bank_0_13__un0_n
+11 1
+.names flash_enable_in_c.BLIF flash_writable_in_c.BLIF N_241
+11 1
+.names reset_freezer_banks.BLIF vector_a2_0_un3_n
+0 1
+.names N_235.BLIF N_235_i
+0 1
+.names a_2_.BLIF reset_freezer_banks.BLIF vector_a2_0_un1_n
+11 1
+.names freezer_rom_bank_select_std_match_result_3_n.BLIF \
+ram_access_std_match_result_2_1_n.BLIF \
+freezer_rom_bank_select_std_match_result_n
+11 1
+.names N_235_i.BLIF un1_os_select_1_i.BLIF N_83_i
+11 1
+.names inst_vector_a2.BLIF vector_a2_0_un3_n.BLIF vector_a2_0_un0_n
+11 1
+.names cart_bank_select_std_match_result_1_n.BLIF \
+cart_bank_select_std_match_result_2_n.BLIF cart_bank_select_std_match_result_n
+11 1
+.names inst_flash_enable.BLIF flash_enable_i
+0 1
+.names un1_result_2.BLIF cart_bank_0_14__un3_n
+0 1
+.names cart_access_un17_tmp_cart_access_1_n.BLIF \
+cart_access_un17_tmp_cart_access_2_n.BLIF cart_access_un17_tmp_cart_access_n
+11 1
+.names check_flash_enable_un3_flash_enable_in_n.BLIF \
+check_flash_enable_un3_flash_enable_in_i_n
+0 1
+.names cart_bank_14_.BLIF un1_result_2.BLIF cart_bank_0_14__un1_n
+11 1
+.names check_flash_enable_un3_flash_enable_in_i_n.BLIF flash_enable_i.BLIF \
+N_243
+11 1
+.names cart_bank_5_14_.BLIF cart_bank_0_14__un3_n.BLIF cart_bank_0_14__un0_n
+11 1
+.names N_75_i.BLIF un1_os_select_1_i.BLIF N_244
+11 1
+.names N_154.BLIF cart_mode_ram_0_un3_n
+0 1
+.names N_150.BLIF N_150_i
+0 1
+.names a_0_.BLIF N_154.BLIF cart_mode_ram_0_un1_n
+11 1
+.names N_151.BLIF N_151_i
+0 1
+.names inst_cart_mode_ram.BLIF cart_mode_ram_0_un3_n.BLIF \
+cart_mode_ram_0_un0_n
+11 1
+.names N_150_i.BLIF N_151_i.BLIF N_245
+11 1
+.names check_cartemu_reset_mode_un69_flash_config_access_n.BLIF \
+cart_keepsettings_0_un3_n
+0 1
+.names check_d700_d71f_access_std_match_result_4_n.BLIF \
+check_d700_d71f_access_std_match_result_5_n.BLIF \
+check_d700_d71f_access_std_match_result_n
+11 1
+.names N_221.BLIF N_221_i
+0 1
+.names a_0_.BLIF check_cartemu_reset_mode_un69_flash_config_access_n.BLIF \
+cart_keepsettings_0_un1_n
+11 1
+.names freezer_ram_bank_select_std_match_result_3_n.BLIF \
+ram_access_std_match_result_2_1_n.BLIF \
+freezer_ram_bank_select_std_match_result_n
+11 1
+.names N_221_i.BLIF rw_1_i.BLIF N_246
+11 1
+.names inst_cart_keepsettings.BLIF cart_keepsettings_0_un3_n.BLIF \
+cart_keepsettings_0_un0_n
+11 1
+.names cart_a_4_14__n.BLIF cart_a_4_i_14__n
+0 1
+.names cart_bank_select_std_match_result_n.BLIF cart_bank_0_17__un3_n
+0 1
+.names cart_access_un17_tmp_cart_access_i_n.BLIF un1_tmp_cart_access_1.BLIF \
+cart_ram_access
+11 1
+.names N_207.BLIF N_207_i
+0 1
+.names a_4_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_0_17__un1_n
+11 1
+.names check_oss_bank_std_match_result_5_n.BLIF \
+check_oss_bank_std_match_result_6_n.BLIF check_oss_bank_std_match_result_n
+11 1
+.names N_208.BLIF N_208_i
+0 1
+.names cart_bank_17_.BLIF cart_bank_0_17__un3_n.BLIF cart_bank_0_17__un0_n
+11 1
+.names a_1_i_4__n.BLIF check_d700_d71f_access_std_match_result_n.BLIF \
+freezer_activation_un5_d700_d71f_access_n
+11 1
+.names N_250_3.BLIF un1_os_select_1_i.BLIF N_250
+11 1
+.names freezer_ram_mode_select_un17_d700_d71f_access_n.BLIF \
+use_vector_bankno_0_un3_n
+0 1
+.names a_4_.BLIF check_d700_d71f_access_std_match_result_n.BLIF \
+freezer_ram_mode_select_un17_d700_d71f_access_n
+11 1
+.names freezer_rom_bank_m_18__n.BLIF freezer_rom_bank_m_i_18__n
+0 1
+.names rw.BLIF freezer_ram_mode_select_un17_d700_d71f_access_n.BLIF \
+use_vector_bankno_0_un1_n
+11 1
+.names check_cartemu_reset_mode_un69_flash_config_access_1_n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_2_n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_n
+11 1
+.names vector_a2_m_1.BLIF vector_a2_m_1_i
+0 1
+.names inst_use_vector_bankno.BLIF use_vector_bankno_0_un3_n.BLIF \
+use_vector_bankno_0_un0_n
+11 1
+.names check_vector_access_un1_activate_7_n.BLIF un1_os_select_1_2.BLIF \
+check_vector_access_un1_activate_n
+11 1
+.names N_254_3.BLIF vector_a2_m_1_i.BLIF N_254
+11 1
+.names cart_bank_select_std_match_result_i_n.BLIF \
+cart_bank_select_un62_cart_mode_i_n.BLIF un1_result_2
+11 1
+.names cart_a_4_i_m_18__n.BLIF cart_a_4_i_m_i_18__n
+0 1
+.names cart_a_4_i_m_i_18__n.BLIF tmp_cart_access_1.BLIF cart_a_iv_i_18__n
+11 1
+.names ram_access_std_match_result_1_n.BLIF ram_access_std_match_result_1_i_n
+0 1
+.names ram_access_std_match_result_n.BLIF ram_access_std_match_result_i_n
+0 1
+.names ram_access_std_match_result_1_i_n.BLIF \
+ram_access_std_match_result_i_n.BLIF N_256
+11 1
+.names cart_rom_access.BLIF cart_rom_access_i
+0 1
+.names N_82.BLIF cart_rom_access_i.BLIF \
+activate_freezer_chips_un10_freezer_rom_access_i_c_n
+11 1
+.names un1_os_select_1_1_0.BLIF un1_os_select_1_2_0.BLIF un1_os_select_1
+11 1
+.names N_77.BLIF N_77_i
+0 1
+.names N_258_1.BLIF N_74_i.BLIF N_258
+11 1
+.names N_73.BLIF N_73_i
+0 1
+.names N_74.BLIF N_74_i
+0 1
+.names cart_ram_access.BLIF cart_ram_access_i
+0 1
+.names N_48_m.BLIF N_48_m_i
+0 1
+.names activate_freezer_chips_un10_freezer_ram_access_i_c_1_n.BLIF \
+vector_a2_m_1_i.BLIF activate_freezer_chips_un10_freezer_ram_access_i_c_n
+11 1
+.names N_76.BLIF N_76_i
+0 1
+.names N_78.BLIF N_78_i
+0 1
+.names N_264_1.BLIF N_76_i.BLIF N_264
+11 1
+.names disable_atari_un36_freezer_rom_access_n.BLIF \
+disable_atari_un36_freezer_rom_access_i_n
+0 1
+.names disable_atari_un38_freezer_rom_access_i_c_3_n.BLIF vector_a2_m_1_i.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_n
+11 1
+.names N_219.BLIF N_219_i
+0 1
+.names N_220.BLIF N_220_i
+0 1
+.names N_218.BLIF N_218_i
+0 1
+.names cart_a_4_13__n.BLIF cart_a_4_i_13__n
+0 1
+.names N_218_i.BLIF un1_freezer_state_7_1_i.BLIF N_200_i
+11 1
+.names N_223.BLIF N_223_i
+0 1
+.names N_224.BLIF N_224_i
+0 1
+.names N_223_i.BLIF N_224_i.BLIF N_272
+11 1
+.names N_222.BLIF N_222_i
+0 1
+.names N_231.BLIF N_231_i
+0 1
+.names N_222_i.BLIF N_231_i.BLIF N_273
+11 1
+.names oss_bank_12_.BLIF oss_bank_i_12__n
+0 1
+.names oss_bank_13_.BLIF oss_bank_i_13__n
+0 1
+.names oss_bank_i_12__n.BLIF oss_bank_i_13__n.BLIF N_274
+11 1
+.names N_275_1.BLIF un1_cart_mode_4_i.BLIF N_275
+11 1
+.names N_209.BLIF N_209_i
+0 1
+.names N_210.BLIF N_210_i
+0 1
+.names N_277_4.BLIF N_277_5.BLIF N_277
+11 1
+.names vector_a2_m.BLIF vector_a2_m_i
+0 1
+.names check_vector_access_un1_activate_n.BLIF freezer_state_d_3__n.BLIF \
+reset_freezer_banks
+11 1
+.names freezer_rom_bank_m_17__n.BLIF freezer_rom_bank_m_i_17__n
+0 1
+.names freezer_state_i_0_0__n.BLIF freezer_state_i_0_1__n.BLIF \
+freezer_state_d_3__n
+11 1
+.names a_1_m_0_4__n.BLIF a_1_m_0_i_4__n
+0 1
+.names cart_a_4_m_17__n.BLIF cart_a_4_m_i_17__n
+0 1
+.names a_1_m_4__n.BLIF a_1_m_i_4__n
+0 1
+.names N_77.BLIF freezer_state_0_.BLIF N_75
+11 1
+.names N_283_4.BLIF N_283_3.BLIF N_283
+11 1
+.names N_83_i.BLIF N_83
+0 1
+.names freezer_ram_bank_m_12__n.BLIF freezer_ram_bank_m_i_12__n
+0 1
+.names N_83.BLIF a_12_.BLIF a_1_m_12__n
+11 1
+.names a_1_m_0_12__n.BLIF a_1_m_0_i_12__n
+0 1
+.names N_235.BLIF freezer_rom_bank_15_.BLIF freezer_rom_bank_m_15__n
+11 1
+.names cart_access_tmp_cart_a_10_m_12__n.BLIF \
+cart_access_tmp_cart_a_10_m_i_12__n
+0 1
+.names N_235.BLIF freezer_rom_bank_16_.BLIF freezer_rom_bank_m_16__n
+11 1
+.names a_1_m_12__n.BLIF a_1_m_i_12__n
+0 1
+.names N_235.BLIF freezer_rom_bank_17_.BLIF freezer_rom_bank_m_17__n
+11 1
+.names freezer_rom_bank_m_16__n.BLIF freezer_rom_bank_m_i_16__n
+0 1
+.names a_4_.BLIF un1_tmp_cart_access_1.BLIF a_1_m_4__n
+11 1
+.names freezer_ram_bank_m_16__n.BLIF freezer_ram_bank_m_i_16__n
+0 1
+.names cart_bank_17_.BLIF cart_rom_access.BLIF cart_a_4_m_17__n
+11 1
+.names freezer_rom_bank_m_15__n.BLIF freezer_rom_bank_m_i_15__n
+0 1
+.names a_4_.BLIF un1_freezer_state_10.BLIF a_1_m_0_4__n
+11 1
+.names freezer_ram_bank_m_15__n.BLIF freezer_ram_bank_m_i_15__n
+0 1
+.names vector_a2_m_1_0.BLIF inst_vector_a2.BLIF vector_a2_m
+11 1
+.names cart_a_4_15__n.BLIF cart_a_4_i_15__n
+0 1
+.names N_215.BLIF freezer_ram_bank_12_.BLIF freezer_ram_bank_m_12__n
+11 1
+.names N_294_3.BLIF freezer_rom_bank_m_i_15__n.BLIF N_294
+11 1
+.names N_215.BLIF freezer_ram_bank_15_.BLIF freezer_ram_bank_m_15__n
+11 1
+.names cart_a_4_16__n.BLIF cart_a_4_i_16__n
+0 1
+.names N_215.BLIF freezer_ram_bank_16_.BLIF freezer_ram_bank_m_16__n
+11 1
+.names N_295_3.BLIF freezer_rom_bank_m_i_16__n.BLIF N_295
+11 1
+.names N_296.BLIF N_90
+0 1
+.names N_214.BLIF N_214_i
+0 1
+.names N_90.BLIF a_12_.BLIF a_1_m_0_12__n
+11 1
+.names N_216.BLIF N_216_i
+0 1
+.names cart_access_tmp_cart_a_10_m_4_12__n.BLIF \
+cart_access_tmp_cart_a_10_m_3_12__n.BLIF cart_access_tmp_cart_a_10_m_12__n
+11 1
+.names N_214_i.BLIF N_216_i.BLIF N_296
+11 1
+.names check_vector_access_un1_activate_4_n.BLIF flash_config_access_1.BLIF \
+check_vector_access_un1_activate_9_n
+11 1
+.names un1_freezer_state_4.BLIF un1_freezer_state_4_i
+0 1
+.names a_12_.BLIF a_14_.BLIF ram_access_std_match_result_2_1_n
+11 1
+.names un1_freezer_state_7.BLIF un1_freezer_state_7_i
+0 1
+.names a_5_.BLIF a_6_.BLIF check_vector_access_un1_activate_2_n
+11 1
+.names un1_freezer_state_4_i.BLIF un1_freezer_state_7_i.BLIF N_297
+11 1
+.names a_9_.BLIF a_10_.BLIF check_vector_access_un1_activate_4_n
+11 1
+.names un1_cart_mode_2.BLIF un1_cart_mode_2_i
+0 1
+.names a_13_.BLIF a_14_.BLIF un1_os_select_1_1
+11 1
+.names un1_un63_cart_mode.BLIF un1_un63_cart_mode_i
+0 1
+.names a_15_.BLIF rw.BLIF un1_os_select_1_2
+11 1
+.names un1_cart_mode_2_i.BLIF un1_un63_cart_mode_i.BLIF un1_cart_mode_4_i
+11 1
+.names N_33_d.BLIF ram_access_freezer_ram_mask_a5a73_n.BLIF vector_a2_m_1
+11 1
+.names check_reset_cartemu_un1_reset_cartemu_n.BLIF \
+check_reset_cartemu_un1_reset_cartemu_i_n
+0 1
+.names un1_freezer_state_7_1_3.BLIF freezer_state_d_3__n.BLIF \
+un1_freezer_state_7_1
+11 1
+.names poweron_c.BLIF poweron_c_i
+0 1
+.names N_153_1.BLIF flash_config_access.BLIF N_153
+11 1
+.names check_reset_cartemu_un1_reset_cartemu_i_n.BLIF poweron_c_i.BLIF N_299
+11 1
+.names N_154_1_0.BLIF flash_config_access.BLIF N_154
+11 1
+.names N_200_i.BLIF N_244.BLIF N_295_1
+11 1
+.names a_1_i_11__n.BLIF a_1_i_13__n.BLIF flash_config_access_5
+11 1
+.names cart_a_4_i_16__n.BLIF freezer_ram_bank_m_i_16__n.BLIF N_295_2
+11 1
+.names a_14_.BLIF a_15_.BLIF flash_config_access_3
+11 1
+.names N_295_1.BLIF N_295_2.BLIF N_295_3
+11 1
+.names a_10_.BLIF a_12_.BLIF flash_config_access_2
+11 1
+.names N_200_i.BLIF N_244.BLIF N_294_1
+11 1
+.names a_1_i_5__n.BLIF a_1_i_6__n.BLIF N_159
+11 1
+.names cart_a_4_i_15__n.BLIF freezer_ram_bank_m_i_15__n.BLIF N_294_2
+11 1
+.names N_159.BLIF a_1_i_4__n.BLIF \
+check_flash_config_access_std_match_6_result_3_n
+11 1
+.names N_294_1.BLIF N_294_2.BLIF N_294_3
+11 1
+.names flash_config_access_4.BLIF flash_config_access_3_0.BLIF \
+flash_config_access
+11 1
+.names a_8_.BLIF a_10_.BLIF check_oss_bank_std_match_result_1_n
+11 1
+.names N_274.BLIF N_191
+0 1
+.names a_15_.BLIF a_1_i_7__n.BLIF check_oss_bank_std_match_result_2_n
+11 1
+.names N_273.BLIF N_192
+0 1
+.names a_1_i_9__n.BLIF check_flash_config_access_std_match_6_result_3_n.BLIF \
+check_oss_bank_std_match_result_3_n
+11 1
+.names N_272.BLIF N_193
+0 1
+.names flash_config_access_5.BLIF ram_access_std_match_result_2_1_n.BLIF \
+check_oss_bank_std_match_result_4_n
+11 1
+.names N_206_4.BLIF N_206_3.BLIF N_206
+11 1
+.names check_oss_bank_std_match_result_1_n.BLIF \
+check_oss_bank_std_match_result_2_n.BLIF check_oss_bank_std_match_result_5_n
+11 1
+.names N_207_1.BLIF freezer_ram_bank_14_.BLIF N_207
+11 1
+.names check_oss_bank_std_match_result_3_n.BLIF \
+check_oss_bank_std_match_result_4_n.BLIF check_oss_bank_std_match_result_6_n
+11 1
+.names N_228.BLIF N_231.BLIF N_209
+11 1
+.names a_15_.BLIF check_vector_access_un1_activate_4_n.BLIF \
+freezer_rom_bank_select_std_match_result_1_n
+11 1
+.names N_210_1.BLIF cart_access_un22_flash_enable_n.BLIF N_210
+11 1
+.names flash_config_access_5.BLIF \
+freezer_rom_bank_select_std_match_8_result_3_n.BLIF \
+freezer_rom_bank_select_std_match_result_2_n
+11 1
+.names ram_access_std_match_result_1_0_n.BLIF a_12_.BLIF \
+ram_access_std_match_result_n
+11 1
+.names freezer_rom_bank_select_std_match_result_1_n.BLIF \
+freezer_rom_bank_select_std_match_result_2_n.BLIF \
+freezer_rom_bank_select_std_match_result_3_n
+11 1
+.names N_214_1.BLIF cart_access_un13_flash_enable_n.BLIF N_214
+11 1
+.names cart_access_tmp_cart_a_10_m_i_12__n.BLIF \
+freezer_ram_bank_m_i_12__n.BLIF N_283_1
+11 1
+.names N_215_1.BLIF a_1_i_13__n.BLIF N_215
+11 1
+.names N_75_i.BLIF N_200_i.BLIF N_283_2
+11 1
+.names cart_access_un13_flash_enable_n.BLIF un1_cart_mode_4.BLIF N_216
+11 1
+.names a_1_m_0_i_12__n.BLIF a_1_m_i_12__n.BLIF N_283_3
+11 1
+.names N_193.BLIF cart_access_un13_flash_enable_n.BLIF cart_a_4_13__n
+11 1
+.names N_283_1.BLIF N_283_2.BLIF N_283_4
+11 1
+.names N_227.BLIF ram_access_std_match_13_result_3_n.BLIF N_218
+11 1
+.names N_75_i.BLIF os_select_i.BLIF un1_os_select_1_1_0
+11 1
+.names N_219_1.BLIF freezer_ram_bank_13_.BLIF N_219
+11 1
+.names un1_os_select_1_1.BLIF un1_os_select_1_2.BLIF un1_os_select_1_2_0
+11 1
+.names N_235.BLIF freezer_rom_bank_13_.BLIF N_220
+11 1
+.names a_3_.BLIF a_4_.BLIF check_vector_access_un1_activate_1_n
+11 1
+.names N_222_1.BLIF oss_bank_13_.BLIF N_222
+11 1
+.names a_11_.BLIF a_12_.BLIF check_vector_access_un1_activate_2_0_n
+11 1
+.names N_192.BLIF cart_access_un22_flash_enable_n.BLIF N_223
+11 1
+.names activate_inputreg_1_i.BLIF check_vector_access_un1_activate_2_n.BLIF \
+check_vector_access_un1_activate_3_n
+11 1
+.names cart_bank_13_.BLIF un1_cart_mode_4.BLIF N_224
+11 1
+.names check_vector_access_un1_activate_9_n.BLIF un1_os_select_1_1.BLIF \
+check_vector_access_un1_activate_4_0_n
+11 1
+.names a_1_i_14__n.BLIF a_1_i_15__n.BLIF N_226
+11 1
+.names check_vector_access_un1_activate_1_n.BLIF \
+check_vector_access_un1_activate_2_0_n.BLIF \
+check_vector_access_un1_activate_5_n
+11 1
+.names N_33_d.BLIF N_226.BLIF N_227
+11 1
+.names check_vector_access_un1_activate_3_n.BLIF \
+check_vector_access_un1_activate_4_0_n.BLIF \
+check_vector_access_un1_activate_6_n
+11 1
+.names a_15_.BLIF a_1_i_14__n.BLIF N_228
+11 1
+.names check_vector_access_un1_activate_5_n.BLIF \
+check_vector_access_un1_activate_6_n.BLIF check_vector_access_un1_activate_7_n
+11 1
+.names N_190.BLIF inst_flash_enable.BLIF cart_access_un13_flash_enable_n
+11 1
+.names a_1_.BLIF a_1_i_2__n.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_1_n
+11 1
+.names N_228.BLIF a_13_.BLIF cart_access_un22_flash_enable_n
+11 1
+.names a_1_i_3__n.BLIF flash_config_access.BLIF \
+check_cartemu_reset_mode_un69_flash_config_access_2_n
+11 1
+.names cart_mode_0_.BLIF cart_mode_i_1__n.BLIF N_231
+11 1
+.names cart_access_un22_flash_enable_n.BLIF oss_bank_12_.BLIF \
+cart_access_tmp_cart_a_10_m_1_12__n
+11 1
+.names cart_mode_1_.BLIF cart_mode_i_0__n.BLIF N_234
+11 1
+.names N_191.BLIF N_234.BLIF cart_access_tmp_cart_a_10_m_2_12__n
+11 1
+.names N_235_1.BLIF rw.BLIF N_235
+11 1
+.names a_1_i_12__n.BLIF cart_access_un13_flash_enable_n.BLIF \
+cart_access_tmp_cart_a_10_m_3_12__n
+11 1
+.names a_2_.BLIF a_1_i_3__n.BLIF N_154_1
+11 1
+.names cart_access_tmp_cart_a_10_m_1_12__n.BLIF \
+cart_access_tmp_cart_a_10_m_2_12__n.BLIF cart_access_tmp_cart_a_10_m_4_12__n
+11 1
+.names a_1_i_12__n.BLIF a_1_i_13__n.BLIF ram_access_std_match_13_result_3_n
+11 1
+.names vector_a2_m_1.BLIF inst_use_vector_bankno.BLIF vector_a2_m_1_0
+11 1
+.names freezer_state_0_.BLIF freezer_state_1_.BLIF N_33_d
+11 1
+.names N_75_i.BLIF a_1_m_0_i_4__n.BLIF N_277_1
+11 1
+.names N_226.BLIF ram_access_std_match_13_result_3_n.BLIF \
+ram_access_std_match_result_1_n
+11 1
+.names a_1_m_i_4__n.BLIF cart_a_4_m_i_17__n.BLIF N_277_2
+11 1
+.names N_256.BLIF ram_access_freezer_ram_mask_a5a73_n
+0 1
+.names freezer_rom_bank_m_i_17__n.BLIF un1_os_select_1_i.BLIF N_277_3
+11 1
+.names N_75_i.BLIF N_83_i.BLIF N_82
+11 1
+.names N_277_1.BLIF N_277_2.BLIF N_277_4
+11 1
+.names disable_atari_un36_freezer_rom_access_1_n.BLIF \
+ram_access_std_match_13_result_3_n.BLIF \
+disable_atari_un36_freezer_rom_access_n
+11 1
+.names N_277_3.BLIF vector_a2_m_i.BLIF N_277_5
+11 1
+.names freezer_activation_un5_d700_d71f_access_i_0_n.BLIF \
+freezer_state_1_.BLIF N_78
+11 1
+.names cart_a_4_13__n.BLIF cart_a_4_14__n.BLIF \
+cart_access_un17_tmp_cart_access_1_n
+11 1
+.names freezer_state_1_.BLIF rw_1_i.BLIF N_76
+11 1
+.names cart_a_4_15__n.BLIF cart_a_4_16__n.BLIF \
+cart_access_un17_tmp_cart_access_2_n
+11 1
+.names N_74_1.BLIF freezer_state_i_0_0__n.BLIF N_74
+11 1
+.names N_209_i.BLIF N_210_i.BLIF N_275_1
+11 1
+.names rw_1_i.BLIF un1_freezer_state_7_1.BLIF N_48_m
+11 1
+.names ram_access_std_match_result_2_1_n.BLIF a_15_.BLIF \
+un1_freezer_state_7_1_1
+11 1
+.names N_78.BLIF freezer_state_0_.BLIF N_73
+11 1
+.names a_1_i_11__n.BLIF a_1_i_13__n.BLIF un1_freezer_state_7_1_2
+11 1
+.names check_vector_access_un1_activate_n.BLIF freezer_state_i_0_1__n.BLIF \
+N_77
+11 1
+.names un1_freezer_state_7_1_1.BLIF un1_freezer_state_7_1_2.BLIF \
+un1_freezer_state_7_1_3
+11 1
+.names N_235.BLIF freezer_rom_bank_18_.BLIF freezer_rom_bank_m_18__n
+11 1
+.names a_1_i_8__n.BLIF a_1_i_9__n.BLIF un1_freezer_state_7_1_0
+11 1
+.names cart_bank_i_18__n.BLIF cart_mode_ram_i.BLIF cart_a_4_i_m_18__n
+11 1
+.names a_1_i_10__n.BLIF un1_freezer_state_7_1.BLIF un1_freezer_state_7_2
+11 1
+.names cart_a_iv_i_18__n.BLIF cart_a_iv_18__n
+0 1
+.names inst_sdx_enable.BLIF cart_access_un22_flash_enable_n.BLIF \
+un1_un63_cart_mode_1
+11 1
+.names N_152_1.BLIF flash_config_access.BLIF N_152
+11 1
+.names cart_mode_i_1__n.BLIF cart_access_un22_flash_enable_n.BLIF \
+un1_cart_mode_2_1
+11 1
+.names N_235.BLIF freezer_rom_bank_14_.BLIF N_208
+11 1
+.names un1_freezer_state_7_1_i.BLIF un1_os_select_1_i.BLIF N_206_1
+11 1
+.names N_246.BLIF N_190
+0 1
+.names N_218_i.BLIF N_219_i.BLIF N_206_2
+11 1
+.names inst_cart_write_enable.BLIF flash_writable_in_i.BLIF N_221
+11 1
+.names N_220_i.BLIF cart_a_4_i_13__n.BLIF N_206_3
+11 1
+.names N_245.BLIF cart_bank_5_15__n
+0 1
+.names N_206_1.BLIF N_206_2.BLIF N_206_4
+11 1
+.names a_2_.BLIF a_1_i_7__n.BLIF N_150
+11 1
+.names N_227.BLIF a_13_.BLIF N_235_1
+11 1
+.names a_7_.BLIF a_1_i_2__n.BLIF N_151
+11 1
+.names N_154_1.BLIF a_1_.BLIF N_154_1_0
+11 1
+.names a_7_.BLIF a_8_.BLIF flash_config_access_1
+11 1
+.names N_82.BLIF cart_ram_access_i.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_1_n
+11 1
+.names check_flash_enable_un3_flash_enable_in_3_n.BLIF \
+flash_config_access.BLIF check_flash_enable_un3_flash_enable_in_n
+11 1
+.names cart_rom_access_i.BLIF disable_atari_un36_freezer_rom_access_i_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_2_n
+11 1
+.names check_flash_enable_un30_flash_enable_in_3_n.BLIF \
+flash_config_access.BLIF check_flash_enable_un30_flash_enable_in_n
+11 1
+.names disable_atari_un38_freezer_rom_access_i_c_1_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_2_n.BLIF \
+disable_atari_un38_freezer_rom_access_i_c_3_n
+11 1
+.names flash_config_access_2.BLIF flash_config_access_3.BLIF \
+cart_bank_select_std_match_result_5_n
+11 1
+.names N_78_i.BLIF N_75_i.BLIF N_264_1
+11 1
+.names check_sdx_enable_std_match_result_4_n.BLIF \
+check_sdx_enable_std_match_result_3_n.BLIF check_sdx_enable_std_match_result_n
+11 1
+.names N_76.BLIF freezer_activation_un5_d700_d71f_access_n.BLIF N_74_1
+11 1
+.names check_flash_enable_un30_flash_enable_in_i_n.BLIF flash_enable_4_f1.BLIF \
+flash_enable_4
+11 1
+.names flash_config_access_3.BLIF os_select_i.BLIF \
+disable_atari_un36_freezer_rom_access_1_n
+11 1
+.names N_243.BLIF flash_enable_4_f1
+0 1
+.names N_48_m_i.BLIF cart_ram_access_i.BLIF \
+activate_freezer_chips_un10_freezer_ram_access_i_c_1_n
+11 1
+.names N_77_i.BLIF N_73_i.BLIF N_258_1
+11 1
+.names N_241.BLIF check_flash_enable_un1_flash_enable_in_n
+0 1
+.names N_75_i.BLIF cart_a_iv_18__n.BLIF N_254_1
+11 1
+.names cart_bank_select_un63_cart_mode_n.BLIF \
+check_sdx_enable_std_match_result_n.BLIF cart_bank_select_un62_cart_mode_n
+11 1
+.names freezer_rom_bank_m_i_18__n.BLIF un1_os_select_1_i.BLIF N_254_2
+11 1
+.names flash_enable_in_c.BLIF flash_enable_in_i
+0 1
+.names N_254_1.BLIF N_254_2.BLIF N_254_3
+11 1
+.names flash_writable_in_c.BLIF flash_writable_in_i
+0 1
+.names N_154_1.BLIF a_1_i_1__n.BLIF N_152_1
+11 1
+.names inst_cart_mode_ram.BLIF cart_mode_ram_i
+0 1
+.names N_200_i.BLIF N_207_i.BLIF N_250_1
+11 1
+.names cart_bank_select_std_match_result_n.BLIF \
+cart_bank_select_std_match_result_i_n
+0 1
+.names N_208_i.BLIF cart_a_4_i_14__n.BLIF N_250_2
+11 1
+.names cart_bank_select_un62_cart_mode_n.BLIF \
+cart_bank_select_un62_cart_mode_i_n
+0 1
+.names N_250_1.BLIF N_250_2.BLIF N_250_3
+11 1
+.names a_3_.BLIF a_1_i_3__n
+0 1
+.names flash_config_access_3.BLIF flash_config_access_5.BLIF \
+flash_config_access_1_0
+11 1
+.names check_flash_enable_un30_flash_enable_in_n.BLIF \
+check_flash_enable_un30_flash_enable_in_i_n
+0 1
+.names a_1_i_9__n.BLIF check_flash_config_access_std_match_6_result_3_n.BLIF \
+flash_config_access_2_0
+11 1
+.names a_9_.BLIF a_1_i_9__n
+0 1
+.names flash_config_access_1.BLIF flash_config_access_2.BLIF \
+flash_config_access_3_0
+11 1
+.names a_4_.BLIF a_1_i_4__n
+0 1
+.names flash_config_access_1_0.BLIF flash_config_access_2_0.BLIF \
+flash_config_access_4
+11 1
+.names a_7_.BLIF a_1_i_7__n
+0 1
+.names a_0_.BLIF a_1_i_1__n.BLIF check_flash_enable_un3_flash_enable_in_1_n
+11 1
+.names a_2_.BLIF a_1_i_2__n
+0 1
+.names a_1_i_2__n.BLIF a_1_i_3__n.BLIF \
+check_flash_enable_un3_flash_enable_in_2_n
+11 1
+.names a_5_.BLIF a_1_i_5__n
+0 1
+.names check_flash_enable_un3_flash_enable_in_1_n.BLIF \
+check_flash_enable_un3_flash_enable_in_2_n.BLIF \
+check_flash_enable_un3_flash_enable_in_3_n
+11 1
+.names a_6_.BLIF a_1_i_6__n
+0 1
+.names a_1_i_0__n.BLIF a_1_i_1__n.BLIF \
+check_flash_enable_un30_flash_enable_in_1_n
+11 1
+.names a_1_.BLIF a_1_i_1__n
+0 1
+.names a_1_i_2__n.BLIF a_1_i_3__n.BLIF \
+check_flash_enable_un30_flash_enable_in_2_n
+11 1
+.names a_14_.BLIF a_1_i_14__n
+0 1
+.names check_flash_enable_un30_flash_enable_in_1_n.BLIF \
+check_flash_enable_un30_flash_enable_in_2_n.BLIF \
+check_flash_enable_un30_flash_enable_in_3_n
+11 1
+.names a_15_.BLIF a_1_i_15__n
+0 1
+.names a_1_i_7__n.BLIF a_6_.BLIF \
+freezer_rom_bank_select_std_match_8_result_3_1_n
+11 1
+.names cart_bank_18_.BLIF cart_bank_i_18__n
+0 1
+.names a_1_i_9__n.BLIF cart_bank_select_std_match_result_5_n.BLIF \
+cart_bank_select_std_match_result_1_n
+11 1
+.names freezer_state_0_.BLIF freezer_state_i_0_0__n
+0 1
+.names flash_config_access_5.BLIF \
+freezer_rom_bank_select_std_match_8_result_3_n.BLIF \
+cart_bank_select_std_match_result_2_n
+11 1
+.names freezer_state_1_.BLIF freezer_state_i_0_1__n
+0 1
+.names N_159.BLIF a_8_.BLIF check_d700_d71f_access_std_match_result_1_n
+11 1
+.names rw.BLIF rw_1_i
+0 1
+.names a_9_.BLIF a_1_i_7__n.BLIF check_d700_d71f_access_std_match_result_2_n
+11 1
+.names freezer_activation_un5_d700_d71f_access_n.BLIF \
+freezer_activation_un5_d700_d71f_access_i_0_n
+0 1
+.names flash_config_access_2.BLIF flash_config_access_3.BLIF \
+check_d700_d71f_access_std_match_result_3_n
+11 1
+.names N_75.BLIF N_75_i
+0 1
+.names check_d700_d71f_access_std_match_result_1_n.BLIF \
+check_d700_d71f_access_std_match_result_2_n.BLIF \
+check_d700_d71f_access_std_match_result_4_n
+11 1
+.names os_select_c.BLIF os_select_i
+0 1
+.names check_d700_d71f_access_std_match_result_3_n.BLIF \
+flash_config_access_5.BLIF check_d700_d71f_access_std_match_result_5_n
+11 1
+.names a_12_.BLIF a_1_i_12__n
+0 1
+.names N_159.BLIF a_15_.BLIF freezer_ram_bank_select_std_match_result_1_n
+11 1
+.names a_13_.BLIF a_1_i_13__n
+0 1
+.names check_vector_access_un1_activate_9_n.BLIF flash_config_access_5.BLIF \
+freezer_ram_bank_select_std_match_result_2_n
+11 1
+.names cart_mode_0_.BLIF cart_mode_i_0__n
+0 1
+.names freezer_ram_bank_select_std_match_result_1_n.BLIF \
+freezer_ram_bank_select_std_match_result_2_n.BLIF \
+freezer_ram_bank_select_std_match_result_3_n
+11 1
+.names cart_mode_1_.BLIF cart_mode_i_1__n
+0 1
+.names flash_config_access_1.BLIF flash_config_access_5.BLIF \
+check_sdx_enable_std_match_result_1_n
+11 1
+.names un1_freezer_state_7_1.BLIF un1_freezer_state_7_1_i
+0 1
+.names a_1_i_4__n.BLIF a_1_i_9__n.BLIF check_sdx_enable_std_match_result_2_n
+11 1
+.names un1_os_select_1.BLIF un1_os_select_1_i
+0 1
+.names cart_bank_select_std_match_result_5_n.BLIF \
+check_vector_access_un1_activate_2_n.BLIF \
+check_sdx_enable_std_match_result_3_n
+11 1
+.names a_11_.BLIF a_1_i_11__n
+0 1
+.names check_sdx_enable_std_match_result_1_n.BLIF \
+check_sdx_enable_std_match_result_2_n.BLIF \
+check_sdx_enable_std_match_result_4_n
+11 1
+.names a_0_.BLIF a_1_i_0__n
+0 1
+.names N_234.BLIF a_1_i_12__n.BLIF N_222_1
+11 1
+.names a_10_.BLIF a_1_i_10__n
+0 1
+.names N_227.BLIF a_1_i_13__n.BLIF N_219_1
+11 1
+.names a_8_.BLIF a_1_i_8__n
+0 1
+.names N_227.BLIF a_12_.BLIF N_215_1
+11 1
+.names inst_use_vector_bankno.BLIF use_vector_bankno_i
+0 1
+.names N_228.BLIF N_231.BLIF N_214_1
+11 1
+.names activate_inputreg.BLIF activate_inputreg_1_i
+0 1
+.names a_1_i_13__n.BLIF N_226.BLIF ram_access_std_match_result_1_0_n
+11 1
+.names phi2_c.BLIF phi2_i
+0 1
+.names N_191.BLIF N_234.BLIF N_210_1
+11 1
+.names reset_c.BLIF reset_i
+0 1
+.names N_227.BLIF a_1_i_13__n.BLIF N_207_1
+11 1
+.names cart_access_un17_tmp_cart_access_n.BLIF \
+cart_access_un17_tmp_cart_access_i_n
+0 1
+.names a_3_.BLIF a_1_i_2__n.BLIF N_153_1
+11 1
+.names inst_cart_keepsettings.BLIF cart_keepsettings_i
+0 1
+.names check_sdx_enable_std_match_result_n.BLIF sdx_enable_0_un3_n
+0 1
+.names a_1_i_3__n.BLIF check_sdx_enable_std_match_result_n.BLIF \
+sdx_enable_0_un1_n
+11 1
+.names inst_sdx_enable.BLIF sdx_enable_0_un3_n.BLIF sdx_enable_0_un0_n
+11 1
+.names N_152.BLIF cart_write_enable_0_un3_n
+0 1
+.names a_0_.BLIF N_152.BLIF cart_write_enable_0_un1_n
+11 1
+.names inst_cart_write_enable.BLIF cart_write_enable_0_un3_n.BLIF \
+cart_write_enable_0_un0_n
+11 1
+.names un1_result_2.BLIF cart_bank_0_13__un3_n
+0 1
+.names cart_bank_13_.BLIF un1_result_2.BLIF cart_bank_0_13__un1_n
+11 1
+.names cart_bank_5_13_.BLIF cart_bank_0_13__un3_n.BLIF cart_bank_0_13__un0_n
+11 1
+.names un1_result_2.BLIF cart_bank_0_15__un3_n
+0 1
+.names cart_bank_15_.BLIF un1_result_2.BLIF cart_bank_0_15__un1_n
+11 1
+.names ram_rom_a_1_c_18__n.BLIF ram_rom_a_18_
+1 1
+0 0
+.names disable_atari_un38_freezer_rom_access_i_c_n.BLIF refresh
+1 1
+0 0
+.names activate_freezer_chips_un10_freezer_ram_access_i_c_n.BLIF ram_ce
+1 1
+0 0
+.names activate_freezer_chips_un10_freezer_rom_access_i_c_n.BLIF rom_ce
+1 1
+0 0
+.names ram_rom_a_1_c_17__n.BLIF ram_rom_a_17_
+1 1
+0 0
+.names ram_rom_a_1_c_16__n.BLIF ram_rom_a_16_
+1 1
+0 0
+.names ram_rom_a_1_c_15__n.BLIF ram_rom_a_15_
+1 1
+0 0
+.names ram_rom_a_1_c_14__n.BLIF ram_rom_a_14_
+1 1
+0 0
+.names N_206_i_0_c.BLIF ram_rom_a_13_
+1 1
+0 0
+.names ram_rom_a_1_c_12__n.BLIF ram_rom_a_12_
+1 1
+0 0
+.names phi2_i.BLIF freezer_state_1_.C
+1 1
+0 0
+.names reset_i.BLIF freezer_state_1_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_state_0_.C
+1 1
+0 0
+.names reset_i.BLIF freezer_state_0_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_ram_bank_13_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_ram_bank_13_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_ram_bank_14_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_ram_bank_14_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_ram_bank_15_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_ram_bank_15_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_ram_bank_16_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_ram_bank_16_.AR
+1 1
+0 0
+.names phi2_i.BLIF oss_bank_12_.C
+1 1
+0 0
+.names phi2_i.BLIF oss_bank_13_.C
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_13_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_13_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_14_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_14_.AR
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_15_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_15_.AP
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_16_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_16_.AP
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_17_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_17_.AP
+1 1
+0 0
+.names phi2_i.BLIF freezer_rom_bank_18_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_rom_bank_18_.AP
+1 1
+0 0
+.names phi2_i.BLIF freezer_ram_bank_12_.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF freezer_ram_bank_12_.AR
+1 1
+0 0
+.names phi2_i.BLIF cart_mode_0_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_mode_0_.AR
+1 1
+0 0
+.names phi2_i.BLIF cart_mode_1_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_mode_1_.AR
+1 1
+0 0
+.names phi2_i.BLIF inst_cart_keepsettings.C
+1 1
+0 0
+.names poweron_c.BLIF inst_cart_keepsettings.AP
+1 1
+0 0
+.names phi2_i.BLIF inst_sdx_enable.C
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_18_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_18_.AP
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_17_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_17_.AP
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_16_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_16_.AP
+1 1
+0 0
+.names a_in_0_.BLIF a_0_.D
+1 1
+0 0
+.names phi2_i.BLIF a_0_.LH
+1 1
+0 0
+.names phi2_i.BLIF inst_flash_enable.C
+1 1
+0 0
+.names a_in_1_.BLIF a_1_.D
+1 1
+0 0
+.names phi2_i.BLIF a_1_.LH
+1 1
+0 0
+.names phi2_i.BLIF inst_use_vector_bankno.C
+1 1
+0 0
+.names reset_freezer_banks.BLIF inst_use_vector_bankno.AR
+1 1
+0 0
+.names a_in_2_.BLIF a_2_.D
+1 1
+0 0
+.names phi2_i.BLIF a_2_.LH
+1 1
+0 0
+.names phi2_i.BLIF inst_vector_a2.C
+1 1
+0 0
+.names a_in_3_.BLIF a_3_.D
+1 1
+0 0
+.names phi2_i.BLIF a_3_.LH
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_15_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_15_.AP
+1 1
+0 0
+.names a_in_4_.BLIF a_4_.D
+1 1
+0 0
+.names phi2_i.BLIF a_4_.LH
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_14_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_14_.AP
+1 1
+0 0
+.names a_in_5_.BLIF a_5_.D
+1 1
+0 0
+.names phi2_i.BLIF a_5_.LH
+1 1
+0 0
+.names phi2_i.BLIF cart_bank_13_.C
+1 1
+0 0
+.names reset_cartemu.BLIF cart_bank_13_.AR
+1 1
+0 0
+.names a_in_6_.BLIF a_6_.D
+1 1
+0 0
+.names phi2_i.BLIF a_6_.LH
+1 1
+0 0
+.names phi2_i.BLIF inst_cart_write_enable.C
+1 1
+0 0
+.names reset_i.BLIF inst_cart_write_enable.AR
+1 1
+0 0
+.names a_in_7_.BLIF a_7_.D
+1 1
+0 0
+.names phi2_i.BLIF a_7_.LH
+1 1
+0 0
+.names phi2_i.BLIF inst_cart_mode_ram.C
+1 1
+0 0
+.names reset_cartemu.BLIF inst_cart_mode_ram.AR
+1 1
+0 0
+.names a_in_8_.BLIF a_8_.D
+1 1
+0 0
+.names phi2_i.BLIF a_8_.LH
+1 1
+0 0
+.names activate_in.BLIF activate_inputreg.D
+1 1
+0 0
+.names phi2_i.BLIF activate_inputreg.C
+1 1
+0 0
+.names rw_in.BLIF rw.D
+1 1
+0 0
+.names phi2_i.BLIF rw.LH
+1 1
+0 0
+.names a_in_9_.BLIF a_9_.D
+1 1
+0 0
+.names phi2_i.BLIF a_9_.LH
+1 1
+0 0
+.names a_in_10_.BLIF a_10_.D
+1 1
+0 0
+.names phi2_i.BLIF a_10_.LH
+1 1
+0 0
+.names a_in_11_.BLIF a_11_.D
+1 1
+0 0
+.names phi2_i.BLIF a_11_.LH
+1 1
+0 0
+.names a_in_12_.BLIF a_12_.D
+1 1
+0 0
+.names phi2_i.BLIF a_12_.LH
+1 1
+0 0
+.names a_in_13_.BLIF a_13_.D
+1 1
+0 0
+.names phi2_i.BLIF a_13_.LH
+1 1
+0 0
+.names a_in_14_.BLIF a_14_.D
+1 1
+0 0
+.names phi2_i.BLIF a_14_.LH
+1 1
+0 0
+.names a_in_15_.BLIF a_15_.D
+1 1
+0 0
+.names phi2_i.BLIF a_15_.LH
+1 1
+0 0
+.names poweron.BLIF poweron_c
+1 1
+0 0
+.names flash_enable_in.BLIF flash_enable_in_c
+1 1
+0 0
+.names flash_writable_in.BLIF flash_writable_in_c
+1 1
+0 0
+.names phi2.BLIF phi2_c
+1 1
+0 0
+.names reset.BLIF reset_c
+1 1
+0 0
+.names os_select.BLIF os_select_c
+1 1
+0 0
+.names a_1_.BLIF a_7_.BLIF cart_bank_5_14_
+01 1
+10 1
+11 0
+00 0
+.names a_0_.BLIF a_7_.BLIF cart_bank_5_13_
+01 1
+10 1
+11 0
+00 0
+.end

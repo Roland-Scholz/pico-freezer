@@ -1,0 +1,137 @@
+; 'a' command - atariserver remote control
+
+COMA  JSR COMASU
+      LDA #2
+      STA NCOUNT
+      JSR EATSPC
+      LDA NCOUNT
+      CMP #40
+      BEQ COMA31
+
+      LDX #39
+COMA1 LDA CMDLINE,X
+      BNE COMA2
+      DEX
+      BNE COMA1
+
+COMA2 INX
+      TXA
+      SEC
+      SBC NCOUNT
+      STA DBYTLO
+      STA DAUX1
+      LDX NCOUNT
+      LDY #0
+COMA3 LDA CMDLINE,X
+      JSR INT2ASC
+      STA DBUF,Y
+      INX
+      INY
+      CPY DBYTLO
+      BNE COMA3
+      LDA #$80
+      STA DSTATS
+
+COMA31 JSR SCROLL
+      LDA #'a
+      JSR PUTBYT
+      LDX #0
+COMA32 CPX DBYTLO
+      BEQ COMA33
+      LDA DBUF,X
+      JSR PUTBYT
+      INX
+      BNE COMA32
+COMA33 JSR DSIO
+      CPY #1
+      BEQ COMA4
+      CPY #144
+      BEQ COMA4
+COMAE LDY #3
+      JMP ERROR
+COMA4 LDA #$53
+      STA DCOMND
+      LDA #4
+      STA DBYTLO
+      LDA #$40
+      STA DSTATS
+      JSR DSIO
+      CPY #1
+      BNE COMAE
+      LDA DBUF+2
+      STA TPNT
+      LDA DBUF+3
+      STA TPNT+1
+      ORA TPNT
+      BEQ COMAX
+
+      LDA #0
+      STA DAUX1
+      STA DAUX2
+      LDA #$52
+      STA DCOMND
+
+      JSR SCROLL
+
+COMA5 LDA TPNT
+      ORA TPNT+1
+      BNE COMA6
+      JSR COMASU ; send empty command to clear buffer
+      JSR DSIO
+COMAX JMP DEBU3
+COMA6 LDA #$80
+      STA DBYTLO
+      STA TPNT2
+      LDA TPNT+1
+      BNE COMA7
+      LDA TPNT
+      BMI COMA7
+      STA TPNT2
+COMA7 LDA #$40
+      STA DSTATS
+      JSR DSIO
+      CPY #1
+      BNE COMAE
+
+      LDX #0
+COMA8 DEC TPNT
+      LDA TPNT
+      CMP #$FF
+      BNE COMA81
+      DEC TPNT+1
+COMA81 LDA DBUF,X
+      CMP #155
+      BNE COMA9
+      TXA
+      PHA
+      LDA TPNT
+      ORA TPNT+1
+      BEQ COMA82 ; ignore last EOL
+      JSR SCROLL
+COMA82 PLA
+      TAX
+      JMP COMA10
+COMA9 JSR PUTBYT
+COMA10 INX
+      CPX TPNT2
+      BNE COMA8
+
+      INC DAUX1
+      BNE COMA12
+      INC DAUX2
+COMA12 JMP COMA5
+
+; setup SIO for atariserver communications
+
+COMASU LDX #$0B
+COMASU1 LDA COMAST,X
+       STA DDEVIC,X
+       DEX
+       BPL COMASU1
+       RTS
+
+COMAST .BYTE $61,1,$43,0
+       .WORD DBUF
+       .BYTE 20,0
+       .WORD 0,0
+

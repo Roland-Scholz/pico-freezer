@@ -1,0 +1,3054 @@
+--
+-- Written by Synplicity
+-- Wed May 04 18:06:54 2005
+--
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity MACH_DFF is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  CLK :  in std_logic;
+  R :  in std_logic;
+  S :  in std_logic;
+  NOTIFIER :  in std_logic);
+end MACH_DFF;
+
+architecture beh of MACH_DFF is
+  signal un0 : std_logic ;
+  signal un1 : std_logic ;
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  un0 <= not S;
+  un1 <= not R;
+  VCC <= '1';
+  GND <= '0';
+  II_Q_Z: prim_dff port map (Q, D, CLK, un1, un0);
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity MACH_LATCH is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  LAT :  in std_logic;
+  R :  in std_logic;
+  S :  in std_logic;
+  NOTIFIER :  in std_logic);
+end MACH_LATCH;
+
+architecture beh of MACH_LATCH is
+  signal un0 : std_logic ;
+  signal un1 : std_logic ;
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  un0 <= not S;
+  un1 <= not R;
+  VCC <= '1';
+  GND <= '0';
+  II_Q_Z: prim_latch port map (Q, D, LAT, un1, un0);
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity AND2 is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic;
+  I1 :  in std_logic);
+end AND2;
+
+architecture beh of AND2 is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  VCC <= '1';
+  GND <= '0';
+  O <= I0 and I1  after 100 ps;
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity DFF is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  CLK :  in std_logic);
+end DFF;
+
+architecture beh of DFF is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+  component MACH_DFF
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic;
+      S : in std_logic;
+      NOTIFIER : in std_logic  );
+  end component;
+begin
+  II_INS4: MACH_DFF port map (
+      Q => Q,
+      D => D,
+      CLK => CLK,
+      R => VCC,
+      S => VCC,
+      NOTIFIER => GND);
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity DFFRH is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  CLK :  in std_logic;
+  R :  in std_logic);
+end DFFRH;
+
+architecture beh of DFFRH is
+  signal un1 : std_logic ;
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+  component MACH_DFF
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic;
+      S : in std_logic;
+      NOTIFIER : in std_logic  );
+  end component;
+begin
+  II_INS1: MACH_DFF port map (
+      Q => Q,
+      D => D,
+      CLK => CLK,
+      R => un1,
+      S => VCC,
+      NOTIFIER => GND);
+  un1 <= not R;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity DFFRSH is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  CLK :  in std_logic;
+  R :  in std_logic;
+  S :  in std_logic);
+end DFFRSH;
+
+architecture beh of DFFRSH is
+  signal un2 : std_logic ;
+  signal un1 : std_logic ;
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+  component MACH_DFF
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic;
+      S : in std_logic;
+      NOTIFIER : in std_logic  );
+  end component;
+begin
+  II_INS7: MACH_DFF port map (
+      Q => Q,
+      D => D,
+      CLK => CLK,
+      R => un2,
+      S => un1,
+      NOTIFIER => GND);
+  un1 <= not S;
+  un2 <= not R;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity DFFSH is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  CLK :  in std_logic;
+  S :  in std_logic);
+end DFFSH;
+
+architecture beh of DFFSH is
+  signal VCC : std_logic ;
+  signal un1 : std_logic ;
+  signal GND : std_logic ;
+  component MACH_DFF
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic;
+      S : in std_logic;
+      NOTIFIER : in std_logic  );
+  end component;
+begin
+  II_INS5: MACH_DFF port map (
+      Q => Q,
+      D => D,
+      CLK => CLK,
+      R => VCC,
+      S => un1,
+      NOTIFIER => GND);
+  un1 <= not S;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity DLAT is
+port(
+  Q :  out std_logic;
+  D :  in std_logic;
+  LAT :  in std_logic);
+end DLAT;
+
+architecture beh of DLAT is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+  component MACH_LATCH
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      LAT : in std_logic;
+      R : in std_logic;
+      S : in std_logic;
+      NOTIFIER : in std_logic  );
+  end component;
+begin
+  II_INS4: MACH_LATCH port map (
+      Q => Q,
+      D => D,
+      LAT => LAT,
+      R => VCC,
+      S => VCC,
+      NOTIFIER => GND);
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity IBUF is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic);
+end IBUF;
+
+architecture beh of IBUF is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  O <= I0;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity INV is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic);
+end INV;
+
+architecture beh of INV is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  O <= not I0;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity OBUF is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic);
+end OBUF;
+
+architecture beh of OBUF is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  O <= I0;
+  VCC <= '1';
+  GND <= '0';
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity OR2 is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic;
+  I1 :  in std_logic);
+end OR2;
+
+architecture beh of OR2 is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  VCC <= '1';
+  GND <= '0';
+  O <= I0 or I1  after 100 ps;
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity XOR2 is
+port(
+  O :  out std_logic;
+  I0 :  in std_logic;
+  I1 :  in std_logic);
+end XOR2;
+
+architecture beh of XOR2 is
+  signal VCC : std_logic ;
+  signal GND : std_logic ;
+begin
+  VCC <= '1';
+  GND <= '0';
+  O <= I0 xor I1  after 100 ps;
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+
+entity TurboFreezerXL is
+port(
+  phi2 :  in std_logic;
+  reset :  in std_logic;
+  rw_in :  in std_logic;
+  os_select :  in std_logic;
+  a_in : in std_logic_vector (15 downto 0);
+  activate_in :  in std_logic;
+  poweron :  in std_logic;
+  flash_enable_in :  in std_logic;
+  flash_writable_in :  in std_logic;
+  ram_rom_a : out std_logic_vector (18 downto 12);
+  refresh :  out std_logic;
+  ram_ce :  out std_logic;
+  rom_ce :  out std_logic);
+end TurboFreezerXL;
+
+architecture beh of TurboFreezerXL is
+  signal cart_mode : std_logic_vector (1 downto 0);
+  signal oss_bank : std_logic_vector (13 downto 12);
+  signal a_1 : std_logic_vector (15 downto 0);
+  signal cart_bank_5 : std_logic_vector (15 downto 13);
+  signal cart_bank : std_logic_vector (18 downto 13);
+  signal cart_a_4 : std_logic_vector (16 downto 13);
+  signal freezer_ram_bank : std_logic_vector (16 downto 12);
+  signal freezer_rom_bank : std_logic_vector (18 downto 13);
+  signal freezer_state : std_logic_vector (1 downto 0);
+  signal freezer_state_d : std_logic_vector (3 to 3);
+  signal freezer_state_ns : std_logic_vector (1 downto 0);
+  signal a_1_m : std_logic_vector (12 downto 4);
+  signal freezer_rom_bank_m : std_logic_vector (18 downto 15);
+  signal cart_a_4_m : std_logic_vector (17 to 17);
+  signal a_1_m_0 : std_logic_vector (12 downto 4);
+  signal freezer_ram_bank_m : std_logic_vector (16 downto 12);
+  signal \cart_access.tmp_cart_a_10_m\ : std_logic_vector (12 to 12);
+  signal cart_a_4_i_m : std_logic_vector (18 to 18);
+  signal cart_a_iv : std_logic_vector (18 to 18);
+  signal a_1_i : std_logic_vector (15 downto 0);
+  signal cart_bank_i : std_logic_vector (18 to 18);
+  signal freezer_state_i_0 : std_logic_vector (1 downto 0);
+  signal cart_mode_i : std_logic_vector (1 downto 0);
+  signal a_in_c : std_logic_vector (15 downto 0);
+  signal ram_rom_a_1_c : std_logic_vector (18 downto 12);
+  signal cart_a_4_i : std_logic_vector (16 downto 13);
+  signal freezer_rom_bank_m_i : std_logic_vector (18 downto 15);
+  signal cart_a_4_i_m_i : std_logic_vector (18 to 18);
+  signal cart_a_iv_i : std_logic_vector (18 to 18);
+  signal oss_bank_i : std_logic_vector (13 downto 12);
+  signal a_1_m_0_i : std_logic_vector (12 downto 4);
+  signal cart_a_4_m_i : std_logic_vector (17 to 17);
+  signal a_1_m_i : std_logic_vector (12 downto 4);
+  signal freezer_ram_bank_m_i : std_logic_vector (16 downto 12);
+  signal \cart_access.tmp_cart_a_10_m_i\ : std_logic_vector (12 to 12);
+  signal \cart_access.tmp_cart_a_10_m_1\ : std_logic_vector (12 to 12);
+  signal \cart_access.tmp_cart_a_10_m_2\ : std_logic_vector (12 to 12);
+  signal \cart_access.tmp_cart_a_10_m_3\ : std_logic_vector (12 to 12);
+  signal \cart_access.tmp_cart_a_10_m_4\ : std_logic_vector (12 to 12);
+  signal use_vector_bankno : std_logic ;
+  signal cart_keepsettings : std_logic ;
+  signal cart_mode_ram : std_logic ;
+  signal rw_1 : std_logic ;
+  signal activate_inputreg_1 : std_logic ;
+  signal \cart_bank_select.un63_cart_mode\ : std_logic ;
+  signal \check_reset_cartemu.un1_reset_cartemu\ : std_logic ;
+  signal cart_write_enable : std_logic ;
+  signal reset_cartemu : std_logic ;
+  signal \freezer_rom_bank_select.std_match.8.result_3\ : std_logic ;
+  signal un1_un63_cart_mode : std_logic ;
+  signal sdx_enable : std_logic ;
+  signal un1_cart_mode_2 : std_logic ;
+  signal un2_reset_cartemu : std_logic ;
+  signal un2_reset_cartemu_1 : std_logic ;
+  signal flash_enable : std_logic ;
+  signal un1_cart_mode_4 : std_logic ;
+  signal tmp_cart_access_5 : std_logic ;
+  signal un1_freezer_state_4 : std_logic ;
+  signal tmp_cart_access_1 : std_logic ;
+  signal un1_freezer_state_7 : std_logic ;
+  signal cart_rom_access : std_logic ;
+  signal un1_tmp_cart_access_1 : std_logic ;
+  signal un1_freezer_state_10 : std_logic ;
+  signal \freezer_rom_bank_select.std_match.result\ : std_logic ;
+  signal \cart_bank_select.std_match.result\ : std_logic ;
+  signal \cart_access.un17_tmp_cart_access\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result\ : std_logic ;
+  signal \freezer_ram_bank_select.std_match.result\ : std_logic ;
+  signal vector_a2 : std_logic ;
+  signal cart_ram_access : std_logic ;
+  signal \check_oss_bank.std_match.result\ : std_logic ;
+  signal \freezer_activation.un5_d700_d71f_access\ : std_logic ;
+  signal \freezer_ram_mode_select.un17_d700_d71f_access\ : std_logic ;
+  signal \check_cartemu_reset_mode.un69_flash_config_access\ : std_logic ;
+  signal \check_vector_access.un1_activate\ : std_logic ;
+  signal un1_result_2 : std_logic ;
+  signal un1_os_select_1 : std_logic ;
+  signal N_1 : std_logic ;
+  signal N_2 : std_logic ;
+  signal N_3 : std_logic ;
+  signal N_4 : std_logic ;
+  signal N_5 : std_logic ;
+  signal N_6 : std_logic ;
+  signal N_7 : std_logic ;
+  signal N_8 : std_logic ;
+  signal N_9 : std_logic ;
+  signal N_10 : std_logic ;
+  signal N_11 : std_logic ;
+  signal N_12 : std_logic ;
+  signal N_13 : std_logic ;
+  signal N_14 : std_logic ;
+  signal N_15 : std_logic ;
+  signal N_16 : std_logic ;
+  signal N_17 : std_logic ;
+  signal N_18 : std_logic ;
+  signal N_19 : std_logic ;
+  signal N_20 : std_logic ;
+  signal N_21 : std_logic ;
+  signal N_22 : std_logic ;
+  signal N_23 : std_logic ;
+  signal N_24 : std_logic ;
+  signal N_25 : std_logic ;
+  signal N_26 : std_logic ;
+  signal N_27 : std_logic ;
+  signal N_28 : std_logic ;
+  signal N_29 : std_logic ;
+  signal N_30 : std_logic ;
+  signal N_31 : std_logic ;
+  signal N_32 : std_logic ;
+  signal reset_freezer_banks : std_logic ;
+  signal N_75 : std_logic ;
+  signal N_83 : std_logic ;
+  signal vector_a2_m : std_logic ;
+  signal N_90 : std_logic ;
+  signal \check_vector_access.un1_activate_9\ : std_logic ;
+  signal \ram_access.std_match.result_2_1\ : std_logic ;
+  signal \check_vector_access.un1_activate_2\ : std_logic ;
+  signal \check_vector_access.un1_activate_4\ : std_logic ;
+  signal un1_os_select_1_1 : std_logic ;
+  signal un1_os_select_1_2 : std_logic ;
+  signal vector_a2_m_1 : std_logic ;
+  signal un1_freezer_state_7_1 : std_logic ;
+  signal N_153 : std_logic ;
+  signal N_154 : std_logic ;
+  signal flash_config_access_5 : std_logic ;
+  signal flash_config_access_3 : std_logic ;
+  signal flash_config_access_2 : std_logic ;
+  signal N_159 : std_logic ;
+  signal \check_flash_config_access.std_match.6.result_3\ : std_logic ;
+  signal flash_config_access : std_logic ;
+  signal N_191 : std_logic ;
+  signal N_192 : std_logic ;
+  signal N_193 : std_logic ;
+  signal N_206 : std_logic ;
+  signal N_207 : std_logic ;
+  signal N_209 : std_logic ;
+  signal N_210 : std_logic ;
+  signal \ram_access.std_match.result\ : std_logic ;
+  signal N_214 : std_logic ;
+  signal N_215 : std_logic ;
+  signal N_216 : std_logic ;
+  signal N_218 : std_logic ;
+  signal N_219 : std_logic ;
+  signal N_220 : std_logic ;
+  signal N_222 : std_logic ;
+  signal N_223 : std_logic ;
+  signal N_224 : std_logic ;
+  signal N_226 : std_logic ;
+  signal N_227 : std_logic ;
+  signal N_228 : std_logic ;
+  signal \cart_access.un13_flash_enable\ : std_logic ;
+  signal \cart_access.un22_flash_enable\ : std_logic ;
+  signal N_231 : std_logic ;
+  signal N_234 : std_logic ;
+  signal N_235 : std_logic ;
+  signal N_154_1 : std_logic ;
+  signal \ram_access.std_match.13.result_3\ : std_logic ;
+  signal N_33_d : std_logic ;
+  signal \ram_access.std_match.result_1\ : std_logic ;
+  signal \ram_access.freezer_ram_mask_a5a73\ : std_logic ;
+  signal N_82 : std_logic ;
+  signal \disable_atari.un36_freezer_rom_access\ : std_logic ;
+  signal N_78 : std_logic ;
+  signal N_76 : std_logic ;
+  signal N_74 : std_logic ;
+  signal N_48_m : std_logic ;
+  signal N_73 : std_logic ;
+  signal N_77 : std_logic ;
+  signal N_152 : std_logic ;
+  signal N_208 : std_logic ;
+  signal N_190 : std_logic ;
+  signal N_221 : std_logic ;
+  signal N_150 : std_logic ;
+  signal N_151 : std_logic ;
+  signal flash_config_access_1 : std_logic ;
+  signal \check_flash_enable.un3_flash_enable_in\ : std_logic ;
+  signal \check_flash_enable.un30_flash_enable_in\ : std_logic ;
+  signal \cart_bank_select.std_match.result_5\ : std_logic ;
+  signal \check_sdx_enable.std_match.result\ : std_logic ;
+  signal flash_enable_4 : std_logic ;
+  signal flash_enable_4_f1 : std_logic ;
+  signal \check_flash_enable.un1_flash_enable_in\ : std_logic ;
+  signal \cart_bank_select.un62_cart_mode\ : std_logic ;
+  signal flash_enable_in_i : std_logic ;
+  signal flash_writable_in_i : std_logic ;
+  signal cart_mode_ram_i : std_logic ;
+  signal \cart_bank_select.std_match.result_i\ : std_logic ;
+  signal \cart_bank_select.un62_cart_mode_i\ : std_logic ;
+  signal \check_flash_enable.un30_flash_enable_in_i\ : std_logic ;
+  signal rw_1_i : std_logic ;
+  signal \freezer_activation.un5_d700_d71f_access_i_0\ : std_logic ;
+  signal N_75_i : std_logic ;
+  signal os_select_i : std_logic ;
+  signal un1_freezer_state_7_1_i : std_logic ;
+  signal un1_os_select_1_i : std_logic ;
+  signal use_vector_bankno_i : std_logic ;
+  signal activate_inputreg_1_i : std_logic ;
+  signal phi2_i : std_logic ;
+  signal reset_i : std_logic ;
+  signal \cart_access.un17_tmp_cart_access_i\ : std_logic ;
+  signal cart_keepsettings_i : std_logic ;
+  signal phi2_c : std_logic ;
+  signal reset_c : std_logic ;
+  signal rw_in_c : std_logic ;
+  signal os_select_c : std_logic ;
+  signal activate_in_c : std_logic ;
+  signal poweron_c : std_logic ;
+  signal flash_enable_in_c : std_logic ;
+  signal flash_writable_in_c : std_logic ;
+  signal N_206_i_0_c : std_logic ;
+  signal N_241 : std_logic ;
+  signal N_235_i : std_logic ;
+  signal N_83_i : std_logic ;
+  signal flash_enable_i : std_logic ;
+  signal \check_flash_enable.un3_flash_enable_in_i\ : std_logic ;
+  signal N_243 : std_logic ;
+  signal N_244 : std_logic ;
+  signal N_150_i : std_logic ;
+  signal N_151_i : std_logic ;
+  signal N_245 : std_logic ;
+  signal N_221_i : std_logic ;
+  signal N_246 : std_logic ;
+  signal N_207_i : std_logic ;
+  signal N_208_i : std_logic ;
+  signal N_250 : std_logic ;
+  signal vector_a2_m_1_i : std_logic ;
+  signal N_254 : std_logic ;
+  signal \ram_access.std_match.result_1_i\ : std_logic ;
+  signal \ram_access.std_match.result_i\ : std_logic ;
+  signal N_256 : std_logic ;
+  signal cart_rom_access_i : std_logic ;
+  signal \activate_freezer_chips.un10_freezer_rom_access_i_c\ : std_logic ;
+  signal N_77_i : std_logic ;
+  signal N_258 : std_logic ;
+  signal N_73_i : std_logic ;
+  signal N_74_i : std_logic ;
+  signal cart_ram_access_i : std_logic ;
+  signal N_48_m_i : std_logic ;
+  signal \activate_freezer_chips.un10_freezer_ram_access_i_c\ : std_logic ;
+  signal N_76_i : std_logic ;
+  signal N_78_i : std_logic ;
+  signal N_264 : std_logic ;
+  signal \disable_atari.un36_freezer_rom_access_i\ : std_logic ;
+  signal \disable_atari.un38_freezer_rom_access_i_c\ : std_logic ;
+  signal N_219_i : std_logic ;
+  signal N_220_i : std_logic ;
+  signal N_218_i : std_logic ;
+  signal N_200_i : std_logic ;
+  signal N_223_i : std_logic ;
+  signal N_224_i : std_logic ;
+  signal N_272 : std_logic ;
+  signal N_222_i : std_logic ;
+  signal N_231_i : std_logic ;
+  signal N_273 : std_logic ;
+  signal N_274 : std_logic ;
+  signal N_275 : std_logic ;
+  signal N_209_i : std_logic ;
+  signal N_210_i : std_logic ;
+  signal N_277 : std_logic ;
+  signal vector_a2_m_i : std_logic ;
+  signal N_283 : std_logic ;
+  signal N_294 : std_logic ;
+  signal N_295 : std_logic ;
+  signal N_214_i : std_logic ;
+  signal N_216_i : std_logic ;
+  signal N_296 : std_logic ;
+  signal un1_freezer_state_4_i : std_logic ;
+  signal un1_freezer_state_7_i : std_logic ;
+  signal N_297 : std_logic ;
+  signal un1_cart_mode_2_i : std_logic ;
+  signal un1_un63_cart_mode_i : std_logic ;
+  signal un1_cart_mode_4_i : std_logic ;
+  signal \check_reset_cartemu.un1_reset_cartemu_i\ : std_logic ;
+  signal poweron_c_i : std_logic ;
+  signal N_299 : std_logic ;
+  signal N_295_1 : std_logic ;
+  signal N_295_2 : std_logic ;
+  signal N_295_3 : std_logic ;
+  signal N_294_1 : std_logic ;
+  signal N_294_2 : std_logic ;
+  signal N_294_3 : std_logic ;
+  signal \check_oss_bank.std_match.result_1\ : std_logic ;
+  signal \check_oss_bank.std_match.result_2\ : std_logic ;
+  signal \check_oss_bank.std_match.result_3\ : std_logic ;
+  signal \check_oss_bank.std_match.result_4\ : std_logic ;
+  signal \check_oss_bank.std_match.result_5\ : std_logic ;
+  signal \check_oss_bank.std_match.result_6\ : std_logic ;
+  signal \freezer_rom_bank_select.std_match.result_1\ : std_logic ;
+  signal \freezer_rom_bank_select.std_match.result_2\ : std_logic ;
+  signal \freezer_rom_bank_select.std_match.result_3\ : std_logic ;
+  signal N_283_1 : std_logic ;
+  signal N_283_2 : std_logic ;
+  signal N_283_3 : std_logic ;
+  signal N_283_4 : std_logic ;
+  signal un1_os_select_1_1_0 : std_logic ;
+  signal un1_os_select_1_2_0 : std_logic ;
+  signal \check_vector_access.un1_activate_1\ : std_logic ;
+  signal \check_vector_access.un1_activate_2_0\ : std_logic ;
+  signal \check_vector_access.un1_activate_3\ : std_logic ;
+  signal \check_vector_access.un1_activate_4_0\ : std_logic ;
+  signal \check_vector_access.un1_activate_5\ : std_logic ;
+  signal \check_vector_access.un1_activate_6\ : std_logic ;
+  signal \check_vector_access.un1_activate_7\ : std_logic ;
+  signal \check_cartemu_reset_mode.un69_flash_config_access_1\ : std_logic ;
+  signal \check_cartemu_reset_mode.un69_flash_config_access_2\ : std_logic ;
+  signal vector_a2_m_1_0 : std_logic ;
+  signal N_277_1 : std_logic ;
+  signal N_277_2 : std_logic ;
+  signal N_277_3 : std_logic ;
+  signal N_277_4 : std_logic ;
+  signal N_277_5 : std_logic ;
+  signal \cart_access.un17_tmp_cart_access_1\ : std_logic ;
+  signal \cart_access.un17_tmp_cart_access_2\ : std_logic ;
+  signal N_275_1 : std_logic ;
+  signal un1_freezer_state_7_1_1 : std_logic ;
+  signal un1_freezer_state_7_1_2 : std_logic ;
+  signal un1_freezer_state_7_1_3 : std_logic ;
+  signal un1_freezer_state_7_1_0 : std_logic ;
+  signal un1_freezer_state_7_2 : std_logic ;
+  signal un1_un63_cart_mode_1 : std_logic ;
+  signal un1_cart_mode_2_1 : std_logic ;
+  signal N_206_1 : std_logic ;
+  signal N_206_2 : std_logic ;
+  signal N_206_3 : std_logic ;
+  signal N_206_4 : std_logic ;
+  signal N_235_1 : std_logic ;
+  signal N_154_1_0 : std_logic ;
+  signal \disable_atari.un38_freezer_rom_access_i_c_1\ : std_logic ;
+  signal \disable_atari.un38_freezer_rom_access_i_c_2\ : std_logic ;
+  signal \disable_atari.un38_freezer_rom_access_i_c_3\ : std_logic ;
+  signal N_264_1 : std_logic ;
+  signal N_74_1 : std_logic ;
+  signal \disable_atari.un36_freezer_rom_access_1\ : std_logic ;
+  signal \activate_freezer_chips.un10_freezer_ram_access_i_c_1\ : std_logic ;
+  signal N_258_1 : std_logic ;
+  signal N_254_1 : std_logic ;
+  signal N_254_2 : std_logic ;
+  signal N_254_3 : std_logic ;
+  signal N_152_1 : std_logic ;
+  signal N_250_1 : std_logic ;
+  signal N_250_2 : std_logic ;
+  signal N_250_3 : std_logic ;
+  signal flash_config_access_1_0 : std_logic ;
+  signal flash_config_access_2_0 : std_logic ;
+  signal flash_config_access_3_0 : std_logic ;
+  signal flash_config_access_4 : std_logic ;
+  signal \check_flash_enable.un3_flash_enable_in_1\ : std_logic ;
+  signal \check_flash_enable.un3_flash_enable_in_2\ : std_logic ;
+  signal \check_flash_enable.un3_flash_enable_in_3\ : std_logic ;
+  signal \check_flash_enable.un30_flash_enable_in_1\ : std_logic ;
+  signal \check_flash_enable.un30_flash_enable_in_2\ : std_logic ;
+  signal \check_flash_enable.un30_flash_enable_in_3\ : std_logic ;
+  signal \freezer_rom_bank_select.std_match.8.result_3_1\ : std_logic ;
+  signal \cart_bank_select.std_match.result_1\ : std_logic ;
+  signal \cart_bank_select.std_match.result_2\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result_1\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result_2\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result_3\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result_4\ : std_logic ;
+  signal \check_d700_d71f_access.std_match.result_5\ : std_logic ;
+  signal \freezer_ram_bank_select.std_match.result_1\ : std_logic ;
+  signal \freezer_ram_bank_select.std_match.result_2\ : std_logic ;
+  signal \freezer_ram_bank_select.std_match.result_3\ : std_logic ;
+  signal \check_sdx_enable.std_match.result_1\ : std_logic ;
+  signal \check_sdx_enable.std_match.result_2\ : std_logic ;
+  signal \check_sdx_enable.std_match.result_3\ : std_logic ;
+  signal \check_sdx_enable.std_match.result_4\ : std_logic ;
+  signal N_222_1 : std_logic ;
+  signal N_219_1 : std_logic ;
+  signal N_215_1 : std_logic ;
+  signal N_214_1 : std_logic ;
+  signal \ram_access.std_match.result_1_0\ : std_logic ;
+  signal N_210_1 : std_logic ;
+  signal N_207_1 : std_logic ;
+  signal N_153_1 : std_logic ;
+  signal \sdx_enable_0.un3\ : std_logic ;
+  signal \sdx_enable_0.un1\ : std_logic ;
+  signal \sdx_enable_0.un0\ : std_logic ;
+  signal \cart_write_enable_0.un3\ : std_logic ;
+  signal \cart_write_enable_0.un1\ : std_logic ;
+  signal \cart_write_enable_0.un0\ : std_logic ;
+  signal \cart_bank_0_13_.un3\ : std_logic ;
+  signal \cart_bank_0_13_.un1\ : std_logic ;
+  signal \cart_bank_0_13_.un0\ : std_logic ;
+  signal \cart_bank_0_15_.un3\ : std_logic ;
+  signal \cart_bank_0_15_.un1\ : std_logic ;
+  signal \cart_bank_0_15_.un0\ : std_logic ;
+  signal \flash_enable_0.un3\ : std_logic ;
+  signal \flash_enable_0.un1\ : std_logic ;
+  signal \flash_enable_0.un0\ : std_logic ;
+  signal \freezer_ram_bank_0_15_.un3\ : std_logic ;
+  signal \freezer_ram_bank_0_15_.un1\ : std_logic ;
+  signal \freezer_ram_bank_0_15_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_18_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_18_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_18_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_16_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_16_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_16_.un0\ : std_logic ;
+  signal \cart_bank_0_16_.un3\ : std_logic ;
+  signal \cart_bank_0_16_.un1\ : std_logic ;
+  signal \cart_bank_0_16_.un0\ : std_logic ;
+  signal \cart_bank_0_18_.un3\ : std_logic ;
+  signal \cart_bank_0_18_.un1\ : std_logic ;
+  signal \cart_bank_0_18_.un0\ : std_logic ;
+  signal \freezer_ram_bank_0_14_.un3\ : std_logic ;
+  signal \freezer_ram_bank_0_14_.un1\ : std_logic ;
+  signal \freezer_ram_bank_0_14_.un0\ : std_logic ;
+  signal \freezer_ram_bank_0_16_.un3\ : std_logic ;
+  signal \freezer_ram_bank_0_16_.un1\ : std_logic ;
+  signal \freezer_ram_bank_0_16_.un0\ : std_logic ;
+  signal \oss_bank_0_12_.un3\ : std_logic ;
+  signal \oss_bank_0_12_.un1\ : std_logic ;
+  signal \oss_bank_0_12_.un0\ : std_logic ;
+  signal \oss_bank_0_13_.un3\ : std_logic ;
+  signal \oss_bank_0_13_.un1\ : std_logic ;
+  signal \oss_bank_0_13_.un0\ : std_logic ;
+  signal \cart_mode_0_0_.un3\ : std_logic ;
+  signal \cart_mode_0_0_.un1\ : std_logic ;
+  signal \cart_mode_0_0_.un0\ : std_logic ;
+  signal \cart_mode_0_1_.un3\ : std_logic ;
+  signal \cart_mode_0_1_.un1\ : std_logic ;
+  signal \cart_mode_0_1_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_13_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_13_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_13_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_14_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_14_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_14_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_15_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_15_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_15_.un0\ : std_logic ;
+  signal \freezer_rom_bank_0_17_.un3\ : std_logic ;
+  signal \freezer_rom_bank_0_17_.un1\ : std_logic ;
+  signal \freezer_rom_bank_0_17_.un0\ : std_logic ;
+  signal \freezer_ram_bank_0_12_.un3\ : std_logic ;
+  signal \freezer_ram_bank_0_12_.un1\ : std_logic ;
+  signal \freezer_ram_bank_0_12_.un0\ : std_logic ;
+  signal \freezer_ram_bank_0_13_.un3\ : std_logic ;
+  signal \freezer_ram_bank_0_13_.un1\ : std_logic ;
+  signal \freezer_ram_bank_0_13_.un0\ : std_logic ;
+  signal \vector_a2_0.un3\ : std_logic ;
+  signal \vector_a2_0.un1\ : std_logic ;
+  signal \vector_a2_0.un0\ : std_logic ;
+  signal \cart_bank_0_14_.un3\ : std_logic ;
+  signal \cart_bank_0_14_.un1\ : std_logic ;
+  signal \cart_bank_0_14_.un0\ : std_logic ;
+  signal \cart_mode_ram_0.un3\ : std_logic ;
+  signal \cart_mode_ram_0.un1\ : std_logic ;
+  signal \cart_mode_ram_0.un0\ : std_logic ;
+  signal \cart_keepsettings_0.un3\ : std_logic ;
+  signal \cart_keepsettings_0.un1\ : std_logic ;
+  signal \cart_keepsettings_0.un0\ : std_logic ;
+  signal \cart_bank_0_17_.un3\ : std_logic ;
+  signal \cart_bank_0_17_.un1\ : std_logic ;
+  signal \cart_bank_0_17_.un0\ : std_logic ;
+  signal \use_vector_bankno_0.un3\ : std_logic ;
+  signal \use_vector_bankno_0.un1\ : std_logic ;
+  signal \use_vector_bankno_0.un0\ : std_logic ;
+  signal GND : std_logic ;
+  signal VCC : std_logic ;
+  component DFFRH
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic  );
+  end component;
+  component DFF
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic  );
+  end component;
+  component DFFSH
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      S : in std_logic  );
+  end component;
+  component DFFRSH
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      CLK : in std_logic;
+      R : in std_logic;
+      S : in std_logic  );
+  end component;
+  component IBUF
+    port(
+      O : out std_logic;
+      I0 : in std_logic  );
+  end component;
+  component OBUF
+    port(
+      O : out std_logic;
+      I0 : in std_logic  );
+  end component;
+  component AND2
+    port(
+      O : out std_logic;
+      I0 : in std_logic;
+      I1 : in std_logic  );
+  end component;
+  component INV
+    port(
+      O : out std_logic;
+      I0 : in std_logic  );
+  end component;
+  component OR2
+    port(
+      O : out std_logic;
+      I0 : in std_logic;
+      I1 : in std_logic  );
+  end component;
+  component XOR2
+    port(
+      O : out std_logic;
+      I0 : in std_logic;
+      I1 : in std_logic  );
+  end component;
+  component DLAT
+    port(
+      Q : out std_logic;
+      D : in std_logic;
+      LAT : in std_logic  );
+  end component;
+begin
+  rw_1 <= rw_1;
+  activate_inputreg_1 <= activate_inputreg_1;
+  a_1(0) <= a_1(0);
+  a_1(1) <= a_1(1);
+  a_1(2) <= a_1(2);
+  a_1(3) <= a_1(3);
+  a_1(4) <= a_1(4);
+  a_1(5) <= a_1(5);
+  a_1(6) <= a_1(6);
+  a_1(7) <= a_1(7);
+  a_1(8) <= a_1(8);
+  a_1(9) <= a_1(9);
+  a_1(10) <= a_1(10);
+  a_1(11) <= a_1(11);
+  a_1(12) <= a_1(12);
+  a_1(13) <= a_1(13);
+  a_1(14) <= a_1(14);
+  a_1(15) <= a_1(15);
+  \II_freezer_state_cZ[1]\: DFFRH port map (
+      Q => freezer_state(1),
+      D => freezer_state_ns(1),
+      CLK => phi2_i,
+      R => reset_i);
+  \II_freezer_state_cZ[0]\: DFFRH port map (
+      Q => freezer_state(0),
+      D => freezer_state_ns(0),
+      CLK => phi2_i,
+      R => reset_i);
+  \II_freezer_ram_bank_cZ[13]\: DFFRH port map (
+      Q => freezer_ram_bank(13),
+      D => N_12,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_freezer_ram_bank_cZ[14]\: DFFRH port map (
+      Q => freezer_ram_bank(14),
+      D => N_13,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_freezer_ram_bank_cZ[15]\: DFFRH port map (
+      Q => freezer_ram_bank(15),
+      D => N_14,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_freezer_ram_bank_cZ[16]\: DFFRH port map (
+      Q => freezer_ram_bank(16),
+      D => N_15,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_oss_bank_cZ[12]\: DFF port map (
+      Q => oss_bank(12),
+      D => N_24,
+      CLK => phi2_i);
+  \II_oss_bank_cZ[13]\: DFF port map (
+      Q => oss_bank(13),
+      D => N_25,
+      CLK => phi2_i);
+  \II_freezer_rom_bank_cZ[13]\: DFFRH port map (
+      Q => freezer_rom_bank(13),
+      D => N_4,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_freezer_rom_bank_cZ[14]\: DFFRH port map (
+      Q => freezer_rom_bank(14),
+      D => N_5,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_freezer_rom_bank_cZ[15]\: DFFSH port map (
+      Q => freezer_rom_bank(15),
+      D => N_6,
+      CLK => phi2_i,
+      S => reset_freezer_banks);
+  \II_freezer_rom_bank_cZ[16]\: DFFSH port map (
+      Q => freezer_rom_bank(16),
+      D => N_7,
+      CLK => phi2_i,
+      S => reset_freezer_banks);
+  \II_freezer_rom_bank_cZ[17]\: DFFSH port map (
+      Q => freezer_rom_bank(17),
+      D => N_8,
+      CLK => phi2_i,
+      S => reset_freezer_banks);
+  \II_freezer_rom_bank_cZ[18]\: DFFSH port map (
+      Q => freezer_rom_bank(18),
+      D => N_9,
+      CLK => phi2_i,
+      S => reset_freezer_banks);
+  \II_freezer_ram_bank_cZ[12]\: DFFRH port map (
+      Q => freezer_ram_bank(12),
+      D => N_11,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  \II_cart_mode_cZ[0]\: DFFRH port map (
+      Q => cart_mode(0),
+      D => N_2,
+      CLK => phi2_i,
+      R => reset_cartemu);
+  \II_cart_mode_cZ[1]\: DFFRH port map (
+      Q => cart_mode(1),
+      D => N_3,
+      CLK => phi2_i,
+      R => reset_cartemu);
+  II_cart_keepsettings_cZ: DFFSH port map (
+      Q => cart_keepsettings,
+      D => N_22,
+      CLK => phi2_i,
+      S => poweron_c);
+  II_sdx_enable_cZ: DFF port map (
+      Q => sdx_enable,
+      D => N_23,
+      CLK => phi2_i);
+  \II_cart_bank_cZ[18]\: DFFSH port map (
+      Q => cart_bank(18),
+      D => N_26,
+      CLK => phi2_i,
+      S => reset_cartemu);
+  \II_cart_bank_cZ[17]\: DFFSH port map (
+      Q => cart_bank(17),
+      D => N_27,
+      CLK => phi2_i,
+      S => reset_cartemu);
+  \II_cart_bank_cZ[16]\: DFFSH port map (
+      Q => cart_bank(16),
+      D => N_28,
+      CLK => phi2_i,
+      S => reset_cartemu);
+  II_flash_enable_cZ: DFFRSH port map (
+      Q => flash_enable,
+      D => N_1,
+      CLK => phi2_i,
+      R => un2_reset_cartemu_1,
+      S => un2_reset_cartemu);
+  II_use_vector_bankno_cZ: DFFRH port map (
+      Q => use_vector_bankno,
+      D => N_10,
+      CLK => phi2_i,
+      R => reset_freezer_banks);
+  II_vector_a2_cZ: DFF port map (
+      Q => vector_a2,
+      D => N_16,
+      CLK => phi2_i);
+  \II_cart_bank_cZ[15]\: DFFSH port map (
+      Q => cart_bank(15),
+      D => N_17,
+      CLK => phi2_i,
+      S => reset_cartemu);
+  \II_cart_bank_cZ[14]\: DFFSH port map (
+      Q => cart_bank(14),
+      D => N_18,
+      CLK => phi2_i,
+      S => reset_cartemu);
+  \II_cart_bank_cZ[13]\: DFFRH port map (
+      Q => cart_bank(13),
+      D => N_19,
+      CLK => phi2_i,
+      R => reset_cartemu);
+  II_cart_write_enable_cZ: DFFRH port map (
+      Q => cart_write_enable,
+      D => N_20,
+      CLK => phi2_i,
+      R => reset_i);
+  II_cart_mode_ram_cZ: DFFRH port map (
+      Q => cart_mode_ram,
+      D => N_21,
+      CLK => phi2_i,
+      R => reset_cartemu);
+  II_activate_inputreg_cZ: DFF port map (
+      Q => activate_inputreg_1,
+      D => activate_in_c,
+      CLK => phi2_i);
+  II_phi2_cZ: IBUF port map (
+      O => phi2_c,
+      I0 => phi2);
+  II_reset_cZ: IBUF port map (
+      O => reset_c,
+      I0 => reset);
+  II_rw_in_cZ: IBUF port map (
+      O => rw_in_c,
+      I0 => rw_in);
+  II_os_select_cZ: IBUF port map (
+      O => os_select_c,
+      I0 => os_select);
+  \II_a_in_cZ[0]\: IBUF port map (
+      O => a_in_c(0),
+      I0 => a_in(0));
+  \II_a_in_cZ[1]\: IBUF port map (
+      O => a_in_c(1),
+      I0 => a_in(1));
+  \II_a_in_cZ[2]\: IBUF port map (
+      O => a_in_c(2),
+      I0 => a_in(2));
+  \II_a_in_cZ[3]\: IBUF port map (
+      O => a_in_c(3),
+      I0 => a_in(3));
+  \II_a_in_cZ[4]\: IBUF port map (
+      O => a_in_c(4),
+      I0 => a_in(4));
+  \II_a_in_cZ[5]\: IBUF port map (
+      O => a_in_c(5),
+      I0 => a_in(5));
+  \II_a_in_cZ[6]\: IBUF port map (
+      O => a_in_c(6),
+      I0 => a_in(6));
+  \II_a_in_cZ[7]\: IBUF port map (
+      O => a_in_c(7),
+      I0 => a_in(7));
+  \II_a_in_cZ[8]\: IBUF port map (
+      O => a_in_c(8),
+      I0 => a_in(8));
+  \II_a_in_cZ[9]\: IBUF port map (
+      O => a_in_c(9),
+      I0 => a_in(9));
+  \II_a_in_cZ[10]\: IBUF port map (
+      O => a_in_c(10),
+      I0 => a_in(10));
+  \II_a_in_cZ[11]\: IBUF port map (
+      O => a_in_c(11),
+      I0 => a_in(11));
+  \II_a_in_cZ[12]\: IBUF port map (
+      O => a_in_c(12),
+      I0 => a_in(12));
+  \II_a_in_cZ[13]\: IBUF port map (
+      O => a_in_c(13),
+      I0 => a_in(13));
+  \II_a_in_cZ[14]\: IBUF port map (
+      O => a_in_c(14),
+      I0 => a_in(14));
+  \II_a_in_cZ[15]\: IBUF port map (
+      O => a_in_c(15),
+      I0 => a_in(15));
+  II_activate_in_cZ: IBUF port map (
+      O => activate_in_c,
+      I0 => activate_in);
+  II_poweron_cZ: IBUF port map (
+      O => poweron_c,
+      I0 => poweron);
+  II_flash_enable_in_cZ: IBUF port map (
+      O => flash_enable_in_c,
+      I0 => flash_enable_in);
+  II_flash_writable_in_cZ: IBUF port map (
+      O => flash_writable_in_c,
+      I0 => flash_writable_in);
+  \II_ram_rom_a_cZ[12]\: OBUF port map (
+      O => ram_rom_a(12),
+      I0 => ram_rom_a_1_c(12));
+  \II_ram_rom_a_cZ[13]\: OBUF port map (
+      O => ram_rom_a(13),
+      I0 => N_206_i_0_c);
+  \II_ram_rom_a_cZ[14]\: OBUF port map (
+      O => ram_rom_a(14),
+      I0 => ram_rom_a_1_c(14));
+  \II_ram_rom_a_cZ[15]\: OBUF port map (
+      O => ram_rom_a(15),
+      I0 => ram_rom_a_1_c(15));
+  \II_ram_rom_a_cZ[16]\: OBUF port map (
+      O => ram_rom_a(16),
+      I0 => ram_rom_a_1_c(16));
+  \II_ram_rom_a_cZ[17]\: OBUF port map (
+      O => ram_rom_a(17),
+      I0 => ram_rom_a_1_c(17));
+  \II_ram_rom_a_cZ[18]\: OBUF port map (
+      O => ram_rom_a(18),
+      I0 => ram_rom_a_1_c(18));
+  II_refresh_cZ: OBUF port map (
+      O => refresh,
+      I0 => \disable_atari.un38_freezer_rom_access_i_c\);
+  II_ram_ce_cZ: OBUF port map (
+      O => ram_ce,
+      I0 => \activate_freezer_chips.un10_freezer_ram_access_i_c\);
+  II_rom_ce_cZ: OBUF port map (
+      O => rom_ce,
+      I0 => \activate_freezer_chips.un10_freezer_rom_access_i_c\);
+  \II_ram_rom_a_1_i_a2_0[13]\: AND2 port map (
+      O => N_219,
+      I0 => N_219_1,
+      I1 => freezer_ram_bank(13));
+  II_un1_freezer_state_2_0_a2_1: AND2 port map (
+      O => N_215_1,
+      I0 => N_227,
+      I1 => a_1(12));
+  II_un1_freezer_state_2_0_a2: AND2 port map (
+      O => N_215,
+      I0 => N_215_1,
+      I1 => a_1_i(13));
+  II_un1_un13_flash_enable_2_0_a2_1: AND2 port map (
+      O => N_214_1,
+      I0 => N_228,
+      I1 => N_231);
+  II_un1_un13_flash_enable_2_0_a2: AND2 port map (
+      O => N_214,
+      I0 => N_214_1,
+      I1 => \cart_access.un13_flash_enable\);
+  \II_ram_access.std_match.result_0_a2_1\: AND2 port map (
+      O => \ram_access.std_match.result_1_0\,
+      I0 => a_1_i(13),
+      I1 => N_226);
+  \II_ram_access.std_match.result_0_a2\: AND2 port map (
+      O => \ram_access.std_match.result\,
+      I0 => \ram_access.std_match.result_1_0\,
+      I1 => a_1(12));
+  II_un1_cart_mode_3_0_a2_1: AND2 port map (
+      O => N_210_1,
+      I0 => N_191,
+      I1 => N_234);
+  II_un1_cart_mode_3_0_a2: AND2 port map (
+      O => N_210,
+      I0 => N_210_1,
+      I1 => \cart_access.un22_flash_enable\);
+  \II_ram_rom_a_1_0_a2_1_0[14]\: AND2 port map (
+      O => N_207_1,
+      I0 => N_227,
+      I1 => a_1_i(13));
+  \II_ram_rom_a_1_0_a2[14]\: AND2 port map (
+      O => N_207,
+      I0 => N_207_1,
+      I1 => freezer_ram_bank(14));
+  II_un1_un277_flash_config_access_1_i_a2_1: AND2 port map (
+      O => N_153_1,
+      I0 => a_1(3),
+      I1 => a_1_i(2));
+  II_un1_un277_flash_config_access_1_i_a2: AND2 port map (
+      O => N_153,
+      I0 => N_153_1,
+      I1 => flash_config_access);
+  \II_check_d700_d71f_access.std_match.result_4_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result_4\,
+      I0 => \check_d700_d71f_access.std_match.result_1\,
+      I1 => \check_d700_d71f_access.std_match.result_2\);
+  \II_check_d700_d71f_access.std_match.result_5_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result_5\,
+      I0 => \check_d700_d71f_access.std_match.result_3\,
+      I1 => flash_config_access_5);
+  \II_check_d700_d71f_access.std_match.result_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result\,
+      I0 => \check_d700_d71f_access.std_match.result_4\,
+      I1 => \check_d700_d71f_access.std_match.result_5\);
+  \II_freezer_ram_bank_select.std_match.result_1_cZ\: AND2 port map (
+      O => \freezer_ram_bank_select.std_match.result_1\,
+      I0 => N_159,
+      I1 => a_1(15));
+  \II_freezer_ram_bank_select.std_match.result_2_cZ\: AND2 port map (
+      O => \freezer_ram_bank_select.std_match.result_2\,
+      I0 => \check_vector_access.un1_activate_9\,
+      I1 => flash_config_access_5);
+  \II_freezer_ram_bank_select.std_match.result_3_cZ\: AND2 port map (
+      O => \freezer_ram_bank_select.std_match.result_3\,
+      I0 => \freezer_ram_bank_select.std_match.result_1\,
+      I1 => \freezer_ram_bank_select.std_match.result_2\);
+  \II_freezer_ram_bank_select.std_match.result_cZ\: AND2 port map (
+      O => \freezer_ram_bank_select.std_match.result\,
+      I0 => \freezer_ram_bank_select.std_match.result_3\,
+      I1 => \ram_access.std_match.result_2_1\);
+  \II_check_sdx_enable.std_match.result_1_cZ\: AND2 port map (
+      O => \check_sdx_enable.std_match.result_1\,
+      I0 => flash_config_access_1,
+      I1 => flash_config_access_5);
+  \II_check_sdx_enable.std_match.result_2_cZ\: AND2 port map (
+      O => \check_sdx_enable.std_match.result_2\,
+      I0 => a_1_i(4),
+      I1 => a_1_i(9));
+  \II_check_sdx_enable.std_match.result_3_cZ\: AND2 port map (
+      O => \check_sdx_enable.std_match.result_3\,
+      I0 => \cart_bank_select.std_match.result_5\,
+      I1 => \check_vector_access.un1_activate_2\);
+  \II_check_sdx_enable.std_match.result_4_cZ\: AND2 port map (
+      O => \check_sdx_enable.std_match.result_4\,
+      I0 => \check_sdx_enable.std_match.result_1\,
+      I1 => \check_sdx_enable.std_match.result_2\);
+  \II_check_sdx_enable.std_match.result_cZ\: AND2 port map (
+      O => \check_sdx_enable.std_match.result\,
+      I0 => \check_sdx_enable.std_match.result_4\,
+      I1 => \check_sdx_enable.std_match.result_3\);
+  \II_cart_a_4_iv_0_a2_2_1[13]\: AND2 port map (
+      O => N_222_1,
+      I0 => N_234,
+      I1 => a_1_i(12));
+  \II_cart_a_4_iv_0_a2_2[13]\: AND2 port map (
+      O => N_222,
+      I0 => N_222_1,
+      I1 => oss_bank(13));
+  \II_ram_rom_a_1_i_a2_0_1[13]\: AND2 port map (
+      O => N_219_1,
+      I0 => N_227,
+      I1 => a_1_i(13));
+  \II_check_flash_enable.un3_flash_enable_in_2_cZ\: AND2 port map (
+      O => \check_flash_enable.un3_flash_enable_in_2\,
+      I0 => a_1_i(2),
+      I1 => a_1_i(3));
+  \II_check_flash_enable.un3_flash_enable_in_3_cZ\: AND2 port map (
+      O => \check_flash_enable.un3_flash_enable_in_3\,
+      I0 => \check_flash_enable.un3_flash_enable_in_1\,
+      I1 => \check_flash_enable.un3_flash_enable_in_2\);
+  \II_check_flash_enable.un3_flash_enable_in_cZ\: AND2 port map (
+      O => \check_flash_enable.un3_flash_enable_in\,
+      I0 => \check_flash_enable.un3_flash_enable_in_3\,
+      I1 => flash_config_access);
+  \II_check_flash_enable.un30_flash_enable_in_1_cZ\: AND2 port map (
+      O => \check_flash_enable.un30_flash_enable_in_1\,
+      I0 => a_1_i(0),
+      I1 => a_1_i(1));
+  \II_check_flash_enable.un30_flash_enable_in_2_cZ\: AND2 port map (
+      O => \check_flash_enable.un30_flash_enable_in_2\,
+      I0 => a_1_i(2),
+      I1 => a_1_i(3));
+  \II_check_flash_enable.un30_flash_enable_in_3_cZ\: AND2 port map (
+      O => \check_flash_enable.un30_flash_enable_in_3\,
+      I0 => \check_flash_enable.un30_flash_enable_in_1\,
+      I1 => \check_flash_enable.un30_flash_enable_in_2\);
+  \II_check_flash_enable.un30_flash_enable_in_cZ\: AND2 port map (
+      O => \check_flash_enable.un30_flash_enable_in\,
+      I0 => \check_flash_enable.un30_flash_enable_in_3\,
+      I1 => flash_config_access);
+  \II_freezer_rom_bank_select.std_match.8.result_3_1_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.8.result_3_1\,
+      I0 => a_1_i(7),
+      I1 => a_1(6));
+  \II_freezer_rom_bank_select.std_match.8.result_3_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.8.result_3\,
+      I0 => \freezer_rom_bank_select.std_match.8.result_3_1\,
+      I1 => a_1(8));
+  \II_cart_bank_select.std_match.result_1_cZ\: AND2 port map (
+      O => \cart_bank_select.std_match.result_1\,
+      I0 => a_1_i(9),
+      I1 => \cart_bank_select.std_match.result_5\);
+  \II_cart_bank_select.std_match.result_2_cZ\: AND2 port map (
+      O => \cart_bank_select.std_match.result_2\,
+      I0 => flash_config_access_5,
+      I1 => \freezer_rom_bank_select.std_match.8.result_3\);
+  \II_cart_bank_select.std_match.result_cZ\: AND2 port map (
+      O => \cart_bank_select.std_match.result\,
+      I0 => \cart_bank_select.std_match.result_1\,
+      I1 => \cart_bank_select.std_match.result_2\);
+  \II_check_d700_d71f_access.std_match.result_1_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result_1\,
+      I0 => N_159,
+      I1 => a_1(8));
+  \II_check_d700_d71f_access.std_match.result_2_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result_2\,
+      I0 => a_1(9),
+      I1 => a_1_i(7));
+  \II_check_d700_d71f_access.std_match.result_3_cZ\: AND2 port map (
+      O => \check_d700_d71f_access.std_match.result_3\,
+      I0 => flash_config_access_2,
+      I1 => flash_config_access_3);
+  \II_ram_rom_a_1_2[18]\: AND2 port map (
+      O => N_254_2,
+      I0 => freezer_rom_bank_m_i(18),
+      I1 => un1_os_select_1_i);
+  \II_ram_rom_a_1_3[18]\: AND2 port map (
+      O => N_254_3,
+      I0 => N_254_1,
+      I1 => N_254_2);
+  \II_ram_rom_a_1[18]\: AND2 port map (
+      O => N_254,
+      I0 => N_254_3,
+      I1 => vector_a2_m_1_i);
+  II_un1_un147_flash_config_access_1_i_a2_1_0: AND2 port map (
+      O => N_152_1,
+      I0 => N_154_1,
+      I1 => a_1_i(1));
+  II_un1_un147_flash_config_access_1_i_a2: AND2 port map (
+      O => N_152,
+      I0 => N_152_1,
+      I1 => flash_config_access);
+  \II_ram_rom_a_1_0_1[14]\: AND2 port map (
+      O => N_250_1,
+      I0 => N_200_i,
+      I1 => N_207_i);
+  \II_ram_rom_a_1_0_2[14]\: AND2 port map (
+      O => N_250_2,
+      I0 => N_208_i,
+      I1 => cart_a_4_i(14));
+  \II_ram_rom_a_1_0_3[14]\: AND2 port map (
+      O => N_250_3,
+      I0 => N_250_1,
+      I1 => N_250_2);
+  \II_ram_rom_a_1_0[14]\: AND2 port map (
+      O => N_250,
+      I0 => N_250_3,
+      I1 => un1_os_select_1_i);
+  II_flash_config_access_0_a2_1: AND2 port map (
+      O => flash_config_access_1_0,
+      I0 => flash_config_access_3,
+      I1 => flash_config_access_5);
+  II_flash_config_access_0_a2_2: AND2 port map (
+      O => flash_config_access_2_0,
+      I0 => a_1_i(9),
+      I1 => \check_flash_config_access.std_match.6.result_3\);
+  II_flash_config_access_0_a2_3: AND2 port map (
+      O => flash_config_access_3_0,
+      I0 => flash_config_access_1,
+      I1 => flash_config_access_2);
+  II_flash_config_access_0_a2_4: AND2 port map (
+      O => flash_config_access_4,
+      I0 => flash_config_access_1_0,
+      I1 => flash_config_access_2_0);
+  II_flash_config_access_0_a2: AND2 port map (
+      O => flash_config_access,
+      I0 => flash_config_access_4,
+      I1 => flash_config_access_3_0);
+  \II_check_flash_enable.un3_flash_enable_in_1_cZ\: AND2 port map (
+      O => \check_flash_enable.un3_flash_enable_in_1\,
+      I0 => a_1(0),
+      I1 => a_1_i(1));
+  \II_disable_atari.un38_freezer_rom_access_1\: AND2 port map (
+      O => \disable_atari.un38_freezer_rom_access_i_c_1\,
+      I0 => N_82,
+      I1 => cart_ram_access_i);
+  \II_disable_atari.un38_freezer_rom_access_2\: AND2 port map (
+      O => \disable_atari.un38_freezer_rom_access_i_c_2\,
+      I0 => cart_rom_access_i,
+      I1 => \disable_atari.un36_freezer_rom_access_i\);
+  \II_disable_atari.un38_freezer_rom_access_3\: AND2 port map (
+      O => \disable_atari.un38_freezer_rom_access_i_c_3\,
+      I0 => \disable_atari.un38_freezer_rom_access_i_c_1\,
+      I1 => \disable_atari.un38_freezer_rom_access_i_c_2\);
+  \II_disable_atari.un38_freezer_rom_access\: AND2 port map (
+      O => \disable_atari.un38_freezer_rom_access_i_c\,
+      I0 => \disable_atari.un38_freezer_rom_access_i_c_3\,
+      I1 => vector_a2_m_1_i);
+  \II_freezer_state_ns_0_1[1]\: AND2 port map (
+      O => N_264_1,
+      I0 => N_78_i,
+      I1 => N_75_i);
+  \II_freezer_state_ns_0[1]\: AND2 port map (
+      O => N_264,
+      I0 => N_264_1,
+      I1 => N_76_i);
+  \II_freezer_state_ns_0_a4_0_1[0]\: AND2 port map (
+      O => N_74_1,
+      I0 => N_76,
+      I1 => \freezer_activation.un5_d700_d71f_access\);
+  \II_freezer_state_ns_0_a4_0[0]\: AND2 port map (
+      O => N_74,
+      I0 => N_74_1,
+      I1 => freezer_state_i_0(0));
+  \II_disable_atari.un36_freezer_rom_access_1_cZ\: AND2 port map (
+      O => \disable_atari.un36_freezer_rom_access_1\,
+      I0 => flash_config_access_3,
+      I1 => os_select_i);
+  \II_disable_atari.un36_freezer_rom_access_cZ\: AND2 port map (
+      O => \disable_atari.un36_freezer_rom_access\,
+      I0 => \disable_atari.un36_freezer_rom_access_1\,
+      I1 => \ram_access.std_match.13.result_3\);
+  \II_activate_freezer_chips.un10_freezer_ram_access_1\: AND2 port map (
+      O => \activate_freezer_chips.un10_freezer_ram_access_i_c_1\,
+      I0 => N_48_m_i,
+      I1 => cart_ram_access_i);
+  \II_activate_freezer_chips.un10_freezer_ram_access\: AND2 port map (
+      O => \activate_freezer_chips.un10_freezer_ram_access_i_c\,
+      I0 => \activate_freezer_chips.un10_freezer_ram_access_i_c_1\,
+      I1 => vector_a2_m_1_i);
+  \II_freezer_state_ns_0_1[0]\: AND2 port map (
+      O => N_258_1,
+      I0 => N_77_i,
+      I1 => N_73_i);
+  \II_freezer_state_ns_0[0]\: AND2 port map (
+      O => N_258,
+      I0 => N_258_1,
+      I1 => N_74_i);
+  \II_ram_rom_a_1_1[18]\: AND2 port map (
+      O => N_254_1,
+      I0 => N_75_i,
+      I1 => cart_a_iv(18));
+  II_un1_freezer_state_7_2_cZ: AND2 port map (
+      O => un1_freezer_state_7_2,
+      I0 => a_1_i(10),
+      I1 => un1_freezer_state_7_1);
+  II_un1_freezer_state_7_cZ: AND2 port map (
+      O => un1_freezer_state_7,
+      I0 => un1_freezer_state_7_1_0,
+      I1 => un1_freezer_state_7_2);
+  II_un1_un63_cart_mode_1_cZ: AND2 port map (
+      O => un1_un63_cart_mode_1,
+      I0 => sdx_enable,
+      I1 => \cart_access.un22_flash_enable\);
+  II_un1_un63_cart_mode_cZ: AND2 port map (
+      O => un1_un63_cart_mode,
+      I0 => un1_un63_cart_mode_1,
+      I1 => \cart_bank_select.un63_cart_mode\);
+  II_un1_cart_mode_2_1_cZ: AND2 port map (
+      O => un1_cart_mode_2_1,
+      I0 => cart_mode_i(1),
+      I1 => \cart_access.un22_flash_enable\);
+  II_un1_cart_mode_2_cZ: AND2 port map (
+      O => un1_cart_mode_2,
+      I0 => un1_cart_mode_2_1,
+      I1 => cart_mode_i(0));
+  \II_ram_rom_a_1_i_a2_1_0[13]\: AND2 port map (
+      O => N_206_1,
+      I0 => un1_freezer_state_7_1_i,
+      I1 => un1_os_select_1_i);
+  \II_ram_rom_a_1_i_a2_2[13]\: AND2 port map (
+      O => N_206_2,
+      I0 => N_218_i,
+      I1 => N_219_i);
+  \II_ram_rom_a_1_i_a2_3[13]\: AND2 port map (
+      O => N_206_3,
+      I0 => N_220_i,
+      I1 => cart_a_4_i(13));
+  \II_ram_rom_a_1_i_a2_4[13]\: AND2 port map (
+      O => N_206_4,
+      I0 => N_206_1,
+      I1 => N_206_2);
+  \II_ram_rom_a_1_i_a2[13]\: AND2 port map (
+      O => N_206,
+      I0 => N_206_4,
+      I1 => N_206_3);
+  II_un1_freezer_rom_a36_1_0_a2_1: AND2 port map (
+      O => N_235_1,
+      I0 => N_227,
+      I1 => a_1(13));
+  II_un1_freezer_rom_a36_1_0_a2: AND2 port map (
+      O => N_235,
+      I0 => N_235_1,
+      I1 => rw_1);
+  \II_check_cartemu_ram_rom.un121_flash_config_access_i_i_a2_1\: AND2 port map (
+      O => N_154_1_0,
+      I0 => N_154_1,
+      I1 => a_1(1));
+  \II_check_cartemu_ram_rom.un121_flash_config_access_i_i_a2\: AND2 port map (
+      O => N_154,
+      I0 => N_154_1_0,
+      I1 => flash_config_access);
+  \II_ram_rom_a_1_2[17]\: AND2 port map (
+      O => N_277_2,
+      I0 => a_1_m_i(4),
+      I1 => cart_a_4_m_i(17));
+  \II_ram_rom_a_1_3[17]\: AND2 port map (
+      O => N_277_3,
+      I0 => freezer_rom_bank_m_i(17),
+      I1 => un1_os_select_1_i);
+  \II_ram_rom_a_1_4[17]\: AND2 port map (
+      O => N_277_4,
+      I0 => N_277_1,
+      I1 => N_277_2);
+  \II_ram_rom_a_1_5[17]\: AND2 port map (
+      O => N_277_5,
+      I0 => N_277_3,
+      I1 => vector_a2_m_i);
+  \II_ram_rom_a_1[17]\: AND2 port map (
+      O => N_277,
+      I0 => N_277_4,
+      I1 => N_277_5);
+  \II_cart_access.un17_tmp_cart_access_1_cZ\: AND2 port map (
+      O => \cart_access.un17_tmp_cart_access_1\,
+      I0 => cart_a_4(13),
+      I1 => cart_a_4(14));
+  \II_cart_access.un17_tmp_cart_access_2_cZ\: AND2 port map (
+      O => \cart_access.un17_tmp_cart_access_2\,
+      I0 => cart_a_4(15),
+      I1 => cart_a_4(16));
+  \II_cart_access.un17_tmp_cart_access_cZ\: AND2 port map (
+      O => \cart_access.un17_tmp_cart_access\,
+      I0 => \cart_access.un17_tmp_cart_access_1\,
+      I1 => \cart_access.un17_tmp_cart_access_2\);
+  II_tmp_cart_access_5_1: AND2 port map (
+      O => N_275_1,
+      I0 => N_209_i,
+      I1 => N_210_i);
+  II_tmp_cart_access_5_cZ: AND2 port map (
+      O => N_275,
+      I0 => N_275_1,
+      I1 => un1_cart_mode_4_i);
+  II_un1_freezer_state_7_1_1_cZ: AND2 port map (
+      O => un1_freezer_state_7_1_1,
+      I0 => \ram_access.std_match.result_2_1\,
+      I1 => a_1(15));
+  II_un1_freezer_state_7_1_2_cZ: AND2 port map (
+      O => un1_freezer_state_7_1_2,
+      I0 => a_1_i(11),
+      I1 => a_1_i(13));
+  II_un1_freezer_state_7_1_3_cZ: AND2 port map (
+      O => un1_freezer_state_7_1_3,
+      I0 => un1_freezer_state_7_1_1,
+      I1 => un1_freezer_state_7_1_2);
+  II_un1_freezer_state_7_1_cZ: AND2 port map (
+      O => un1_freezer_state_7_1,
+      I0 => un1_freezer_state_7_1_3,
+      I1 => freezer_state_d(3));
+  II_un1_freezer_state_7_1_0_cZ: AND2 port map (
+      O => un1_freezer_state_7_1_0,
+      I0 => a_1_i(8),
+      I1 => a_1_i(9));
+  \II_check_vector_access.un1_activate_5_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_5\,
+      I0 => \check_vector_access.un1_activate_1\,
+      I1 => \check_vector_access.un1_activate_2_0\);
+  \II_check_vector_access.un1_activate_6_0\: AND2 port map (
+      O => \check_vector_access.un1_activate_6\,
+      I0 => \check_vector_access.un1_activate_3\,
+      I1 => \check_vector_access.un1_activate_4_0\);
+  \II_check_vector_access.un1_activate_7_0\: AND2 port map (
+      O => \check_vector_access.un1_activate_7\,
+      I0 => \check_vector_access.un1_activate_5\,
+      I1 => \check_vector_access.un1_activate_6\);
+  \II_check_vector_access.un1_activate_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate\,
+      I0 => \check_vector_access.un1_activate_7\,
+      I1 => un1_os_select_1_2);
+  \II_check_cartemu_reset_mode.un69_flash_config_access_1_cZ\: AND2 port map (
+      O => \check_cartemu_reset_mode.un69_flash_config_access_1\,
+      I0 => a_1(1),
+      I1 => a_1_i(2));
+  \II_check_cartemu_reset_mode.un69_flash_config_access_2_cZ\: AND2 port map (
+      O => \check_cartemu_reset_mode.un69_flash_config_access_2\,
+      I0 => a_1_i(3),
+      I1 => flash_config_access);
+  \II_check_cartemu_reset_mode.un69_flash_config_access_cZ\: AND2 port map (
+      O => \check_cartemu_reset_mode.un69_flash_config_access\,
+      I0 => \check_cartemu_reset_mode.un69_flash_config_access_1\,
+      I1 => \check_cartemu_reset_mode.un69_flash_config_access_2\);
+  \II_cart_access.tmp_cart_a_10_m_1_cZ[12]\: AND2 port map (
+      O => \cart_access.tmp_cart_a_10_m_1\(12),
+      I0 => \cart_access.un22_flash_enable\,
+      I1 => oss_bank(12));
+  \II_cart_access.tmp_cart_a_10_m_2_cZ[12]\: AND2 port map (
+      O => \cart_access.tmp_cart_a_10_m_2\(12),
+      I0 => N_191,
+      I1 => N_234);
+  \II_cart_access.tmp_cart_a_10_m_3_cZ[12]\: AND2 port map (
+      O => \cart_access.tmp_cart_a_10_m_3\(12),
+      I0 => a_1_i(12),
+      I1 => \cart_access.un13_flash_enable\);
+  \II_cart_access.tmp_cart_a_10_m_4_cZ[12]\: AND2 port map (
+      O => \cart_access.tmp_cart_a_10_m_4\(12),
+      I0 => \cart_access.tmp_cart_a_10_m_1\(12),
+      I1 => \cart_access.tmp_cart_a_10_m_2\(12));
+  \II_cart_access.tmp_cart_a_10_m_cZ[12]\: AND2 port map (
+      O => \cart_access.tmp_cart_a_10_m\(12),
+      I0 => \cart_access.tmp_cart_a_10_m_4\(12),
+      I1 => \cart_access.tmp_cart_a_10_m_3\(12));
+  II_vector_a2_m_1_cZ: AND2 port map (
+      O => vector_a2_m_1_0,
+      I0 => vector_a2_m_1,
+      I1 => use_vector_bankno);
+  II_vector_a2_m_cZ: AND2 port map (
+      O => vector_a2_m,
+      I0 => vector_a2_m_1_0,
+      I1 => vector_a2);
+  \II_ram_rom_a_1_1[17]\: AND2 port map (
+      O => N_277_1,
+      I0 => N_75_i,
+      I1 => a_1_m_0_i(4));
+  \II_freezer_rom_bank_select.std_match.result_2_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.result_2\,
+      I0 => flash_config_access_5,
+      I1 => \freezer_rom_bank_select.std_match.8.result_3\);
+  \II_freezer_rom_bank_select.std_match.result_3_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.result_3\,
+      I0 => \freezer_rom_bank_select.std_match.result_1\,
+      I1 => \freezer_rom_bank_select.std_match.result_2\);
+  \II_freezer_rom_bank_select.std_match.result_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.result\,
+      I0 => \freezer_rom_bank_select.std_match.result_3\,
+      I1 => \ram_access.std_match.result_2_1\);
+  \II_ram_rom_a_1_1[12]\: AND2 port map (
+      O => N_283_1,
+      I0 => \cart_access.tmp_cart_a_10_m_i\(12),
+      I1 => freezer_ram_bank_m_i(12));
+  \II_ram_rom_a_1_2[12]\: AND2 port map (
+      O => N_283_2,
+      I0 => N_75_i,
+      I1 => N_200_i);
+  \II_ram_rom_a_1_3[12]\: AND2 port map (
+      O => N_283_3,
+      I0 => a_1_m_0_i(12),
+      I1 => a_1_m_i(12));
+  \II_ram_rom_a_1_4[12]\: AND2 port map (
+      O => N_283_4,
+      I0 => N_283_1,
+      I1 => N_283_2);
+  \II_ram_rom_a_1[12]\: AND2 port map (
+      O => N_283,
+      I0 => N_283_4,
+      I1 => N_283_3);
+  II_un1_os_select_1_1_cZ: AND2 port map (
+      O => un1_os_select_1_1_0,
+      I0 => N_75_i,
+      I1 => os_select_i);
+  II_un1_os_select_1_2_cZ: AND2 port map (
+      O => un1_os_select_1_2_0,
+      I0 => un1_os_select_1_1,
+      I1 => un1_os_select_1_2);
+  II_un1_os_select_1_cZ: AND2 port map (
+      O => un1_os_select_1,
+      I0 => un1_os_select_1_1_0,
+      I1 => un1_os_select_1_2_0);
+  \II_check_vector_access.un1_activate_1_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_1\,
+      I0 => a_1(3),
+      I1 => a_1(4));
+  \II_check_vector_access.un1_activate_2_0_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_2_0\,
+      I0 => a_1(11),
+      I1 => a_1(12));
+  \II_check_vector_access.un1_activate_3_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_3\,
+      I0 => activate_inputreg_1_i,
+      I1 => \check_vector_access.un1_activate_2\);
+  \II_check_vector_access.un1_activate_4_0_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_4_0\,
+      I0 => \check_vector_access.un1_activate_9\,
+      I1 => un1_os_select_1_1);
+  \II_ram_rom_a_1_2[16]\: AND2 port map (
+      O => N_295_2,
+      I0 => cart_a_4_i(16),
+      I1 => freezer_ram_bank_m_i(16));
+  \II_ram_rom_a_1_3[16]\: AND2 port map (
+      O => N_295_3,
+      I0 => N_295_1,
+      I1 => N_295_2);
+  \II_ram_rom_a_1[16]\: AND2 port map (
+      O => N_295,
+      I0 => N_295_3,
+      I1 => freezer_rom_bank_m_i(16));
+  \II_ram_rom_a_1_1[15]\: AND2 port map (
+      O => N_294_1,
+      I0 => N_200_i,
+      I1 => N_244);
+  \II_ram_rom_a_1_2[15]\: AND2 port map (
+      O => N_294_2,
+      I0 => cart_a_4_i(15),
+      I1 => freezer_ram_bank_m_i(15));
+  \II_ram_rom_a_1_3[15]\: AND2 port map (
+      O => N_294_3,
+      I0 => N_294_1,
+      I1 => N_294_2);
+  \II_ram_rom_a_1[15]\: AND2 port map (
+      O => N_294,
+      I0 => N_294_3,
+      I1 => freezer_rom_bank_m_i(15));
+  \II_check_oss_bank.std_match.result_1_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_1\,
+      I0 => a_1(8),
+      I1 => a_1(10));
+  \II_check_oss_bank.std_match.result_2_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_2\,
+      I0 => a_1(15),
+      I1 => a_1_i(7));
+  \II_check_oss_bank.std_match.result_3_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_3\,
+      I0 => a_1_i(9),
+      I1 => \check_flash_config_access.std_match.6.result_3\);
+  \II_check_oss_bank.std_match.result_4_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_4\,
+      I0 => flash_config_access_5,
+      I1 => \ram_access.std_match.result_2_1\);
+  \II_check_oss_bank.std_match.result_5_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_5\,
+      I0 => \check_oss_bank.std_match.result_1\,
+      I1 => \check_oss_bank.std_match.result_2\);
+  \II_check_oss_bank.std_match.result_6_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result_6\,
+      I0 => \check_oss_bank.std_match.result_3\,
+      I1 => \check_oss_bank.std_match.result_4\);
+  \II_check_oss_bank.std_match.result_cZ\: AND2 port map (
+      O => \check_oss_bank.std_match.result\,
+      I0 => \check_oss_bank.std_match.result_5\,
+      I1 => \check_oss_bank.std_match.result_6\);
+  \II_freezer_rom_bank_select.std_match.result_1_cZ\: AND2 port map (
+      O => \freezer_rom_bank_select.std_match.result_1\,
+      I0 => a_1(15),
+      I1 => \check_vector_access.un1_activate_4\);
+  \II_cart_a_4_i_cZ[16]\: INV port map (
+      O => cart_a_4_i(16),
+      I0 => cart_a_4(16));
+  \II_ram_rom_a_1_i[16]\: INV port map (
+      O => ram_rom_a_1_c(16),
+      I0 => N_295);
+  II_N_214_i_cZ: INV port map (
+      O => N_214_i,
+      I0 => N_214);
+  II_N_216_i_cZ: INV port map (
+      O => N_216_i,
+      I0 => N_216);
+  \II_cart_a_4_i[12]\: INV port map (
+      O => N_90,
+      I0 => N_296);
+  II_un1_freezer_state_4_i_cZ: INV port map (
+      O => un1_freezer_state_4_i,
+      I0 => un1_freezer_state_4);
+  II_un1_freezer_state_7_i_cZ: INV port map (
+      O => un1_freezer_state_7_i,
+      I0 => un1_freezer_state_7);
+  II_un1_freezer_state_10_i: INV port map (
+      O => un1_freezer_state_10,
+      I0 => N_297);
+  II_un1_cart_mode_2_i_cZ: INV port map (
+      O => un1_cart_mode_2_i,
+      I0 => un1_cart_mode_2);
+  II_un1_un63_cart_mode_i_cZ: INV port map (
+      O => un1_un63_cart_mode_i,
+      I0 => un1_un63_cart_mode);
+  II_un1_cart_mode_4_i_0: INV port map (
+      O => un1_cart_mode_4,
+      I0 => un1_cart_mode_4_i);
+  \II_check_reset_cartemu.un1_reset_cartemu_i_cZ\: INV port map (
+      O => \check_reset_cartemu.un1_reset_cartemu_i\,
+      I0 => \check_reset_cartemu.un1_reset_cartemu\);
+  II_poweron_c_i_cZ: INV port map (
+      O => poweron_c_i,
+      I0 => poweron_c);
+  II_reset_cartemu_i: INV port map (
+      O => reset_cartemu,
+      I0 => N_299);
+  \II_ram_rom_a_1_1[16]\: AND2 port map (
+      O => N_295_1,
+      I0 => N_200_i,
+      I1 => N_244);
+  \II_freezer_rom_bank_m_i_cZ[17]\: INV port map (
+      O => freezer_rom_bank_m_i(17),
+      I0 => freezer_rom_bank_m(17));
+  \II_a_1_m_0_i_cZ[4]\: INV port map (
+      O => a_1_m_0_i(4),
+      I0 => a_1_m_0(4));
+  \II_cart_a_4_m_i_cZ[17]\: INV port map (
+      O => cart_a_4_m_i(17),
+      I0 => cart_a_4_m(17));
+  \II_a_1_m_i_cZ[4]\: INV port map (
+      O => a_1_m_i(4),
+      I0 => a_1_m(4));
+  \II_ram_rom_a_1_i[12]\: INV port map (
+      O => ram_rom_a_1_c(12),
+      I0 => N_283);
+  \II_freezer_ram_bank_m_i_cZ[12]\: INV port map (
+      O => freezer_ram_bank_m_i(12),
+      I0 => freezer_ram_bank_m(12));
+  \II_a_1_m_0_i_cZ[12]\: INV port map (
+      O => a_1_m_0_i(12),
+      I0 => a_1_m_0(12));
+  \II_cart_access.tmp_cart_a_10_m_i_cZ[12]\: INV port map (
+      O => \cart_access.tmp_cart_a_10_m_i\(12),
+      I0 => \cart_access.tmp_cart_a_10_m\(12));
+  \II_a_1_m_i_cZ[12]\: INV port map (
+      O => a_1_m_i(12),
+      I0 => a_1_m(12));
+  \II_freezer_rom_bank_m_i_cZ[16]\: INV port map (
+      O => freezer_rom_bank_m_i(16),
+      I0 => freezer_rom_bank_m(16));
+  \II_freezer_ram_bank_m_i_cZ[16]\: INV port map (
+      O => freezer_ram_bank_m_i(16),
+      I0 => freezer_ram_bank_m(16));
+  \II_freezer_rom_bank_m_i_cZ[15]\: INV port map (
+      O => freezer_rom_bank_m_i(15),
+      I0 => freezer_rom_bank_m(15));
+  \II_freezer_ram_bank_m_i_cZ[15]\: INV port map (
+      O => freezer_ram_bank_m_i(15),
+      I0 => freezer_ram_bank_m(15));
+  \II_cart_a_4_i_cZ[15]\: INV port map (
+      O => cart_a_4_i(15),
+      I0 => cart_a_4(15));
+  \II_ram_rom_a_1_i[15]\: INV port map (
+      O => ram_rom_a_1_c(15),
+      I0 => N_294);
+  \II_cart_a_4_i_cZ[13]\: INV port map (
+      O => cart_a_4_i(13),
+      I0 => cart_a_4(13));
+  II_N_223_i_cZ: INV port map (
+      O => N_223_i,
+      I0 => N_223);
+  II_N_224_i_cZ: INV port map (
+      O => N_224_i,
+      I0 => N_224);
+  \II_cart_a_4_iv_0_o2_i[13]\: INV port map (
+      O => N_193,
+      I0 => N_272);
+  II_N_222_i_cZ: INV port map (
+      O => N_222_i,
+      I0 => N_222);
+  II_N_231_i_cZ: INV port map (
+      O => N_231_i,
+      I0 => N_231);
+  \II_cart_a_4_iv_0_o2_0_i[13]\: INV port map (
+      O => N_192,
+      I0 => N_273);
+  \II_oss_bank_i_cZ[12]\: INV port map (
+      O => oss_bank_i(12),
+      I0 => oss_bank(12));
+  \II_oss_bank_i_cZ[13]\: INV port map (
+      O => oss_bank_i(13),
+      I0 => oss_bank(13));
+  II_un1_cart_mode_3_0_o2_i: INV port map (
+      O => N_191,
+      I0 => N_274);
+  II_tmp_cart_access_5_i: INV port map (
+      O => tmp_cart_access_5,
+      I0 => N_275);
+  II_N_209_i_cZ: INV port map (
+      O => N_209_i,
+      I0 => N_209);
+  II_N_210_i_cZ: INV port map (
+      O => N_210_i,
+      I0 => N_210);
+  \II_ram_rom_a_1_i[17]\: INV port map (
+      O => ram_rom_a_1_c(17),
+      I0 => N_277);
+  II_vector_a2_m_i_cZ: INV port map (
+      O => vector_a2_m_i,
+      I0 => vector_a2_m);
+  \II_ram_access.freezer_ram_mask_a5a73_i\: INV port map (
+      O => \ram_access.freezer_ram_mask_a5a73\,
+      I0 => N_256);
+  II_cart_rom_access_i_cZ: INV port map (
+      O => cart_rom_access_i,
+      I0 => cart_rom_access);
+  II_N_77_i_cZ: INV port map (
+      O => N_77_i,
+      I0 => N_77);
+  \II_freezer_state_ns_0_i[0]\: INV port map (
+      O => freezer_state_ns(0),
+      I0 => N_258);
+  II_N_73_i_cZ: INV port map (
+      O => N_73_i,
+      I0 => N_73);
+  II_N_74_i_cZ: INV port map (
+      O => N_74_i,
+      I0 => N_74);
+  II_cart_ram_access_i_cZ: INV port map (
+      O => cart_ram_access_i,
+      I0 => cart_ram_access);
+  II_N_48_m_i_cZ: INV port map (
+      O => N_48_m_i,
+      I0 => N_48_m);
+  II_N_76_i_cZ: INV port map (
+      O => N_76_i,
+      I0 => N_76);
+  II_N_78_i_cZ: INV port map (
+      O => N_78_i,
+      I0 => N_78);
+  \II_freezer_state_ns_0_i[1]\: INV port map (
+      O => freezer_state_ns(1),
+      I0 => N_264);
+  \II_disable_atari.un36_freezer_rom_access_i_cZ\: INV port map (
+      O => \disable_atari.un36_freezer_rom_access_i\,
+      I0 => \disable_atari.un36_freezer_rom_access\);
+  II_N_219_i_cZ: INV port map (
+      O => N_219_i,
+      I0 => N_219);
+  II_N_220_i_cZ: INV port map (
+      O => N_220_i,
+      I0 => N_220);
+  II_N_218_i_cZ: INV port map (
+      O => N_218_i,
+      I0 => N_218);
+  II_N_151_i_cZ: INV port map (
+      O => N_151_i,
+      I0 => N_151);
+  \II_cart_bank_5_0_i[15]\: INV port map (
+      O => cart_bank_5(15),
+      I0 => N_245);
+  \II_cart_access.N_221_i\: INV port map (
+      O => N_221_i,
+      I0 => N_221);
+  \II_cart_access.un13_flash_enable_0_o2_i\: INV port map (
+      O => N_190,
+      I0 => N_246);
+  \II_cart_a_4_i_cZ[14]\: INV port map (
+      O => cart_a_4_i(14),
+      I0 => cart_a_4(14));
+  II_N_207_i_cZ: INV port map (
+      O => N_207_i,
+      I0 => N_207);
+  II_N_208_i_cZ: INV port map (
+      O => N_208_i,
+      I0 => N_208);
+  \II_ram_rom_a_1_0_i[14]\: INV port map (
+      O => ram_rom_a_1_c(14),
+      I0 => N_250);
+  \II_freezer_rom_bank_m_i_cZ[18]\: INV port map (
+      O => freezer_rom_bank_m_i(18),
+      I0 => freezer_rom_bank_m(18));
+  II_vector_a2_m_1_i_cZ: INV port map (
+      O => vector_a2_m_1_i,
+      I0 => vector_a2_m_1);
+  \II_ram_rom_a_1_i[18]\: INV port map (
+      O => ram_rom_a_1_c(18),
+      I0 => N_254);
+  \II_cart_a_4_i_m_i_cZ[18]\: INV port map (
+      O => cart_a_4_i_m_i(18),
+      I0 => cart_a_4_i_m(18));
+  \II_cart_a_iv_i_0[18]\: INV port map (
+      O => cart_a_iv(18),
+      I0 => cart_a_iv_i(18));
+  \II_ram_access.std_match.result_1_i_cZ\: INV port map (
+      O => \ram_access.std_match.result_1_i\,
+      I0 => \ram_access.std_match.result_1\);
+  \II_ram_access.std_match.result_i_cZ\: INV port map (
+      O => \ram_access.std_match.result_i\,
+      I0 => \ram_access.std_match.result\);
+  \II_check_flash_enable.un1_flash_enable_in_i\: INV port map (
+      O => \check_flash_enable.un1_flash_enable_in\,
+      I0 => N_241);
+  II_N_235_i_cZ: INV port map (
+      O => N_235_i,
+      I0 => N_235);
+  \II_freezer_rom_a_i[12]\: INV port map (
+      O => N_83,
+      I0 => N_83_i);
+  II_flash_enable_i_cZ: INV port map (
+      O => flash_enable_i,
+      I0 => flash_enable);
+  \II_check_flash_enable.un3_flash_enable_in_i_cZ\: INV port map (
+      O => \check_flash_enable.un3_flash_enable_in_i\,
+      I0 => \check_flash_enable.un3_flash_enable_in\);
+  II_flash_enable_4_f1_i: INV port map (
+      O => flash_enable_4_f1,
+      I0 => N_243);
+  II_N_150_i_cZ: INV port map (
+      O => N_150_i,
+      I0 => N_150);
+  II_flash_enable_in_i_cZ: INV port map (
+      O => flash_enable_in_i,
+      I0 => flash_enable_in_c);
+  II_flash_writable_in_i_cZ: INV port map (
+      O => flash_writable_in_i,
+      I0 => flash_writable_in_c);
+  \II_check_flash_enable.un1_flash_enable_in_cZ\: AND2 port map (
+      O => N_241,
+      I0 => flash_enable_in_c,
+      I1 => flash_writable_in_c);
+  II_N_206_i: INV port map (
+      O => N_206_i_0_c,
+      I0 => N_206);
+  \II_sdx_enable_0.r\: INV port map (
+      O => \sdx_enable_0.un3\,
+      I0 => \check_sdx_enable.std_match.result\);
+  \II_sdx_enable_0.m\: AND2 port map (
+      O => \sdx_enable_0.un1\,
+      I0 => a_1_i(3),
+      I1 => \check_sdx_enable.std_match.result\);
+  \II_sdx_enable_0.n\: AND2 port map (
+      O => \sdx_enable_0.un0\,
+      I0 => sdx_enable,
+      I1 => \sdx_enable_0.un3\);
+  \II_sdx_enable_0.p\: OR2 port map (
+      O => N_23,
+      I0 => \sdx_enable_0.un1\,
+      I1 => \sdx_enable_0.un0\);
+  \II_cart_write_enable_0.r\: INV port map (
+      O => \cart_write_enable_0.un3\,
+      I0 => N_152);
+  \II_cart_write_enable_0.m\: AND2 port map (
+      O => \cart_write_enable_0.un1\,
+      I0 => a_1(0),
+      I1 => N_152);
+  \II_cart_write_enable_0.n\: AND2 port map (
+      O => \cart_write_enable_0.un0\,
+      I0 => cart_write_enable,
+      I1 => \cart_write_enable_0.un3\);
+  \II_cart_write_enable_0.p\: OR2 port map (
+      O => N_20,
+      I0 => \cart_write_enable_0.un1\,
+      I1 => \cart_write_enable_0.un0\);
+  \II_cart_bank_0_13_.r\: INV port map (
+      O => \cart_bank_0_13_.un3\,
+      I0 => un1_result_2);
+  \II_cart_bank_0_13_.m\: AND2 port map (
+      O => \cart_bank_0_13_.un1\,
+      I0 => cart_bank(13),
+      I1 => un1_result_2);
+  \II_cart_bank_0_13_.n\: AND2 port map (
+      O => \cart_bank_0_13_.un0\,
+      I0 => cart_bank_5(13),
+      I1 => \cart_bank_0_13_.un3\);
+  \II_cart_bank_0_13_.p\: OR2 port map (
+      O => N_19,
+      I0 => \cart_bank_0_13_.un1\,
+      I1 => \cart_bank_0_13_.un0\);
+  \II_cart_bank_0_15_.r\: INV port map (
+      O => \cart_bank_0_15_.un3\,
+      I0 => un1_result_2);
+  \II_cart_bank_0_15_.m\: AND2 port map (
+      O => \cart_bank_0_15_.un1\,
+      I0 => cart_bank(15),
+      I1 => un1_result_2);
+  \II_cart_bank_0_15_.n\: AND2 port map (
+      O => \cart_bank_0_15_.un0\,
+      I0 => cart_bank_5(15),
+      I1 => \cart_bank_0_15_.un3\);
+  \II_cart_bank_0_15_.p\: OR2 port map (
+      O => N_17,
+      I0 => \cart_bank_0_15_.un1\,
+      I1 => \cart_bank_0_15_.un0\);
+  \II_flash_enable_0.r\: INV port map (
+      O => \flash_enable_0.un3\,
+      I0 => \check_flash_enable.un1_flash_enable_in\);
+  \II_flash_enable_0.m\: AND2 port map (
+      O => \flash_enable_0.un1\,
+      I0 => flash_enable_4,
+      I1 => \check_flash_enable.un1_flash_enable_in\);
+  \II_flash_enable_0.n\: AND2 port map (
+      O => \flash_enable_0.un0\,
+      I0 => flash_enable,
+      I1 => \flash_enable_0.un3\);
+  \II_flash_enable_0.p\: OR2 port map (
+      O => N_1,
+      I0 => \flash_enable_0.un1\,
+      I1 => \flash_enable_0.un0\);
+  \II_cart_bank_select.std_match.result_i_cZ\: INV port map (
+      O => \cart_bank_select.std_match.result_i\,
+      I0 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_select.un62_cart_mode_i_cZ\: INV port map (
+      O => \cart_bank_select.un62_cart_mode_i\,
+      I0 => \cart_bank_select.un62_cart_mode\);
+  II_un1_result_2_cZ: AND2 port map (
+      O => un1_result_2,
+      I0 => \cart_bank_select.std_match.result_i\,
+      I1 => \cart_bank_select.un62_cart_mode_i\);
+  \II_cart_bank_select.un62_cart_mode_cZ\: AND2 port map (
+      O => \cart_bank_select.un62_cart_mode\,
+      I0 => \cart_bank_select.un63_cart_mode\,
+      I1 => \check_sdx_enable.std_match.result\);
+  II_un1_tmp_cart_access_1_cZ: AND2 port map (
+      O => un1_tmp_cart_access_1,
+      I0 => cart_mode_ram,
+      I1 => tmp_cart_access_1);
+  II_cart_mode_ram_i_cZ: INV port map (
+      O => cart_mode_ram_i,
+      I0 => cart_mode_ram);
+  II_cart_rom_access_cZ: AND2 port map (
+      O => cart_rom_access,
+      I0 => cart_mode_ram_i,
+      I1 => tmp_cart_access_1);
+  II_un2_reset_cartemu_1_cZ: AND2 port map (
+      O => un2_reset_cartemu_1,
+      I0 => flash_enable_in_c,
+      I1 => reset_cartemu);
+  II_un2_reset_cartemu_cZ: AND2 port map (
+      O => un2_reset_cartemu,
+      I0 => flash_enable_in_i,
+      I1 => reset_cartemu);
+  \II_cart_bank_5_cZ[13]\: XOR2 port map (
+      O => cart_bank_5(13),
+      I0 => a_1(0),
+      I1 => a_1(7));
+  \II_a_1_i_cZ[4]\: INV port map (
+      O => a_1_i(4),
+      I0 => a_1(4));
+  II_ram_rom_a_1_16_34: AND2 port map (
+      O => N_244,
+      I0 => N_75_i,
+      I1 => un1_os_select_1_i);
+  \II_check_flash_enable.un30_flash_enable_in_i_cZ\: INV port map (
+      O => \check_flash_enable.un30_flash_enable_in_i\,
+      I0 => \check_flash_enable.un30_flash_enable_in\);
+  II_flash_enable_4_f0: AND2 port map (
+      O => flash_enable_4,
+      I0 => \check_flash_enable.un30_flash_enable_in_i\,
+      I1 => flash_enable_4_f1);
+  II_flash_enable_4_f1_cZ: AND2 port map (
+      O => N_243,
+      I0 => \check_flash_enable.un3_flash_enable_in_i\,
+      I1 => flash_enable_i);
+  \II_freezer_rom_a[12]\: AND2 port map (
+      O => N_83_i,
+      I0 => N_235_i,
+      I1 => un1_os_select_1_i);
+  \II_cart_a_4_cZ[14]\: AND2 port map (
+      O => cart_a_4(14),
+      I0 => cart_bank(14),
+      I1 => tmp_cart_access_1);
+  \II_cart_a_4_cZ[15]\: AND2 port map (
+      O => cart_a_4(15),
+      I0 => cart_bank(15),
+      I1 => tmp_cart_access_1);
+  \II_cart_a_4_cZ[16]\: AND2 port map (
+      O => cart_a_4(16),
+      I0 => cart_bank(16),
+      I1 => tmp_cart_access_1);
+  \II_freezer_ram_bank_0_15_.r\: INV port map (
+      O => \freezer_ram_bank_0_15_.un3\,
+      I0 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_15_.m\: AND2 port map (
+      O => \freezer_ram_bank_0_15_.un1\,
+      I0 => a_1(3),
+      I1 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_15_.n\: AND2 port map (
+      O => \freezer_ram_bank_0_15_.un0\,
+      I0 => freezer_ram_bank(15),
+      I1 => \freezer_ram_bank_0_15_.un3\);
+  \II_freezer_ram_bank_0_15_.p\: OR2 port map (
+      O => N_14,
+      I0 => \freezer_ram_bank_0_15_.un1\,
+      I1 => \freezer_ram_bank_0_15_.un0\);
+  \II_freezer_rom_bank_0_18_.r\: INV port map (
+      O => \freezer_rom_bank_0_18_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_18_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_18_.un1\,
+      I0 => a_1(5),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_18_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_18_.un0\,
+      I0 => freezer_rom_bank(18),
+      I1 => \freezer_rom_bank_0_18_.un3\);
+  \II_freezer_rom_bank_0_18_.p\: OR2 port map (
+      O => N_9,
+      I0 => \freezer_rom_bank_0_18_.un1\,
+      I1 => \freezer_rom_bank_0_18_.un0\);
+  \II_freezer_rom_bank_0_16_.r\: INV port map (
+      O => \freezer_rom_bank_0_16_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_16_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_16_.un1\,
+      I0 => a_1(3),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_16_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_16_.un0\,
+      I0 => freezer_rom_bank(16),
+      I1 => \freezer_rom_bank_0_16_.un3\);
+  \II_freezer_rom_bank_0_16_.p\: OR2 port map (
+      O => N_7,
+      I0 => \freezer_rom_bank_0_16_.un1\,
+      I1 => \freezer_rom_bank_0_16_.un0\);
+  \II_cart_bank_0_16_.r\: INV port map (
+      O => \cart_bank_0_16_.un3\,
+      I0 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_16_.m\: AND2 port map (
+      O => \cart_bank_0_16_.un1\,
+      I0 => a_1(3),
+      I1 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_16_.n\: AND2 port map (
+      O => \cart_bank_0_16_.un0\,
+      I0 => cart_bank(16),
+      I1 => \cart_bank_0_16_.un3\);
+  \II_cart_bank_0_16_.p\: OR2 port map (
+      O => N_28,
+      I0 => \cart_bank_0_16_.un1\,
+      I1 => \cart_bank_0_16_.un0\);
+  \II_cart_bank_0_18_.r\: INV port map (
+      O => \cart_bank_0_18_.un3\,
+      I0 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_18_.m\: AND2 port map (
+      O => \cart_bank_0_18_.un1\,
+      I0 => a_1(5),
+      I1 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_18_.n\: AND2 port map (
+      O => \cart_bank_0_18_.un0\,
+      I0 => cart_bank(18),
+      I1 => \cart_bank_0_18_.un3\);
+  \II_cart_bank_0_18_.p\: OR2 port map (
+      O => N_26,
+      I0 => \cart_bank_0_18_.un1\,
+      I1 => \cart_bank_0_18_.un0\);
+  \II_a_1_i_cZ[3]\: INV port map (
+      O => a_1_i(3),
+      I0 => a_1(3));
+  \II_ram_rom_a_1_0_a2_0[14]\: AND2 port map (
+      O => N_208,
+      I0 => N_235,
+      I1 => freezer_rom_bank(14));
+  \II_cart_bank_5_0[15]\: AND2 port map (
+      O => N_245,
+      I0 => N_150_i,
+      I1 => N_151_i);
+  \II_a_1_i_cZ[5]\: INV port map (
+      O => a_1_i(5),
+      I0 => a_1(5));
+  \II_a_1_i_cZ[6]\: INV port map (
+      O => a_1_i(6),
+      I0 => a_1(6));
+  \II_check_flash_config_access.std_match.6.result_3_0_a2_0\: AND2 port map (
+      O => N_159,
+      I0 => a_1_i(5),
+      I1 => a_1_i(6));
+  \II_check_vector_access.un1_activate_3_0_a2\: AND2 port map (
+      O => flash_config_access_1,
+      I0 => a_1(7),
+      I1 => a_1(8));
+  \II_a_1_i_cZ[2]\: INV port map (
+      O => a_1_i(2),
+      I0 => a_1(2));
+  \II_cart_bank_5_0_a2_0[15]\: AND2 port map (
+      O => N_151,
+      I0 => a_1(7),
+      I1 => a_1_i(2));
+  \II_cart_bank_5_0_a2[15]\: AND2 port map (
+      O => N_150,
+      I0 => a_1(2),
+      I1 => a_1_i(7));
+  \II_check_vector_access.un1_activate_4_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_4\,
+      I0 => a_1(9),
+      I1 => a_1(10));
+  \II_check_vector_access.un1_activate_2_cZ\: AND2 port map (
+      O => \check_vector_access.un1_activate_2\,
+      I0 => a_1(5),
+      I1 => a_1(6));
+  \II_a_1_i_cZ[7]\: INV port map (
+      O => a_1_i(7),
+      I0 => a_1(7));
+  \II_freezer_ram_bank_select.std_match.result_6\: AND2 port map (
+      O => \check_vector_access.un1_activate_9\,
+      I0 => \check_vector_access.un1_activate_4\,
+      I1 => flash_config_access_1);
+  \II_check_sdx_enable.std_match.result_8\: AND2 port map (
+      O => \cart_bank_select.std_match.result_5\,
+      I0 => flash_config_access_2,
+      I1 => flash_config_access_3);
+  \II_a_1_i_cZ[9]\: INV port map (
+      O => a_1_i(9),
+      I0 => a_1(9));
+  \II_freezer_rom_bank_m_cZ[18]\: AND2 port map (
+      O => freezer_rom_bank_m(18),
+      I0 => N_235,
+      I1 => freezer_rom_bank(18));
+  \II_cart_bank_i_cZ[18]\: INV port map (
+      O => cart_bank_i(18),
+      I0 => cart_bank(18));
+  \II_cart_a_4_i_m_cZ[18]\: AND2 port map (
+      O => cart_a_4_i_m(18),
+      I0 => cart_bank_i(18),
+      I1 => cart_mode_ram_i);
+  \II_cart_a_iv_cZ[18]\: AND2 port map (
+      O => cart_a_iv_i(18),
+      I0 => cart_a_4_i_m_i(18),
+      I1 => tmp_cart_access_1);
+  \II_check_vector_access.un1_activate_6_cZ\: AND2 port map (
+      O => un1_os_select_1_1,
+      I0 => a_1(13),
+      I1 => a_1(14));
+  \II_disable_atari.un36_freezer_rom_access_1_0_a2\: AND2 port map (
+      O => flash_config_access_3,
+      I0 => a_1(14),
+      I1 => a_1(15));
+  \II_a_1_i_cZ[15]\: INV port map (
+      O => a_1_i(15),
+      I0 => a_1(15));
+  \II_ram_access.std_match.result_0_a2_0\: AND2 port map (
+      O => N_226,
+      I0 => a_1_i(14),
+      I1 => a_1_i(15));
+  \II_a_1_i_cZ[14]\: INV port map (
+      O => a_1_i(14),
+      I0 => a_1(14));
+  II_un1_cart_mode_1_0_a2_0: AND2 port map (
+      O => N_228,
+      I0 => a_1(15),
+      I1 => a_1_i(14));
+  \II_a_1_i_cZ[1]\: INV port map (
+      O => a_1_i(1),
+      I0 => a_1(1));
+  II_un1_un147_flash_config_access_1_i_a2_1: AND2 port map (
+      O => N_154_1,
+      I0 => a_1(2),
+      I1 => a_1_i(3));
+  \II_cart_access.un13_flash_enable_0_o2\: AND2 port map (
+      O => N_246,
+      I0 => N_221_i,
+      I1 => rw_1_i);
+  \II_cart_access.un13_flash_enable_0_a2\: AND2 port map (
+      O => \cart_access.un13_flash_enable\,
+      I0 => N_190,
+      I1 => flash_enable);
+  \II_cart_access.un13_flash_enable_0_a2_0\: AND2 port map (
+      O => N_221,
+      I0 => cart_write_enable,
+      I1 => flash_writable_in_i);
+  II_N_48_m_cZ: AND2 port map (
+      O => N_48_m,
+      I0 => rw_1_i,
+      I1 => un1_freezer_state_7_1);
+  II_N_75_i_cZ: INV port map (
+      O => N_75_i,
+      I0 => N_75);
+  II_freezer_rom_access_i_a2: AND2 port map (
+      O => N_82,
+      I0 => N_75_i,
+      I1 => N_83_i);
+  \II_freezer_activation.un5_d700_d71f_access_i\: INV port map (
+      O => \freezer_activation.un5_d700_d71f_access_i_0\,
+      I0 => \freezer_activation.un5_d700_d71f_access\);
+  \II_freezer_state_ns_0_a2_0[1]\: AND2 port map (
+      O => N_78,
+      I0 => \freezer_activation.un5_d700_d71f_access_i_0\,
+      I1 => freezer_state(1));
+  \II_freezer_state_ns_0_a2[0]\: AND2 port map (
+      O => N_77,
+      I0 => \check_vector_access.un1_activate\,
+      I1 => freezer_state_i_0(1));
+  II_rw_1_i_cZ: INV port map (
+      O => rw_1_i,
+      I0 => rw_1);
+  \II_freezer_state_ns_0_a2[1]\: AND2 port map (
+      O => N_76,
+      I0 => freezer_state(1),
+      I1 => rw_1_i);
+  \II_freezer_state_ns_0_a4[1]\: AND2 port map (
+      O => N_75,
+      I0 => N_77,
+      I1 => freezer_state(0));
+  \II_freezer_state_ns_0_a4[0]\: AND2 port map (
+      O => N_73,
+      I0 => N_78,
+      I1 => freezer_state(0));
+  \II_freezer_state_i[0]\: INV port map (
+      O => freezer_state_i_0(0),
+      I0 => freezer_state(0));
+  \II_freezer_state_i[1]\: INV port map (
+      O => freezer_state_i_0(1),
+      I0 => freezer_state(1));
+  II_freezer_state_s0_0_a2: AND2 port map (
+      O => freezer_state_d(3),
+      I0 => freezer_state_i_0(0),
+      I1 => freezer_state_i_0(1));
+  \II_activate_freezer_chips.un10_freezer_rom_access\: AND2 port map (
+      O => \activate_freezer_chips.un10_freezer_rom_access_i_c\,
+      I0 => N_82,
+      I1 => cart_rom_access_i);
+  \II_ram_access.freezer_ram_mask_a5a73_cZ\: AND2 port map (
+      O => N_256,
+      I0 => \ram_access.std_match.result_1_i\,
+      I1 => \ram_access.std_match.result_i\);
+  II_un1_cart_mode_3_0_o2: AND2 port map (
+      O => N_274,
+      I0 => oss_bank_i(12),
+      I1 => oss_bank_i(13));
+  \II_cart_a_4_iv_0_o2_0[13]\: AND2 port map (
+      O => N_273,
+      I0 => N_222_i,
+      I1 => N_231_i);
+  \II_cart_a_4_iv_0_o2[13]\: AND2 port map (
+      O => N_272,
+      I0 => N_223_i,
+      I1 => N_224_i);
+  \II_ram_rom_a_1_0_o2[14]\: AND2 port map (
+      O => N_200_i,
+      I0 => N_218_i,
+      I1 => un1_freezer_state_7_1_i);
+  \II_a_1_i_cZ[12]\: INV port map (
+      O => a_1_i(12),
+      I0 => a_1(12));
+  \II_a_1_i_cZ[13]\: INV port map (
+      O => a_1_i(13),
+      I0 => a_1(13));
+  \II_ram_access.std_match.13.result_3_0_a2\: AND2 port map (
+      O => \ram_access.std_match.13.result_3\,
+      I0 => a_1_i(12),
+      I1 => a_1_i(13));
+  \II_ram_rom_a_1_0_a2_2[14]\: AND2 port map (
+      O => N_227,
+      I0 => N_33_d,
+      I1 => N_226);
+  II_freezer_state_s3_0_a2_0_a2: AND2 port map (
+      O => N_33_d,
+      I0 => freezer_state(0),
+      I1 => freezer_state(1));
+  \II_ram_rom_a_1_0_a2_1[14]\: AND2 port map (
+      O => N_218,
+      I0 => N_227,
+      I1 => \ram_access.std_match.13.result_3\);
+  \II_ram_access.std_match.result_1_2_a2\: AND2 port map (
+      O => \ram_access.std_match.result_1\,
+      I0 => N_226,
+      I1 => \ram_access.std_match.13.result_3\);
+  II_un1_freezer_state_4_1: AND2 port map (
+      O => vector_a2_m_1,
+      I0 => N_33_d,
+      I1 => \ram_access.freezer_ram_mask_a5a73\);
+  \II_check_vector_access.un1_activate_7_cZ\: AND2 port map (
+      O => un1_os_select_1_2,
+      I0 => a_1(15),
+      I1 => rw_1);
+  \II_ram_access.std_match.result_2_1_cZ\: AND2 port map (
+      O => \ram_access.std_match.result_2_1\,
+      I0 => a_1(12),
+      I1 => a_1(14));
+  II_os_select_i_cZ: INV port map (
+      O => os_select_i,
+      I0 => os_select_c);
+  \II_cart_bank_select.std_match.result_1_0_a2\: AND2 port map (
+      O => flash_config_access_2,
+      I0 => a_1(10),
+      I1 => a_1(12));
+  \II_check_flash_config_access.std_match.6.result_3_0_a2\: AND2 port map (
+      O => \check_flash_config_access.std_match.6.result_3\,
+      I0 => N_159,
+      I1 => a_1_i(4));
+  II_un1_freezer_state_7_1_i_cZ: INV port map (
+      O => un1_freezer_state_7_1_i,
+      I0 => un1_freezer_state_7_1);
+  II_un1_os_select_1_i_cZ: INV port map (
+      O => un1_os_select_1_i,
+      I0 => un1_os_select_1);
+  II_un1_cart_mode_1_0_a2: AND2 port map (
+      O => N_209,
+      I0 => N_228,
+      I1 => N_231);
+  II_un1_un13_flash_enable_3_0_a2: AND2 port map (
+      O => N_216,
+      I0 => \cart_access.un13_flash_enable\,
+      I1 => un1_cart_mode_4);
+  \II_cart_a_4_iv_0_a2[13]\: AND2 port map (
+      O => cart_a_4(13),
+      I0 => N_193,
+      I1 => \cart_access.un13_flash_enable\);
+  \II_ram_rom_a_1_i_a2_1[13]\: AND2 port map (
+      O => N_220,
+      I0 => N_235,
+      I1 => freezer_rom_bank(13));
+  \II_cart_a_4_iv_0_a2_0[13]\: AND2 port map (
+      O => N_223,
+      I0 => N_192,
+      I1 => \cart_access.un22_flash_enable\);
+  \II_cart_a_4_iv_0_a2_1[13]\: AND2 port map (
+      O => N_224,
+      I0 => cart_bank(13),
+      I1 => un1_cart_mode_4);
+  \II_cart_access.un22_flash_enable_0_a2\: AND2 port map (
+      O => \cart_access.un22_flash_enable\,
+      I0 => N_228,
+      I1 => a_1(13));
+  \II_cart_mode_i_cZ[1]\: INV port map (
+      O => cart_mode_i(1),
+      I0 => cart_mode(1));
+  II_un1_cart_mode_1_0_a2_1: AND2 port map (
+      O => N_231,
+      I0 => cart_mode(0),
+      I1 => cart_mode_i(1));
+  \II_cart_mode_i_cZ[0]\: INV port map (
+      O => cart_mode_i(0),
+      I0 => cart_mode(0));
+  II_un1_cart_mode_3_0_a2_0: AND2 port map (
+      O => N_234,
+      I0 => cart_mode(1),
+      I1 => cart_mode_i(0));
+  \II_a_1_m_0_cZ[4]\: AND2 port map (
+      O => a_1_m_0(4),
+      I0 => a_1(4),
+      I1 => un1_freezer_state_10);
+  \II_freezer_ram_bank_m_cZ[12]\: AND2 port map (
+      O => freezer_ram_bank_m(12),
+      I0 => N_215,
+      I1 => freezer_ram_bank(12));
+  \II_freezer_ram_bank_m_cZ[15]\: AND2 port map (
+      O => freezer_ram_bank_m(15),
+      I0 => N_215,
+      I1 => freezer_ram_bank(15));
+  \II_freezer_ram_bank_m_cZ[16]\: AND2 port map (
+      O => freezer_ram_bank_m(16),
+      I0 => N_215,
+      I1 => freezer_ram_bank(16));
+  \II_cart_a_4[12]\: AND2 port map (
+      O => N_296,
+      I0 => N_214_i,
+      I1 => N_216_i);
+  \II_a_1_m_0_cZ[12]\: AND2 port map (
+      O => a_1_m_0(12),
+      I0 => N_90,
+      I1 => a_1(12));
+  \II_cart_a_4_m_cZ[17]\: AND2 port map (
+      O => cart_a_4_m(17),
+      I0 => cart_bank(17),
+      I1 => cart_rom_access);
+  II_activate_inputreg_1_i_cZ: INV port map (
+      O => activate_inputreg_1_i,
+      I0 => activate_inputreg_1);
+  II_use_vector_bankno_i_cZ: INV port map (
+      O => use_vector_bankno_i,
+      I0 => use_vector_bankno);
+  II_un1_freezer_state_4_cZ: AND2 port map (
+      O => un1_freezer_state_4,
+      I0 => use_vector_bankno_i,
+      I1 => vector_a2_m_1);
+  \II_a_1_i_cZ[8]\: INV port map (
+      O => a_1_i(8),
+      I0 => a_1(8));
+  \II_a_1_i_cZ[10]\: INV port map (
+      O => a_1_i(10),
+      I0 => a_1(10));
+  \II_a_1_i_cZ[0]\: INV port map (
+      O => a_1_i(0),
+      I0 => a_1(0));
+  \II_a_1_i_cZ[11]\: INV port map (
+      O => a_1_i(11),
+      I0 => a_1(11));
+  \II_freezer_rom_bank_select.std_match.result_4_0_a2\: AND2 port map (
+      O => flash_config_access_5,
+      I0 => a_1_i(11),
+      I1 => a_1_i(13));
+  II_reset_i_cZ: INV port map (
+      O => reset_i,
+      I0 => reset_c);
+  II_phi2_i_cZ: INV port map (
+      O => phi2_i,
+      I0 => phi2_c);
+  \II_a_1_m_cZ[12]\: AND2 port map (
+      O => a_1_m(12),
+      I0 => N_83,
+      I1 => a_1(12));
+  \II_freezer_rom_bank_m_cZ[15]\: AND2 port map (
+      O => freezer_rom_bank_m(15),
+      I0 => N_235,
+      I1 => freezer_rom_bank(15));
+  \II_freezer_rom_bank_m_cZ[16]\: AND2 port map (
+      O => freezer_rom_bank_m(16),
+      I0 => N_235,
+      I1 => freezer_rom_bank(16));
+  \II_freezer_rom_bank_m_cZ[17]\: AND2 port map (
+      O => freezer_rom_bank_m(17),
+      I0 => N_235,
+      I1 => freezer_rom_bank(17));
+  \II_a_1_m_cZ[4]\: AND2 port map (
+      O => a_1_m(4),
+      I0 => a_1(4),
+      I1 => un1_tmp_cart_access_1);
+  \II_freezer_ram_bank_0_14_.r\: INV port map (
+      O => \freezer_ram_bank_0_14_.un3\,
+      I0 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_14_.m\: AND2 port map (
+      O => \freezer_ram_bank_0_14_.un1\,
+      I0 => a_1(2),
+      I1 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_14_.n\: AND2 port map (
+      O => \freezer_ram_bank_0_14_.un0\,
+      I0 => freezer_ram_bank(14),
+      I1 => \freezer_ram_bank_0_14_.un3\);
+  \II_freezer_ram_bank_0_14_.p\: OR2 port map (
+      O => N_13,
+      I0 => \freezer_ram_bank_0_14_.un1\,
+      I1 => \freezer_ram_bank_0_14_.un0\);
+  \II_freezer_ram_bank_0_16_.r\: INV port map (
+      O => \freezer_ram_bank_0_16_.un3\,
+      I0 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_16_.m\: AND2 port map (
+      O => \freezer_ram_bank_0_16_.un1\,
+      I0 => a_1(4),
+      I1 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_16_.n\: AND2 port map (
+      O => \freezer_ram_bank_0_16_.un0\,
+      I0 => freezer_ram_bank(16),
+      I1 => \freezer_ram_bank_0_16_.un3\);
+  \II_freezer_ram_bank_0_16_.p\: OR2 port map (
+      O => N_15,
+      I0 => \freezer_ram_bank_0_16_.un1\,
+      I1 => \freezer_ram_bank_0_16_.un0\);
+  \II_oss_bank_0_12_.r\: INV port map (
+      O => \oss_bank_0_12_.un3\,
+      I0 => \check_oss_bank.std_match.result\);
+  \II_oss_bank_0_12_.m\: AND2 port map (
+      O => \oss_bank_0_12_.un1\,
+      I0 => a_1_i(3),
+      I1 => \check_oss_bank.std_match.result\);
+  \II_oss_bank_0_12_.n\: AND2 port map (
+      O => \oss_bank_0_12_.un0\,
+      I0 => oss_bank(12),
+      I1 => \oss_bank_0_12_.un3\);
+  \II_oss_bank_0_12_.p\: OR2 port map (
+      O => N_24,
+      I0 => \oss_bank_0_12_.un1\,
+      I1 => \oss_bank_0_12_.un0\);
+  \II_oss_bank_0_13_.r\: INV port map (
+      O => \oss_bank_0_13_.un3\,
+      I0 => \check_oss_bank.std_match.result\);
+  \II_oss_bank_0_13_.m\: AND2 port map (
+      O => \oss_bank_0_13_.un1\,
+      I0 => a_1(0),
+      I1 => \check_oss_bank.std_match.result\);
+  \II_oss_bank_0_13_.n\: AND2 port map (
+      O => \oss_bank_0_13_.un0\,
+      I0 => oss_bank(13),
+      I1 => \oss_bank_0_13_.un3\);
+  \II_oss_bank_0_13_.p\: OR2 port map (
+      O => N_25,
+      I0 => \oss_bank_0_13_.un1\,
+      I1 => \oss_bank_0_13_.un0\);
+  II_reset_freezer_banks_0_a2: AND2 port map (
+      O => reset_freezer_banks,
+      I0 => \check_vector_access.un1_activate\,
+      I1 => freezer_state_d(3));
+  \II_a_cZ[9]\: DLAT port map (
+      Q => a_1(9),
+      D => a_in_c(9),
+      LAT => phi2_i);
+  \II_a_cZ[10]\: DLAT port map (
+      Q => a_1(10),
+      D => a_in_c(10),
+      LAT => phi2_i);
+  \II_a_cZ[11]\: DLAT port map (
+      Q => a_1(11),
+      D => a_in_c(11),
+      LAT => phi2_i);
+  \II_a_cZ[12]\: DLAT port map (
+      Q => a_1(12),
+      D => a_in_c(12),
+      LAT => phi2_i);
+  \II_a_cZ[13]\: DLAT port map (
+      Q => a_1(13),
+      D => a_in_c(13),
+      LAT => phi2_i);
+  \II_a_cZ[14]\: DLAT port map (
+      Q => a_1(14),
+      D => a_in_c(14),
+      LAT => phi2_i);
+  \II_a_cZ[15]\: DLAT port map (
+      Q => a_1(15),
+      D => a_in_c(15),
+      LAT => phi2_i);
+  \II_cart_mode_0_0_.r\: INV port map (
+      O => \cart_mode_0_0_.un3\,
+      I0 => N_153);
+  \II_cart_mode_0_0_.m\: AND2 port map (
+      O => \cart_mode_0_0_.un1\,
+      I0 => a_1(0),
+      I1 => N_153);
+  \II_cart_mode_0_0_.n\: AND2 port map (
+      O => \cart_mode_0_0_.un0\,
+      I0 => cart_mode(0),
+      I1 => \cart_mode_0_0_.un3\);
+  \II_cart_mode_0_0_.p\: OR2 port map (
+      O => N_2,
+      I0 => \cart_mode_0_0_.un1\,
+      I1 => \cart_mode_0_0_.un0\);
+  \II_cart_mode_0_1_.r\: INV port map (
+      O => \cart_mode_0_1_.un3\,
+      I0 => N_153);
+  \II_cart_mode_0_1_.m\: AND2 port map (
+      O => \cart_mode_0_1_.un1\,
+      I0 => a_1(1),
+      I1 => N_153);
+  \II_cart_mode_0_1_.n\: AND2 port map (
+      O => \cart_mode_0_1_.un0\,
+      I0 => cart_mode(1),
+      I1 => \cart_mode_0_1_.un3\);
+  \II_cart_mode_0_1_.p\: OR2 port map (
+      O => N_3,
+      I0 => \cart_mode_0_1_.un1\,
+      I1 => \cart_mode_0_1_.un0\);
+  \II_freezer_rom_bank_0_13_.r\: INV port map (
+      O => \freezer_rom_bank_0_13_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_13_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_13_.un1\,
+      I0 => a_1(0),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_13_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_13_.un0\,
+      I0 => freezer_rom_bank(13),
+      I1 => \freezer_rom_bank_0_13_.un3\);
+  \II_freezer_rom_bank_0_13_.p\: OR2 port map (
+      O => N_4,
+      I0 => \freezer_rom_bank_0_13_.un1\,
+      I1 => \freezer_rom_bank_0_13_.un0\);
+  \II_freezer_rom_bank_0_14_.r\: INV port map (
+      O => \freezer_rom_bank_0_14_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_14_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_14_.un1\,
+      I0 => a_1(1),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_14_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_14_.un0\,
+      I0 => freezer_rom_bank(14),
+      I1 => \freezer_rom_bank_0_14_.un3\);
+  \II_freezer_rom_bank_0_14_.p\: OR2 port map (
+      O => N_5,
+      I0 => \freezer_rom_bank_0_14_.un1\,
+      I1 => \freezer_rom_bank_0_14_.un0\);
+  \II_freezer_rom_bank_0_15_.r\: INV port map (
+      O => \freezer_rom_bank_0_15_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_15_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_15_.un1\,
+      I0 => a_1(2),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_15_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_15_.un0\,
+      I0 => freezer_rom_bank(15),
+      I1 => \freezer_rom_bank_0_15_.un3\);
+  \II_freezer_rom_bank_0_15_.p\: OR2 port map (
+      O => N_6,
+      I0 => \freezer_rom_bank_0_15_.un1\,
+      I1 => \freezer_rom_bank_0_15_.un0\);
+  \II_freezer_rom_bank_0_17_.r\: INV port map (
+      O => \freezer_rom_bank_0_17_.un3\,
+      I0 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_17_.m\: AND2 port map (
+      O => \freezer_rom_bank_0_17_.un1\,
+      I0 => a_1(4),
+      I1 => \freezer_rom_bank_select.std_match.result\);
+  \II_freezer_rom_bank_0_17_.n\: AND2 port map (
+      O => \freezer_rom_bank_0_17_.un0\,
+      I0 => freezer_rom_bank(17),
+      I1 => \freezer_rom_bank_0_17_.un3\);
+  \II_freezer_rom_bank_0_17_.p\: OR2 port map (
+      O => N_8,
+      I0 => \freezer_rom_bank_0_17_.un1\,
+      I1 => \freezer_rom_bank_0_17_.un0\);
+  \II_freezer_ram_bank_0_12_.r\: INV port map (
+      O => \freezer_ram_bank_0_12_.un3\,
+      I0 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_12_.m\: AND2 port map (
+      O => \freezer_ram_bank_0_12_.un1\,
+      I0 => a_1(0),
+      I1 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_12_.n\: AND2 port map (
+      O => \freezer_ram_bank_0_12_.un0\,
+      I0 => freezer_ram_bank(12),
+      I1 => \freezer_ram_bank_0_12_.un3\);
+  \II_freezer_ram_bank_0_12_.p\: OR2 port map (
+      O => N_11,
+      I0 => \freezer_ram_bank_0_12_.un1\,
+      I1 => \freezer_ram_bank_0_12_.un0\);
+  \II_freezer_ram_bank_0_13_.r\: INV port map (
+      O => \freezer_ram_bank_0_13_.un3\,
+      I0 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_13_.m\: AND2 port map (
+      O => \freezer_ram_bank_0_13_.un1\,
+      I0 => a_1(1),
+      I1 => \freezer_ram_bank_select.std_match.result\);
+  \II_freezer_ram_bank_0_13_.n\: AND2 port map (
+      O => \freezer_ram_bank_0_13_.un0\,
+      I0 => freezer_ram_bank(13),
+      I1 => \freezer_ram_bank_0_13_.un3\);
+  \II_freezer_ram_bank_0_13_.p\: OR2 port map (
+      O => N_12,
+      I0 => \freezer_ram_bank_0_13_.un1\,
+      I1 => \freezer_ram_bank_0_13_.un0\);
+  \II_vector_a2_0.r\: INV port map (
+      O => \vector_a2_0.un3\,
+      I0 => reset_freezer_banks);
+  \II_vector_a2_0.m\: AND2 port map (
+      O => \vector_a2_0.un1\,
+      I0 => a_1(2),
+      I1 => reset_freezer_banks);
+  \II_vector_a2_0.n\: AND2 port map (
+      O => \vector_a2_0.un0\,
+      I0 => vector_a2,
+      I1 => \vector_a2_0.un3\);
+  \II_vector_a2_0.p\: OR2 port map (
+      O => N_16,
+      I0 => \vector_a2_0.un1\,
+      I1 => \vector_a2_0.un0\);
+  \II_cart_bank_0_14_.r\: INV port map (
+      O => \cart_bank_0_14_.un3\,
+      I0 => un1_result_2);
+  \II_cart_bank_0_14_.m\: AND2 port map (
+      O => \cart_bank_0_14_.un1\,
+      I0 => cart_bank(14),
+      I1 => un1_result_2);
+  \II_cart_bank_0_14_.n\: AND2 port map (
+      O => \cart_bank_0_14_.un0\,
+      I0 => cart_bank_5(14),
+      I1 => \cart_bank_0_14_.un3\);
+  \II_cart_bank_0_14_.p\: OR2 port map (
+      O => N_18,
+      I0 => \cart_bank_0_14_.un1\,
+      I1 => \cart_bank_0_14_.un0\);
+  \II_cart_mode_ram_0.r\: INV port map (
+      O => \cart_mode_ram_0.un3\,
+      I0 => N_154);
+  \II_cart_mode_ram_0.m\: AND2 port map (
+      O => \cart_mode_ram_0.un1\,
+      I0 => a_1(0),
+      I1 => N_154);
+  \II_cart_mode_ram_0.n\: AND2 port map (
+      O => \cart_mode_ram_0.un0\,
+      I0 => cart_mode_ram,
+      I1 => \cart_mode_ram_0.un3\);
+  \II_cart_mode_ram_0.p\: OR2 port map (
+      O => N_21,
+      I0 => \cart_mode_ram_0.un1\,
+      I1 => \cart_mode_ram_0.un0\);
+  \II_cart_keepsettings_0.r\: INV port map (
+      O => \cart_keepsettings_0.un3\,
+      I0 => \check_cartemu_reset_mode.un69_flash_config_access\);
+  \II_cart_keepsettings_0.m\: AND2 port map (
+      O => \cart_keepsettings_0.un1\,
+      I0 => a_1(0),
+      I1 => \check_cartemu_reset_mode.un69_flash_config_access\);
+  \II_cart_keepsettings_0.n\: AND2 port map (
+      O => \cart_keepsettings_0.un0\,
+      I0 => cart_keepsettings,
+      I1 => \cart_keepsettings_0.un3\);
+  \II_cart_keepsettings_0.p\: OR2 port map (
+      O => N_22,
+      I0 => \cart_keepsettings_0.un1\,
+      I1 => \cart_keepsettings_0.un0\);
+  \II_cart_bank_0_17_.r\: INV port map (
+      O => \cart_bank_0_17_.un3\,
+      I0 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_17_.m\: AND2 port map (
+      O => \cart_bank_0_17_.un1\,
+      I0 => a_1(4),
+      I1 => \cart_bank_select.std_match.result\);
+  \II_cart_bank_0_17_.n\: AND2 port map (
+      O => \cart_bank_0_17_.un0\,
+      I0 => cart_bank(17),
+      I1 => \cart_bank_0_17_.un3\);
+  \II_cart_bank_0_17_.p\: OR2 port map (
+      O => N_27,
+      I0 => \cart_bank_0_17_.un1\,
+      I1 => \cart_bank_0_17_.un0\);
+  II_tmp_cart_access_1_cZ: AND2 port map (
+      O => tmp_cart_access_1,
+      I0 => \cart_access.un13_flash_enable\,
+      I1 => tmp_cart_access_5);
+  \II_a_cZ[0]\: DLAT port map (
+      Q => a_1(0),
+      D => a_in_c(0),
+      LAT => phi2_i);
+  \II_a_cZ[1]\: DLAT port map (
+      Q => a_1(1),
+      D => a_in_c(1),
+      LAT => phi2_i);
+  \II_a_cZ[2]\: DLAT port map (
+      Q => a_1(2),
+      D => a_in_c(2),
+      LAT => phi2_i);
+  \II_a_cZ[3]\: DLAT port map (
+      Q => a_1(3),
+      D => a_in_c(3),
+      LAT => phi2_i);
+  \II_a_cZ[4]\: DLAT port map (
+      Q => a_1(4),
+      D => a_in_c(4),
+      LAT => phi2_i);
+  \II_a_cZ[5]\: DLAT port map (
+      Q => a_1(5),
+      D => a_in_c(5),
+      LAT => phi2_i);
+  \II_a_cZ[6]\: DLAT port map (
+      Q => a_1(6),
+      D => a_in_c(6),
+      LAT => phi2_i);
+  \II_a_cZ[7]\: DLAT port map (
+      Q => a_1(7),
+      D => a_in_c(7),
+      LAT => phi2_i);
+  \II_a_cZ[8]\: DLAT port map (
+      Q => a_1(8),
+      D => a_in_c(8),
+      LAT => phi2_i);
+  II_rw_cZ: DLAT port map (
+      Q => rw_1,
+      D => rw_in_c,
+      LAT => phi2_i);
+  \II_cart_bank_select.un63_cart_mode_cZ\: AND2 port map (
+      O => \cart_bank_select.un63_cart_mode\,
+      I0 => cart_mode(0),
+      I1 => cart_mode(1));
+  II_cart_keepsettings_i_cZ: INV port map (
+      O => cart_keepsettings_i,
+      I0 => cart_keepsettings);
+  \II_check_reset_cartemu.un1_reset_cartemu_cZ\: AND2 port map (
+      O => \check_reset_cartemu.un1_reset_cartemu\,
+      I0 => cart_keepsettings_i,
+      I1 => reset_i);
+  II_reset_cartemu_cZ: AND2 port map (
+      O => N_299,
+      I0 => \check_reset_cartemu.un1_reset_cartemu_i\,
+      I1 => poweron_c_i);
+  \II_cart_bank_5_cZ[14]\: XOR2 port map (
+      O => cart_bank_5(14),
+      I0 => a_1(1),
+      I1 => a_1(7));
+  II_un1_cart_mode_4_cZ: AND2 port map (
+      O => un1_cart_mode_4_i,
+      I0 => un1_cart_mode_2_i,
+      I1 => un1_un63_cart_mode_i);
+  II_un1_freezer_state_10_cZ: AND2 port map (
+      O => N_297,
+      I0 => un1_freezer_state_4_i,
+      I1 => un1_freezer_state_7_i);
+  \II_cart_access.un17_tmp_cart_access_i_cZ\: INV port map (
+      O => \cart_access.un17_tmp_cart_access_i\,
+      I0 => \cart_access.un17_tmp_cart_access\);
+  II_cart_ram_access_cZ: AND2 port map (
+      O => cart_ram_access,
+      I0 => \cart_access.un17_tmp_cart_access_i\,
+      I1 => un1_tmp_cart_access_1);
+  \II_freezer_activation.un5_d700_d71f_access_cZ\: AND2 port map (
+      O => \freezer_activation.un5_d700_d71f_access\,
+      I0 => a_1_i(4),
+      I1 => \check_d700_d71f_access.std_match.result\);
+  \II_freezer_ram_mode_select.un17_d700_d71f_access_cZ\: AND2 port map (
+      O => \freezer_ram_mode_select.un17_d700_d71f_access\,
+      I0 => a_1(4),
+      I1 => \check_d700_d71f_access.std_match.result\);
+  \II_use_vector_bankno_0.r\: INV port map (
+      O => \use_vector_bankno_0.un3\,
+      I0 => \freezer_ram_mode_select.un17_d700_d71f_access\);
+  \II_use_vector_bankno_0.m\: AND2 port map (
+      O => \use_vector_bankno_0.un1\,
+      I0 => rw_1,
+      I1 => \freezer_ram_mode_select.un17_d700_d71f_access\);
+  \II_use_vector_bankno_0.n\: AND2 port map (
+      O => \use_vector_bankno_0.un0\,
+      I0 => use_vector_bankno,
+      I1 => \use_vector_bankno_0.un3\);
+  \II_use_vector_bankno_0.p\: OR2 port map (
+      O => N_10,
+      I0 => \use_vector_bankno_0.un1\,
+      I1 => \use_vector_bankno_0.un0\);
+  GND <= '0';
+  VCC <= '1';
+end beh;
+

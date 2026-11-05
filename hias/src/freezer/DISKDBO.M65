@@ -1,0 +1,117 @@
+; DBO functions
+
+;ENTRY --- SAVE DISK BOOT
+
+	.include "LDDBOEQ.M65"
+
+SAVDBO 
+      DBGTXT "sBO     "
+      LDA #1
+      STA DRIVENO
+      JSR DENSTY
+      JSR WDBO	; write DBO boot code to disk
+      JSR IBOOT
+      JSR SAVE
+      JMP ENDCMD
+
+;ENTRY --- EXEC DISK BOOT
+
+EXEDBO
+      DBGTXT "eBO     " 
+      LDA #1
+      STA DRIVENO
+      JSR DENSTY
+      JSR IBOOT
+      JSR LOAD
+      JMP RSTART
+
+
+;WRITE DBO BOOT SECTORS AND LOADER CODE
+WDBO  LDX #0
+      STX DAUX2
+      INX
+      STX DAUX1
+      LDA #$80
+      STA SIZE
+      LDA #<DBOBOOT
+      STA TPNT
+      LDA #>DBOBOOT
+      STA TPNT+1
+      LDA #<DBOBEND
+      STA TPNT2
+      LDA #>DBOBEND
+      STA TPNT2+1
+      JSR WRDBO
+
+      LDX DENTYP
+      LDA SIZTAB,X
+      STA SIZE
+
+      LDA #<DBOLOAD
+      STA TPNT
+      LDA #>DBOLOAD
+      STA TPNT+1
+      LDA #<DBOLEND
+      STA TPNT2
+      LDA #>DBOLEND
+      STA TPNT2+1
+      LDA #<LDBOSEC
+      STA DAUX1
+      LDA #>LDBOSEC
+      STA DAUX2
+      JMP WRDBO
+
+; write data from (TPNT) to (TPNT2) to disk
+
+WRDBO LDY #0
+      LDX SIZE
+WRDBO1 LDA (TPNT),Y
+      STA DBUF,Y
+      INY
+      DEX
+      BNE WRDBO1
+      JSR WSEC
+      CLC
+      LDA SIZE
+      BEQ WRDBO2
+      ADC TPNT
+      STA TPNT
+      BCC WRDBO3
+WRDBO2 INC TPNT+1
+WRDBO3 INC DAUX1
+      BNE WRDBO4
+      INC DAUX2
+WRDBO4 LDA TPNT+1
+      CMP TPNT2+1
+      BNE WRDBO
+      LDA TPNT
+      CMP TPNT2
+      BNE WRDBO
+      RTS
+
+;INIT LOAD/SAVE FOR BOOT DISKS
+
+IBOOT LDA #1
+      STA NEXT
+      STA DEVICE
+      LDA #4
+      STA DAUX1
+      LDA #0
+      STA NEXT+1
+      STA DAUX2
+      LDA #$C0
+      STA FILENO
+      LDX DENTYP
+      LDA SIZTAB,X
+      STA SIZE
+      STA NCOUNT
+      RTS 
+
+SIZTAB .BYTE 128,128,0
+
+DBOBOOT .incbin "lddbob.obj"
+DBOBEND = *
+
+DBOLOAD .incbin "lddbol.obj"
+DBOLEND = *
+

@@ -1,0 +1,1148 @@
+
+;-------------------------------
+;    DEBUGGER AND DIRECTORY
+;-------------------------------
+
+DEBUG LDA #0
+      STA DMACTL
+      LDA #XDLIST&$FF
+      LDX #XDLIST/256
+      STA DLISTL
+      STX DLISTH
+      LDA #$22
+      STA DMACTL
+      LDA #0
+      STA COLPF0+4
+      STA KBCAPS	; reset to caps off, inverse off
+      STA DIOMODE	; disable direct I/O mode $D000-$D6FF
+      TAX 
+DEBU2 STA MONSCR,X
+      STA MONSCR+256,X
+      STA MONSCR+512,X
+      INX 
+      BNE DEBU2
+      STA DCOUNT
+
+      DBGTXT "Debugger"
+
+DEBU3 LDA #0              ; CLEAR CMD LINE
+      LDX #39
+DEBU4 STA CMDLINE,X
+      DEX 
+      BPL DEBU4
+      STA NCOUNT
+      STA IRQEN
+      STA HELPFLG
+      LDA #$FF
+      STA HISTPOS
+
+      BIT PRFLAG	; also output to printer?
+      BPL DEBU41
+      JSR PRFIN		; signal printer output finished
+;      JSR PREOL		; signal printer output finished
+
+DEBU41
+
+      LDA #'>             ; SHOW PROMPT
+      BNE DEBU6
+
+DEBU5 
+;      LDA HISTIDX
+;      LDX #0
+;      DBGA
+;      LDA HISTPOS
+;      LDX #2
+;      DBGA
+      LDX NCOUNT          ; SET CURSOR
+      LDA CMDLINE,X
+      EOR #$80
+      STA CMDLINE,X
+      JSR GETKEYH
+DEBU6 PHA                 ; CLEAR CURSOR
+      LDX NCOUNT
+      LDA CMDLINE,X
+      EOR #$80
+      STA CMDLINE,X
+      PLA 
+      BIT HELPFLG
+      BPL DEBU61
+
+      LDA PRFLAG	; disable printing when displaying help
+      PHA
+      LDA #0
+      STA PRFLAG
+      JSR PHELP
+      PLA
+      STA PRFLAG
+
+      JMP DEBU5
+DEBU61 CMP #$9B
+      BEQ DEB15           ; EOL
+      CMP #$FF
+      BEQ DEB12           ; INSERT
+      CMP #$FE
+      BEQ DEB11           ; DELETE
+      CMP #$7D
+      BEQ DEBU3           ; CLEAR
+      CMP #$7E
+      BEQ DEBU7           ; BACKSPACE
+      CMP #$1F
+      BEQ DEB10           ; CURSOR ->
+      CMP #$1E
+      BEQ DEBU8           ; CURSOR <-
+      CMP #$1D
+      BNE DEBU01          ; CURSOR DOWN
+      JMP DEBCDN
+DEBU01 CMP #$1C
+      BNE DEBU02          ; CURSOR UP
+      JMP DEBCUP
+DEBU02 JSR ASC2INT
+      STA CMDLINE,X
+      JMP DEB10
+
+DEBU7 CPX #1
+      BEQ DEBU5
+      LDA #0
+      STA CMDLINE-1,X
+DEBU8 DEX 
+      BEQ DEBU5
+DEBU9 STX NCOUNT
+      JMP DEBU5
+DEB10 INX 
+      CPX #40
+      BCC DEBU9
+      BCS DEBU5
+DEB11 LDA CMDLINE+1,X
+      STA CMDLINE,X
+      INX 
+      CPX #39
+      BCC DEB11
+      LDA #0
+      STA CMDLINE+39
+      JMP DEBU5
+DEB12 LDX #38
+DEB13 LDA CMDLINE,X
+      STA CMDLINE+1,X
+      DEX 
+      CPX NCOUNT
+      BCS DEB13
+      LDA #0
+      STA CMDLINE+1,X
+      JMP DEBU5
+
+DEB15 JSR SAVCMD
+      LDX #COMNUM-1              ; NO OF CMD-1
+      LDA CMDLINE+1
+DEB16 CMP COMTB,X
+      BEQ DEB17
+      DEX 
+      BPL DEB16
+      JSR SCROLL
+      JMP DEBU3
+
+DEB17 TXA 
+      ASL A
+      TAX 
+      LDA #2
+      STA NCOUNT
+      SEI 
+      LDA #$80
+      STA IRQEN
+      LDA COMAD+1,X
+      PHA 
+      LDA COMAD,X
+      PHA 
+      LDA CMDLINE+2
+      LDX CMDLINE+3
+      RTS 
+
+; cursor up - move back in command history
+DEBCUP 
+;      DBGT4 4,"    "
+      LDX HISTPOS
+      CPX #3
+      BEQ DEBCUP2      ; already at top of history
+      INX              ; calculate absolute slot number
+      TXA
+      EOR #3
+      CLC
+      ADC HISTIDX
+      AND #3
+      TAX
+      LDA HISTCSR,X    ; slot is unused
+      BMI DEBCUP2
+      TXA
+      PHA
+      LDA HISTPOS
+      CMP #$FF
+      BNE DEBCUP1
+      LDX #4
+      JSR SAVCMDL
+DEBCUP1 PLA
+      TAX
+      JSR RCLCMDL
+      INC HISTPOS
+DEBCUP2 JMP DEBU5
+
+; cursor down - move forward in command history
+DEBCDN 
+;      DBGT4 4,"    "
+      LDA HISTPOS
+      CMP #$FF
+      BEQ DEBCDN2      ; already at current command line slot
+      DEC HISTPOS
+      LDX #4
+      LDA HISTPOS
+      CMP #$FF
+      BEQ DEBCDN1
+      EOR #3
+      CLC
+      ADC HISTIDX
+      AND #3
+      TAX
+DEBCDN1 JSR RCLCMDL
+DEBCDN2 JMP DEBU5
+
+; recall command line (X=slot number)
+
+RCLCMDL 
+;      TXA
+;      PHA
+;      LDX #6
+;      DBGA
+;      PLA
+;      TAX
+
+      LDA HISTCSR,X
+      STA NCOUNT
+      LDY HISTOFS,X
+      LDX #0
+RCLCMDL1 LDA HISTBUF,Y
+      STA CMDLINE,X
+      INY
+      INX
+      CPX #40
+      BNE RCLCMDL1
+      RTS
+
+; save command line (X=current slot)
+SAVCMDL
+;      TXA
+;      PHA
+;      LDX #4
+;      DBGA
+;      PLA
+;      TAX
+
+      LDA NCOUNT
+      STA HISTCSR,X
+      LDY HISTOFS,X
+      LDX #0
+SAVCMDL1 LDA CMDLINE,X
+      STA HISTBUF,Y
+      INY
+      INX
+      CPX #40
+      BNE SAVCMDL1
+      RTS
+
+; only save command line if it is not empty and differes from last entry
+
+SAVCMD LDX #39 ; check for empty command line
+SAVCMD0 LDA CMDLINE,X
+       BNE SAVCMD1
+       DEX
+       BNE SAVCMD0
+       RTS
+
+; don't store 'Q' - quit debugger command
+SAVCMD1 LDA CMDLINE+1
+       CMP #'Q-$20
+       BNE SAVCMD2
+       RTS
+       
+; check if command lines are equal
+SAVCMD2 LDX HISTIDX
+       DEX
+       TXA
+       AND #3
+       TAX
+       LDA HISTCSR,X    ; slot not in use - always save
+       BMI SAVCMD4
+       LDY HISTOFS,X
+       LDX #0
+SAVCMD3 LDA CMDLINE,X
+       CMP HISTBUF,Y
+       BNE SAVCMD4
+       INY
+       INX
+       CPX #40
+       BNE SAVCMD3
+       RTS
+SAVCMD4 LDX HISTIDX
+       JSR SAVCMDL
+
+; position cursor at end of line
+       LDY #39
+SAVCMD5 LDA CMDLINE,Y
+       BNE SAVCMD6
+       DEY
+       BPL SAVCMD5
+SAVCMD6 CPY #39
+       BEQ SAVCMD7
+       INY
+SAVCMD7 TYA
+       LDX HISTIDX
+       STA HISTCSR,X
+       INX               ; move on to next slot
+       TXA
+       AND #3
+       STA HISTIDX
+       RTS
+
+; offsets of command line slots (40 bytes each)
+HISTOFS .BYTE 0,40,80,120,160
+
+;COMTB .SBYTE "DIQRLGFSCU/VaT"
+COMTB .SBYTE "DIQRLGFSCU/VaBMPHK;"
+COMNUM = *-COMTB
+COMAD .WORD DISP-1
+      .WORD COMI-1
+      .WORD RES3-1
+      .WORD CPU-1
+      .WORD COML-1
+      .WORD COMG-1
+      .WORD COMF-1
+      .WORD COMS-1
+      .WORD COMC-1
+      .WORD COMU-1
+      .WORD COMSR-1
+      .WORD COMV-1
+      .WORD COMA-1
+      .WORD COMB-1
+      .WORD MEMMAP-1
+      .WORD COMP-1
+      .WORD COMH-1
+      .WORD COMK-1
+      .WORD COMCOMM-1
+;      .WORD COMTEST-1
+
+; test command: dump $0810-$9fff
+;COMTEST	LDA #$10
+;      STA RPNT
+;      LDA #$08
+;      STA RPNT+1
+;      LDA #$FF
+;      STA TPNT
+;      LDA #$9F
+;      STA TPNT+1
+;      LDA #0
+;      STA OPTION
+;      JMP DISP4
+
+;PRINT ADDRESS IN A,X
+
+PRTADR PHA 
+      TXA 
+      JSR PRTBYT
+      PLA 
+
+;PRINT BYTE A
+
+PRTBYT PHA 
+      LSR A
+      LSR A
+      LSR A
+      LSR A
+      JSR PRTBY1
+      PLA 
+      AND #$0F
+PRTBY1 CLC 
+      ADC #$30
+      CMP #$3A
+      BCC PUTBYT
+      ADC #6
+
+;PUT A TO MONSCR
+
+PUTBYT JSR ASC2INT
+PUTINT STA MAPMSK
+      BIT PRFLAG	; also output to printer?
+      BPL PUTBY0	; no
+      JSR PRCINT
+PUTBY0
+      TYA 
+      PHA 
+      TXA 
+      PHA 
+      LDA MAPMSK
+      LDX DCOUNT
+      STA MONLINE,X
+      INC DCOUNT
+      CPX #39
+      BNE PUTBY1
+      JSR SCROLL
+PUTBY1 PLA 
+      TAX 
+      PLA 
+      TAY 
+      RTS 
+
+SCROLL BIT PRFLAG	; also output to printer?
+      BPL SCROL0
+      JSR PREOL
+      BMI SCROL8	; abort on error
+SCROL0
+      LDA IRQST
+      BMI SCROL5
+SCROL8 JMP DEBU3          ; BREAK ABORT
+SCROL5 LDA KBCODE
+      CMP #$1C		  ; ESC=ABORT
+      BEQ SCROL8
+      CMP #$3E		  ; S=STOP?
+      BNE SCROL7          ; NO
+SCROL6 LDA IRQST
+      BPL SCROL8
+      LDA KBCODE          ; Q=CONT?
+      CMP #$2F
+      BNE SCROL6
+SCROL7 LDA #MONSCR&$FF
+      LDX #MONSCR/256
+      STA BPNT
+      STX BPNT+1
+      LDX #15
+      STX DCOUNT
+SCROL1 LDX #40
+SCROL2 LDY #40
+      LDA (BPNT),Y
+      LDY #0
+      STA (BPNT),Y
+      INC BPNT
+      BNE SCROL3
+      INC BPNT+1
+SCROL3 DEX 
+      BNE SCROL2
+      DEC DCOUNT
+      BNE SCROL1
+      LDA #0
+      LDX #39
+SCROL4 STA MONLINE,X
+      DEX 
+      BPL SCROL4
+      RTS 
+
+;-------------------------------
+
+; eat up space on command line
+EATSPC LDX NCOUNT
+EATSP1 CPX #40
+      BCS EATSP2
+      LDA CMDLINE,X
+      BNE EATSP2
+      INX
+      BNE EATSP1
+EATSP2 STX NCOUNT
+      RTS
+      
+
+;MATCH CHAR A OR ADDRESS IF A=0
+;CY=MATCH FLAG
+
+MATCH LDX NCOUNT
+      CPX #40
+      BCS MATC6
+      TAY 
+      BEQ MATC2           ; MATCH ADDRESS
+      SEC                 ; MATCH CHAR
+      SBC #$20
+      CMP CMDLINE,X
+      BNE MATC6           ; NO MATCH
+      INX 
+      BPL MATC6           ; ALWAYS
+MATC2 STA TPNT
+      STA TPNT+1
+      LDA CMDLINE,X
+      CMP #5
+      BEQ MATDEC	; MATCH DECIMAL ADDRESS
+      CMP #7
+      BEQ MATASC0	; MATCH ASCII CODE
+      CMP #32
+      BEQ MATINT0	; MATCH INTERNAL CODE
+      CMP #10
+      BNE MATC3
+
+      JMP MATVAL	; MATCH *ADDRESS
+MATASC0 JMP MATASC
+MATINT0 JMP MATINT
+
+MATC3 LDA CMDLINE,X
+      SEC 
+      SBC #$10
+      BCC MATC6
+      CMP #10
+      BCC MATC4           ; 0...9
+      SBC #7
+      CMP #10
+      BCC MATC6
+      CMP #16
+      BCS MATC6           ; NOT A...F
+MATC4 ASL A
+      ASL A
+      ASL A
+      ASL A
+      LDY #4
+MATC5 ASL A
+      ROL TPNT
+      ROL TPNT+1
+      DEY 
+      BNE MATC5
+      INX 
+      CPX #40
+      BCC MATC3
+MATC6 CPX NCOUNT
+      STX NCOUNT
+      BNE MATC7
+      CLC 
+      RTS 
+MATC7 LDA TPNT
+      LDX TPNT+1
+      SEC 
+      RTS 
+
+MATDEC	CPX #39
+	BCS MATDEC0
+	INX
+	LDA CMDLINE,X
+	CMP #$10
+	BCC MATDEC0
+	CMP #$1A
+	BCS MATDEC0
+MATDEC1	LDA CMDLINE,X
+	SEC
+	SBC #$10
+	BCC MATC6
+	CMP #10
+	BCS MATC6
+	PHA
+	ASL TPNT
+	ROL TPNT+1
+	LDA TPNT
+	STA TPNT2
+	LDA TPNT+1
+	STA TPNT2+1
+	ASL TPNT
+	ROL TPNT+1
+	ASL TPNT
+	ROL TPNT+1
+	CLC
+	LDA TPNT
+	ADC TPNT2
+	STA TPNT
+	LDA TPNT+1
+	ADC TPNT2+1
+	STA TPNT+1
+	CLC
+	PLA
+	ADC TPNT
+	STA TPNT
+	BCC MATDEC2
+	INC TPNT+1
+MATDEC2	INX
+	CPX #40
+	BCC MATDEC1
+	JMP MATC6
+
+MATDEC0	CLC
+	RTS
+
+; try to get address and return the values of (addr) and (addr+1)
+
+MATVAL INC NCOUNT
+      LDA #0
+      JSR MATCH
+      BCS MATV1
+      DEC NCOUNT
+      RTS
+
+MATV1 PHA
+      LDA RPNT
+      STA TPNT2
+      LDA RPNT+1
+      STA TPNT2+1
+      PLA
+      STA RPNT
+      STX RPNT+1
+      LDY #0
+      JSR GETBYT
+      PHA
+      LDY #1
+      JSR GETBYT
+      PHA
+      LDA TPNT2
+      STA RPNT
+      LDA TPNT2+1
+      STA RPNT+1
+      PLA
+      TAX
+      PLA
+      STA TPNT
+      STX TPNT+1
+      SEC
+      RTS
+
+MATASC INX
+      CPX #40
+      BCC MATASC1
+      CLC
+      RTS
+MATASC1 INC NCOUNT
+      INC NCOUNT
+      LDA CMDLINE,X
+      JSR INT2ASC
+      STA TPNT
+      LDX #0
+      SEC
+      RTS
+
+INT2ASC CMP #$80
+      PHP
+      AND #$7F
+      CMP #$40
+      BCS INT2ASC1
+      ADC #$20
+      BNE INT2ASC2
+INT2ASC1 CMP #$60
+      BCS INT2ASC2
+      SEC
+      SBC #$40
+INT2ASC2 PLP
+      BCC INT2ASC3
+      ORA #$80
+INT2ASC3 RTS
+
+ASC2INT CMP #$80
+      PHP
+      AND #$7F
+      CMP #$20
+      BCS ASC2INT1
+      ADC #$40
+      BNE ASC2INT2
+ASC2INT1 CMP #$60
+      BCS ASC2INT2
+      SEC
+      SBC #$20
+ASC2INT2 PLP
+      BCC ASC2INT3
+      ORA #$80
+ASC2INT3 RTS
+
+MATINT INX
+      CPX #40
+      BCC MATINT1
+      CLC
+      RTS
+MATINT1 INC NCOUNT
+      INC NCOUNT
+      LDA CMDLINE,X
+      STA TPNT
+      LDX #0
+      SEC
+      RTS
+
+;ADVANCE RPNT BY A AND CMP TPNT
+
+ADVADR CLC 
+      ADC RPNT
+      STA RPNT
+      LDA RPNT+1
+      ADC #0
+      STA RPNT+1
+      BCS ADVAD3          ; STOP IF CY
+      LDA RPNT
+      CMP TPNT
+      LDA RPNT+1
+      SBC TPNT+1
+      BNE ADVAD1
+      LDA RPNT
+      EOR TPNT
+ADVAD1 RTS 
+ADVAD2 CLC 
+      LDA #1
+      RTS 
+ADVAD3 LDA #1
+      RTS
+
+; DISPLAY BYTES INTERNAL ASCII
+COMI  LDA #$80
+      STA OPTION
+      JMP DISP0
+
+;DISPLAY BYTES COMMAND PROCESSOR
+
+; might be DIR or DEL or DL or DIO
+DISP  CMP #'I-$20
+      BNE DISP01
+      CPX #'O-$20
+      BNE DISP00
+      JMP COMDIO
+DISP00 CPX #'R-$20
+      BNE DISP01
+      JMP DISD
+DISP01 CMP #'E-$20
+      BNE DISP02
+      CPX #'L-$20
+      BNE DISP02
+      JMP DELF
+DISP02 CMP #'L-$20
+      BNE DISP03
+      INC NCOUNT
+      JMP COMDL
+DISP03 LDA #0
+      STA OPTION
+DISP0 JSR EATSPC
+      LDA #0
+      JSR MATCH
+      BCC DISP1
+      STA RPNT
+      STX RPNT+1
+DISP1 LDA #',
+      JSR MATCH
+      BCC DISP2
+      LDA #0
+      JSR MATCH
+      BCS DISP3
+      LDA #$7F	; display one page in case of "Dxxxx," or "D,"
+      BNE DISP21
+DISP2 LDA #7
+DISP21 LDX RPNT+1
+      CLC 
+      ADC RPNT
+      BCC DISP3
+      INX 
+DISP3 STA TPNT
+      STX TPNT+1
+DISP4 LDA #8
+      JSR BLKGET
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT            ; PRINT ADDRESS
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #$20
+      JSR PUTBYT
+      LDY #0
+DISP5 TYA
+      PHA
+      LDA BLKBUF,Y
+      PHA
+      LDA #$20
+      JSR PUTBYT
+      PLA
+      JSR PRTBYT
+      PLA 
+      TAY 
+      INY 
+      CPY #8
+      BCC DISP5
+      LDA #$20
+      JSR PUTBYT
+      LDY #0
+DISP6 TYA 
+      PHA
+      LDA BLKBUF,Y
+      BIT OPTION
+      BPL DISP7
+      JSR PUTINT
+      JMP DISP8
+DISP7 JSR PUTBYT
+DISP8 PLA 
+      TAY 
+      INY 
+      CPY #8
+      BCC DISP6
+      LDA #8
+      JSR ADVADR
+      BCC DISP4
+      BEQ DISP4
+      JMP DEBU3
+
+;DISPLAY DIRECTORY
+
+DISD  JSR GFNAME
+      BCC DISDX
+      JSR SCROLL
+      JSR SCROLL
+      JSR DDIR            ; IN DISK.M65
+DISDX JMP DEBU3
+
+;-------------------------------
+
+;PRINT TEXT Y
+
+PRTSTR LDX #0
+PRTST1 LDA PRTTAB,X
+      BMI PRTST2
+      INX 
+      BNE PRTST1
+PRTST2 INX 
+      DEY 
+      BPL PRTST1
+      LDA #$20
+      JSR PUTBYT
+PRTST3 LDA PRTTAB,X
+      PHP 
+      AND #$7F
+      JSR PUTBYT
+      INX 
+      PLP 
+      BPL PRTST3
+      RTS 
+
+PRTTAB .CBYTE " "
+      .CBYTE "SINGLE"
+      .CBYTE "ENHANCED"
+      .CBYTE "DOUBLE"
+      .CBYTE "DENSITY, "
+      .CBYTE "SECTORS FREE"
+      .CBYTE "DELETE: "
+      .CBYTE "A  X  Y  S  NV-BDIZC  PC"
+      .CBYTE "RENAME: "
+      .CBYTE "LOCK: "
+      .CBYTE "UNLOCK: "
+
+;PRINT TPNT IN DECIMAL
+
+PRTTPN LDX #7
+PRTTP1 LDY #0
+PRTTP2 LDA TPNT
+      CMP DECTAB-1,X
+      LDA TPNT+1
+      SBC DECTAB,X
+      BCC PRTTP3
+      STA TPNT+1
+      LDA TPNT
+      SBC DECTAB-1,X
+      STA TPNT
+      INY 
+      BPL PRTTP2
+PRTTP3 TYA 
+      ADC #$30
+      JSR PUTBYT
+      DEX 
+      DEX 
+      BPL PRTTP1
+      RTS 
+
+DECTAB .WORD 1
+      .WORD 10
+      .WORD 100
+      .WORD 1000
+
+;CHANGE START ADDRESS
+
+COMG  JSR EATSPC
+      LDA #0
+      JSR MATCH
+      BCC COMG1
+      LDA #1
+      STA RPNT+1
+      CLC 
+      ADC REGS
+      STA RPNT
+      LDA TPNT
+      LDY #1
+      JSR STOBYT
+      LDA TPNT+1
+      LDY #2
+      JSR STOBYT
+      JMP CPU1
+COMG1 JMP DEBU3
+
+;CHANGE BYTES
+
+COMC  JSR EATSPC
+      LDA #0
+      JSR MATCH
+      BCC COMC1
+      STA RPNT
+      STX RPNT+1
+COMC1 LDA #'<
+      JSR MATCH
+      BCC COMG1
+COMC2 LDA #0
+      JSR MATCH
+      BCC COMC4
+      LDY #0
+      JSR STOBYT
+
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #'<
+      JSR PUTBYT
+      LDA TPNT
+      JSR PRTBYT
+
+      INC RPNT
+      BNE COMC3
+      INC RPNT+1
+COMC3 LDA #',
+      JSR MATCH
+      BCS COMC2
+      BCC COMG1
+
+COMC4 LDA #',
+      JSR MATCH
+      BCC COMG1
+      INC RPNT
+      BNE COMC2
+      INC RPNT+1
+      JMP COMC2
+
+; print / change vcount
+
+COMV  CMP #'E-$20
+      BNE COMV2
+      CPX #'R-$20
+      BNE COMV1
+      JMP SHOWVER
+
+COMV1 CPX #'C-$20
+      BNE COMV2
+      JMP SHOWVEC
+
+COMV2 JSR EATSPC
+      LDA #'<
+      JSR MATCH
+      BCC COMVPR
+      LDA #0
+      JSR MATCH
+      BCC COMVX
+      STA VCNT
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'V
+      JSR PUTBYT
+      LDA #'<
+      JSR PUTBYT
+      LDA VCNT
+      JSR PRTBYT
+COMVX JMP DEBU3
+
+COMVPR JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDX FRZINT
+      LDY #4
+COMVPR1 LDA FRITXT,X
+      JSR PUTBYT
+      INX
+      DEY
+      BNE COMVPR1
+      LDA FRZVEC
+      LDX FRZVEC+1
+      JSR PRTADR
+      LDA #$20
+      JSR PUTBYT
+      LDA FRZVCNT
+      JSR PRTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDA VCNT
+      JSR PRTBYT
+
+.if .def FREEZER2011
+; testing: display status of dual pokey flag
+      LDA #$20
+      JSR PUTBYT
+      LDA DPOKEYF
+      EOR #1
+      JSR PRTBYT
+.endif
+      JMP DEBU3
+
+FRITXT .BYTE "NMI IRQ ??? "
+
+COMDIO LDA #4
+      STA NCOUNT
+      LDA #'<
+      JSR MATCH
+      BCC COMDIO1
+      LDA #'0
+      JSR MATCH
+      BCS COMDIO3
+      LDA #'1
+      JSR MATCH
+      BCS COMDIO4
+
+COMDIO1 JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'D
+      JSR PUTBYT
+      LDA #'I
+      JSR PUTBYT
+      LDA #'O
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDA #'O
+      JSR PUTBYT
+      BIT DIOMODE
+      BPL COMDIO2
+      LDA #'N
+      JSR PUTBYT
+      JMP DEBU3
+COMDIO2 LDA #'F
+      JSR PUTBYT
+      LDA #'F
+      JSR PUTBYT
+COMDIOX JMP DEBU3
+
+COMDIO3 LDA #0
+      STA DIOMODE
+      BEQ COMDIO1
+
+COMDIO4 LDA #$80
+      STA DIOMODE
+      BNE COMDIO1
+
+; set/get portb value for ramdisk access
+
+COMP  CMP #'B-$20
+      BEQ COMP1
+      CMP #'R-$20
+      BEQ COMP4
+      JMP DEBU3
+
+COMP1 INC NCOUNT
+      JSR EATSPC
+      LDA #'<
+      JSR MATCH
+      BCC COMP2
+      LDA #0
+      JSR MATCH
+      BCC COMP2
+      STA PBMEM
+
+COMP2 JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'P
+      JSR PUTBYT
+      LDA #'B
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDA PBMEM
+      JSR PRTBYT
+COMP3 JMP DEBU3
+
+; PR command: enable/disable printer
+COMP4 INC NCOUNT
+      JSR EATSPC
+      LDA #'<
+      JSR MATCH
+      BCC COMP8
+      LDA #0
+      JSR MATCH
+      BCC COMP3
+      CMP #0
+      BNE COMP5
+      STA PRFLAG
+      LDA #'0
+      JSR COMPP
+      JMP DEBU3
+
+COMP5 CMP #1
+      BCC COMP3
+      CMP #9
+      BCS COMP3
+      ORA #$C0
+      STA PRFLAG
+      JSR PRCHECK
+      BPL COMP6
+
+      LDA #0
+      STA PRFLAG
+      JSR SCROLL
+      DPTEXT TCOMNOP
+      JMP DEBU3
+
+COMP6 LDA PRFLAG
+      PHA
+      LDX #0
+      STX PRFLAG
+      STX PRIDX
+      AND #$0F
+      ORA #$30
+      JSR COMPP
+      PLA
+      STA PRFLAG
+COMP7 JMP DEBU3
+
+COMP8 JSR SCROLL
+      DPTEXT TCOMP
+      LDA #32
+      JSR PUTBYT
+      LDX #'0
+      LDA PRFLAG
+      BPL COMP9
+      AND #$F
+      ORA #'0
+      TAX
+COMP9 TXA
+      JSR PUTBYT
+      JMP DEBU3
+
+COMPP PHA
+      JSR SCROLL
+      DPTEXT TCOMP
+      LDA #'<
+      JSR PUTBYT
+      PLA
+      JSR PUTBYT
+      RTS
+      
+TCOMP .BYTE " PR",$FF
+TCOMNOP .BYTE " printer offline",$FF
+
+; Commands starting with 'H':
+; currently only "HAT" to print the HATABS table
+
+COMH  CMP #'A-$20
+      BNE COMP7
+      CPX #'T-$20
+      BNE COMP7
+      JMP SHOWHAT
+
+; Comment function output text to debugger screen
+COMCOMM
+      JSR SCROLL
+      LDA CMDLINE+1
+      JSR PUTINT
+      LDA #32
+      JSR PUTBYT
+      LDX #38
+CCOMM1 LDA CMDLINE,X
+      BNE CCOMM2	; found last non-space character
+      DEX
+      CPX #1
+      BNE CCOMM1
+      JMP DEBU3
+
+CCOMM2 INX
+      STX TPNT
+      LDX #2
+      
+CCOMM3 LDA CMDLINE,X
+      JSR PUTINT
+      INX
+      CPX TPNT
+      BNE CCOMM3
+      JMP DEBU3

@@ -1,0 +1,341 @@
+#PLAFILE turbofreezerxl.tt4
+#DATE    05/04/2005
+#DESIGN  <no design name>
+#DEVICE  mach463a
+
+DATA LOCATION N_272:C_12	// NOD
+DATA LOCATION N_275:B_0	// NOD
+DATA LOCATION a_0_:B_77_17	// Rin {a_in_0_}
+DATA LOCATION a_10_:C_83_30	// Rin {a_in_10_}
+DATA LOCATION a_11_:C_82_31	// Rin {a_in_11_}
+DATA LOCATION a_12_:C_86_27	// Rin {a_in_12_}
+DATA LOCATION a_13_:C_85_28	// Rin {a_in_13_}
+DATA LOCATION a_14_:C_87_26	// Rin {a_in_14_}
+DATA LOCATION a_15_:C_88_25	// Rin {a_in_15_}
+DATA LOCATION a_1_:B_78_18	// Rin {a_in_1_}
+DATA LOCATION a_2_:B_79_19	// Rin {a_in_2_}
+DATA LOCATION a_3_:B_80_20	// Rin {a_in_3_}
+DATA LOCATION a_4_:B_81_21	// Rin {a_in_4_}
+DATA LOCATION a_5_:C_89_24	// Rin {a_in_5_}
+DATA LOCATION a_6_:D_94_40	// Rin {a_in_6_}
+DATA LOCATION a_7_:D_92_38	// Rin {a_in_7_}
+DATA LOCATION a_8_:D_91_37	// Rin {a_in_8_}
+DATA LOCATION a_9_:D_90_36	// Rin {a_in_9_}
+DATA LOCATION a_in_0_:B_*_17	// INP
+DATA LOCATION a_in_10_:C_*_30	// INP
+DATA LOCATION a_in_11_:C_*_31	// INP
+DATA LOCATION a_in_12_:C_*_27	// INP
+DATA LOCATION a_in_13_:C_*_28	// INP
+DATA LOCATION a_in_14_:C_*_26	// INP
+DATA LOCATION a_in_15_:C_*_25	// INP
+DATA LOCATION a_in_1_:B_*_18	// INP
+DATA LOCATION a_in_2_:B_*_19	// INP
+DATA LOCATION a_in_3_:B_*_20	// INP
+DATA LOCATION a_in_4_:B_*_21	// INP
+DATA LOCATION a_in_5_:C_*_24	// INP
+DATA LOCATION a_in_6_:D_*_40	// INP
+DATA LOCATION a_in_7_:D_*_38	// INP
+DATA LOCATION a_in_8_:D_*_37	// INP
+DATA LOCATION a_in_9_:D_*_36	// INP
+DATA LOCATION activate_in:A_*_6	// INP
+DATA LOCATION activate_inputreg:A_69_6	// Rin {activate_in}
+DATA LOCATION cart_access_un13_flash_enable_n:C_4	// NOD
+DATA LOCATION cart_bank_13_:C_14	// NOD
+DATA LOCATION cart_bank_14_:C_0	// NOD
+DATA LOCATION cart_bank_15_:C_9	// NOD
+DATA LOCATION cart_bank_16_:B_9	// NOD
+DATA LOCATION cart_bank_17_:C_2	// NOD
+DATA LOCATION cart_bank_18_:C_13	// NOD
+DATA LOCATION cart_bank_select_std_match_result_n:A_2	// NOD
+DATA LOCATION cart_mode_0_:C_5	// NOD
+DATA LOCATION cart_mode_1_:C_1	// NOD
+DATA LOCATION check_d700_d71f_access_std_match_result_n:A_11	// NOD
+DATA LOCATION check_oss_bank_std_match_result_n:A_7	// NOD
+DATA LOCATION check_sdx_enable_std_match_result_n:A_14	// NOD
+DATA LOCATION check_vector_access_un1_activate_n:A_8	// NOD
+DATA LOCATION flash_config_access:A_3	// NOD
+DATA LOCATION flash_enable_in:A_*_8	// INP
+DATA LOCATION flash_writable_in:A_*_7	// INP
+DATA LOCATION freezer_ram_bank_12_:B_3	// NOD
+DATA LOCATION freezer_ram_bank_13_:D_10	// NOD
+DATA LOCATION freezer_ram_bank_14_:D_6	// NOD
+DATA LOCATION freezer_ram_bank_15_:B_5	// NOD
+DATA LOCATION freezer_ram_bank_16_:B_14	// NOD
+DATA LOCATION freezer_ram_bank_select_std_match_result_n:A_13	// NOD
+DATA LOCATION freezer_rom_bank_13_:B_1	// NOD
+DATA LOCATION freezer_rom_bank_14_:D_2	// NOD
+DATA LOCATION freezer_rom_bank_15_:A_10	// NOD
+DATA LOCATION freezer_rom_bank_16_:B_6	// NOD
+DATA LOCATION freezer_rom_bank_17_:A_9	// NOD
+DATA LOCATION freezer_rom_bank_18_:A_6	// NOD
+DATA LOCATION freezer_rom_bank_select_std_match_result_n:A_5	// NOD
+DATA LOCATION freezer_state_0_:D_4	// NOD
+DATA LOCATION freezer_state_1_:D_5	// NOD
+DATA LOCATION inst_cart_keepsettings:C_7	// NOD
+DATA LOCATION inst_cart_mode_ram:C_8	// NOD
+DATA LOCATION inst_cart_write_enable:C_3	// NOD
+DATA LOCATION inst_flash_enable:C_10	// NOD
+DATA LOCATION inst_sdx_enable:B_13	// NOD
+DATA LOCATION inst_use_vector_bankno:D_13	// NOD
+DATA LOCATION inst_vector_a2:D_9	// NOD
+DATA LOCATION os_select:C_*_29	// INP
+DATA LOCATION oss_bank_12_:B_7	// NOD
+DATA LOCATION oss_bank_13_:B_2	// NOD
+DATA LOCATION phi2:*_*_33	// Cin
+DATA LOCATION poweron:A_*_5	// INP
+DATA LOCATION ram_ce:A_1_3	// OUT
+DATA LOCATION ram_rom_a_12_:B_4_16	// OUT
+DATA LOCATION ram_rom_a_13_:D_8_39	// OUT
+DATA LOCATION ram_rom_a_14_:D_12_41	// OUT
+DATA LOCATION ram_rom_a_15_:A_4_2	// OUT
+DATA LOCATION ram_rom_a_16_:B_8_15	// OUT
+DATA LOCATION ram_rom_a_17_:D_0_43	// OUT
+DATA LOCATION ram_rom_a_18_:A_12_4	// OUT
+DATA LOCATION refresh:A_0_9	// OUT
+DATA LOCATION reset:B_*_14	// INP
+DATA LOCATION reset_cartemu:C_6	// NOD
+DATA LOCATION rom_ce:D_1_42	// OUT
+DATA LOCATION rw:B_12	// NOD
+DATA LOCATION rw_in:*_*_11	// INP
+DATA LOCATION un1_result_2:B_10	// NOD
+DATA IO_DIR   a_in_0_:IN
+DATA IO_DIR   a_in_10_:IN
+DATA IO_DIR   a_in_11_:IN
+DATA IO_DIR   a_in_12_:IN
+DATA IO_DIR   a_in_13_:IN
+DATA IO_DIR   a_in_14_:IN
+DATA IO_DIR   a_in_15_:IN
+DATA IO_DIR   a_in_1_:IN
+DATA IO_DIR   a_in_2_:IN
+DATA IO_DIR   a_in_3_:IN
+DATA IO_DIR   a_in_4_:IN
+DATA IO_DIR   a_in_5_:IN
+DATA IO_DIR   a_in_6_:IN
+DATA IO_DIR   a_in_7_:IN
+DATA IO_DIR   a_in_8_:IN
+DATA IO_DIR   a_in_9_:IN
+DATA IO_DIR   activate_in:IN
+DATA IO_DIR   flash_enable_in:IN
+DATA IO_DIR   flash_writable_in:IN
+DATA IO_DIR   os_select:IN
+DATA IO_DIR   phi2:IN
+DATA IO_DIR   poweron:IN
+DATA IO_DIR   ram_ce:OUT
+DATA IO_DIR   ram_rom_a_12_:OUT
+DATA IO_DIR   ram_rom_a_13_:OUT
+DATA IO_DIR   ram_rom_a_14_:OUT
+DATA IO_DIR   ram_rom_a_15_:OUT
+DATA IO_DIR   ram_rom_a_16_:OUT
+DATA IO_DIR   ram_rom_a_17_:OUT
+DATA IO_DIR   ram_rom_a_18_:OUT
+DATA IO_DIR   refresh:OUT
+DATA IO_DIR   reset:IN
+DATA IO_DIR   rom_ce:OUT
+DATA IO_DIR   rw_in:IN
+DATA INPUT_REGISTER  a_0_
+DATA INPUT_REGISTER  a_10_
+DATA INPUT_REGISTER  a_11_
+DATA INPUT_REGISTER  a_12_
+DATA INPUT_REGISTER  a_13_
+DATA INPUT_REGISTER  a_14_
+DATA INPUT_REGISTER  a_15_
+DATA INPUT_REGISTER  a_1_
+DATA INPUT_REGISTER  a_2_
+DATA INPUT_REGISTER  a_3_
+DATA INPUT_REGISTER  a_4_
+DATA INPUT_REGISTER  a_5_
+DATA INPUT_REGISTER  a_6_
+DATA INPUT_REGISTER  a_7_
+DATA INPUT_REGISTER  a_8_
+DATA INPUT_REGISTER  a_9_
+DATA INPUT_REGISTER  activate_inputreg
+DATA GLB_CLOCK  phi2
+DATA PW_LEVEL  a_in_12_:0
+DATA SLEW      a_in_12_:1
+DATA PW_LEVEL  a_in_11_:0
+DATA SLEW      a_in_11_:1
+DATA PW_LEVEL  a_in_15_:0
+DATA SLEW      a_in_15_:1
+DATA PW_LEVEL  a_in_10_:0
+DATA SLEW      a_in_10_:1
+DATA PW_LEVEL  a_in_9_:0
+DATA SLEW      a_in_9_:1
+DATA PW_LEVEL  ram_rom_a_18_:0
+DATA SLEW      ram_rom_a_18_:1
+DATA PW_LEVEL  a_in_8_:0
+DATA SLEW      a_in_8_:1
+DATA SLEW      phi2:1
+DATA PW_LEVEL  a_in_7_:0
+DATA SLEW      a_in_7_:1
+DATA PW_LEVEL  reset:0
+DATA SLEW      reset:1
+DATA PW_LEVEL  a_in_6_:0
+DATA SLEW      a_in_6_:1
+DATA SLEW      rw_in:1
+DATA PW_LEVEL  a_in_5_:0
+DATA SLEW      a_in_5_:1
+DATA PW_LEVEL  os_select:0
+DATA SLEW      os_select:1
+DATA PW_LEVEL  a_in_4_:0
+DATA SLEW      a_in_4_:1
+DATA PW_LEVEL  activate_in:0
+DATA SLEW      activate_in:1
+DATA PW_LEVEL  a_in_3_:0
+DATA SLEW      a_in_3_:1
+DATA PW_LEVEL  poweron:0
+DATA SLEW      poweron:1
+DATA PW_LEVEL  a_in_2_:0
+DATA SLEW      a_in_2_:1
+DATA PW_LEVEL  flash_enable_in:0
+DATA SLEW      flash_enable_in:1
+DATA PW_LEVEL  a_in_1_:0
+DATA SLEW      a_in_1_:1
+DATA PW_LEVEL  flash_writable_in:0
+DATA SLEW      flash_writable_in:1
+DATA PW_LEVEL  a_in_0_:0
+DATA SLEW      a_in_0_:1
+DATA PW_LEVEL  refresh:0
+DATA SLEW      refresh:1
+DATA PW_LEVEL  ram_rom_a_17_:0
+DATA SLEW      ram_rom_a_17_:1
+DATA PW_LEVEL  ram_ce:0
+DATA SLEW      ram_ce:1
+DATA PW_LEVEL  ram_rom_a_16_:0
+DATA SLEW      ram_rom_a_16_:1
+DATA PW_LEVEL  rom_ce:0
+DATA SLEW      rom_ce:1
+DATA PW_LEVEL  ram_rom_a_15_:0
+DATA SLEW      ram_rom_a_15_:1
+DATA PW_LEVEL  ram_rom_a_14_:0
+DATA SLEW      ram_rom_a_14_:1
+DATA PW_LEVEL  ram_rom_a_13_:0
+DATA SLEW      ram_rom_a_13_:1
+DATA PW_LEVEL  ram_rom_a_12_:0
+DATA SLEW      ram_rom_a_12_:1
+DATA PW_LEVEL  a_in_14_:0
+DATA SLEW      a_in_14_:1
+DATA PW_LEVEL  a_in_13_:0
+DATA SLEW      a_in_13_:1
+DATA PW_LEVEL  inst_use_vector_bankno:0
+DATA SLEW      inst_use_vector_bankno:1
+DATA PW_LEVEL  inst_cart_keepsettings:0
+DATA SLEW      inst_cart_keepsettings:1
+DATA PW_LEVEL  inst_cart_mode_ram:0
+DATA SLEW      inst_cart_mode_ram:1
+DATA PW_LEVEL  cart_mode_0_:0
+DATA SLEW      cart_mode_0_:1
+DATA PW_LEVEL  cart_mode_1_:0
+DATA SLEW      cart_mode_1_:1
+DATA PW_LEVEL  oss_bank_12_:0
+DATA SLEW      oss_bank_12_:1
+DATA PW_LEVEL  oss_bank_13_:0
+DATA SLEW      oss_bank_13_:1
+DATA PW_LEVEL  a_0_:0
+DATA SLEW      a_0_:1
+DATA PW_LEVEL  a_1_:0
+DATA SLEW      a_1_:1
+DATA PW_LEVEL  a_2_:0
+DATA SLEW      a_2_:1
+DATA PW_LEVEL  a_3_:0
+DATA SLEW      a_3_:1
+DATA PW_LEVEL  a_4_:0
+DATA SLEW      a_4_:1
+DATA PW_LEVEL  a_5_:0
+DATA SLEW      a_5_:1
+DATA PW_LEVEL  a_6_:0
+DATA SLEW      a_6_:1
+DATA PW_LEVEL  a_7_:0
+DATA SLEW      a_7_:1
+DATA PW_LEVEL  a_8_:0
+DATA SLEW      a_8_:1
+DATA PW_LEVEL  a_9_:0
+DATA SLEW      a_9_:1
+DATA PW_LEVEL  a_10_:0
+DATA SLEW      a_10_:1
+DATA PW_LEVEL  a_11_:0
+DATA SLEW      a_11_:1
+DATA PW_LEVEL  a_12_:0
+DATA SLEW      a_12_:1
+DATA PW_LEVEL  a_13_:0
+DATA SLEW      a_13_:1
+DATA PW_LEVEL  a_14_:0
+DATA SLEW      a_14_:1
+DATA PW_LEVEL  a_15_:0
+DATA SLEW      a_15_:1
+DATA PW_LEVEL  rw:0
+DATA SLEW      rw:1
+DATA PW_LEVEL  activate_inputreg:0
+DATA SLEW      activate_inputreg:1
+DATA PW_LEVEL  inst_cart_write_enable:0
+DATA SLEW      inst_cart_write_enable:1
+DATA PW_LEVEL  reset_cartemu:0
+DATA SLEW      reset_cartemu:1
+DATA PW_LEVEL  inst_sdx_enable:0
+DATA SLEW      inst_sdx_enable:1
+DATA PW_LEVEL  inst_flash_enable:0
+DATA SLEW      inst_flash_enable:1
+DATA PW_LEVEL  cart_bank_13_:0
+DATA SLEW      cart_bank_13_:1
+DATA PW_LEVEL  cart_bank_14_:0
+DATA SLEW      cart_bank_14_:1
+DATA PW_LEVEL  cart_bank_15_:0
+DATA SLEW      cart_bank_15_:1
+DATA PW_LEVEL  cart_bank_16_:0
+DATA SLEW      cart_bank_16_:1
+DATA PW_LEVEL  cart_bank_17_:0
+DATA SLEW      cart_bank_17_:1
+DATA PW_LEVEL  cart_bank_18_:0
+DATA SLEW      cart_bank_18_:1
+DATA PW_LEVEL  freezer_rom_bank_select_std_match_result_n:0
+DATA SLEW      freezer_rom_bank_select_std_match_result_n:1
+DATA PW_LEVEL  cart_bank_select_std_match_result_n:0
+DATA SLEW      cart_bank_select_std_match_result_n:1
+DATA PW_LEVEL  freezer_ram_bank_12_:0
+DATA SLEW      freezer_ram_bank_12_:1
+DATA PW_LEVEL  freezer_ram_bank_13_:0
+DATA SLEW      freezer_ram_bank_13_:1
+DATA PW_LEVEL  freezer_ram_bank_14_:0
+DATA SLEW      freezer_ram_bank_14_:1
+DATA PW_LEVEL  freezer_ram_bank_15_:0
+DATA SLEW      freezer_ram_bank_15_:1
+DATA PW_LEVEL  freezer_ram_bank_16_:0
+DATA SLEW      freezer_ram_bank_16_:1
+DATA PW_LEVEL  check_d700_d71f_access_std_match_result_n:0
+DATA SLEW      check_d700_d71f_access_std_match_result_n:1
+DATA PW_LEVEL  freezer_ram_bank_select_std_match_result_n:0
+DATA SLEW      freezer_ram_bank_select_std_match_result_n:1
+DATA PW_LEVEL  inst_vector_a2:0
+DATA SLEW      inst_vector_a2:1
+DATA PW_LEVEL  check_oss_bank_std_match_result_n:0
+DATA SLEW      check_oss_bank_std_match_result_n:1
+DATA PW_LEVEL  check_vector_access_un1_activate_n:0
+DATA SLEW      check_vector_access_un1_activate_n:1
+DATA PW_LEVEL  un1_result_2:0
+DATA SLEW      un1_result_2:1
+DATA PW_LEVEL  freezer_rom_bank_13_:0
+DATA SLEW      freezer_rom_bank_13_:1
+DATA PW_LEVEL  freezer_rom_bank_14_:0
+DATA SLEW      freezer_rom_bank_14_:1
+DATA PW_LEVEL  freezer_rom_bank_15_:0
+DATA SLEW      freezer_rom_bank_15_:1
+DATA PW_LEVEL  freezer_rom_bank_16_:0
+DATA SLEW      freezer_rom_bank_16_:1
+DATA PW_LEVEL  freezer_rom_bank_17_:0
+DATA SLEW      freezer_rom_bank_17_:1
+DATA PW_LEVEL  freezer_rom_bank_18_:0
+DATA SLEW      freezer_rom_bank_18_:1
+DATA PW_LEVEL  N_272:0
+DATA SLEW      N_272:1
+DATA PW_LEVEL  N_275:0
+DATA SLEW      N_275:1
+DATA PW_LEVEL  freezer_state_0_:0
+DATA SLEW      freezer_state_0_:1
+DATA PW_LEVEL  freezer_state_1_:0
+DATA SLEW      freezer_state_1_:1
+DATA PW_LEVEL  flash_config_access:0
+DATA SLEW      flash_config_access:1
+DATA PW_LEVEL  cart_access_un13_flash_enable_n:0
+DATA SLEW      cart_access_un13_flash_enable_n:1
+DATA PW_LEVEL  check_sdx_enable_std_match_result_n:0
+DATA SLEW      check_sdx_enable_std_match_result_n:1
+END

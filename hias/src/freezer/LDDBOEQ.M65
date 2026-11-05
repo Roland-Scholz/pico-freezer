@@ -1,0 +1,12 @@
+; DBO boot loader public equates
+
+.if .not .def LDDBOEQ
+LDDBOEQ=1
+
+; starting sector of freezer loader code
+LDBOSEC	= $240
+
+; default page for frezzer DBO loader
+LDBOPAG = $c0
+
+.endif

@@ -1,0 +1,1438 @@
+#$ TOOL ispLEVER 4.1.00.22.28.04_Synplify_Pack
+#$ DATE Wed May 04 18:07:02 2005
+#$ PROPERTY LATTICE SLEW DEFAULT = SLOW
+#$ PROPERTY LATTICE PULL DEFAULT = HOLD
+#$ PROPERTY LATTICE POWER DEFAULT = HIGH
+#$ PROPERTY LATTICE USERCODE HIAS,ASCII
+#$ MODULE turbofreezerxl
+#$ PINS 34 a_in_12_:27'ke'  a_in_11_:31'ke'  a_in_15_:25'ke'  a_in_10_:30'ke'  a_in_9_:36'ke'  \
+#  ram_rom_a_18_:4'ke'  a_in_8_:37'ke'  phi2:33'ke'  a_in_7_:38'ke'  reset:14'ke'  a_in_6_:40'ke'  \
+#  rw_in:11'ke'  a_in_5_:24'ke'  os_select:29'ke'  a_in_4_:21'ke'  activate_in:6'ke'  a_in_3_:20'ke'  \
+#  poweron:5'ke'  a_in_2_:19'ke'  flash_enable_in:8'ke'  a_in_1_:18'ke'  flash_writable_in:7'ke'  \
+#  a_in_0_:17'ke'  refresh:9'ke'  ram_rom_a_17_:43'ke'  ram_ce:3'ke'  ram_rom_a_16_:15'ke'  \
+#  rom_ce:42'ke'  ram_rom_a_15_:2'ke'  ram_rom_a_14_:41'ke'  ram_rom_a_13_:39'ke'  \
+#  ram_rom_a_12_:16'ke'  a_in_14_:26'ke'  a_in_13_:28'ke' 
+#$ NODES 61 inst_use_vector_bankno inst_cart_keepsettings inst_cart_mode_ram \
+#  cart_mode_0_ cart_mode_1_ oss_bank_12_ oss_bank_13_ a_0_ a_1_ a_2_ a_3_ a_4_ a_5_ a_6_ \
+#  a_7_ a_8_ a_9_ a_10_ a_11_ a_12_ a_13_ a_14_ a_15_ rw activate_inputreg \
+#  inst_cart_write_enable reset_cartemu inst_sdx_enable inst_flash_enable \
+#  cart_bank_13_ cart_bank_14_ cart_bank_15_ cart_bank_16_ cart_bank_17_ cart_bank_18_ \
+#  freezer_rom_bank_select_std_match_result_n cart_bank_select_std_match_result_n \
+#  freezer_ram_bank_12_ freezer_ram_bank_13_ freezer_ram_bank_14_ \
+#  freezer_ram_bank_15_ freezer_ram_bank_16_ \
+#  check_d700_d71f_access_std_match_result_n \
+#  freezer_ram_bank_select_std_match_result_n inst_vector_a2 \
+#  check_oss_bank_std_match_result_n check_vector_access_un1_activate_n \
+#  un1_result_2 freezer_rom_bank_13_ freezer_rom_bank_14_ freezer_rom_bank_15_ \
+#  freezer_rom_bank_16_ freezer_rom_bank_17_ freezer_rom_bank_18_ N_272 N_275 \
+#  freezer_state_0_ freezer_state_1_ flash_config_access \
+#  cart_access_un13_flash_enable_n check_sdx_enable_std_match_result_n
+.model turbofreezerxl
+.inputs a_in_15_.BLIF phi2.BLIF reset.BLIF rw_in.BLIF os_select.BLIF \
+activate_in.BLIF poweron.BLIF flash_enable_in.BLIF flash_writable_in.BLIF \
+a_in_14_.BLIF a_in_13_.BLIF a_in_12_.BLIF a_in_11_.BLIF a_in_10_.BLIF \
+a_in_9_.BLIF a_in_8_.BLIF a_in_7_.BLIF a_in_6_.BLIF a_in_5_.BLIF a_in_4_.BLIF \
+a_in_3_.BLIF a_in_2_.BLIF a_in_1_.BLIF a_in_0_.BLIF \
+inst_use_vector_bankno.BLIF inst_cart_keepsettings.BLIF \
+inst_cart_mode_ram.BLIF cart_mode_0_.BLIF cart_mode_1_.BLIF oss_bank_12_.BLIF \
+oss_bank_13_.BLIF a_0_.BLIF a_1_.BLIF a_2_.BLIF a_3_.BLIF a_4_.BLIF a_5_.BLIF \
+a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF a_12_.BLIF \
+a_13_.BLIF a_14_.BLIF a_15_.BLIF rw.BLIF activate_inputreg.BLIF \
+inst_cart_write_enable.BLIF reset_cartemu.BLIF inst_sdx_enable.BLIF \
+inst_flash_enable.BLIF cart_bank_13_.BLIF cart_bank_14_.BLIF \
+cart_bank_15_.BLIF cart_bank_16_.BLIF cart_bank_17_.BLIF cart_bank_18_.BLIF \
+freezer_rom_bank_select_std_match_result_n.BLIF \
+cart_bank_select_std_match_result_n.BLIF freezer_ram_bank_12_.BLIF \
+freezer_ram_bank_13_.BLIF freezer_ram_bank_14_.BLIF freezer_ram_bank_15_.BLIF \
+freezer_ram_bank_16_.BLIF check_d700_d71f_access_std_match_result_n.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF inst_vector_a2.BLIF \
+check_oss_bank_std_match_result_n.BLIF check_vector_access_un1_activate_n.BLIF \
+un1_result_2.BLIF freezer_rom_bank_13_.BLIF freezer_rom_bank_14_.BLIF \
+freezer_rom_bank_15_.BLIF freezer_rom_bank_16_.BLIF freezer_rom_bank_17_.BLIF \
+freezer_rom_bank_18_.BLIF N_272.BLIF N_275.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF flash_config_access.BLIF \
+cart_access_un13_flash_enable_n.BLIF check_sdx_enable_std_match_result_n.BLIF
+.outputs ram_rom_a_18_ refresh ram_ce rom_ce ram_rom_a_17_ ram_rom_a_16_ \
+ram_rom_a_15_ ram_rom_a_14_ ram_rom_a_13_ ram_rom_a_12_ freezer_state_1_.D \
+freezer_state_1_.C freezer_state_1_.AR freezer_state_0_.D freezer_state_0_.C \
+freezer_state_0_.AR freezer_ram_bank_13_.D freezer_ram_bank_13_.C \
+freezer_ram_bank_13_.AR freezer_ram_bank_14_.D freezer_ram_bank_14_.C \
+freezer_ram_bank_14_.AR freezer_ram_bank_15_.D freezer_ram_bank_15_.C \
+freezer_ram_bank_15_.AR freezer_ram_bank_16_.D freezer_ram_bank_16_.C \
+freezer_ram_bank_16_.AR oss_bank_12_.D oss_bank_12_.C oss_bank_13_.D \
+oss_bank_13_.C freezer_rom_bank_13_.D freezer_rom_bank_13_.C \
+freezer_rom_bank_13_.AR freezer_rom_bank_14_.D freezer_rom_bank_14_.C \
+freezer_rom_bank_14_.AR freezer_rom_bank_15_.D freezer_rom_bank_15_.C \
+freezer_rom_bank_15_.AP freezer_rom_bank_16_.D freezer_rom_bank_16_.C \
+freezer_rom_bank_16_.AP freezer_rom_bank_17_.D freezer_rom_bank_17_.C \
+freezer_rom_bank_17_.AP freezer_rom_bank_18_.D freezer_rom_bank_18_.C \
+freezer_rom_bank_18_.AP freezer_ram_bank_12_.D freezer_ram_bank_12_.C \
+freezer_ram_bank_12_.AR cart_mode_0_.D cart_mode_0_.C cart_mode_0_.AR \
+cart_mode_1_.D cart_mode_1_.C cart_mode_1_.AR inst_cart_keepsettings.C \
+inst_cart_keepsettings.AP inst_sdx_enable.D inst_sdx_enable.C cart_bank_18_.D \
+cart_bank_18_.C cart_bank_18_.AP cart_bank_17_.D cart_bank_17_.C \
+cart_bank_17_.AP cart_bank_16_.D cart_bank_16_.C cart_bank_16_.AP a_0_.D \
+a_0_.LH inst_flash_enable.C inst_flash_enable.AR inst_flash_enable.AP a_1_.D \
+a_1_.LH inst_use_vector_bankno.D inst_use_vector_bankno.C \
+inst_use_vector_bankno.AR a_2_.D a_2_.LH inst_vector_a2.D inst_vector_a2.C \
+a_3_.D a_3_.LH cart_bank_15_.D cart_bank_15_.C cart_bank_15_.AP a_4_.D a_4_.LH \
+cart_bank_14_.D cart_bank_14_.C cart_bank_14_.AP a_5_.D a_5_.LH \
+cart_bank_13_.D cart_bank_13_.C cart_bank_13_.AR a_6_.D a_6_.LH \
+inst_cart_write_enable.C inst_cart_write_enable.AR a_7_.D a_7_.LH \
+inst_cart_mode_ram.C inst_cart_mode_ram.AR a_8_.D a_8_.LH activate_inputreg.D \
+activate_inputreg.C rw.D rw.LH a_9_.D a_9_.LH a_10_.D a_10_.LH a_11_.D \
+a_11_.LH a_12_.D a_12_.LH a_13_.D a_13_.LH a_14_.D a_14_.LH a_15_.D a_15_.LH \
+reset_cartemu freezer_rom_bank_select_std_match_result_n \
+cart_bank_select_std_match_result_n check_d700_d71f_access_std_match_result_n \
+freezer_ram_bank_select_std_match_result_n check_oss_bank_std_match_result_n \
+check_vector_access_un1_activate_n un1_result_2 N_272 N_275 \
+flash_config_access cart_access_un13_flash_enable_n \
+check_sdx_enable_std_match_result_n inst_cart_keepsettings.D.X1 \
+inst_cart_keepsettings.D.X2 inst_cart_mode_ram.D.X1 inst_cart_mode_ram.D.X2 \
+inst_cart_write_enable.D.X1 inst_cart_write_enable.D.X2 inst_flash_enable.D.X1 \
+inst_flash_enable.D.X2
+.names a_4_.BLIF rw.BLIF check_d700_d71f_access_std_match_result_n.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_state_1_.D
+---110 1
+--0--1 1
+-0---1 1
+1----1 1
+011--1 0
+----00 0
+---0-0 0
+.names a_4_.BLIF rw.BLIF check_d700_d71f_access_std_match_result_n.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_state_0_.D
+001-01 1
+---1-0 1
+--0-11 1
+1---11 1
+-1--01 0
+0-1-11 0
+---0-0 0
+--0-01 0
+1---01 0
+.names a_1_.BLIF freezer_ram_bank_13_.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF freezer_ram_bank_13_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names a_2_.BLIF freezer_ram_bank_14_.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF freezer_ram_bank_14_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names a_3_.BLIF freezer_ram_bank_15_.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF freezer_ram_bank_15_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names a_4_.BLIF freezer_ram_bank_16_.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF freezer_ram_bank_16_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names oss_bank_12_.BLIF a_3_.BLIF check_oss_bank_std_match_result_n.BLIF \
+oss_bank_12_.D
+1-0 1
+-01 1
+0-0 0
+-11 0
+.names oss_bank_13_.BLIF a_0_.BLIF check_oss_bank_std_match_result_n.BLIF \
+oss_bank_13_.D
+1-0 1
+-11 1
+0-0 0
+-01 0
+.names a_0_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_13_.BLIF freezer_rom_bank_13_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_1_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_14_.BLIF freezer_rom_bank_14_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_2_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_15_.BLIF freezer_rom_bank_15_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_3_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_16_.BLIF freezer_rom_bank_16_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_4_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_17_.BLIF freezer_rom_bank_17_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_5_.BLIF freezer_rom_bank_select_std_match_result_n.BLIF \
+freezer_rom_bank_18_.BLIF freezer_rom_bank_18_.D
+11- 1
+-01 1
+01- 0
+-00 0
+.names a_0_.BLIF freezer_ram_bank_12_.BLIF \
+freezer_ram_bank_select_std_match_result_n.BLIF freezer_ram_bank_12_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names cart_mode_0_.BLIF a_0_.BLIF a_2_.BLIF a_3_.BLIF \
+flash_config_access.BLIF cart_mode_0_.D
+-1011 1
+1--0- 1
+1-1-- 1
+1---0 1
+-0011 0
+0--0- 0
+0-1-- 0
+0---0 0
+.names cart_mode_1_.BLIF a_1_.BLIF a_2_.BLIF a_3_.BLIF \
+flash_config_access.BLIF cart_mode_1_.D
+-1011 1
+1--0- 1
+1-1-- 1
+1---0 1
+-0011 0
+0--0- 0
+0-1-- 0
+0---0 0
+.names a_3_.BLIF inst_sdx_enable.BLIF check_sdx_enable_std_match_result_n.BLIF \
+inst_sdx_enable.D
+-10 1
+0-1 1
+-00 0
+1-1 0
+.names a_5_.BLIF cart_bank_18_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_18_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names a_4_.BLIF cart_bank_17_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_17_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names a_3_.BLIF cart_bank_16_.BLIF cart_bank_select_std_match_result_n.BLIF \
+cart_bank_16_.D
+-10 1
+1-1 1
+-00 0
+0-1 0
+.names flash_enable_in.BLIF reset_cartemu.BLIF inst_flash_enable.AR
+11 1
+0- 0
+-0 0
+.names flash_enable_in.BLIF reset_cartemu.BLIF inst_flash_enable.AP
+01 1
+1- 0
+-0 0
+.names inst_use_vector_bankno.BLIF a_4_.BLIF rw.BLIF \
+check_d700_d71f_access_std_match_result_n.BLIF inst_use_vector_bankno.D
+-111 1
+10-- 1
+1--0 1
+-101 0
+00-- 0
+0--0 0
+.names a_2_.BLIF inst_vector_a2.BLIF check_vector_access_un1_activate_n.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF inst_vector_a2.D
+1-100 1
+-1-1- 1
+-10-- 1
+-1--1 1
+0-100 0
+-0-1- 0
+-00-- 0
+-0--1 0
+.names a_2_.BLIF a_7_.BLIF cart_bank_15_.BLIF un1_result_2.BLIF \
+cart_bank_15_.D
+10-0 1
+01-0 1
+--11 1
+00-0 0
+11-0 0
+--01 0
+.names a_1_.BLIF a_7_.BLIF cart_bank_14_.BLIF un1_result_2.BLIF \
+cart_bank_14_.D
+10-0 1
+01-0 1
+--11 1
+00-0 0
+11-0 0
+--01 0
+.names a_0_.BLIF a_7_.BLIF cart_bank_13_.BLIF un1_result_2.BLIF \
+cart_bank_13_.D
+10-0 1
+01-0 1
+--11 1
+00-0 0
+11-0 0
+--01 0
+.names reset.BLIF poweron.BLIF inst_cart_keepsettings.BLIF reset_cartemu
+0-0 1
+-1- 1
+10- 0
+-01 0
+.names a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF \
+a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+freezer_rom_bank_select_std_match_result_n
+1011101011 1
+--------0- 0
+-------1-- 0
+------0--- 0
+-----1---- 0
+----0----- 0
+---0------ 0
+--0------- 0
+-1-------- 0
+0--------- 0
+---------0 0
+.names a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF \
+a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+cart_bank_select_std_match_result_n
+1010101011 1
+--------0- 0
+-------1-- 0
+------0--- 0
+-----1---- 0
+----0----- 0
+---1------ 0
+--0------- 0
+-1-------- 0
+0--------- 0
+---------0 0
+.names a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF \
+a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+check_d700_d71f_access_std_match_result_n
+00011101011 1
+---------0- 0
+--------1-- 0
+-------0--- 0
+------1---- 0
+-----0----- 0
+----0------ 0
+---0------- 0
+--1-------- 0
+-1--------- 0
+1---------- 0
+----------0 0
+.names a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF \
+a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+freezer_ram_bank_select_std_match_result_n
+00111101011 1
+---------0- 0
+--------1-- 0
+-------0--- 0
+------1---- 0
+-----0----- 0
+----0------ 0
+---0------- 0
+--0-------- 0
+-1--------- 0
+1---------- 0
+----------0 0
+.names a_4_.BLIF a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF \
+a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+check_oss_bank_std_match_result_n
+000010101011 1
+----------0- 0
+---------1-- 0
+--------0--- 0
+-------1---- 0
+------0----- 0
+-----1------ 0
+----0------- 0
+---1-------- 0
+--1--------- 0
+-1---------- 0
+1----------- 0
+-----------0 0
+.names a_3_.BLIF a_4_.BLIF a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF \
+a_10_.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF rw.BLIF \
+activate_inputreg.BLIF check_vector_access_un1_activate_n
+111111111111110 1
+-------------0- 0
+------------0-- 0
+-----------0--- 0
+----------0---- 0
+---------0----- 0
+--------0------ 0
+-------0------- 0
+------0-------- 0
+-----0--------- 0
+----0---------- 0
+---0----------- 0
+--0------------ 0
+-0------------- 0
+0-------------- 0
+--------------1 0
+.names cart_mode_0_.BLIF cart_mode_1_.BLIF \
+cart_bank_select_std_match_result_n.BLIF \
+check_sdx_enable_std_match_result_n.BLIF un1_result_2
+-00- 1
+0-0- 1
+--00 1
+11-1 0
+--1- 0
+.names cart_mode_0_.BLIF cart_mode_1_.BLIF oss_bank_13_.BLIF a_12_.BLIF \
+a_13_.BLIF a_14_.BLIF a_15_.BLIF inst_sdx_enable.BLIF cart_bank_13_.BLIF N_272
+11-----0- 1
+01-1----- 1
+010------ 1
+00------0 1
+11------0 1
+------0-- 1
+-----1--- 1
+----0---- 1
+0110101-- 0
+10--101-- 0
+1---10111 0
+-0--101-1 0
+.names cart_mode_0_.BLIF cart_mode_1_.BLIF oss_bank_12_.BLIF oss_bank_13_.BLIF \
+a_13_.BLIF a_14_.BLIF a_15_.BLIF inst_sdx_enable.BLIF N_275
+0100---- 1
+11-----0 1
+0---0--- 1
+-1--0--- 1
+------0- 1
+-----1-- 1
+0--1101- 0
+0-1-101- 0
+10---01- 0
+-0--101- 0
+1---1011 0
+.names a_4_.BLIF a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF \
+a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF flash_config_access
+000110101011 1
+----------0- 0
+---------1-- 0
+--------0--- 0
+-------1---- 0
+------0----- 0
+-----1------ 0
+----0------- 0
+---0-------- 0
+--1--------- 0
+-1---------- 0
+1----------- 0
+-----------0 0
+.names flash_writable_in.BLIF rw.BLIF inst_cart_write_enable.BLIF \
+inst_flash_enable.BLIF cart_access_un13_flash_enable_n
+0-11 1
+-1-1 1
+-00- 0
+10-- 0
+---0 0
+.names a_4_.BLIF a_5_.BLIF a_6_.BLIF a_7_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF \
+a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+check_sdx_enable_std_match_result_n
+011110101011 1
+----------0- 0
+---------1-- 0
+--------0--- 0
+-------1---- 0
+------0----- 0
+-----1------ 0
+----0------- 0
+---0-------- 0
+--0--------- 0
+-0---------- 0
+1----------- 0
+-----------0 0
+.names os_select.BLIF inst_cart_mode_ram.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF cart_bank_18_.BLIF check_vector_access_un1_activate_n.BLIF \
+freezer_rom_bank_18_.BLIF N_275.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF cart_access_un13_flash_enable_n.BLIF ram_rom_a_18_
+---001--1-11- 1
+0-1111------- 1
+--000-----11- 1
+-------1--10- 1
+------1--0--1 1
+-1-------0--1 1
+-010--0-0--1- 0
+10----00---0- 0
+10--1-0----1- 0
+-0--0-00---0- 0
+--10----01-1- 0
+-01--000----- 0
+-00-1-0----1- 0
+--10----0--10 0
+1------0-1-0- 0
+1---1----1-1- 0
+-00---00---0- 0
+1------0---00 0
+-0-0--00---0- 0
+1---1------10 0
+----0--0-1-0- 0
+----0--0---00 0
+--1--0-0-1--- 0
+--0-1----1-1- 0
+--1--0-0----0 0
+--0-1------10 0
+--0----0-1-0- 0
+---0---0-1-0- 0
+--0----0---00 0
+---0---0---00 0
+-01--00----1- 0
+-0-01-0----1- 0
+-0-10-0----1- 0
+--1--0---1-1- 0
+---01----1-1- 0
+-0---00---0-- 0
+-0--0-0---0-- 0
+10----0---0-- 0
+-0-0--0---0-- 0
+-00---0---0-- 0
+---10----1-1- 0
+--1--0-----10 0
+---01------10 0
+---10------10 0
+-----0---10-- 0
+----0----10-- 0
+1--------10-- 0
+---0-----10-- 0
+--0------10-- 0
+-----0----0-0 0
+----0-----0-0 0
+1---------0-0 0
+---0------0-0 0
+--0-------0-0 0
+.names os_select.BLIF inst_cart_mode_ram.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF \
+a_15_.BLIF rw.BLIF cart_bank_14_.BLIF cart_bank_15_.BLIF cart_bank_16_.BLIF \
+check_vector_access_un1_activate_n.BLIF N_272.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF refresh
+-110---11100--0- 1
+-110-1-111-0--1- 1
+11-----11100--0- 1
+11---1-111-0--1- 1
+-1--0--11100--0- 1
+-1---0-11100--0- 1
+--10------0-1-0- 1
+--10-1------1-1- 1
+--10------0---00 1
+--10-1--------10 1
+1---------0-1-0- 1
+1----1------1-1- 1
+----0-----0-1-0- 1
+1---------0---00 1
+1----1--------10 1
+-----0----0-1-0- 1
+----0-----0---00 1
+-----0----0---00 1
+-1-1--0111-0-0-- 1
+-1-1--0111-0--1- 1
+-1--10-111-0--1- 1
+-1--01-111-0--1- 1
+-110---111-0-0-- 1
+-1-1--011100---- 1
+-1---0-111-0-0-- 1
+-1--0--111-0-0-- 1
+11-----111-0-0-- 1
+---1--0-----10-- 1
+---1--0-----1-1- 1
+----10------1-1- 1
+----01------1-1- 1
+--10--------10-- 1
+---1--0---0-1--- 1
+---1--0------0-0 1
+---1--0-------10 1
+----10--------10 1
+----01--------10 1
+--10---------0-0 1
+---1--0---0----0 1
+-----0------10-- 1
+----0-------10-- 1
+1-----------10-- 1
+-----0-------0-0 1
+----0--------0-0 1
+1------------0-0 1
+0--1111--------- 0
+0-0011---------- 0
+----001------11- 0
+---000-------11- 0
+----------1--10- 0
+-----------10--1 0
+---------0--0--1 0
+--------0---0--1 0
+-------0----0--1 0
+-0----------0--1 0
+.names inst_cart_mode_ram.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF \
+a_15_.BLIF rw.BLIF cart_bank_14_.BLIF cart_bank_15_.BLIF cart_bank_16_.BLIF \
+N_272.BLIF N_275.BLIF freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF ram_ce
+-1--1--1110---- 1
+--0-1--1110---- 1
+----1-11110---- 1
+0-0-1---------- 1
+-------1110-10- 1
+----1--1110--1- 1
+-----0-1110-0-- 1
+----01-1110---- 1
+-1--1------1--- 1
+-1--1---------0 1
+01--1---------- 1
+----1-1----1--- 1
+----1-1-------0 1
+--0-1------1--- 1
+0---01--------- 1
+--0-1---------0 1
+0-----------10- 1
+0---1--------1- 1
+0----0------0-- 1
+0----11-------- 1
+-----------110- 1
+----1------1-1- 1
+-----0-----10-- 1
+----01-----1--- 1
+------------100 1
+----1--------10 1
+-----0------0-0 1
+----01--------0 1
+---1---1110---- 1
+---1-------1--- 1
+0--1----------- 1
+---1----------0 1
+-010110-----00- 0
+---000------11- 0
+1---------10--1 0
+1--------0-0--1 0
+1-------0--0--1 0
+1------0---0--1 0
+.names os_select.BLIF inst_cart_mode_ram.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF check_vector_access_un1_activate_n.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF rom_ce
+1--1--0---0 1
+-1-0--0--0- 1
+11--1----1- 1
+---0--01-0- 1
+1---1--1-1- 1
+-1--0-0--0- 1
+1---1----10 1
+11----0--0- 1
+----0-01-0- 1
+---0--0--00 1
+----0-0--00 1
+1-----01-0- 1
+---10--1-1- 1
+---01--1-1- 1
+-1-10----1- 1
+-1-01----1- 1
+---10----10 1
+---01----10 1
+-----0-10-- 1
+--0----10-- 1
+-1---0--0-- 1
+-10-----0-- 1
+-----0-1-1- 1
+--0----1-1- 1
+-1---0---1- 1
+-10------1- 1
+----0--10-- 1
+---0---10-- 1
+-1--0---0-- 1
+-1-0----0-- 1
+1------10-- 1
+11------0-- 1
+-----001--- 1
+--0---01--- 1
+-1---00---- 1
+-10---0---- 1
+-----0--0-0 1
+--0-----0-0 1
+-----0---10 1
+--0------10 1
+----0---0-0 1
+---0----0-0 1
+1-------0-0 1
+-----00---0 1
+--0---0---0 1
+--1001--11- 0
+0-1111----- 0
+------1-10- 0
+-0-----0--1 0
+.names os_select.BLIF inst_use_vector_bankno.BLIF inst_cart_mode_ram.BLIF \
+a_4_.BLIF a_8_.BLIF a_9_.BLIF a_10_.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF \
+a_14_.BLIF a_15_.BLIF rw.BLIF cart_bank_17_.BLIF inst_vector_a2.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_rom_bank_17_.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF ram_rom_a_17_
+---100001011------00- 1
+---------1001---1-11- 1
+-1-------000--1---11- 1
+-0-1-----000------11- 1
+0--------1111-------- 1
+--0----------1---0--1 1
+--11-------------0--1 1
+---------------1--10- 1
+--10-----0-1-------1- 0
+1-0--------1-0-----1- 0
+--0------1-0-0--0--1- 0
+--10-----1-0----0--1- 0
+--0--------0-0-0---0- 0
+1-10-----------0---0- 0
+1-10-------1-------1- 0
+1----------1-----1-1- 0
+--10-------0---0---0- 0
+1----------1-------10 0
+--10-----1--0--0----- 0
+---------1-0----01-1- 0
+--0------0-1-0-----1- 0
+-----------0---0-1-0- 0
+--0-------0--0-0---0- 0
+1-0-------1--0-0--1-- 0
+---------1-0----0--10 0
+-----------0---0---00 0
+--10-----0-----0---0- 0
+--0------1--00-0----- 0
+--0------0---0-0--10- 0
+--10------0----0---0- 0
+---------0-1-----1-1- 0
+----------0----0-1-0- 0
+1---------1----0-11-- 0
+---------0-1-------10 0
+----------0----0---00 0
+1---------1----0--1-0 0
+---------1--0--0-1--- 0
+---------1--0--0----0 0
+---------0-----0-110- 0
+---------0-----0--100 0
+-10------0---00----1- 0
+--10-----0----0----1- 0
+--0-------01-0-----1- 0
+-1-------0----0--1-1- 0
+--10------01-------1- 0
+--0-------10-0-----1- 0
+--0------1--00-----1- 0
+--0------1--00----0-- 0
+1-0------1---0----0-- 0
+--10------10-------1- 0
+--10-----1--0------1- 0
+--0-----00---0----0-- 0
+--0----1-0---0----0-- 0
+--0---1--0---0----0-- 0
+--0--1---0---0----0-- 0
+--0-1----0---0----0-- 0
+-010-----0---------1- 0
+-0-0-----0-------1-1- 0
+-0-0-----0---0-----1- 0
+-1-------0----0----10 0
+--10--------0-----0-- 0
+1-10--------------0-- 0
+-0-0-----0---------10 0
+----------01-----1-1- 0
+----------10-----1-1- 0
+---------1--0----1-1- 0
+---------1--0----10-- 0
+1--------1-------10-- 0
+--0--------0-0----0-- 0
+--0-------0--0----0-- 0
+--10-------0------0-- 0
+--10------0-------0-- 0
+--------00-------10-- 0
+-------1-0-------10-- 0
+------1--0-------10-- 0
+-----1---0-------10-- 0
+----1----0-------10-- 0
+----------01-------10 0
+----------10-------10 0
+---------1--0------10 0
+---------1--0-----0-0 0
+1--------1--------0-0 0
+--10-----0--------0-- 0
+---0-----0-------10-- 0
+---0-----0---0----0-- 0
+--------00--------0-0 0
+-------1-0--------0-0 0
+------1--0--------0-0 0
+-----1---0--------0-0 0
+----1----0--------0-0 0
+---0-----0--------0-0 0
+-----------0-----10-- 0
+----------0------10-- 0
+-----------0------0-0 0
+----------0-------0-0 0
+.names os_select.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF cart_bank_16_.BLIF freezer_ram_bank_16_.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_rom_bank_16_.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF ram_rom_a_16_
+-01011------00- 1
+---1001---1-11- 1
+0--1111-------- 1
+---000--1---11- 1
+--0000------11- 1
+---------1--10- 1
+-------1---0--1 1
+1---1--0-----1- 0
+---10--0--0--1- 0
+-----0-0-0---0- 0
+1---1------1-1- 0
+1---1--------10 0
+---10-----01-1- 0
+---1--00-0----- 0
+-----0---0-1-0- 0
+---10-----0--10 0
+-----0---0---00 0
+---1--0--0-1--- 0
+---01--0-----1- 0
+---1--0--0----0 0
+---01--------10 0
+----0--0-0---0- 0
+1---1--0-0--1-- 0
+---0---0-0--10- 0
+---01------1-1- 0
+----0----0-1-0- 0
+1---1----0-11-- 0
+---0-----0-110- 0
+----0----0---00 0
+1---1----0--1-0 0
+---0-----0--100 0
+--10----0--1-1- 0
+--10---00----1- 0
+--10----0----10 0
+----01-----1-1- 0
+----01-0-----1- 0
+--00-------10-- 0
+-1-0-------10-- 0
+--00---0----0-- 0
+-1-0---0----0-- 0
+---1--0----10-- 0
+1--1-------10-- 0
+---1--00----0-- 0
+1--1---0----0-- 0
+----10-----1-1- 0
+----10-0-----1- 0
+---1--0----1-1- 0
+---1--00-----1- 0
+----01-------10 0
+--00--------0-0 0
+-1-0--------0-0 0
+---1--0-----0-0 0
+1--1--------0-0 0
+----10-------10 0
+---1--0------10 0
+-----0-----10-- 0
+-----0-0----0-- 0
+----0------10-- 0
+----0--0----0-- 0
+-----0------0-0 0
+----0-------0-0 0
+.names os_select.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF cart_bank_15_.BLIF freezer_ram_bank_15_.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_rom_bank_15_.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF ram_rom_a_15_
+-01011------00- 1
+---1001---1-11- 1
+0--1111-------- 1
+---000--1---11- 1
+--0000------11- 1
+---------1--10- 1
+-------1---0--1 1
+1---1--0-----1- 0
+---10--0--0--1- 0
+-----0-0-0---0- 0
+1---1------1-1- 0
+1---1--------10 0
+---10-----01-1- 0
+---1--00-0----- 0
+-----0---0-1-0- 0
+---10-----0--10 0
+-----0---0---00 0
+---1--0--0-1--- 0
+---01--0-----1- 0
+---1--0--0----0 0
+---01--------10 0
+----0--0-0---0- 0
+1---1--0-0--1-- 0
+---0---0-0--10- 0
+---01------1-1- 0
+----0----0-1-0- 0
+1---1----0-11-- 0
+---0-----0-110- 0
+----0----0---00 0
+1---1----0--1-0 0
+---0-----0--100 0
+--10----0--1-1- 0
+--10---00----1- 0
+--10----0----10 0
+----01-----1-1- 0
+----01-0-----1- 0
+--00-------10-- 0
+-1-0-------10-- 0
+--00---0----0-- 0
+-1-0---0----0-- 0
+---1--0----10-- 0
+1--1-------10-- 0
+---1--00----0-- 0
+1--1---0----0-- 0
+----10-----1-1- 0
+----10-0-----1- 0
+---1--0----1-1- 0
+---1--00-----1- 0
+----01-------10 0
+--00--------0-0 0
+-1-0--------0-0 0
+---1--0-----0-0 0
+1--1--------0-0 0
+----10-------10 0
+---1--0------10 0
+-----0-----10-- 0
+-----0-0----0-- 0
+----0------10-- 0
+----0--0----0-- 0
+-----0------0-0 0
+----0-------0-0 0
+.names os_select.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF cart_bank_14_.BLIF freezer_ram_bank_14_.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_rom_bank_14_.BLIF N_275.BLIF \
+freezer_state_0_.BLIF freezer_state_1_.BLIF \
+cart_access_un13_flash_enable_n.BLIF ram_rom_a_14_
+-01011------00- 1
+---1001---1-11- 1
+---000--1---11- 1
+--0000------11- 1
+0--1111--0----- 1
+0--1111-----0-- 1
+0--1111------1- 1
+-------1---0--1 1
+---10--0--0---- 0
+--10---00---1-- 0
+-1-01--0------- 0
+---10-----01--- 0
+---10-----0---0 0
+--10----0--11-- 0
+-1-01------1--- 0
+--10----0---1-0 0
+--001--0------- 0
+---0---0----10- 0
+1--11--0------- 0
+-1-01---------0 0
+--001------1--- 0
+---0-------110- 0
+1--11------1--- 0
+--001---------0 0
+---0--------100 0
+1--11---------0 0
+----0--0----0-- 0
+---01--0-----1- 0
+----0--0-----0- 0
+----0------10-- 0
+----0-------0-0 0
+---01------1-1- 0
+----0------1-0- 0
+---01--------10 0
+----0--------00 0
+---------1-110- 0
+-------0-1--10- 0
+---------1--100 0
+---1--0----1--- 0
+---1--00------- 0
+----01-----1--- 0
+----01-0------- 0
+----10-----1--- 0
+----10-0------- 0
+---1--0-------0 0
+----01--------0 0
+----10--------0 0
+.names os_select.BLIF a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF \
+rw.BLIF freezer_ram_bank_13_.BLIF check_vector_access_un1_activate_n.BLIF \
+freezer_rom_bank_13_.BLIF N_272.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF cart_access_un13_flash_enable_n.BLIF ram_rom_a_13_
+-01011-----00- 1
+---1001--1-11- 1
+---000-1---11- 1
+--0000-----11- 1
+0--1111-0----- 1
+0--1111----0-- 1
+0--1111-----1- 1
+----------0--1 1
+---10----01--- 0
+--10---0--11-- 0
+---10----0---0 0
+-1-01-----1--- 0
+--10---0---1-0 0
+-1-01--------0 0
+--001-----1--- 0
+---0------110- 0
+1--11-----1--- 0
+--001--------0 0
+---0-------100 0
+1--11--------0 0
+----0-----10-- 0
+---01-----1-1- 0
+----0------0-0 0
+----0-----1-0- 0
+---01-------10 0
+----0-------00 0
+--------1-110- 0
+--------1--100 0
+---1--0---1--- 0
+----01----1--- 0
+----10----1--- 0
+---1--0------0 0
+----01-------0 0
+----10-------0 0
+.names os_select.BLIF cart_mode_0_.BLIF cart_mode_1_.BLIF oss_bank_12_.BLIF \
+a_11_.BLIF a_12_.BLIF a_13_.BLIF a_14_.BLIF a_15_.BLIF rw.BLIF \
+inst_sdx_enable.BLIF freezer_ram_bank_12_.BLIF \
+check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF cart_access_un13_flash_enable_n.BLIF ram_rom_a_12_
+----01011----00- 1
+-011-0101------1 1
+-----11001---11- 1
+0----11111------ 1
+------000--1-11- 1
+-----0000----11- 1
+-1---1101-1----1 1
+-10--1-01------1 1
+--0--1101------1 1
+------------110- 1
+1------1----01-- 0
+--1--1-0--0--0-- 0
+---0-0-------0-- 0
+--1--1-0--0-0-0- 0
+---0-0--1---0--- 0
+--1--1-01-0---1- 0
+---0-0--1-----1- 0
+-------1-0--01-- 0
+-01--1-0----0-0- 0
+-1---01-------1- 0
+--1---0-----010- 0
+-1---0------0-0- 0
+-0----0-----010- 0
+--0--0--1-----1- 0
+--0--0------0-0- 0
+-------0----0-00 0
+-01--1-01-----1- 0
+-01--1-0-----0-- 0
+-----10-0--0--1- 0
+------01----01-- 0
+-----0-1----0--- 0
+------1-00----1- 0
+1-----11-----0-- 0
+------11-0---0-- 0
+-0----00-----0-- 0
+----1-01-----0-- 0
+--1---00-----0-- 0
+-----01-0-----1- 0
+-0----0-1-----1- 0
+--1---0-1-----1- 0
+--------0---0-0- 0
+1------1------1- 0
+-------1-0----1- 0
+--0--0-------0-- 0
+-1---0-------0-- 0
+-------10-----1- 0
+------01------1- 0
+-------01-----10 0
+-----0-1-----0-- 0
+-----0-1------1- 0
+--------0----0-- 0
+-------0-----0-0 0
+.names phi2.BLIF freezer_state_1_.C
+0 1
+1 0
+.names reset.BLIF freezer_state_1_.AR
+0 1
+1 0
+.names phi2.BLIF freezer_state_0_.C
+0 1
+1 0
+.names reset.BLIF freezer_state_0_.AR
+0 1
+1 0
+.names phi2.BLIF freezer_ram_bank_13_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_ram_bank_13_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_ram_bank_14_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_ram_bank_14_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_ram_bank_15_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_ram_bank_15_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_ram_bank_16_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_ram_bank_16_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF oss_bank_12_.C
+0 1
+1 0
+.names phi2.BLIF oss_bank_13_.C
+0 1
+1 0
+.names phi2.BLIF freezer_rom_bank_13_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_13_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_rom_bank_14_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_14_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_rom_bank_15_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_15_.AP
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_rom_bank_16_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_16_.AP
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_rom_bank_17_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_17_.AP
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_rom_bank_18_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_rom_bank_18_.AP
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF freezer_ram_bank_12_.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF freezer_ram_bank_12_.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names phi2.BLIF cart_mode_0_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_mode_0_.AR
+1 1
+0 0
+.names phi2.BLIF cart_mode_1_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_mode_1_.AR
+1 1
+0 0
+.names phi2.BLIF inst_cart_keepsettings.C
+0 1
+1 0
+.names poweron.BLIF inst_cart_keepsettings.AP
+1 1
+0 0
+.names phi2.BLIF inst_sdx_enable.C
+0 1
+1 0
+.names phi2.BLIF cart_bank_18_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_18_.AP
+1 1
+0 0
+.names phi2.BLIF cart_bank_17_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_17_.AP
+1 1
+0 0
+.names phi2.BLIF cart_bank_16_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_16_.AP
+1 1
+0 0
+.names a_in_0_.BLIF a_0_.D
+1 1
+0 0
+.names phi2.BLIF a_0_.LH
+0 1
+1 0
+.names phi2.BLIF inst_flash_enable.C
+0 1
+1 0
+.names a_in_1_.BLIF a_1_.D
+1 1
+0 0
+.names phi2.BLIF a_1_.LH
+0 1
+1 0
+.names phi2.BLIF inst_use_vector_bankno.C
+0 1
+1 0
+.names check_vector_access_un1_activate_n.BLIF freezer_state_0_.BLIF \
+freezer_state_1_.BLIF inst_use_vector_bankno.AR
+100 1
+-1- 0
+0-- 0
+--1 0
+.names a_in_2_.BLIF a_2_.D
+1 1
+0 0
+.names phi2.BLIF a_2_.LH
+0 1
+1 0
+.names phi2.BLIF inst_vector_a2.C
+0 1
+1 0
+.names a_in_3_.BLIF a_3_.D
+1 1
+0 0
+.names phi2.BLIF a_3_.LH
+0 1
+1 0
+.names phi2.BLIF cart_bank_15_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_15_.AP
+1 1
+0 0
+.names a_in_4_.BLIF a_4_.D
+1 1
+0 0
+.names phi2.BLIF a_4_.LH
+0 1
+1 0
+.names phi2.BLIF cart_bank_14_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_14_.AP
+1 1
+0 0
+.names a_in_5_.BLIF a_5_.D
+1 1
+0 0
+.names phi2.BLIF a_5_.LH
+0 1
+1 0
+.names phi2.BLIF cart_bank_13_.C
+0 1
+1 0
+.names reset_cartemu.BLIF cart_bank_13_.AR
+1 1
+0 0
+.names a_in_6_.BLIF a_6_.D
+1 1
+0 0
+.names phi2.BLIF a_6_.LH
+0 1
+1 0
+.names phi2.BLIF inst_cart_write_enable.C
+0 1
+1 0
+.names reset.BLIF inst_cart_write_enable.AR
+0 1
+1 0
+.names a_in_7_.BLIF a_7_.D
+1 1
+0 0
+.names phi2.BLIF a_7_.LH
+0 1
+1 0
+.names phi2.BLIF inst_cart_mode_ram.C
+0 1
+1 0
+.names reset_cartemu.BLIF inst_cart_mode_ram.AR
+1 1
+0 0
+.names a_in_8_.BLIF a_8_.D
+1 1
+0 0
+.names phi2.BLIF a_8_.LH
+0 1
+1 0
+.names activate_in.BLIF activate_inputreg.D
+1 1
+0 0
+.names phi2.BLIF activate_inputreg.C
+0 1
+1 0
+.names rw_in.BLIF rw.D
+1 1
+0 0
+.names phi2.BLIF rw.LH
+0 1
+1 0
+.names a_in_9_.BLIF a_9_.D
+1 1
+0 0
+.names phi2.BLIF a_9_.LH
+0 1
+1 0
+.names a_in_10_.BLIF a_10_.D
+1 1
+0 0
+.names phi2.BLIF a_10_.LH
+0 1
+1 0
+.names a_in_11_.BLIF a_11_.D
+1 1
+0 0
+.names phi2.BLIF a_11_.LH
+0 1
+1 0
+.names a_in_12_.BLIF a_12_.D
+1 1
+0 0
+.names phi2.BLIF a_12_.LH
+0 1
+1 0
+.names a_in_13_.BLIF a_13_.D
+1 1
+0 0
+.names phi2.BLIF a_13_.LH
+0 1
+1 0
+.names a_in_14_.BLIF a_14_.D
+1 1
+0 0
+.names phi2.BLIF a_14_.LH
+0 1
+1 0
+.names a_in_15_.BLIF a_15_.D
+1 1
+0 0
+.names phi2.BLIF a_15_.LH
+0 1
+1 0
+.names inst_cart_keepsettings.BLIF a_0_.BLIF inst_cart_keepsettings.D.X1
+10 1
+0- 0
+-1 0
+.names inst_cart_keepsettings.BLIF a_0_.BLIF a_1_.BLIF a_2_.BLIF a_3_.BLIF \
+flash_config_access.BLIF inst_cart_keepsettings.D.X2
+1-1001 1
+11---- 1
+-11001 1
+00---- 0
+0-0--- 0
+-00--- 0
+0--1-- 0
+-0-1-- 0
+0---1- 0
+-0--1- 0
+0----0 0
+-0---0 0
+.names inst_cart_mode_ram.BLIF a_0_.BLIF inst_cart_mode_ram.D.X1
+10 1
+0- 0
+-1 0
+.names inst_cart_mode_ram.BLIF a_0_.BLIF a_1_.BLIF a_2_.BLIF a_3_.BLIF \
+flash_config_access.BLIF inst_cart_mode_ram.D.X2
+1-1101 1
+11---- 1
+-11101 1
+00---- 0
+0-0--- 0
+-00--- 0
+0--0-- 0
+-0-0-- 0
+0---1- 0
+-0--1- 0
+0----0 0
+-0---0 0
+.names a_0_.BLIF inst_cart_write_enable.BLIF inst_cart_write_enable.D.X1
+01 1
+1- 0
+-0 0
+.names a_0_.BLIF a_1_.BLIF a_2_.BLIF a_3_.BLIF inst_cart_write_enable.BLIF \
+flash_config_access.BLIF inst_cart_write_enable.D.X2
+-01011 1
+1---1- 1
+1010-1 1
+01---- 0
+0-0--- 0
+0--1-- 0
+0---0- 0
+-1--0- 0
+--0-0- 0
+---10- 0
+0----0 0
+----00 0
+.names a_0_.BLIF inst_flash_enable.BLIF inst_flash_enable.D.X1
+01 1
+1- 0
+-0 0
+.names flash_enable_in.BLIF flash_writable_in.BLIF a_0_.BLIF a_1_.BLIF \
+a_2_.BLIF a_3_.BLIF inst_flash_enable.BLIF flash_config_access.BLIF \
+inst_flash_enable.D.X2
+0--00011 1
+-0-00011 1
+--1---1- 1
+0-1000-1 1
+-01000-1 1
+--01---- 0
+--0-1--- 0
+--0--1-- 0
+--0---0- 0
+---1--0- 0
+----1-0- 0
+-----10- 0
+--0----0 0
+------00 0
+110----- 0
+11----0- 0
+.end

@@ -1,0 +1,131 @@
+;-------------------------------
+;LOADER:DIVIDES SYSTEM STATUS IN
+;       BLOCKS OF LENGTH NCOUNT
+;       AND LOADS THEM VIA CALLS
+;       TO THE DEVICE HANDLERS.
+;-------------------------------
+
+LOAD
+;      DBGT4 4,"Chip"
+      JSR READ
+      LDX #CHIPLEN-1
+LOA1  LDA DBUF,X
+      STA SGTIA,X
+      DEX 
+      BPL LOA1
+
+      BIT FILENO
+      BVS LOA3            ; NOT COMPACTED DATA
+
+;      DBGT4 4,"Map "
+      JSR READ            ; READ MAP OF USED BLOCKS
+      LDX #65
+LOA2  LDA DBUF,X
+      STA USEMAP,X
+      DEX 
+      BPL LOA2
+
+LOA3  LDA #0
+      STA RPNT
+      STA RPNT+1
+      STA MAPIDX
+      LDA #$80
+      STA MAPMSK
+      LDA NCOUNT
+      STA DCOUNT
+
+LOA4  BIT FILENO          ; ACTUAL LOAD LOOP
+      BVS LOA6            ; NOT COMPACTED DATA
+      LDX MAPIDX
+      LDA USEMAP,X
+      AND MAPMSK
+      BEQ LOA6            ; BLOCK NOT ZERO
+      LDX #0
+      TXA 
+LOA5  STA DBUF,X
+      INX 
+      BNE LOA5
+      BEQ LOA7
+
+LOA6
+      DBGADR 4,RPNT
+      JSR READ
+LOA7  JSR TORAM
+      JSR ADVMAP
+      JSR ADVPNT
+      BCC LOA4
+
+      LDA #$FF
+      STA PORTB
+      JMP DMAON
+
+;MOVE BLOCK FROM DBUF TO (RPNT)
+
+TORAM LDA RPNT+1          ; DBUF TO (RPNT)
+      CMP #$40
+      BCS TORA5
+
+      LDA #0
+      STA DMACTL          ; 0000-3FFF
+      LDX #TORA3-TORA2
+TORA1 LDA CPAGE,X
+      STA SPAGE,X
+      LDA TORA2,X
+      STA CPAGE,X
+      DEX 
+      BPL TORA1
+      LDA RPNT
+      STA CPAGE+7
+      LDA RPNT+1
+      STA CPAGE+8
+      LDY #0
+      JMP CPAGE
+
+TORA2 LDA DBUF,Y
+      STA BRKCTL
+      STA $EEEE,Y
+      STA BRKCTL
+      INY 
+      CPY DCOUNT
+      BNE TORA2
+      JMP TORA3
+
+TORA3 LDX #TORA3-TORA2
+TORA4 LDA SPAGE,X
+      STA CPAGE,X
+      DEX
+      BPL TORA4
+      RTS 
+TORA5 CMP #$BF
+      BCS TORA8
+      LDA #$21            ; 4000-BF00
+      STA DMACTL
+TORA6 LDY #0
+TORA7 LDA DBUF,Y
+      STA (RPNT),Y
+      INY 
+      CPY DCOUNT
+      BNE TORA7
+      LDA #$FF
+      STA PORTB
+      RTS 
+
+TORA8 LDA #0              ; BF00-FFFF
+      STA DMACTL
+      LDA #$FE
+      STA PORTB           ; OS OFF
+      BNE TORA6           ; ALWAYS
+
+;JUMP TO DEVICE HANDLERS TO
+;LOAD BLOCK INTO DBUF
+
+READ  LDX DEVICE
+      BEQ READ1
+      DEX 
+      BEQ READ2
+      DEX
+      BEQ READ3
+      JMP RFRZ
+READ1 JMP RRAMD
+READ2 JMP RDISK
+READ3 JMP RCASS

@@ -1,0 +1,211 @@
+[DEVICE]
+
+Family = M4A5;
+PartType = M4A5-64/32;
+Package = 44PLCC;
+PartNumber = M4A5-64/32-10JC;
+Speed = -10;
+Operating_condition = COM;
+EN_Segment = NO;
+Pin_MC_1to1 = NO;
+Voltage = 5.0;
+
+[REVISION]
+
+RCS = "$Revision: 1.2 $";
+Parent = m4a5.lci;
+SDS_file = m4a5.sds;
+Design = turbofreezerxl.tt4;
+Rev = 0.01;
+DATE = 5/4/05;
+TIME = 18:07:29;
+Type = TT2;
+Pre_Fit_Time = 1;
+Source_Format = Schematic_VHDL;
+
+[IGNORE ASSIGNMENTS]
+
+Pin_Assignments = NO;
+Pin_Keep_Block = NO;
+Pin_Keep_Segment = NO;
+Group_Assignments = NO;
+Macrocell_Assignments = NO;
+Macrocell_Keep_Block = NO;
+Macrocell_Keep_Segment = NO;
+Pin_Reservation = NO;
+Timing_Constraints = NO;
+Block_Reservation = NO;
+Segment_Reservation = NO;
+Ignore_Source_Location = NO;
+Ignore_Source_Optimization = NO;
+Ignore_Source_Timing = NO;
+
+[CLEAR ASSIGNMENTS]
+
+Pin_Assignments = NO;
+Pin_Keep_Block = NO;
+Pin_Keep_Segment = NO;
+Group_Assignments = NO;
+Macrocell_Assignments = NO;
+Macrocell_Keep_Block = NO;
+Macrocell_Keep_Segment = NO;
+Pin_Reservation = NO;
+Timing_Constraints = NO;
+Block_Reservation = NO;
+Segment_Reservation = NO;
+Ignore_Source_Location = NO;
+Ignore_Source_Optimization = NO;
+Ignore_Source_Timing = NO;
+
+[BACKANNOTATE NETLIST]
+
+Netlist = VHDL;
+Delay_File = SDF;
+Generic_VCC = ;
+Generic_GND = ;
+
+[BACKANNOTATE ASSIGNMENTS]
+
+Pin_Assignment = NO;
+Pin_Block = NO;
+Pin_Macrocell_Block = NO;
+Routing = NO;
+
+[GLOBAL PROJECT OPTIMIZATION]
+
+Balanced_Partitioning = YES;
+Spread_Placement = YES;
+Max_Pin_Percent = 100;
+Max_Macrocell_Percent = 100;
+Max_Inter_Seg_Percent = 100;
+Max_Seg_In_Percent = 100;
+Max_Blk_In_Percent = 100;
+
+[FITTER REPORT FORMAT]
+
+Fitter_Options = YES;
+Pinout_Diagram = NO;
+Pinout_Listing = YES;
+Detailed_Block_Segment_Summary = YES;
+Input_Signal_List = YES;
+Output_Signal_List = YES;
+Bidir_Signal_List = YES;
+Node_Signal_List = YES;
+Signal_Fanout_List = YES;
+Block_Segment_Fanin_List = YES;
+Prefit_Eqn = YES;
+Postfit_Eqn = YES;
+Page_Break = YES;
+
+[OPTIMIZATION OPTIONS]
+
+Logic_Reduction = YES;
+Max_PTerm_Split = 16;
+Max_PTerm_Collapse = 16;
+XOR_Synthesis = YES;
+Node_Collapse = Yes;
+DT_Synthesis = Yes;
+
+[FITTER GLOBAL OPTIONS]
+
+Run_Time = 0;
+Set_Reset_Dont_Care = NO;
+In_Reg_Optimize = YES;
+Clock_Optimize = NO;
+Conf_Unused_IOs = OUT_LOW;
+
+[POWER]
+Powerlevel = Low, High;
+Default = HIGH;
+Type = GLB;
+
+[HARDWARE DEVICE OPTIONS]
+Zero_Hold_Time = No;
+Signature_Word = HIAS;
+Pull_up = No;
+Out_Slew_Rate = SLOW, FAST, 0;
+Device_max_fanin = 33;
+Device_max_pterms = 20;
+Usercode_Format = ASCII;
+
+[LOCATION ASSIGNMENT]
+
+Layer = OFF;
+a_in_12_ = INPUT,27, C,-;
+a_in_11_ = INPUT,31, C,-;
+a_in_15_ = INPUT,25, C,-;
+a_in_10_ = INPUT,30, C,-;
+a_in_9_ = INPUT,36, D,-;
+ram_rom_a_18_ = OUTPUT,4, A,-;
+a_in_8_ = INPUT,37, D,-;
+phi2 = INPUT,33,-,-;
+a_in_7_ = INPUT,38, D,-;
+reset = INPUT,14, B,-;
+a_in_6_ = INPUT,40, D,-;
+rw_in = INPUT,11,-,-;
+a_in_5_ = INPUT,24, C,-;
+os_select = INPUT,29, C,-;
+a_in_4_ = INPUT,21, B,-;
+activate_in = INPUT,6, A,-;
+a_in_3_ = INPUT,20, B,-;
+poweron = INPUT,5, A,-;
+a_in_2_ = INPUT,19, B,-;
+flash_enable_in = INPUT,8, A,-;
+a_in_1_ = INPUT,18, B,-;
+flash_writable_in = INPUT,7, A,-;
+a_in_0_ = INPUT,17, B,-;
+refresh = OUTPUT,9, A,-;
+ram_rom_a_17_ = OUTPUT,43, D,-;
+ram_ce = OUTPUT,3, A,-;
+ram_rom_a_16_ = OUTPUT,15, B,-;
+rom_ce = OUTPUT,42, D,-;
+ram_rom_a_15_ = OUTPUT,2, A,-;
+ram_rom_a_14_ = OUTPUT,41, D,-;
+ram_rom_a_13_ = OUTPUT,39, D,-;
+ram_rom_a_12_ = OUTPUT,16, B,-;
+a_in_14_ = INPUT,26, C,-;
+a_in_13_ = INPUT,28, C,-;
+inst_use_vector_bankno = NODE,13, D,-;
+inst_cart_keepsettings = NODE,7, C,-;
+inst_cart_mode_ram = NODE,8, C,-;
+cart_mode_0_ = NODE,5, C,-;
+cart_mode_1_ = NODE,1, C,-;
+oss_bank_12_ = NODE,7, B,-;
+oss_bank_13_ = NODE,2, B,-;
+rw = NODE,12, B,-;
+inst_cart_write_enable = NODE,3, C,-;
+reset_cartemu = NODE,6, C,-;
+inst_sdx_enable = NODE,13, B,-;
+inst_flash_enable = NODE,10, C,-;
+cart_bank_13_ = NODE,14, C,-;
+cart_bank_14_ = NODE,0, C,-;
+cart_bank_15_ = NODE,9, C,-;
+cart_bank_16_ = NODE,9, B,-;
+cart_bank_17_ = NODE,2, C,-;
+cart_bank_18_ = NODE,13, C,-;
+freezer_rom_bank_select_std_match_result_n = NODE,5, A,-;
+cart_bank_select_std_match_result_n = NODE,2, A,-;
+freezer_ram_bank_12_ = NODE,3, B,-;
+freezer_ram_bank_13_ = NODE,10, D,-;
+freezer_ram_bank_14_ = NODE,6, D,-;
+freezer_ram_bank_15_ = NODE,5, B,-;
+freezer_ram_bank_16_ = NODE,14, B,-;
+check_d700_d71f_access_std_match_result_n = NODE,11, A,-;
+freezer_ram_bank_select_std_match_result_n = NODE,13, A,-;
+inst_vector_a2 = NODE,9, D,-;
+check_oss_bank_std_match_result_n = NODE,7, A,-;
+check_vector_access_un1_activate_n = NODE,8, A,-;
+un1_result_2 = NODE,10, B,-;
+freezer_rom_bank_13_ = NODE,1, B,-;
+freezer_rom_bank_14_ = NODE,2, D,-;
+freezer_rom_bank_15_ = NODE,10, A,-;
+freezer_rom_bank_16_ = NODE,6, B,-;
+freezer_rom_bank_17_ = NODE,9, A,-;
+freezer_rom_bank_18_ = NODE,6, A,-;
+N_272 = NODE,12, C,-;
+N_275 = NODE,0, B,-;
+freezer_state_0_ = NODE,4, D,-;
+freezer_state_1_ = NODE,5, D,-;
+flash_config_access = NODE,3, A,-;
+cart_access_un13_flash_enable_n = NODE,4, C,-;
+check_sdx_enable_std_match_result_n = NODE,14, A,-;

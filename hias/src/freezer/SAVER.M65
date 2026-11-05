@@ -1,0 +1,205 @@
+;-------------------------------
+;SAVER: DIVIDES SYSTEM STATUS IN
+;       BLOCKS OF LENGTH NCOUNT
+;       AND SAVES THEM VIA CALLS
+;       TO THE DEVICE HANDLERS.
+;-------------------------------
+
+SAVE
+;      DBGT4 4,"Chip"
+      LDX #CHIPLEN-1
+SAV1  LDA SGTIA,X
+      STA DBUF,X
+      DEX 
+      BPL SAV1
+      JSR WRITE
+
+      BIT FILENO
+      BVS SAV7            ; DON'T COMPACT
+
+;      DBGT4 4,"Map "
+
+      LDX #65             ; PREPARE MAP OF USED BLOCKS
+      LDA #0
+SAV2  STA USEMAP,X
+      DEX 
+      BPL SAV2
+      STA MAPIDX
+      STA RPNT
+      STA RPNT+1
+      LDA #$80
+      STA MAPMSK
+SAV3  JSR TOBUF           ; COPY BLOCK TO BUFFER
+      LDX #0
+SAV4  LDA DBUF,X
+      BNE SAV5            ; NOT ZERO
+      INX 
+      CPX DCOUNT
+      BNE SAV4
+      LDA NEXT
+      ORA NEXT+1
+      BEQ SAV5            ; LAST BLOCK ALWAYS USED
+      LDX MAPIDX          ; SET BLOCK UNUSED BIT
+      LDA USEMAP,X
+      ORA MAPMSK
+      STA USEMAP,X
+SAV5  JSR ADVMAP
+      JSR ADVPNT
+      BCC SAV3
+      LDX #66             ; SAVE MAP
+      STX DCOUNT
+      DEX 
+SAV6  LDA USEMAP,X
+      STA DBUF,X
+      DEX 
+      BPL SAV6
+      INC NEXT            ; FORCE SECTOR ALLOCATION
+      JSR WRITE
+
+SAV7  LDA #0
+      STA RPNT
+      STA RPNT+1
+      STA MAPIDX
+      LDA #$80
+      STA MAPMSK
+      LDA NCOUNT
+      STA DCOUNT
+
+SAV8
+      DBGADR 4,RPNT
+      JSR TOBUF
+      BIT FILENO
+      BVS SAV9
+      LDX MAPIDX          ; UNUSED BLOCK?
+      LDA USEMAP,X
+      AND MAPMSK
+      BNE SAV10           ; YES, SKIP
+SAV9  JSR WRITE
+SAV10 JSR ADVMAP
+      JSR ADVPNT
+      BCC SAV8
+      LDA #$FF
+      STA PORTB
+      JMP DMAON
+
+;COPY DATA FROM (RPNT) TO DBUF
+
+TOBUF
+      LDA RPNT+1          ; (RPNT) TO DBUF
+      CMP #$40
+      BCS TOBU5
+
+      LDA #0              ; 0000-3FFF
+      STA DMACTL
+      LDX #TOBU3-TOBU2
+TOBU1 LDA CPAGE,X
+      STA SPAGE,X
+      LDA TOBU2,X
+      STA CPAGE,X
+      DEX 
+      BPL TOBU1
+      LDA RPNT
+      STA CPAGE+4
+      LDA RPNT+1
+      STA CPAGE+5
+      LDY #0
+      JMP CPAGE
+
+TOBU2 STA BRKCTL
+      LDA $EEEE,Y
+      STA BRKCTL
+      STA DBUF,Y
+      INY 
+      CPY DCOUNT
+      BNE TOBU2
+      JMP TOBU3
+
+TOBU3 LDX #TOBU3-TOBU2
+TOBU4 LDA SPAGE,X
+      STA CPAGE,X
+      DEX 
+      BPL TOBU4
+      RTS 
+
+TOBU5 CMP #$BF
+      BCS TOBU8
+      LDA #$21            ; 4000-BF00
+      STA DMACTL
+TOBU6 LDY #0
+TOBU7 LDA (RPNT),Y
+      STA DBUF,Y
+      INY 
+      CPY DCOUNT
+      BNE TOBU7
+      LDA #$FF
+      STA PORTB
+      RTS 
+
+TOBU8 LDA #0              ; BF00-FFFF
+      STA DMACTL
+      LDA #$FE            ; OS OFF
+      STA PORTB
+      BNE TOBU6           ; ALWAYS
+
+;ADVANCE ONE BIT POS IN USEMAP
+
+ADVMAP LSR MAPMSK
+      BCC ADVMA1
+      ROR MAPMSK
+      INC MAPIDX
+ADVMA1 RTS 
+
+;ADVANCE RPNT ONE BLOCK
+
+ADVPNT LDA NCOUNT
+      STA DCOUNT
+      SEC 
+      BEQ ADVPN0
+      CLC 
+      ADC RPNT
+      STA RPNT
+ADVPN0 LDA RPNT+1
+      ADC #0
+      STA RPNT+1
+      BCS ADVPN3          ; ALL BLOCKS DONE
+      CMP #$CF            ; END PAGES?
+      BEQ ADVPN1          ; YES
+      CMP #$FF
+      BEQ ADVPN1          ; YES
+      AND #$F8            ; IO AREA?
+      CMP #$D0
+      BNE ADVPN2          ; NO
+      LDA #0              ; SKIP IO AREA
+      STA RPNT
+      LDA #$D8
+      STA RPNT+1
+      BNE ADVPN2          ; ALWAYS
+ADVPN1 LDA RPNT           ; PROCESS END PAGES
+      CLC 
+      ADC NCOUNT
+      BCC ADVPN2          ; STILL ENOUGH DATA
+      BEQ ADVPN2          ; EXACTLY ONE BLOCK LEFT
+      LDA #0              ; CALC REMAINING BYTES COUNT
+      SBC RPNT
+      STA DCOUNT
+      LDX RPNT+1          ; LAST BLOCK?
+      INX 
+      BNE ADVPN2          ; NO
+      STX NEXT
+      STX NEXT+1
+ADVPN2 CLC 
+ADVPN3 RTS 
+
+;JUMP TO DEVICE HANDLERS TO
+;SAVE DBUF TO DEVICES
+
+WRITE LDX DEVICE
+      BEQ WRITE1
+      DEX 
+      BEQ WRITE2
+      DEX
+      BEQ WRITE3
+      JMP WFRZ
+WRITE1 JMP WRAMD
+WRITE2 JMP WDISK
+WRITE3 JMP WCASS

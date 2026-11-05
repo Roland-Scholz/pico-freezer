@@ -1,0 +1,22 @@
+CHIP GAL_M GAL16V8 Simple_Mode
+
+M_i1 M_i2 M_i3 PBD6 PBD5 RAS M_i7 PBD4 M_i9 GND OSselect 
+Dram3 Dram2 ExtSel Refresh Dram1 M_o17 Dram0 OldRomOE VCC 
+
+/OldRomOE =  /M_i1 & M_i3 & M_i7 &  /OSselect;
+/M_o17 = M_i1 &  /M_i3 &  /RAS & M_i7;
+/Refresh = M_i1 & M_i3 & M_i7 +
+		 /M_i1 & M_i7 &  /OSselect;
+ExtSel = M_i1 & M_i3 &  /M_i7 &  /OSselect +
+		M_i1 &  /M_i3 & M_i7 +
+		M_i1 & M_i2 & M_i3 & PBD6 &  /M_i7 & PBD4 +
+		M_i1 &  /M_i2 & M_i3 & PBD6 & PBD5 &  /M_i7 +
+		 /M_i1 & M_i7 & OSselect +
+		 /M_i1 &  /M_i3 & OSselect +
+		 /M_i1 &  /M_i3 &  /M_i7;
+/Dram0 = M_i1 & M_i3 &  /PBD5 &  /RAS &  /M_i7 &  /PBD4 &  /M_i9 & OSselect +
+		M_i1 & M_i2 & M_i3 & PBD6 &  /RAS &  /M_i7 &  /PBD4 &  /M_i9 & OSselect +
+		M_i1 &  /M_i2 & M_i3 & PBD6 &  /PBD5 &  /RAS &  /M_i7 &  /M_i9 & OSselect;
+/Dram1 = M_i1 & M_i3 &  /PBD6 &  /PBD5 &  /RAS &  /M_i7 & PBD4 &  /M_i9 & OSselect;
+/Dram2 = M_i1 & M_i3 &  /PBD6 & PBD5 &  /RAS &  /M_i7 &  /PBD4 &  /M_i9 & OSselect;
+/Dram3 = M_i1 & M_i3 &  /PBD6 & PBD5 &  /RAS &  /M_i7 & PBD4 &  /M_i9 & OSselect;

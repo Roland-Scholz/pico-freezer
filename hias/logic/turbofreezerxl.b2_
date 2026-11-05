@@ -1,0 +1,1 @@
+ -collapse -pterms 16 -nmax 32 -clust 5 -reduce bypin choose -xorsyn

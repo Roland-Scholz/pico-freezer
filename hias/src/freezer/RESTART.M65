@@ -1,0 +1,188 @@
+
+;-------------------------------
+;RESTART: RESTORE CONDITIONS BE-
+;         FORE BREAK AND RESTART
+;-------------------------------
+
+RSTART BIT RESMODE
+      BPL RSTAR0
+      JMP ENDCMD
+RSTAR0  DBGCLR
+      LDX #0             ; SAVE CPAGE
+      STX DMACTL          ; DMA OFF
+RSTAR1 LDA CPAGE,X
+      STA SPAGE,X
+      DEX 
+      BNE RSTAR1
+
+      LDX #11             ; MOVE ROUTINE
+RSTAR2 LDA READST,X
+      STA CPAGE,X
+      DEX 
+      BPL RSTAR2
+      LDX #0              ; READ STACK
+RSTAR3 JMP CPAGE          ; GET BYTE
+READST STA BRKCTL
+      LDA $0100,X
+      STA BRKCTL
+      JMP RSTAR4
+RSTAR4 STA $0100,X
+      DEX 
+      BNE RSTAR3
+
+      LDX REGS            ; RESTORE SP
+      TXS 
+      LDA REGA            ; PUSH SAVED ACCU
+      PHA 
+      LDA SANTIC+14       ; PUSH NMIEN
+      PHA 
+      LDA VCNT
+      SEC 
+      SBC #1
+      PHA 
+      BIT RESMODE
+      BVS RSTAR51
+
+      LDX #LPHAS0-LPHASE-1 ; PUSH LAST RESTART PHASE
+RSTAR5 LDA LPHASE,X
+      PHA 
+      DEX 
+      BPL RSTAR5
+      BMI RSTAR53
+
+; alternative last restart phase, clear collision register
+
+RSTAR51 LDX #CLPHAS0-CLPHASE-1
+RSTAR52 LDA CLPHASE,X
+      PHA 
+      DEX 
+      BPL RSTAR52
+
+RSTAR53 TSX                 ; CALC START VECTOR
+      INX 
+      STX RSVECL
+      LDA #1
+      STA RSVECH
+      LDX REGS            ; RESTORE SP
+      DEX 
+      DEX 
+      DEX 
+      TXS 
+
+      LDX #11             ; MOVE STORE ROUTINE
+RSTAR6 LDA WRITES,X
+      STA CPAGE,X
+      DEX 
+      BPL RSTAR6
+      LDX #0              ; MOVE STACK
+RSTAR7 LDA $0100,X
+      JMP CPAGE
+WRITES STA BRKCTL
+      STA $0100,X
+      STA BRKCTL
+      JMP RSTAR8
+RSTAR8 DEX 
+      BNE RSTAR7
+
+      LDX #0              ; RESTORE CPAGE
+RSTAR9 LDA SPAGE,X
+      STA CPAGE,X
+      DEX 
+      BNE RSTAR9
+
+      SEI 
+; restore second pokey
+      LDA DPOKEYF	; dual pokey mode?
+      BNE RSTDPX	; no, skip second pokey
+      LDX #15
+RSTDP1
+      LDA SPOKEY2,X
+      STA POKEY-OFFSET+$10,X
+      STA POKEY+$10,X
+      DEX
+      BPL RSTDP1
+
+;RESTORE ANTIC, POKEY, GTIA REGS
+
+RSTDPX
+      LDX #15
+RSTA10 LDA SANTIC,X
+      STA ANTIC-OFFSET,X
+      CPX #14
+      BEQ RSTA11          ; NO NMIS
+      CPX #0              ; NO DMA
+      BEQ RSTA11
+      STA ANTIC,X
+RSTA11 LDA SGTIA,X
+      STA GTIA-OFFSET,X
+      STA GTIA,X
+      LDA SGTIA+16,X
+      STA GTIA-OFFSET+16,X
+      STA GTIA+16,X
+      LDA SPOKEY,X
+      STA POKEY-OFFSET,X
+      STA POKEY,X
+      DEX 
+      BPL RSTA10
+
+;RESTORE PIA REGISTERS
+
+      LDA #$38
+      STA PACTL
+      STA PBCTL
+      LDA SDIRA
+      STA PORTA
+      LDA SDIRB
+      STA PORTB
+      LDA #$3C
+      STA PACTL
+      STA PBCTL
+      LDA SPORTA
+      STA PORTA
+      LDA SPORTB
+      STA PORTB
+      LDA SCTLA
+      STA PACTL
+      STA PACTL-OFFSET
+      LDA SCTLB
+      STA PBCTL
+      STA PBCTL-OFFSET
+
+;RESTART, LAST PHASE
+
+      SEI 
+      LDX REGX
+      LDY REGY
+      LDA #3
+RSTA12 CMP VCOUNT
+      BNE RSTA12
+      STA WSYNC
+      LDA SANTIC
+      JMP (RSVECL)
+
+; original resume code
+LPHASE BIT BRKCTL
+      STA WSYNC
+      STA DMACTL
+      PLA 
+LPHAS1 CMP VCOUNT
+      BNE LPHAS1
+      PLA 
+      STA NMIEN
+      PLA 
+      RTI 
+LPHAS0 = *
+
+; clear collosion register before resuming
+CLPHASE BIT BRKCTL
+      STA WSYNC
+      STA DMACTL
+      PLA 
+CLPHAS1 CMP VCOUNT
+      BNE CLPHAS1
+      STA HITCLR
+      PLA 
+      STA NMIEN
+      PLA 
+      RTI 
+CLPHAS0 = *

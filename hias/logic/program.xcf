@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE		ispXCF	SYSTEM	"IspXCF.dtd" >
+<ispXCF version="14.3 Linux">
+	<Comment></Comment>
+	<Chain>
+		<Comm>JTAG</Comm>
+		<Device>
+			<Pos>1</Pos>
+			<Vendor>Vantis</Vendor>
+			<Family>MACH4A</Family>
+			<Name>iM4A5-64/32</Name>
+			<IDCode>0x17482157</IDCode>
+			<Package>All</Package>
+			<PON>M4A5-64/32</PON>
+			<Bypass>
+				<InstrLen>6</InstrLen>
+				<InstrVal>000011</InstrVal>
+				<BScanLen>80</BScanLen>
+				<BScanVal>00000000000000000000000000000000000000000000000000000000000000000000000000000000</BScanVal>
+			</Bypass>
+			<File>turbofreezerxl.jed</File>
+			<FileTime>2/9/2005 13:18:32</FileTime>
+			<JedecChecksum>0xB6B3</JedecChecksum>
+			<Operation>Erase,Program,Verify</Operation>
+			<Option>
+				<SVFVendor>JTAG STANDARD</SVFVendor>
+				<IOState>HighZ</IOState>
+				<Reinitialize value="TRUE"/>
+				<OverideUES value="TRUE"/>
+				<TCKFrequency>1.000000 MHz</TCKFrequency>
+				<SVFProcessor>ispVM</SVFProcessor>
+				<Usercode>0x48494153</Usercode>
+			</Option>
+		</Device>
+	</Chain>
+	<ProjectOptions>
+		<Program>SEQUENTIAL</Program>
+		<Process>ENTIRED CHAIN</Process>
+		<OperationOverride>No Override</OperationOverride>
+		<StartTAP>TLR</StartTAP>
+		<EndTAP>TLR</EndTAP>
+		<DeGlitch value="TRUE"/>
+		<SequentializeEnableDisable value="FALSE"/>
+		<VerifyUsercode value="TRUE"/>
+		<PinSetting>
+			TMS	LOW;
+			TCK	LOW;
+			TDI	LOW;
+			TDO	LOW;
+			TRST	ABSENT;
+			CableEN	HIGH;
+		</PinSetting>
+	</ProjectOptions>
+</ispXCF>

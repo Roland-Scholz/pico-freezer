@@ -1,0 +1,14 @@
+; print text include / macros
+
+; print text at given address, terminated with $80..$FF
+	.MACRO DPTEXT
+	LDA #<%1
+	LDX #>%1
+	JSR DPTEXTC
+	.ENDM
+
+; print spaces
+	.MACRO DPSPACE
+	LDY #%1
+	JSR DPSPACEC
+	.ENDM

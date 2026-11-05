@@ -1,0 +1,806 @@
+;  flash - Turbo Freezer flash writer
+;
+;  Copyright (C) 2005-2012 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+	.include "cio.inc"
+	.include "libflash.inc"
+.if .def FREEZER2011
+	.include "flash11.inc"
+.else
+	.include "flash05.inc"
+.endif
+
+START	= $2000
+
+	.BANK
+	* = START
+
+	JSR INIT
+
+MAINLP	BPUT0 TTITLE
+	JSR FINIT
+	JSR FENABLE
+	JSR FDETECT
+	JSR FDISABLE
+
+	LDA FTYPE
+	STA FFTYPE
+	JSR PFTYPE
+	LDA FTYPE
+	CMP #TNOFLSH
+	BNE MOK
+.if .def FREEZER2005 .or .def FREEZER2011
+	BPUT0 TCHKWRIT
+.endif
+
+	JSR GETCHAR
+	CPY #128
+	BNE MAINLP
+	JMP EXIT
+
+MOK	LDA FSIZE
+	STA SIZE
+	LDA FSIZE+1
+	STA SIZE+1
+	LDA FSIZE+2
+	STA SIZE+2
+	LDA FSIZE+3
+	STA SIZE+3
+	LDA #1
+	STA NUMCHIP
+.if .def MEGAMAX8 .or .def MEGAMAX16 .or .def FREEZER2011
+	ASL SIZE
+	ROL SIZE+1
+	ROL SIZE+2
+	ROL SIZE+3
+	INC NUMCHIP
+.endif
+	LDX SIZE+1
+	LDY SIZE+2
+	JSR ADR2BNK
+	STA SIZEB
+
+	LDA #0
+	STA NEEDERAS
+	LDA FBLKMSK
+	ORA FBLKMSK+1
+	ORA FBLKMSK+2
+	ORA FBLKMSK+3
+	BEQ ?CNOERAS
+	INC NEEDERAS
+?CNOERAS
+
+.if .def FREEZER2005 .or .def FREEZER2011
+; check current software version
+	BPUT0 TSWVERS
+
+	LDA #$E0
+	STA FLASHADR
+	LDA #$BE
+	STA FLASHADR+1
+.if .def FREEZER2011
+	LDA #$0F
+.else
+	LDA #$07
+.endif
+	STA FLASHADR+2
+	LDA #<BUF
+	STA DATAADR
+	LDA #>BUF
+	STA DATAADR+1
+
+	JSR FENABLE
+	LDX #32
+	LDY #0
+	JSR FRBYTE
+	PHP
+	JSR FDISABLE
+	PLP
+
+	BMI PVERNA
+; check for signature "Hias"
+	LDX #3
+CVER1	LDA BUF,X
+	CMP THIAS,X
+	BNE PVERNA
+	DEX
+	BPL CVER1
+; max. 16 byte zero-terminated version string
+	LDX #0
+CVER2	LDA BUF+4,X
+	BEQ CVER3
+	INX
+	CPX #16
+	BNE CVER2
+CVER3	LDA #155
+	STA BUF+4,X
+	PRINT0 BUF+4
+	JMP CVERX
+
+PVERNA	PRINT0 TVERNA
+	JMP CVERX
+
+CVERX
+.endif
+
+
+	BPUT0 TMENU
+MENULP	JSR GETCHAR
+	CPY #128
+	BNE MENUL1
+	JMP MAINLP
+MENUL1	CMP #'0
+	BNE NEXIT
+EXIT	JSR CLEANUP
+	JMP ($A)
+
+NEXIT	CMP #'1		; program cartemu flash
+	BNE NO1
+
+	JSR PRSEL
+	JSR SETROM
+	JSR LIMITFL	; set flash size to end of cartemu area
+	LDA #MODEP
+	STA MODE
+	JMP DOCOMMON
+
+NO1	CMP #'2		; program whole flash
+	BNE NO2
+
+	JSR PRSEL
+	JSR SETROM
+
+	BPUT0 TSYSH	; print hint about freezer SW start
+	LDA SIZEB
+	SEC
+	SBC #8
+	TAX
+	LDY #0
+	JSR PRDEC
+	LDA #155
+	JSR PUTCHAR
+
+	LDA #MODEP
+	STA MODE
+	JMP DOCOMMON
+
+NO2	CMP #'3		; write flash to file
+	BNE NO3
+
+	JSR PRSEL
+	JSR SETROM
+	LDA #MODED
+	STA MODE
+	JMP DOCOMMON
+
+NO3	CMP #'4		; program RAM
+	BNE NO4
+
+	JSR PRSEL
+	JSR SETRAM
+	LDA #MODEP
+	STA MODE
+	JMP DOCOMMON
+
+NO4	CMP #'5		; write RAM to file
+	BNE NO5
+
+	JSR PRSEL
+	JSR SETRAM
+	LDA #MODED
+	STA MODE
+	JMP DOCOMMON
+
+NO5	CMP #'6		; erase flash
+	BNE NO6
+
+	JSR PRSEL
+	JMP DOERAS
+
+NO6	CMP #'7		; start cartemu
+	BNE GOMEN
+	BEQ STARTCE
+GOMEN	JMP MENULP
+
+STARTCE	JSR PRSEL
+	BPUT0 TASKCE
+	JSR YESNO
+	BEQ STARTCE0
+	JMP MAINLP
+	
+STARTCE0 SEI
+	LDA #0
+	STA $D40E
+.if .def FREEZER2011
+	LDA #CE_CFG_MENU
+	LDX BRAM
+	BEQ STARTCE1
+	ORA #CE_CFG_SRC
+STARTCE1
+	STA CE_CFG
+	LDA #CE_MODE_8K_RAM
+	STA CE_MODE
+	LDA #0
+	STA CE_RENABLE
+	STA CE_SDX
+	LDA BSBANK
+	STA CE_BANK
+.else
+	STA $D57E
+	STA $D581
+	STA $D586
+	STA $D588
+.endif
+	JMP $E477
+
+MODE	.BYTE 0
+MODEP	= $00	; program flash
+MODEV	= $40	; verify
+MODED	= $80	; dump flash to file
+
+; total flash size
+SIZE	.WORD 0,0
+
+; flash size in 8k banks
+SIZEB	.BYTE 0
+
+; ending address of read/write/verify
+ENDADR	.WORD 0,0
+
+;ENDHI	.BYTE 0
+
+; number of flash chips
+NUMCHIP	.BYTE 0
+
+; flag: chip needs erasing (0/1),
+; bit 7 used to force erase of first bank
+NEEDERAS .BYTE 0
+
+; remember flash type
+FFTYPE	.BYTE 0
+
+TMPSTAT	.BYTE 0
+
+
+; set size to actual size-64k to prevent
+; accidentally overwriting the freezer software
+LIMITFL	SEC
+	LDA SIZE+2
+	SBC #1
+	STA SIZE+2
+	LDA SIZE+3
+	SBC #0
+	STA SIZE+3
+
+	LDX SIZE+1
+	LDY SIZE+2
+	JSR ADR2BNK
+	STA SIZEB
+	RTS
+
+; put libflash into RAM mode
+SETRAM	LDA #1
+	STA BRAM
+.if .def FREEZER2005
+; 128k chip, 112k are available to the cartemu
+	LDA #TRAM128
+	JSR FSETCHP
+	LDA #0
+	STA SIZE
+	STA SIZE+3
+	LDX #$C0
+	STX SIZE+1
+	LDY #1
+	STY SIZE+2
+.else
+; FREEZER2011: 512k chip, 384k are available to the cartemu
+	LDA #TRAM512
+	JSR FSETCHP
+	LDX #0
+	STX SIZE
+	STX SIZE+1
+	STX SIZE+3
+	LDY #6
+	STY SIZE+2
+.endif
+	JSR ADR2BNK
+	STA SIZEB
+	LDA #0
+	STA NEEDERAS
+	RTS
+
+SETROM	LDX #0
+	STX BRAM
+	RTS
+
+; print menu selection
+PRSEL	JSR PUTCHAR
+	LDA #155
+	JSR PUTCHAR
+	LDA #155
+	JMP PUTCHAR
+
+; common entry point
+DOCOMMON
+
+; flash offset 0
+	JSR FADRZERO
+
+; ask for starting/ending bank etc
+	JSR RRANGE
+	BPL ?RROK
+	JMP MAINLP
+
+?RROK
+
+; set data buffer address
+	LDA #<DATABUF
+	STA DATAADR
+	LDA #>DATABUF
+	STA DATAADR+1
+
+	BPUT0 TFILNA
+	JSR GETFN
+	BPL DOCOMM1
+	JMP MAINLP
+
+DOCOMM1	BIT MODE
+	BMI DOCOMM2
+	OPEN 1,4,0,FNBUF
+	JMP DOCOMM3
+
+DOCOMM2	OPEN 1,8,0,FNBUF
+DOCOMM3	BPL DOCOMM4
+	CLOSE 1
+	PRINT 0, TOPENER
+	JMP DOCONT
+
+DOCOMER	JSR PERROR
+
+DOCOMEX	CLOSE 1
+	JMP DOCONT
+
+DOCOMM4	LDA #155
+	JSR PUTCHAR
+
+; flash/write/verify data, depending on MODE
+DOLOOP	BIT MODE
+	BPL DOLOOP0	; flash/verify mode
+	JMP DOLOOPW	; write mode
+
+; flash/verify: check if we have some more data
+DOLOOP0	BGET 1, 1, DATABUF
+	BPL DOLOOP1
+
+; no, end of file
+DOLPOK	CLOSE 1
+	JMP DOCONTS	; report success
+
+DOLOOP1	JSR PFLBNK
+
+; read rest of data block
+	BPUT0 TRDDAT
+	BGET 1, 8191, DATABUF+1
+	BPL DOLOOP2
+	JMP DOCOMER
+
+DOLOOP2	BIT MODE
+	BVC ?DOL1
+	JMP DOLOOPV	; verify flash
+
+?DOL1	LDA NEEDERAS
+	BEQ ?NOERAS
+
+	BPL ?DOL2	; normal check for block boundary
+	AND #$7F
+	STA NEEDERAS
+	BPL ?DOL3	; force erasing of first block
+
+?DOL2
+	LDA FLASHADR
+	AND FBLKMSK
+	BNE ?NOERAS
+
+	LDA FLASHADR+1
+	AND FBLKMSK+1
+	BNE ?NOERAS
+
+	LDA FLASHADR+2
+	AND FBLKMSK+2
+	BNE ?NOERAS
+
+	LDA FLASHADR+3
+	AND FBLKMSK+3
+	BNE ?NOERAS
+
+; erase block
+?DOL3	BPUT0 TERAF
+	JSR FENABLE
+	JSR FPERAS
+	PHP
+	JSR FDISABLE
+	PLP
+	BMI DOLPERA
+
+?NOERAS
+
+; program block
+	BPUT0 TPROGF
+
+	JSR FENABLE
+	LDX #$20
+	JSR FWPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+
+; entry: check for error
+DOLPST	BPL DOLOOPN
+
+; print error plus address
+DOLPERA	JSR PERRADR
+	JSR PERRTYP
+	JMP DOCOMEX
+
+; print ok and go on to next block
+DOLOOPN	JSR POK
+	CLC
+	LDA FLASHADR+1
+	ADC #$20
+	STA FLASHADR+1
+	BCC DOLOOP3
+	INC FLASHADR+2
+
+DOLOOP3	LDA FLASHADR+2
+	CMP ENDADR+2
+	BCC DOLOOP4
+	BNE DOLOOPX
+
+	LDA FLASHADR+1
+	CMP ENDADR+1
+	BCC DOLOOP4
+DOLOOPX	JMP DOLPOK
+
+DOLOOP4	JMP DOLOOP
+
+; verify block
+DOLOOPV	BPUT0 TVERIF
+	JSR FENABLE
+	LDX #$20
+	JSR FCPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+	JMP DOLPST
+
+; write block to file
+DOLOOPW	JSR PFLBNK
+	JSR FENABLE
+	LDX #$20
+	JSR FRPAGE
+	JSR FDISABLE
+	BPUT0 TWRDAT
+	BPUT 1, 8192, DATABUF
+	BPL DOLOOPW1
+	JMP DOCOMER
+
+DOLOOPW1 JMP DOLOOPN
+
+; input start and number of banks
+RRANGE	
+	BPUT0 TSBANK
+	LDX SIZEB
+	DEX
+	LDY #0
+	JSR PRDEC
+	BPUT0 TSBANK2
+
+	JSR GETDEC
+	BPL RRANGE2
+RRANGE1	JMP RRANGEX
+RRANGE2	CPY #0
+	BNE RRANGE1
+	STX RSBANK
+	CPX SIZEB
+	BCS RRANGE1
+	TXA
+	JSR BNK2ADR
+	
+	STX FLASHADR+1
+	STY FLASHADR+2
+
+	LDA MODE	; are we programming?
+	CMP #MODEP
+	BNE RRERAS3	; no, skip check
+; check if starting bank is not at block boundary
+	LDA NEEDERAS
+	BEQ RRERAS3
+
+	TXA
+	AND FBLKMSK+1
+	BNE RRERAS1
+
+	TYA
+	AND FBLKMSK+2
+	BEQ RRERAS3
+
+; starting bank not at block boundary, ask user if the first
+; block should be erased
+RRERAS1	
+	BPUT0 TERBNK
+	JSR YESNO
+	BMI RRANGEX
+	BNE RRERAS2
+
+; set bit 7 of NEEDERAS to indicate the first block must be erased
+	LDA NEEDERAS
+	ORA #$80
+	STA NEEDERAS
+
+RRERAS2
+	LDA #155
+	JSR PUTCHAR
+RRERAS3
+	LDA SIZE
+	STA ENDADR
+	LDA SIZE+1
+	STA ENDADR+1
+	LDA SIZE+2
+	STA ENDADR+2
+	LDA SIZE+3
+	STA ENDADR+3
+	
+	BPUT0 TNBANK
+	JSR GETDEC
+	CPY #0
+	BNE RRANGEX
+	TXA
+	STA RNBANK
+	BEQ RRANGEE
+	CLC
+	ADC RSBANK
+	BCS RRANGEX
+	CMP SIZEB
+	BCC ?RRANG1
+	BEQ ?RRANG1
+
+RRANGEX	LDY #$FF
+	RTS
+
+?RRANG1	JSR BNK2ADR
+	STX ENDADR+1
+	STY ENDADR+2
+
+RRANGEE
+;	JSR PFLADR
+;	LDA #32
+;	JSR PUTCHAR
+;	LDA ENDADR+2
+;	JSR PUTHEX
+;	LDA ENDADR+1
+;	JSR PUTHEX
+;	LDA ENDADR
+;	JSR PUTHEX
+;	LDA #155
+;	JSR PUTCHAR
+
+	LDX RSBANK
+	STX BSBANK
+	LDY #0
+	RTS
+
+; starting bank
+RSBANK	.BYTE 0
+
+; remember starting bank and ram/rom mode
+BSBANK	.BYTE 0
+BRAM	.BYTE 0
+
+; number of banks (0 = to end)
+RNBANK	.BYTE 0
+
+; erase flash chip (manually)
+DOERAS	
+	BPUT0 TASKER
+	JSR YESNO
+	BEQ DOERAS1
+	JMP MAINLP
+
+DOERAS1	LDA #155
+	JSR PUTCHAR
+	LDA #155
+	JSR PUTCHAR
+
+	JSR ERASEF
+
+	BMI DOCONT
+
+DOCONTS	BPUT0 TFINI
+
+DOCONT	BPUT0 TCONT
+	JSR GETCHAR
+	JMP MAINLP
+
+; common chip erase code
+ERASEF	BPUT0 TERAS
+
+	JSR FADRZERO
+	JSR FENABLE
+	JSR FCERAS
+
+	PHP
+	LDA NUMCHIP
+	CMP #2
+	BCC ERASEF1
+
+	PLA
+	STA TMPSTAT
+	LDA FSIZE+2
+	STA FLASHADR+2
+	JSR FCERAS
+	PHP
+	PLA
+	ORA TMPSTAT
+	PHA
+	LDA #0
+	STA FLASHADR+2
+ERASEF1	PLP
+
+	PHP
+	PHP
+	JSR FDISABLE
+	PLP
+	JSR PSTAT
+	PLP
+	RTS
+
+	
+INIT	LDA 106
+	STA M106
+	LDA 740
+	STA M740
+	LDA #$80
+	STA 106
+	STA 740
+	JSR GR0
+
+	LDA $D301
+	STA MD301
+	ORA #2
+	STA $D301
+	RTS
+
+CLEANUP	LDA MD301
+	STA $D301
+	LDA M106
+	STA 106
+	LDA M740
+	STA 740
+	JMP GR0
+
+M106	.BYTE 0
+M740	.BYTE 0
+MD301	.BYTE 0
+
+.if .def FREEZER2005
+TTITLE  .BYTE 125, "Freezer 2005 Flash Writer V2.0",155
+.endif
+.if .def FREEZER2011
+TTITLE  .BYTE 125, "Freezer 2011 Flash Writer V2.0",155
+.endif
+.if .def MEGAMAX8
+TTITLE  .BYTE 125, "Megamax 8k FlashCart Writer V0.5",155
+.endif
+.if .def MEGAMAX16
+TTITLE  .BYTE 125, "Megamax 16k FlashCart Writer V0.5",155
+.endif
+.if .def MEGA512
+TTITLE  .BYTE 125, "Mega 512k FlashCart Writer V0.5",155
+.endif
+	.BYTE "(c) 2005-2012 by Matthias Reichl",155,155
+TTITLEL	= * - TTITLE
+
+TMENU	.BYTE 155
+	.BYTE "1) Program CartEmu flash",155
+	.BYTE "2) Program CartEmu+Freezer flash",155
+	.BYTE "3) Write flash to file",155
+	.BYTE "4) Program RAM",155
+	.BYTE "5) Write RAM to file",155
+	.BYTE "6) Erase flash",155
+	.BYTE "7) Start CartEmu",155
+	.BYTE "0) Exit program",155
+	.BYTE "> "
+TMENUL	= * - TMENU
+
+TASKER	.BYTE "Warning: the whole flash area",155
+	.BYTE "including the Freezer software",155
+	.BYTE "will be erased!",155,155
+	.BYTE "Completely erase flash (y/n)? "
+TASKERL	= * - TASKER
+
+TASKCE	.BYTE 155, "Start CartEmu (y/n)? "
+TASKCEL	= * - TASKCE
+
+TFILNA	.BYTE "Filename > "
+TFILNAL	= * - TFILNA
+
+TOPENER	.BYTE "Error opening file!",155
+
+TERAF	.BYTE " erase"
+TERAFL	= * - TERAF
+
+TERAS	.BYTE " erasing flash: "
+TERASL	= * - TERAS
+
+TRDDAT	.BYTE " read"
+TRDDATL	= * - TRDDAT
+
+TWRDAT	.BYTE " write"
+TWRDATL	= * - TWRDAT
+
+TPROGF	.BYTE " program"
+TPROGFL	= * - TPROGF
+
+TVERIF	.BYTE " verify"
+TVERIFL	= * - TVERIF
+
+TFINI	.BYTE 155, "operation successfully completed",155
+TFINIL	= * - TFINI
+
+TCONT	.BYTE 155
+	.BYTE "Press any key to continue > "
+TCONTL	= * - TCONT
+
+TSBANK	.BYTE "starting bank (0-"
+TSBANKL	= * - TSBANK
+
+TSBANK2	.BYTE ") > 0",30
+TSBANK2L = * - TSBANK2
+
+TSYSH	.BYTE "Freezer software starts at bank "
+TSYSHL	= * - TSYSH
+
+TERBNK	.BYTE "bank not on block boundary,",155
+	.BYTE "erase block (y/n)? "
+TERBNKL	= * - TERBNK
+
+TNBANK	.BYTE "number of banks (0=to end) > 0",30
+TNBANKL	= * - TNBANK
+
+TCHKWRIT .BYTE "check write enable switch",155
+TCHKWRITL = * - TCHKWRIT
+
+TSWVERS  .BYTE 155,"SW Version: "
+TSWVERSL = * - TSWVERS
+
+TVERNA   .BYTE "n/a",155
+THIAS	.BYTE "Hias"
+
+	.include "libflash.src"
+	.include "cio.src"
+	.include "iohelp.src"
+	.include "iohelpfl.src"
+
+BUF	.DC 128 0
+
+	* = (*+255) & $FF00
+DATABUF	= *
+
+	.BANK
+	* = $2E0
+	.WORD START
+

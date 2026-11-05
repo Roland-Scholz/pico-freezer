@@ -1,0 +1,175 @@
+;DBO boot sector code
+
+	.include "LDDBOEQ.M65"
+	.include "LDDBOPR.M65"
+
+	* = START
+
+; boot loader and relocator
+
+RELDEST	.BYTE LDBOPAG	; relocator destination page
+	.BYTE (BOOTEND-START)/128
+	.WORD START
+	.WORD $E477
+
+	JMP BOOT
+
+; number of sectors of freezer loader code
+
+LDCNT	.BYTE (FRZ2END-FRZCODE+127)/128
+
+; check if the relocator page is valid ($05..$C9, $D8..$F9)
+
+BOOT	LDA RELDEST
+	CMP #5
+	BCC XIT
+	CMP #$C9
+	BCC PGOK
+	CMP #$D8
+	BCC XIT
+	CMP #$F9
+	BCC PGOK
+XIT	SEC
+	RTS
+
+; check density of drive 1
+PGOK	LDA #$53
+	STA DCOMND
+
+GSTAT	JSR $E453
+	BMI GSTAT
+
+	LDA $2EA
+	AND #$20
+	BEQ NODD
+
+	INC LDCNT
+	LSR LDCNT
+	LDX #0
+	STX DBYT
+	INX
+	STX DBYT+1
+	BNE GDENS
+	
+NODD	LDA #$80
+	STA DBYT
+	ASL
+	STA DBYT+1
+
+GDENS	LDA LDCNT
+	STA SECCNT
+
+; disable interrupts and DMA
+
+	LDA #0
+	STA 559
+	STA $D400
+	STA $D40E
+	STA ADR
+	SEI
+	LDA #$FE
+	STA $D301
+	LDA RELDEST
+	STA RELPG
+	STA ADR+1
+
+; setup disk I/O parameters
+
+	LDA #<LDBOSEC
+	STA DSEC
+	LDA #>LDBOSEC
+	STA DSEC+1
+
+	LDA #<SECBUF
+	STA DBUF
+	LDA #>SECBUF
+	STA DBUF+1
+
+	LDA #$52
+	STA DCOMND
+
+; copy sector loader code to page 0 (starting at IOPRG)
+
+	LDX #LDLEN-1
+CPSEC	LDA SECRD,X
+	STA IOPRG,X
+	DEX
+	BPL CPSEC
+
+; setup pointer to relocator table
+
+	LDA #<RELTAB
+	STA DEST
+	CLC 
+	LDA RELPG
+	ADC #>(RELTAB-FRZCODE)
+	STA DEST+1
+
+; setup jump to relocator
+
+	LDA #<RELOC
+	STA 12
+	CLC
+	LDA #>(RELOC-FRZCODE)
+	ADC RELPG
+	STA 13
+
+; load remaining code
+
+	JMP IOPRG+(LDBOOT-SECRD)
+
+; read a sector and advance DSEC
+
+SECRD	INC $D301
+	LDA #$40
+	STA $D40E
+	CLI
+	STA $D40A
+SECRD1	LDA #$40
+	STA DSTATS
+	JSR $E459
+	BMI SECRD1
+	INC DSEC
+	BNE SECRD2
+	INC DSEC+1
+SECRD2	SEI
+	LDA #0
+	STA $D40E
+	DEC $D301
+	RTS
+
+; load freezer loader code
+
+LDBOOT	JSR IOPRG
+	LDY #0
+	LDX DBYT
+CPBOOT	LDA SECBUF,Y
+	STA (ADR),Y
+	INY
+	DEX
+	BNE CPBOOT
+
+	ADVADR
+
+	DEC SECCNT
+	BNE LDBOOT
+
+; run relocator and start loader
+
+	JMP (12)
+	
+LDLEN	= * - SECRD
+LDEND	= IOPRG + LDLEN - 1
+
+CODEEND	= *
+
+        .IF (*&127)<>0
+        .DC (128-(*&127)) 0
+        .ENDIF
+
+BOOTEND	= *
+
+	.OPT NO OBJ
+	.include "LDDBOL.M65"
+	.OPT OBJ
+

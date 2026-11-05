@@ -1,0 +1,25 @@
+
+  FILENAME.EXT /   Bytes /    Gerät        / Typ          Funktion         Version  Jahr   CRC
+  ============================================================================================  
+
+
+  TURBO-FREEZER XL 2
+  ==================
+
+
+  TF2GALF1.JED /   2.870 / Turbo-Freezer 2 / GAL 16V8     Freezer            v1.1   87   ----
+
+  TF2GALG1.JED /   2.524 / Turbo-Freezer 2 / GAL 16V8     Logic              v1.1   87   ----
+
+  TF2GALM1.JED /   2.702 / Turbo-Freezer 2 / GAL 16V8     Memory             v1.1   87   ----
+
+
+  TF2EPROM.8KB /   8.192 / Turbo-Fr. 1 & 2 / EPROM 2764   Freezer-OS         v2.3   88   AA4B
+
+  TFOLDRUN.8KB /   8.192 / Turbo-Freezer 1 / EPROM 2764   OldRun (400/800)          87   51EB
+
+
+  FREEZE23.PRT / 181.191 / Turbo-Freezer 2 / Source Text  Freezer-OS         v2.3   88   ----
+
+  SOFTFRZ23    /   <DIR> / Turbo Freezer 2 / MAC/65 Source                   v2.3  2K4   ----
+  ____________________________________________________________________________________________

@@ -1,0 +1,45 @@
+      .TITLE "FREEZER V3.02"
+
+;-------------------------------
+;   A FREEZER FOR THE ATARI
+;COPYRIGHT 1987  BERNHARD ENGL
+;COPYRIGHT 2004-2006 Matthias Reichl
+;-------------------------------
+
+      .INCLUDE EQUATES.M65
+      .INCLUDE HWDEBUG.M65
+
+      *=  $2000
+
+      .INCLUDE HELP.M65
+      .INCLUDE MEMACC.M65
+      .INCLUDE SEARCH.M65
+      .INCLUDE DISASS.M65
+      .INCLUDE DISDL.M65
+      .INCLUDE MEMMAP.M65
+      .INCLUDE BLOCK.M65
+      .INCLUDE SHOWVEC.M65
+
+      .INCLUDE HWDEBSUP.M65
+
+ENDB3 = *
+
+      .INCLUDE BANKSEL.M65
+
+      *= XDLADR
+      .INCLUDE XDLIST.M65
+
+      *= VERSADR
+      .INCLUDE VERSION.M65
+
+      *= GO13ADR
+      .INCLUDE B31JMP.M65
+      .INCLUDE B31JSR.M65
+
+      *= GO23ADR
+      .INCLUDE B32JMP.M65
+      .INCLUDE B32JSR.M65
+
+      *= $3FFF
+      .BYTE 0
+      .END 

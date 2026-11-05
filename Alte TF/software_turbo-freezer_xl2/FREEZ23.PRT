@@ -1,0 +1,5116 @@
+
+
+
+
+
+
+
+
+
+
+                            FREEZER SOURCE LISTING
+                           ========================
+
+                         Copyright 1988 Bernhard Engl
+
+
+
+
+PAGE 1   FREEZER V2.3
+                                                                                                                     
+
+
+
+                0100     .SET 3,0
+0000            0101     .OPT NO OBJ
+                0110     .SET 4,70
+                0120     .SET 2,132
+0000            0130     .OPT NO MLIST
+                0140       .TAB 10,14,30
+                0150       .TITLE "FREEZER V2.3"
+                0160 ;
+                0170 ;-------------------------------
+                0180 ;   A FREEZER FOR THE ATARI
+N               0190 ;COPYRIGHT 1987  BERNHARD ENGL
+                0200 ;-------------------------------
+                0210 ;
+                0220       .INCLUDE #D:EQUATES.M65
+                0100 ;
+    =D000       0110 GTIA  =   $D000
+    =D400       0120 ANTIC =   $D400
+    =D200       0130 POKEY =   $D200
+    =D300       0140 PORTA =   $D300
+    =D301       0150 PORTB =   $D301
+    =D302       0160 PACTL =   $D302
+    =D303       0170 PBCTL =   $D303
+    =D016       0180 COLPF0 =  $D016
+    =D402       0190 DLISTL =  $D402
+    =D403       0200 DLISTH =  $D403
+    =D400       0210 DMACTL =  $D400
+    =D401       0220 CHACTL =  $D401
+    =D409       0230 CHBASE =  $D409
+    =D014       0240 PAL   =   $D014
+    =D40A       0250 WSYNC =   $D40A
+    =D01F       0260 CONSOL =  $D01F
+    =D20F       0270 SKCTL =   $D20F
+    =D20F       0280 SKSTAT =  $D20F
+    =0232       0290 SSKCTL =  $0232
+    =D209       0300 KBCODE =  $D209
+    =D40E       0310 NMIEN =   $D40E
+    =D20E       0320 IRQEN =   $D20E
+    =D01D       0330 GRACTL =  $D01D
+    =D01A       0340 COLBK =   $D01A
+    =D011       0350 GRAFM =   $D011
+    =D00D       0360 GRAFP0 =  $D00D
+    =D00E       0370 GRAFP1 =  $D00E
+    =D00F       0380 GRAFP2 =  $D00F
+    =D010       0390 GRAFP3 =  $D010
+    =D40B       0400 VCOUNT =  $D40B
+    =D40F       0410 NMIST =   $D40F
+    =D40F       0420 NMIRES =  $D40F
+    =D20E       0430 IRQST =   $D20E
+    =033D       0440 PUPBT1 =  $033D
+    =D20A       0450 SKRES =   $D20A
+    =D20D       0460 SERIN =   $D20D
+    =D20D       0470 SEROUT =  $D20D
+    =D204       0480 AUDF3 =   $D204
+    =D206       0490 AUDF4 =   $D206
+    =0218       0500 CDTMV1 =  $0218
+    =0226       0510 CDTMA1 =  $0226
+    =023D       0520 CAUX2 =   $023D
+    =02EE       0530 CBAUDL =  $02EE
+    =02EF       0540 CBAUDH =  $02EF
+    =0216       0550 VIMIRQ =  $0216
+    =0222       0560 VVBLKI =  $0222
+
+
+
+PAGE 2   FREEZER V2.3
+                                                                                                                    D:EQUATES.M65
+
+
+
+    =0041       0570 SOUNDR =  $41
+    =0010       0580 POKMSK =  $10
+    =0012       0590 RTCLOK =  $12
+    =0011       0600 BRKKEY =  $11
+    =0062       0610 PALNTS =  $62
+    =0247       0620 PDVMSK =  $0247
+    =E459       0630 SIOV  =   $E459
+    =0300       0640 DDEVIC =  $0300
+    =0301       0650 DUNIT =   $0301
+    =0302       0660 DCOMND =  $0302
+    =0303       0670 DSTATS =  $0303
+    =0304       0680 DBUFLO =  $0304
+    =0305       0690 DBUFHI =  $0305
+    =0306       0700 DTIMLO =  $0306
+    =0307       0710 DTIMHI =  $0307
+    =0308       0720 DBYTLO =  $0308
+    =0309       0730 DBYTHI =  $0309
+    =030A       0740 DAUX1 =   $030A
+    =030B       0750 DAUX2 =   $030B
+    =E468       0760 SENDEV =  $E468
+                0770 ;
+    =0400       0780 SCREEN =  $0400
+    =0340       0790 MONSCR =  $0340
+    =0500       0800 SPAGE =   $0500
+    =0600       0810 VTOC  =   $0600
+    =0700       0820 DBUF  =   $0700
+    =D000       0830 OFFSET =  $D000
+    =4100       0840 CPAGE =   $4100
+    =D700       0850 BRKCTL =  $D700
+                0860 ;
+                0870 ;RAM LOCATIONS
+                0880 ;
+0000            0890       *=  $30
+                0900 ;
+0030            0910 STATUS *= *+1             ZP LOCS FOR SIO
+0031            0920 CHKSUM *= *+1
+0032            0930 BUFRLO *= *+1
+0033            0940 BUFRHI *= *+1
+0034            0950 BFENLO *= *+1
+0035            0960 BFENHI *= *+1
+0036            0970 CRETRY *= *+1
+0037            0980 DRETRY *= *+1
+0038            0990 BUFRFL *= *+1
+0039            1000 RECVDN *= *+1
+003A            1010 XMTDON *= *+1
+003B            1020 CHKSNT *= *+1
+003C            1030 NOCKSM *= *+1
+                1040 ;
+003D            1050       *=  $80
+                1060 ;
+0080            1070 SGTIA *=  *+32            GTIA SHADOW
+00A0            1080 SPOKEY *= *+16            POKEY SHADOW
+00B0            1090 SANTIC *= *+16            ANTIC SHADOW
+00C0            1100 SPORTA *= *+1             PORTA OUT
+00C1            1110 SPORTB *= *+1             PORTB OUT
+00C2            1120 SDIRA *=  *+1             PORTA DIRC
+00C3            1130 SDIRB *=  *+1             PORTB DIRC
+00C4            1140 SCTLA *=  *+1             PORTA CONTROL
+00C5            1150 SCTLB *=  *+1             PORTB CONTROL
+00C6            1160 REGA  *=  *+1             CPU ACCU
+00C7            1170 REGX  *=  *+1             CPU X
+00C8            1180 REGY  *=  *+1             CPU Y
+
+
+
+PAGE 3   FREEZER V2.3
+                                                                                                                    D:EQUATES.M65
+
+
+
+00C9            1190 REGS  *=  *+1             CPU SP
+00CA            1200 VCNT  *=  *+1             VCOUNT
+00CB            1210 NMIF  *=  *+1             NMI STATUS
+00CC            1220 IRQF  *=  *+1             IRQ STATUS
+00CD            1230 RSVECL *= *+1             RESTART VECTOR
+00CE            1240 RSVECH *= *+1
+                1250 ;
+00CF            1260 RPNT  *=  *+2
+00D1            1270 BPNT  *=  *+2
+00D3            1280 TURFLG *= *+1             FLOPPY HAS 1050 TURBO
+00D4            1290 BANK  *=  *+1             CURRENT BANK CNTRL BYTE
+00D5            1300 NAME  *=  *+11            FILE NAME
+00E0            1310 DHOLE *=  *+1             DIRECTORY HOLE
+00E1            1320 DENTYP *= *+1             DENSITY TYPE
+00E2            1330 DENTRY *= *+16            DIRECTORY ENTRY
+00F2            1340 NEXT  *=  *+2             NEXT SECTOR
+00F4            1350 SIZE  *=  *+1             BLOCK SIZE IN BYTES MOD 256
+00F5            1360 DCOUNT *= *+1             DATA BYTE COUNT
+00F6            1370 NCOUNT *= *+1             NORMAL DATA BYTE COUNT
+00F7            1380 MAPIDX *= *+1             USEMAP INDEX
+00F8            1390 MAPMSK *= *+1             USEMAP MASK
+00F9            1400 FILENO *= *+1             FILE NUMBER & TYPE
+00FA            1410 DEVICE *= *+1             DEVICE RAMD/DISK/CASS
+00FB            1420 KEYTIM *= *+1             KEYBOARD AUTOREP TIMER
+00FC            1430 TPNT  *=  *+2             TEMP ADDRESS
+00FE            1440 OPTION *= *+1             COMMAND OPTION
+                1450 ;
+00FF            1460       *=  $0100
+                1470 ;
+0100            1480 USEMAP *= *+66            MAP OF USED SECTORS
+                1490 ;
+                1500 ;-------------------------------
+                1510 ;
+0142            1520       *=  $0800
+    =4000       1530       .SET 6,$4000
+                1540 ;
+                1550       .MACRO NOX 
+                1560       NOP 
+                1570       NOP 
+                1580       NOP 
+                1590       NOP 
+                1600       NOP 
+                1610       NOP 
+                1620       NOP 
+                1630       NOP 
+                1640       NOP 
+                1650       NOP 
+                1660       NOP 
+                1670       NOP 
+                1680       NOP 
+                1690       NOP 
+                1700       NOP 
+                1710       NOP 
+                1720       .ENDM 
+                0230 ;
+4800            0240       *=  $0800
+    =4000       0250       .SET 6,$4000
+                0260 ;
+                0270       .INCLUDE #D:STOPPER.M65
+                0100 ;
+                0110 ;-------------------------------
+                0120 ;STOP PAGE: THE HARDWARE WILL
+
+
+
+PAGE 4   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+                0130 ;           "BEND" THE VECTORS
+                0140 ;           TO THIS PAGE, HIGH
+                0150 ;           BYTES ONLY.
+                0160 ;-------------------------------
+                0170        NOX  
+4800 EA        M           NOP 
+4801 EA        M           NOP 
+4802 EA        M           NOP 
+4803 EA        M           NOP 
+4804 EA        M           NOP 
+4805 EA        M           NOP 
+4806 EA        M           NOP 
+4807 EA        M           NOP 
+4808 EA        M           NOP 
+4809 EA        M           NOP 
+480A EA        M           NOP 
+480B EA        M           NOP 
+480C EA        M           NOP 
+480D EA        M           NOP 
+480E EA        M           NOP 
+480F EA        M           NOP 
+4810 EA         0180       NOP 
+4811 EA         0190       NOP 
+4812 EA         0200       NOP 
+4813 EA         0210       NOP 
+4814 EA         0220       NOP 
+4815 EA         0230       NOP 
+4816 EA         0240       NOP 
+4817 EA         0250       NOP 
+4818 4CFB08     0260       JMP STOP
+                0270        NOX  
+481B EA        M           NOP 
+481C EA        M           NOP 
+481D EA        M           NOP 
+481E EA        M           NOP 
+481F EA        M           NOP 
+4820 EA        M           NOP 
+4821 EA        M           NOP 
+4822 EA        M           NOP 
+4823 EA        M           NOP 
+4824 EA        M           NOP 
+4825 EA        M           NOP 
+4826 EA        M           NOP 
+4827 EA        M           NOP 
+4828 EA        M           NOP 
+4829 EA        M           NOP 
+482A EA        M           NOP 
+                0280        NOX  
+482B EA        M           NOP 
+482C EA        M           NOP 
+482D EA        M           NOP 
+482E EA        M           NOP 
+482F EA        M           NOP 
+4830 EA        M           NOP 
+4831 EA        M           NOP 
+4832 EA        M           NOP 
+4833 EA        M           NOP 
+4834 EA        M           NOP 
+4835 EA        M           NOP 
+4836 EA        M           NOP 
+4837 EA        M           NOP 
+4838 EA        M           NOP 
+
+
+
+PAGE 5   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+4839 EA        M           NOP 
+483A EA        M           NOP 
+                0290        NOX  
+483B EA        M           NOP 
+483C EA        M           NOP 
+483D EA        M           NOP 
+483E EA        M           NOP 
+483F EA        M           NOP 
+4840 EA        M           NOP 
+4841 EA        M           NOP 
+4842 EA        M           NOP 
+4843 EA        M           NOP 
+4844 EA        M           NOP 
+4845 EA        M           NOP 
+4846 EA        M           NOP 
+4847 EA        M           NOP 
+4848 EA        M           NOP 
+4849 EA        M           NOP 
+484A EA        M           NOP 
+                0300        NOX  
+484B EA        M           NOP 
+484C EA        M           NOP 
+484D EA        M           NOP 
+484E EA        M           NOP 
+484F EA        M           NOP 
+4850 EA        M           NOP 
+4851 EA        M           NOP 
+4852 EA        M           NOP 
+4853 EA        M           NOP 
+4854 EA        M           NOP 
+4855 EA        M           NOP 
+4856 EA        M           NOP 
+4857 EA        M           NOP 
+4858 EA        M           NOP 
+4859 EA        M           NOP 
+485A EA        M           NOP 
+                0310        NOX  
+485B EA        M           NOP 
+485C EA        M           NOP 
+485D EA        M           NOP 
+485E EA        M           NOP 
+485F EA        M           NOP 
+4860 EA        M           NOP 
+4861 EA        M           NOP 
+4862 EA        M           NOP 
+4863 EA        M           NOP 
+4864 EA        M           NOP 
+4865 EA        M           NOP 
+4866 EA        M           NOP 
+4867 EA        M           NOP 
+4868 EA        M           NOP 
+4869 EA        M           NOP 
+486A EA        M           NOP 
+                0320        NOX  
+486B EA        M           NOP 
+486C EA        M           NOP 
+486D EA        M           NOP 
+486E EA        M           NOP 
+486F EA        M           NOP 
+4870 EA        M           NOP 
+4871 EA        M           NOP 
+4872 EA        M           NOP 
+
+
+
+PAGE 6   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+4873 EA        M           NOP 
+4874 EA        M           NOP 
+4875 EA        M           NOP 
+4876 EA        M           NOP 
+4877 EA        M           NOP 
+4878 EA        M           NOP 
+4879 EA        M           NOP 
+487A EA        M           NOP 
+                0330        NOX  
+487B EA        M           NOP 
+487C EA        M           NOP 
+487D EA        M           NOP 
+487E EA        M           NOP 
+487F EA        M           NOP 
+4880 EA        M           NOP 
+4881 EA        M           NOP 
+4882 EA        M           NOP 
+4883 EA        M           NOP 
+4884 EA        M           NOP 
+4885 EA        M           NOP 
+4886 EA        M           NOP 
+4887 EA        M           NOP 
+4888 EA        M           NOP 
+4889 EA        M           NOP 
+488A EA        M           NOP 
+                0340        NOX  
+488B EA        M           NOP 
+488C EA        M           NOP 
+488D EA        M           NOP 
+488E EA        M           NOP 
+488F EA        M           NOP 
+4890 EA        M           NOP 
+4891 EA        M           NOP 
+4892 EA        M           NOP 
+4893 EA        M           NOP 
+4894 EA        M           NOP 
+4895 EA        M           NOP 
+4896 EA        M           NOP 
+4897 EA        M           NOP 
+4898 EA        M           NOP 
+4899 EA        M           NOP 
+489A EA        M           NOP 
+                0350        NOX  
+489B EA        M           NOP 
+489C EA        M           NOP 
+489D EA        M           NOP 
+489E EA        M           NOP 
+489F EA        M           NOP 
+48A0 EA        M           NOP 
+48A1 EA        M           NOP 
+48A2 EA        M           NOP 
+48A3 EA        M           NOP 
+48A4 EA        M           NOP 
+48A5 EA        M           NOP 
+48A6 EA        M           NOP 
+48A7 EA        M           NOP 
+48A8 EA        M           NOP 
+48A9 EA        M           NOP 
+48AA EA        M           NOP 
+                0360        NOX  
+48AB EA        M           NOP 
+48AC EA        M           NOP 
+
+
+
+PAGE 7   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+48AD EA        M           NOP 
+48AE EA        M           NOP 
+48AF EA        M           NOP 
+48B0 EA        M           NOP 
+48B1 EA        M           NOP 
+48B2 EA        M           NOP 
+48B3 EA        M           NOP 
+48B4 EA        M           NOP 
+48B5 EA        M           NOP 
+48B6 EA        M           NOP 
+48B7 EA        M           NOP 
+48B8 EA        M           NOP 
+48B9 EA        M           NOP 
+48BA EA        M           NOP 
+                0370        NOX  
+48BB EA        M           NOP 
+48BC EA        M           NOP 
+48BD EA        M           NOP 
+48BE EA        M           NOP 
+48BF EA        M           NOP 
+48C0 EA        M           NOP 
+48C1 EA        M           NOP 
+48C2 EA        M           NOP 
+48C3 EA        M           NOP 
+48C4 EA        M           NOP 
+48C5 EA        M           NOP 
+48C6 EA        M           NOP 
+48C7 EA        M           NOP 
+48C8 EA        M           NOP 
+48C9 EA        M           NOP 
+48CA EA        M           NOP 
+                0380        NOX  
+48CB EA        M           NOP 
+48CC EA        M           NOP 
+48CD EA        M           NOP 
+48CE EA        M           NOP 
+48CF EA        M           NOP 
+48D0 EA        M           NOP 
+48D1 EA        M           NOP 
+48D2 EA        M           NOP 
+48D3 EA        M           NOP 
+48D4 EA        M           NOP 
+48D5 EA        M           NOP 
+48D6 EA        M           NOP 
+48D7 EA        M           NOP 
+48D8 EA        M           NOP 
+48D9 EA        M           NOP 
+48DA EA        M           NOP 
+                0390        NOX  
+48DB EA        M           NOP 
+48DC EA        M           NOP 
+48DD EA        M           NOP 
+48DE EA        M           NOP 
+48DF EA        M           NOP 
+48E0 EA        M           NOP 
+48E1 EA        M           NOP 
+48E2 EA        M           NOP 
+48E3 EA        M           NOP 
+48E4 EA        M           NOP 
+48E5 EA        M           NOP 
+48E6 EA        M           NOP 
+48E7 EA        M           NOP 
+
+
+
+PAGE 8   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+48E8 EA        M           NOP 
+48E9 EA        M           NOP 
+48EA EA        M           NOP 
+                0400        NOX  
+48EB EA        M           NOP 
+48EC EA        M           NOP 
+48ED EA        M           NOP 
+48EE EA        M           NOP 
+48EF EA        M           NOP 
+48F0 EA        M           NOP 
+48F1 EA        M           NOP 
+48F2 EA        M           NOP 
+48F3 EA        M           NOP 
+48F4 EA        M           NOP 
+48F5 EA        M           NOP 
+48F6 EA        M           NOP 
+48F7 EA        M           NOP 
+48F8 EA        M           NOP 
+48F9 EA        M           NOP 
+48FA EA        M           NOP 
+                0410 ;
+                0420 ;-------------------------------
+                0430 ;SAVE SYSTEM STATUS, RESET THE
+                0440 ;CUSTOM CHIPS AND SHOW MENU.
+                0450 ;-------------------------------
+                0460 ;
+48FB 85C6       0470 STOP  STA REGA
+48FD AD0BD4     0480       LDA VCOUNT
+4900 85CA       0490       STA VCNT
+4902 AD0FD4     0500       LDA NMIST
+4905 85CB       0510       STA NMIF
+4907 A900       0520       LDA #0
+4909 8D0ED4     0530       STA NMIEN
+490C 8510       0540       STA POKMSK
+490E 8D0ED2     0550       STA IRQEN
+4911 8D00D4     0560       STA DMACTL
+4914 8D1DD0     0570       STA GRACTL
+4917 8D1AD0     0580       STA COLBK
+491A 8D11D0     0590       STA GRAFM
+491D 8D0DD0     0600       STA GRAFP0
+4920 8D0ED0     0610       STA GRAFP1
+4923 8D0FD0     0620       STA GRAFP2
+4926 8D10D0     0630       STA GRAFP3
+4929 86C7       0640       STX REGX
+492B 84C8       0650       STY REGY
+492D BA         0660       TSX 
+492E 86C9       0670       STX REGS
+4930 A2FF       0680       LDX #$FF
+4932 9A         0690       TXS 
+                0700 ;
+                0710 ;SAVE PIA REGISTERS
+                0720 ;
+4933 AD0203     0730       LDA PACTL-OFFSET
+4936 85C4       0740       STA SCTLA
+4938 AD0303     0750       LDA PBCTL-OFFSET
+493B 85C5       0760       STA SCTLB
+493D A938       0770       LDA #$38            ACCESS DIRC
+493F 8D02D3     0780       STA PACTL
+4942 8D03D3     0790       STA PBCTL
+4945 AD00D3     0800       LDA PORTA
+4948 85C2       0810       STA SDIRA
+494A AD01D3     0820       LDA PORTB
+
+
+
+PAGE 9   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+494D 85C3       0830       STA SDIRB
+494F A9FF       0840       LDA #$FF
+4951 8D00D3     0850       STA PORTA
+4954 8D01D3     0860       STA PORTB
+4957 A93C       0870       LDA #$3C            ACCESS PORTS
+4959 8D02D3     0880       STA PACTL
+495C 8D03D3     0890       STA PBCTL
+495F AD00D3     0900       LDA PORTA
+4962 85C0       0910       STA SPORTA
+4964 AD01D3     0920       LDA PORTB
+4967 85C1       0930       STA SPORTB
+                0940 ;
+                0950 ;SAVE ANTIC, POKEY, GTIA REGS
+                0960 ;
+4969 A20F       0970       LDX #15
+496B B500       0980 SAPGR LDA GTIA-OFFSET,X
+496D 9580       0990       STA SGTIA,X
+496F B510       1000       LDA GTIA-OFFSET+16,X
+4971 9590       1010       STA SGTIA+16,X
+4973 BD0002     1020       LDA POKEY-OFFSET,X
+4976 95A0       1030       STA SPOKEY,X
+4978 BD0004     1040       LDA ANTIC-OFFSET,X
+497B 95B0       1050       STA SANTIC,X
+497D CA         1060       DEX 
+497E 10EB       1070       BPL SAPGR
+                1080 ;
+                1090 ;RESET ANTIC, POKEY AND GTIA
+                1100 ;
+4980 A20F       1110 RES   LDX #15
+4982 A900       1120       LDA #0
+4984 9D00D0     1130 RES1  STA GTIA,X
+4987 9D10D0     1140       STA GTIA+16,X
+498A 9D00D4     1150       STA ANTIC,X
+498D 9D00D2     1160       STA POKEY,X
+4990 CA         1170       DEX 
+4991 10F1       1180       BPL RES1
+                1190 ;
+                1200 ;RESET PIA
+                1210 ;
+4993 A038       1220       LDY #$38
+4995 8C02D3     1230       STY PACTL
+4998 8C03D3     1240       STY PBCTL
+499B 8D00D3     1250       STA PORTA
+499E 8E01D3     1260       STX PORTB
+49A1 A03C       1270       LDY #$3C
+49A3 8C02D3     1280       STY PACTL
+49A6 8C03D3     1290       STY PBCTL
+49A9 8E01D3     1300       STX PORTB
+                1310 ;
+                1320 ;SET COLORS
+                1330 ;
+49AC A204       1340       LDX #4
+49AE BDDE09     1350 RES2  LDA COLTAB,X
+49B1 9D16D0     1360       STA COLPF0,X
+49B4 CA         1370       DEX 
+49B5 10F7       1380       BPL RES2
+                1390 ;
+                1400 ;DISPLAY LIST
+                1410 ;
+49B7 A900       1420 RES3  LDA #SCREEN&$FF
+49B9 8D02D4     1430       STA DLISTL
+49BC A904       1440       LDA #SCREEN/256
+
+
+
+PAGE 10   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+49BE 8D03D4     1450       STA DLISTH
+                1460 ;
+                1470 ;CHARACTER BASE
+                1480 ;
+49C1 A9E0       1490       LDA #$E0
+49C3 8D09D4     1500       STA CHBASE
+                1510 ;
+49C6 A902       1520       LDA #2
+49C8 8D01D4     1530       STA CHACTL
+                1540 ;
+                1550 ;COPY PLAYFIELD FROM ROM TO RAM
+                1560 ;
+49CB A200       1570       LDX #0
+49CD BDE309     1580 COPYPF LDA DLIST,X
+49D0 9D0004     1590       STA SCREEN,X
+49D3 E8         1600       INX 
+49D4 E0B6       1610       CPX #DLEND-DLIST
+49D6 D0F5       1620       BNE COPYPF
+                1630 ;
+                1640 ;DMA ON
+                1650 ;
+49D8 201A10     1660       JSR DMAON
+                1670 ;
+                1680 ;TO COMMAND PROCESSOR
+                1690 ;
+49DB 4CAF0A     1700       JMP KEY
+                1710 ;
+49DE D80AC288   1720 COLTAB .BYTE $D8,$0A,$C2,$88,$C2
+49E2 C2
+                1730 ;
+49E3 70707070   1740 DLIST .BYTE $70,$70,$70,$70,$70
+49E7 70
+49E8 70707070   1750       .BYTE $70,$70,$70,$70
+49EC 7070       1760       .BYTE $70,$70
+49EE 49         1770       .BYTE $49
+49EF 1E04       1780       .WORD BARLIN-DLIST+SCREEN
+49F1 060249     1790       .BYTE 6,2,$49
+49F4 1E04       1800       .WORD BARLIN-DLIST+SCREEN
+49F6 42         1810       .BYTE $42
+49F7 5604       1820       .WORD MENU-DLIST+SCREEN
+49F9 020249     1830       .BYTE 2,2,$49
+49FC 1E04       1840       .WORD BARLIN-DLIST+SCREEN
+49FE 41         1850       .BYTE $41
+49FF 0004       1860       .WORD SCREEN
+                1870 ;
+4A01 FFFFFFFF   1880 BARLIN .BYTE $FF,$FF,$FF,$FF,$FF
+4A05 FF
+4A06 FFFFFF     1890       .BYTE $FF,$FF,$FF
+4A09 34353222   1900       .SBYTE "TURBO-FREEZER XL"
+4A0D 2F0D2632
+4A11 25253A25
+4A15 3200382C
+4A19 232F3039   1910       .SBYTE "COPYRIGHT 1987  BY BERNHARD ENGL"
+4A1D 32292728
+4A21 34001119
+4A25 18170000
+4A29 22390022
+4A2D 25322E28
+4A31 21322400
+4A35 252E272C
+                1920 ;
+4A39 3B333D00   1930 MENU  .SBYTE "[S] SAVE EXTERN [R] SAVE RAMDISK"
+
+
+
+PAGE 11   FREEZER V2.3
+                                                                                                                    D:STOPPER.M65
+
+
+
+4A3D 33213625
+4A41 00253834
+4A45 25322E00
+4A49 3B323D00
+4A4D 33213625
+4A51 0032212D
+4A55 2429332B
+4A59 3B253D00   1940       .SBYTE "[E] EXEC EXTERN [X] EXEC RAMDISK"
+4A5D 25382523
+4A61 00253834
+4A65 25322E00
+4A69 3B383D00
+4A6D 25382523
+4A71 0032212D
+4A75 2429332B
+4A79 3B3A3D00   1950       .SBYTE "[Z] ZERO OS RAM [D] DOS/DEBUGGER"
+4A7D 3A25322F
+4A81 002F3300
+4A85 32212D00
+4A89 3B243D00
+4A8D 242F330F
+4A91 24252235
+4A95 27272532
+4A99            1960 DLEND
+                0280       .INCLUDE #D:MENU.M65
+                0100 ;
+                0110 ;-------------------------------
+                0120 ;MAIN MENU: WAIT FOR KEY AND
+                0130 ;           CALL ACTION ROUTINES
+                0140 ;           FORCE COLD START IF
+                0150 ;           RESET DURING WAITING
+                0160 ;-------------------------------
+                0170 ;
+                0180 ;END OF COMMAND, UNMARK CHOICE
+                0190 ;
+4A99 AE870B     0200 ENDCMD LDX SELTAB+6
+4A9C A900       0210       LDA #0
+4A9E BD0004     0220 ENDCM1 LDA SCREEN,X
+4AA1 297F       0230       AND #$7F
+4AA3 9D0004     0240       STA SCREEN,X
+4AA6 CA         0250       DEX 
+4AA7 EC810B     0260       CPX SELTAB
+4AAA B0F2       0270       BCS ENDCM1
+4AAC A2FF       0280       LDX #$FF
+4AAE 9A         0290       TXS 
+                0300 ;
+                0310 ;WAIT FOR KEY
+                0320 ;
+4AAF ADE209     0330 KEY   LDA COLTAB+4
+4AB2 8D1AD0     0340       STA COLPF0+4
+4AB5 A900       0350       LDA #0
+4AB7 8D0FD2     0360       STA SKCTL
+4ABA 8D1802     0370       STA CDTMV1
+4ABD 8D1902     0380       STA CDTMV1+1
+4AC0 8D4702     0390       STA PDVMSK
+4AC3 A903       0400       LDA #$03
+4AC5 8D3202     0410       STA SSKCTL
+4AC8 8D0FD2     0420       STA SKCTL
+4ACB A20E       0430       LDX #RESTO1-RESTOG  RESET ON
+4ACD BD0041     0440 RESON1 LDA CPAGE,X
+4AD0 9D0005     0450       STA SPAGE,X
+4AD3 BD940B     0460       LDA RESTOG,X
+
+
+
+PAGE 12   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4AD6 9D0041     0470       STA CPAGE,X
+4AD9 CA         0480       DEX 
+4ADA 10F1       0490       BPL RESON1
+4ADC 200041     0500       JSR CPAGE
+4ADF A964       0510       LDA #MYIRQ&$FF      SET IRQ VECTOR
+4AE1 A211       0520       LDX #MYIRQ/256
+4AE3 8D1602     0530       STA VIMIRQ
+4AE6 8E1702     0540       STX VIMIRQ+1
+4AE9 A933       0550       LDA #MYVBL&$FF      SET VBLANK VECTOR
+4AEB A211       0560       LDX #MYVBL/256
+4AED 8D2202     0570       STA VVBLKI
+4AF0 8E2302     0580       STX VVBLKI+1
+4AF3 A901       0590       LDA #1              NOISY I/O
+4AF5 8541       0600       STA SOUNDR
+4AF7 8511       0610       STA BRKKEY
+4AF9 A9CC       0620       LDA #$CC            SET BAUD RATE
+4AFB A205       0630       LDX #$05            FOR CASSETTE
+4AFD 8DEE02     0640       STA CBAUDL
+4B00 8EEF02     0650       STX CBAUDH
+4B03 AD14D0     0660       LDA PAL
+4B06 4A         0670       LSR A
+4B07 2901       0680       AND #1
+4B09 4901       0690       EOR #1
+4B0B 8562       0700       STA PALNTS
+4B0D AD0FD2     0710 KEY1  LDA SKSTAT          WAIT FOR NEW KEY
+4B10 2904       0720       AND #4
+4B12 F0F9       0730       BEQ KEY1
+4B14 AD0FD2     0740 KEY2  LDA SKSTAT
+4B17 2904       0750       AND #4
+4B19 D0F9       0760       BNE KEY2
+4B1B A514       0770       LDA RTCLOK+2        SET AUTOREPEAT TIMER
+4B1D 18         0780       CLC 
+4B1E 6919       0790       ADC #25
+4B20 85FB       0800       STA KEYTIM
+                0810 ;
+4B22 200041     0820       JSR CPAGE           RESET OFF
+4B25 A20E       0830       LDX #RESTO1-RESTOG
+4B27 BD0005     0840 RESON2 LDA SPAGE,X
+4B2A 9D0041     0850       STA CPAGE,X
+4B2D CA         0860       DEX 
+4B2E 10F7       0870       BPL RESON2
+                0880 ;
+4B30 AD09D2     0890       LDA KBCODE          VALID?
+4B33 293F       0900       AND #$3F
+4B35 A206       0910       LDX #6
+4B37 DD7A0B     0920 KEY3  CMP KEYTAB,X
+4B3A F00D       0930       BEQ KEY4
+4B3C CA         0940       DEX 
+4B3D 10F8       0950       BPL KEY3
+4B3F AD0FD2     0960 KEY7  LDA SKSTAT
+4B42 2904       0970       AND #4
+4B44 F0F9       0980       BEQ KEY7
+4B46 4CAF0A     0990       JMP KEY
+                1000 ;
+4B49 A07F       1010 KEY4  LDY #$7F            CLICK
+4B4B 8C1FD0     1020 KEY5  STY CONSOL
+4B4E 8C0AD4     1030       STY WSYNC
+4B51 88         1040       DEY 
+4B52 10F7       1050       BPL KEY5
+                1060 ;
+4B54 E006       1070       CPX #6
+4B56 F04B       1080       BEQ SPACE
+
+
+
+PAGE 13   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4B58 BC810B     1090       LDY SELTAB,X        MARK CHOICE
+4B5B 8A         1100       TXA                 AND BRANCH
+4B5C 0A         1110       ASL A
+4B5D AA         1120       TAX 
+4B5E BD890B     1130       LDA CMDV+1,X
+4B61 48         1140       PHA 
+4B62 BD880B     1150       LDA CMDV,X
+4B65 48         1160       PHA 
+4B66 A203       1170       LDX #3
+4B68 B90004     1180 KEY6  LDA SCREEN,Y
+4B6B 0980       1190       ORA #$80
+4B6D 990004     1200       STA SCREEN,Y
+4B70 C8         1210       INY 
+4B71 CA         1220       DEX 
+4B72 D0F4       1230       BNE KEY6
+4B74 A902       1240       LDA #2
+4B76 8D01D4     1250       STA CHACTL
+4B79 60         1260       RTS 
+                1270 ;
+4B7A 3E2A1728   1280 KEYTAB .BYTE $3E,$2A,$17,$28,$16,$3A,$21
+4B7E 163A21
+                1290 ;
+4B81 56         1300 SELTAB .BYTE MENU-DLIST
+4B82 76         1310       .BYTE MENU-DLIST+32
+4B83 96         1320       .BYTE MENU-DLIST+64
+4B84 66         1330       .BYTE MENU-DLIST+16
+4B85 86         1340       .BYTE MENU-DLIST+48
+4B86 A6         1350       .BYTE MENU-DLIST+80
+4B87 A8         1360       .BYTE MENU-DLIST+82
+                1370 ;
+4B88 BB0C       1380 CMDV  .WORD AKEY-1
+4B8A 640E       1390       .WORD BKEY-1
+4B8C 1310       1400       .WORD CKEY-1
+4B8E 9914       1410       .WORD DKEY-1
+4B90 A214       1420       .WORD EKEY-1
+4B92 681A       1430       .WORD FKEY-1
+                1440 ;
+4B94 8D00D7     1450 RESTOG STA BRKCTL
+4B97 AD3D03     1460       LDA PUPBT1
+4B9A 49FF       1470       EOR #$FF
+4B9C 8D3D03     1480       STA PUPBT1
+4B9F 8D00D7     1490       STA BRKCTL
+4BA2 60         1500 RESTO1 RTS 
+                1510 ;
+4BA3 AD0FD2     1520 SPACE LDA SKSTAT          WAIT FOR KEY RELEASED
+4BA6 2904       1530       AND #4
+4BA8 F0F9       1540       BEQ SPACE
+4BAA 4C2710     1550       JMP RSTART
+                1560 ;
+                1570 ;-------------------------------
+                1580 ;USER INTERFACE ROUTINES
+                1590 ;-------------------------------
+                1600 ;
+                1610 ;WAIT FOR KEY, CODE TO A
+                1620 ;
+4BAD A903       1630 GETKEY LDA #3
+4BAF 8D3202     1640       STA SSKCTL
+4BB2 8D0FD2     1650       STA SKCTL
+4BB5 A940       1660       LDA #$40
+4BB7 8D0ED4     1670       STA NMIEN
+4BBA A5FB       1680 GETKE1 LDA KEYTIM         WAIT FOR KEY
+4BBC C514       1690       CMP RTCLOK+2        RELEASED OR TIMER
+
+
+
+PAGE 14   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4BBE D007       1700       BNE GETKE2
+4BC0 6904       1710       ADC #4
+4BC2 85FB       1720       STA KEYTIM
+4BC4 4CDC0B     1730       JMP GETKE4
+4BC7 AD0FD2     1740 GETKE2 LDA SKSTAT
+4BCA 2904       1750       AND #4
+4BCC F0EC       1760       BEQ GETKE1
+                1770 ;
+4BCE A514       1780 GETKE3 LDA RTCLOK+2       WAIT FOR KEY
+4BD0 18         1790       CLC 
+4BD1 6919       1800       ADC #25
+4BD3 85FB       1810       STA KEYTIM
+4BD5 AD0FD2     1820       LDA SKSTAT
+4BD8 2904       1830       AND #4
+4BDA D0F2       1840       BNE GETKE3
+                1850 ;
+4BDC A900       1860 GETKE4 LDA #0
+4BDE 8D0ED4     1870       STA NMIEN
+4BE1 A07F       1880       LDY #$7F            CLICK
+4BE3 8C1FD0     1890 GETKE5 STY CONSOL
+4BE6 8C0AD4     1900       STY WSYNC
+4BE9 88         1910       DEY 
+4BEA 10F7       1920       BPL GETKE5
+                1930 ;
+4BEC AD09D2     1940       LDA KBCODE          DETERMINE KEY CODE
+4BEF C9C0       1950       CMP #$C0
+4BF1 9002       1960       BCC GETKE6
+4BF3 29BF       1970       AND #$BF            CONTROL OVERRIDES SHIFT
+4BF5 AA         1980 GETKE6 TAX 
+4BF6 BDFC0B     1990       LDA KEYCOD,X
+4BF9 F0B2       2000       BEQ GETKEY
+4BFB 60         2010       RTS 
+                2020 ;
+4BFC 4C4A3A00   2030 KEYCOD .BYTE $4C,$4A,$3A,0,0,$4B,$2B,$2A
+4C00 004B2B2A
+4C04 4F005055   2040       .BYTE $4F,0,$50,$55,$9B,$49,$2D,$3D
+4C08 9B492D3D
+4C0C 56004300   2050       .BYTE $56,0,$43,0,0,$42,$58,$5A
+4C10 0042585A
+4C14 34003336   2060       .BYTE $34,0,$33,$36,$1B,$35,$32,$31
+4C18 1B353231
+4C1C 2C202E4E   2070       .BYTE $2C,$20,$2E,$4E,0,$4D,$2F,0
+4C20 004D2F00
+4C24 52004559   2080       .BYTE $52,0,$45,$59,0,$54,$57,$51
+4C28 00545751
+4C2C 39003037   2090       .BYTE $39,0,$30,$37,$7E,$38,$3C,$3E
+4C30 7E383C3E
+4C34 46484400   2100       .BYTE $46,$48,$44,0,0,$47,$53,$41
+4C38 00475341
+                2110 ;
+4C3C 4C4A3A00   2120       .BYTE $4C,$4A,$3A,0,0,$4B,$5C,$5E
+4C40 004B5C5E
+4C44 4F005055   2130       .BYTE $4F,0,$50,$55,$9B,$49,$5F,$7C
+4C48 9B495F7C
+4C4C 56004300   2140       .BYTE $56,0,$43,0,0,$42,$58,$5A
+4C50 0042585A
+4C54 24002326   2150       .BYTE $24,0,$23,$26,$1B,$25,$22,$21
+4C58 1B252221
+4C5C 5B205D4E   2160       .BYTE $5B,$20,$5D,$4E,$00,$4D,$3F,0
+4C60 004D3F00
+4C64 52004559   2170       .BYTE $52,0,$45,$59,0,$54,$57,$51
+4C68 00545751
+
+
+
+PAGE 15   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+NC6C 28002927   2180       .BYTE $28,0,$29,$27,$9C,$40,$7D,$9D
+4C70 9C407D9D
+4C74 46484400   2190       .BYTE $46,$48,$44,0,0,$47,$53,$41
+4C78 00475341
+                2200 ;
+4C7C 00000000   2210       .BYTE 0,0,0,0,0,0,$1E,$1F
+4C80 00001E1F
+4C84 00000000   2220       .BYTE 0,0,0,0,$9B,0,$1C,$1D
+4C88 9B001C1D
+4C8C 00000000   2230       .BYTE 0,0,0,0,0,0,0,0
+4C90 00000000
+4C94 00000000   2240       .BYTE 0,0,0,0,0,0,0,0
+4C98 00000000
+4C9C 00200000   2250       .BYTE 0,$20,0,0,0,0,0,0
+4CA0 00000000
+4CA4 00000000   2260       .BYTE 0,0,0,0,0,0,0,0
+4CA8 00000000
+4CAC 00000000   2270       .BYTE 0,0,0,0,$FE,0,$7D,$FF
+4CB0 FE007DFF
+4CB4 00000000   2280       .BYTE 0,0,0,0,0,0,0,0
+4CB8 00000000
+                2290 ;
+                2300 ;SAVE EXTERN MENU
+                2310 ;
+4CBC A200       2320 AKEY  LDX #0
+4CBE 8D0AD4     2330 SEXT  STA WSYNC
+4CC1 8D0AD4     2340       STA WSYNC
+4CC4 8D0AD4     2350       STA WSYNC
+4CC7 CA         2360       DEX 
+4CC8 D0F4       2370       BNE SEXT
+4CCA A25F       2380       LDX #$5F
+4CCC BD5604     2390 SEX1  LDA SCREEN+$56,X
+4CCF 9D0005     2400       STA SPAGE,X
+4CD2 BD0A0D     2410       LDA MENUA,X
+4CD5 9D5604     2420       STA SCREEN+$56,X
+4CD8 CA         2430       DEX 
+4CD9 10F1       2440       BPL SEX1
+4CDB A900       2450       LDA #0
+4CDD 8D1604     2460       STA SCREEN+22
+                2470 ;
+4CE0 20AD0B     2480 SEX2  JSR GETKEY
+4CE3 C943       2490       CMP #'C
+4CE5 F011       2500       BEQ SEX3            SAVE CASSETTE
+4CE7 C942       2510       CMP #'B
+4CE9 F013       2520       BEQ SEX4            SAVE BOOT
+4CEB C946       2530       CMP #'F
+4CED D015       2540       BNE SEX5
+4CEF 205B0D     2550       JSR FNAME           SAVE FILE
+4CF2 204A0D     2560       JSR OLDSCR
+4CF5 4C1215     2570       JMP SAVFIL
+4CF8 204A0D     2580 SEX3  JSR OLDSCR
+4CFB 4C5319     2590       JMP SCASS
+4CFE 204A0D     2600 SEX4  JSR OLDSCR
+4D01 4CFA14     2610       JMP SAVDBO
+4D04 204A0D     2620 SEX5  JSR OLDSCR
+4D07 4C990A     2630       JMP ENDCMD
+                2640 ;
+4D0A B3A1B6A5   2650 MENUA .SBYTE "SAVE PROGRAM TO EXTERNAL STORAGE"
+4D0E 80B0B2AF
+4D12 A7B2A1AD
+4D16 80B4AF80
+4D1A A5B8B4A5
+
+
+
+PAGE 16   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4D1E B2AEA1AC
+4D22 80B3B4AF
+4D26 B2A1A7A5
+4D2A 3B233D00   2660       .SBYTE "[C] CASSETTE  [B] BOOT  [F] FILE"
+4D2E 23213333
+4D32 25343425
+4D36 00003B22
+4D3A 3D00222F
+4D3E 2F340000
+4D42 3B263D00
+4D46 26292C25
+                2670 ;
+                2680 ;RESTORE MAIN MENU
+                2690 ;
+4D4A A25F       2700 OLDSCR LDX #$5F
+4D4C BD0005     2710 OLDSC1 LDA SPAGE,X
+4D4F 9D5604     2720       STA SCREEN+$56,X
+4D52 CA         2730       DEX 
+4D53 10F7       2740       BPL OLDSC1
+4D55 A902       2750       LDA #2
+4D57 8D1604     2760       STA SCREEN+22
+4D5A 60         2770       RTS 
+                2780 ;
+                2790 ;ASK FOR FILE NAME (TO /NAME/)
+                2800 ;
+4D5B A21F       2810 FNAME LDX #$1F
+4D5D BD450E     2820 FNAM1 LDA MENUN,X
+4D60 9D7604     2830       STA SCREEN+$76,X
+4D63 CA         2840       DEX 
+4D64 10F7       2850       BPL FNAM1
+                2860 ;
+4D66 A287       2870 FNAM2 LDX #$87            INIT CURSOR
+4D68 E087       2880 FNAM3 CPX #$87            CURSOR BOUNDARY CHECK
+4D6A 90FA       2890       BCC FNAM2
+4D6C E094       2900       CPX #$94
+4D6E 9002       2910       BCC FNAM4
+4D70 A294       2920       LDX #$94
+4D72 BD0004     2930 FNAM4 LDA SCREEN,X        SHOW CURSOR
+4D75 0980       2940       ORA #$80
+4D77 9D0004     2950       STA SCREEN,X
+4D7A 8A         2960       TXA 
+4D7B 48         2970       PHA 
+4D7C 20AD0B     2980       JSR GETKEY
+4D7F A8         2990       TAY 
+4D80 68         3000       PLA 
+4D81 AA         3010       TAX 
+4D82 BD0004     3020       LDA SCREEN,X        REMOVE CURSOR
+4D85 297F       3030       AND #$7F
+4D87 9D0004     3040       STA SCREEN,X
+4D8A 98         3050       TYA 
+4D8B C97E       3060       CMP #$7E            BS?
+4D8D D008       3070       BNE FNAM6
+4D8F A900       3080       LDA #0
+4D91 9D0004     3090       STA SCREEN,X
+4D94 CA         3100 FNAM5 DEX 
+4D95 D0D1       3110       BNE FNAM3           ALWAYS
+4D97 C91E       3120 FNAM6 CMP #$1E            CURSOR <-?
+4D99 F0F9       3130       BEQ FNAM5
+4D9B C91F       3140       CMP #$1F            CURSOR ->?
+4D9D D003       3150       BNE FNAM7
+4D9F E8         3160       INX 
+4DA0 D0C6       3170       BNE FNAM3           ALWAYS
+
+
+
+PAGE 17   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4DA2 C99B       3180 FNAM7 CMP #$9B            EOL?
+4DA4 F02A       3190       BEQ FNAM9
+4DA6 C92E       3200       CMP #'.
+4DA8 F01C       3210       BEQ FNAM8
+4DAA C93F       3220       CMP #'?
+4DAC F018       3230       BEQ FNAM8
+4DAE C92A       3240       CMP #'*
+4DB0 F014       3250       BEQ FNAM8
+4DB2 C920       3260       CMP #$20
+4DB4 F010       3270       BEQ FNAM8
+4DB6 C930       3280       CMP #'0
+4DB8 90AE       3290       BCC FNAM3
+4DBA C93A       3300       CMP #'9+1
+4DBC 9008       3310       BCC FNAM8
+4DBE C941       3320       CMP #'A
+4DC0 90A6       3330       BCC FNAM3
+4DC2 C95B       3340       CMP #'Z+1
+4DC4 B0A2       3350       BCS FNAM3
+4DC6 38         3360 FNAM8 SEC 
+4DC7 E920       3370       SBC #$20
+4DC9 9D0004     3380       STA SCREEN,X
+4DCC E8         3390       INX 
+4DCD 4C680D     3400       JMP FNAM3
+                3410 ;
+4DD0 38         3420 FNAM9 SEC 
+4DD1 E920       3430       SBC #$20
+4DD3 9D0004     3440       STA SCREEN,X
+4DD6 A908       3450       LDA #8
+4DD8 85F9       3460       STA FILENO
+4DDA A287       3470       LDX #$87
+4DDC A000       3480       LDY #0
+4DDE BD0004     3490 FNA10 LDA SCREEN,X        CONVERT FILENAME
+4DE1 E8         3500       INX 
+4DE2 18         3510       CLC 
+4DE3 6920       3520       ADC #$20
+4DE5 C99B       3530 FNA11 CMP #$9B
+4DE7 F004       3540       BEQ FNA12
+4DE9 C920       3550       CMP #$20
+4DEB D028       3560       BNE FNA15
+4DED C00B       3570 FNA12 CPY #11
+4DEF B008       3580       BCS FNAX1
+4DF1 A920       3590       LDA #$20
+4DF3 99D500     3600       STA NAME,Y
+4DF6 C8         3610       INY 
+4DF7 D0F4       3620       BNE FNA12           ALWAYS
+4DF9 A5D5       3630 FNAX1 LDA NAME
+4DFB C920       3640       CMP #$20
+4DFD D00A       3650       BNE FNA14           LEGAL NAME
+4DFF A20A       3660       LDX #10             USE DEFAULT NAME
+4E01 BD0A0E     3670 FNA13 LDA DEFNAM,X
+4E04 95D5       3680       STA NAME,X
+4E06 CA         3690       DEX 
+4E07 10F8       3700       BPL FNA13
+4E09 60         3710 FNA14 RTS 
+4E0A 434F5245   3720 DEFNAM .BYTE "CORE       "
+4E0E 20202020
+4E12 202020
+4E15 C4F9       3730 FNA15 CPY FILENO
+4E17 D00A       3740       BNE FNA16
+4E19 C92E       3750       CMP #'.
+4E1B D0C1       3760       BNE FNA10
+4E1D A90B       3770 FNAX2 LDA #11
+
+
+
+PAGE 18   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4E1F 85F9       3780       STA FILENO
+4E21 D0BB       3790       BNE FNA10
+4E23 C92E       3800 FNA16 CMP #'.
+4E25 F00A       3810       BEQ FNA17
+4E27 C92A       3820       CMP #'*
+4E29 F00A       3830       BEQ FNA18
+4E2B 99D500     3840       STA NAME,Y
+4E2E C8         3850       INY 
+4E2F D0AD       3860       BNE FNA10
+4E31 A920       3870 FNA17 LDA #$20
+4E33 D002       3880       BNE FNA19
+4E35 A93F       3890 FNA18 LDA #'?
+4E37 99D500     3900 FNA19 STA NAME,Y
+4E3A C8         3910       INY 
+4E3B C4F9       3920       CPY FILENO
+4E3D D0F8       3930       BNE FNA19
+4E3F C920       3940       CMP #$20
+4E41 F0DA       3950       BEQ FNAX2
+4E43 D099       3960       BNE FNA10
+                3970 ;
+4E45 252E3425   3980 MENUN .SBYTE "ENTER FILENAME ->              <"
+4E49 32002629
+4E4D 2C252E21
+4E51 2D25000D
+4E55 1E000000
+4E59 00000000
+4E5D 00000000
+4E61 0000001C
+                3990 ;
+                4000 ;LOAD EXTERN MENU
+                4010 ;
+4E65 A200       4020 BKEY  LDX #0
+4E67 8D0AD4     4030 LEXT  STA WSYNC
+4E6A 8D0AD4     4040       STA WSYNC
+4E6D 8D0AD4     4050       STA WSYNC
+4E70 CA         4060       DEX 
+4E71 D0F4       4070       BNE LEXT
+4E73 A25F       4080       LDX #$5F
+4E75 BD5604     4090 LEX1  LDA SCREEN+$56,X
+4E78 9D0005     4100       STA SPAGE,X
+4E7B BDB30E     4110       LDA MENUB,X
+4E7E 9D5604     4120       STA SCREEN+$56,X
+4E81 CA         4130       DEX 
+4E82 10F1       4140       BPL LEX1
+4E84 A900       4150       LDA #0
+4E86 8D1604     4160       STA SCREEN+22
+                4170 ;
+4E89 20AD0B     4180 LEX2  JSR GETKEY
+4E8C C943       4190       CMP #'C
+4E8E F011       4200       BEQ LEX3            LOAD CASSETTE
+4E90 C942       4210       CMP #'B
+4E92 F013       4220       BEQ LEX4            LOAD BOOT
+4E94 C946       4230       CMP #'F
+4E96 D015       4240       BNE LEX5
+4E98 205B0D     4250       JSR FNAME           LOAD FILE
+4E9B 204A0D     4260       JSR OLDSCR
+4E9E 4C3E15     4270       JMP EXEFIL
+4EA1 204A0D     4280 LEX3  JSR OLDSCR
+4EA4 4C4419     4290       JMP ECASS
+4EA7 204A0D     4300 LEX4  JSR OLDSCR
+4EAA 4C0615     4310       JMP EXEDBO
+4EAD 204A0D     4320 LEX5  JSR OLDSCR
+
+
+
+PAGE 19   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4EB0 4C990A     4330       JMP ENDCMD
+                4340 ;
+4EB3 A5B8A5A3   4350 MENUB .SBYTE "EXEC PROGRAM FROM EXTERNAL STORE"
+4EB7 80B0B2AF
+4EBB A7B2A1AD
+4EBF 80A6B2AF
+4EC3 AD80A5B8
+4EC7 B4A5B2AE
+4ECB A1AC80B3
+4ECF B4AFB2A5
+4ED3 3B233D00   4360       .SBYTE "[C] CASSETTE  [B] BOOT  [F] FILE"
+4ED7 23213333
+4EDB 25343425
+4EDF 00003B22
+4EE3 3D00222F
+4EE7 2F340000
+4EEB 3B263D00
+4EEF 26292C25
+                4370 ;
+                4380 ;ERROR HANDLER, Y=ERROR CODE
+                4390 ;
+4EF3 A9FF       4400 ERROR LDA #$FF
+4EF5 8D01D3     4410       STA PORTB           OS ON
+4EF8 A900       4420       LDA #0              DMA OFF
+4EFA 8D00D4     4430       STA DMACTL
+4EFD A900       4440       LDA #SCREEN&$FF
+4EFF 8D02D4     4450       STA DLISTL
+4F02 A904       4460       LDA #SCREEN/256
+4F04 8D03D4     4470       STA DLISTH
+4F07 A200       4480       LDX #0
+4F09 BDE309     4490 ERRO0 LDA DLIST,X
+4F0C 9D0004     4500       STA SCREEN,X
+4F0F E8         4510       INX 
+4F10 E0B6       4520       CPX #DLEND-DLIST
+4F12 D0F5       4530       BNE ERRO0
+4F14 ADE209     4540       LDA COLTAB+4
+4F17 8D1AD0     4550       STA COLPF0+4
+4F1A 201A10     4560       JSR DMAON
+4F1D A25F       4570       LDX #$5F            SAVE SCREEN
+4F1F BD5604     4580 ERRO1 LDA SCREEN+$56,X
+4F22 9D0005     4590       STA SPAGE,X
+4F25 BD700F     4600       LDA MENUE,X
+4F28 9D5604     4610       STA SCREEN+$56,X
+4F2B CA         4620       DEX 
+4F2C 10F1       4630       BPL ERRO1
+4F2E A900       4640       LDA #0
+4F30 8D1604     4650       STA SCREEN+22
+4F33 A200       4660       LDX #0              INDEX INTO ERROR TEXTS
+4F35 BD700F     4670 ERRO2 LDA MENUE,X
+4F38 3003       4680       BMI ERRO3
+4F3A E8         4690       INX 
+4F3B D0F8       4700       BNE ERRO2
+4F3D E8         4710 ERRO3 INX 
+4F3E 88         4720       DEY 
+4F3F 10F4       4730       BPL ERRO2
+4F41 A007       4740       LDY #7              COPY TEXT TO SCREEN
+4F43 BD700F     4750 ERRO4 LDA MENUE,X
+4F46 08         4760       PHP 
+4F47 297F       4770       AND #$7F
+4F49 38         4780       SEC 
+4F4A E920       4790       SBC #$20
+4F4C 995604     4800       STA SCREEN+$56,Y
+
+
+
+PAGE 20   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+4F4F E8         4810       INX 
+4F50 C8         4820       INY 
+4F51 28         4830       PLP 
+4F52 10EF       4840       BPL ERRO4
+4F54 A00A       4850       LDY #10             BEEP
+4F56 A200       4860 ERRO6 LDX #0
+4F58 8E1FD0     4870 ERRO7 STX CONSOL
+4F5B 8E0AD4     4880       STX WSYNC
+4F5E E8         4890       INX 
+4F5F D0F7       4900       BNE ERRO7
+4F61 E8         4910 ERRO8 INX 
+4F62 10FD       4920       BPL ERRO8
+4F64 88         4930       DEY 
+4F65 D0EF       4940       BNE ERRO6
+4F67 20AD0B     4950       JSR GETKEY          WAIT FOR KEY
+4F6A 204A0D     4960       JSR OLDSCR
+4F6D 4C990A     4970       JMP ENDCMD
+                4980 ;
+4F70 2532322F   4990 MENUE .SBYTE "ERROR:                          "
+4F74 321A0000
+4F78 00000000
+4F7C 00000000
+4F80 00000000
+4F84 00000000
+4F88 00000000
+4F8C 00000000
+4F90 2F302532   5000       .SBYTE "OPERATION TERMINATED, HIT RETURN",$80
+4F94 2134292F
+4F98 2E003425
+4F9C 322D292E
+4FA0 21342524
+4FA4 0C002829
+4FA8 34003225
+4FAC 3435322E
+4FB0 C0
+4FB1 46494C45   5010       .CBYTE "FILE NOT FOUND"
+4FB5 204E4F54
+4FB9 20464F55
+4FBD 4EC4
+4FBF 46494C45   5020       .CBYTE "FILE# MISMATCH"
+4FC3 23204D49
+4FC7 534D4154
+4FCB 43C8
+4FCD A0         5030       .CBYTE " "
+4FCE 42414420   5040       .CBYTE "BAD DISK I/O"
+4FD2 4449534B
+4FD6 20492FCF
+4FDA 4E4F2044   5050       .CBYTE "NO DRIVE"
+4FDE 524956C5
+4FE2 4449534B   5060       .CBYTE "DISK FULL"
+4FE6 2046554C
+4FEA CC
+4FEB 46494C45   5070       .CBYTE "FILE LOCKED"
+4FEF 204C4F43
+4FF3 4B45C4
+4FF6 44495245   5080       .CBYTE "DIRECTORY FULL"
+4FFA 43544F52
+4FFE 59204655
+5002 4CCC
+5004 42414420   5090       .CBYTE "BAD CASSETTE I/O"
+5008 43415353
+500C 45545445
+
+
+
+PAGE 21   FREEZER V2.3
+                                                                                                                    D:MENU.M65
+
+
+
+5010 20492FCF
+                5100 ;
+                5110 ;CLEAR OS RAM COMMAND
+                5120 ;
+5014 209E1F     5130 CKEY  JSR OSRCLR          IN DEBUGGER
+5017 4C990A     5140       JMP ENDCMD
+                5150 ;
+                5160 ;ENTER DEBUGGER
+                5170 ;
+                5180 ;
+                5190 ;DMA ON
+                5200 ;
+501A AD0BD4     5210 DMAON LDA VCOUNT
+501D C97C       5220       CMP #124
+501F 90F9       5230       BCC DMAON
+5021 A921       5240       LDA #$21
+5023 8D00D4     5250       STA DMACTL
+5026 60         5260       RTS 
+                0290       .INCLUDE #D:RESTART.M65
+                0100 ;
+                0110 ;-------------------------------
+                0120 ;RESTART: RESTORE CONDITIONS BE-
+                0130 ;         FORE BREAK AND RESTART
+                0140 ;-------------------------------
+                0150 ;
+5027 A200       0160 RSTART LDX #0             SAVE CPAGE
+5029 8E00D4     0170       STX DMACTL          DMA OFF
+502C BD0041     0180 RSTAR1 LDA CPAGE,X
+502F 9D0005     0190       STA SPAGE,X
+5032 CA         0200       DEX 
+5033 D0F7       0210       BNE RSTAR1
+                0220 ;
+5035 A20B       0230       LDX #11             MOVE ROUTINE
+5037 BD4510     0240 RSTAR2 LDA READST,X
+503A 9D0041     0250       STA CPAGE,X
+503D CA         0260       DEX 
+503E 10F7       0270       BPL RSTAR2
+5040 A200       0280       LDX #0              READ STACK
+5042 4C0041     0290 RSTAR3 JMP CPAGE          GET BYTE
+5045 8D00D7     0300 READST STA BRKCTL
+5048 BD0001     0310       LDA $0100,X
+504B 8D00D7     0320       STA BRKCTL
+504E 4C5110     0330       JMP RSTAR4
+5051 9D0001     0340 RSTAR4 STA $0100,X
+5054 CA         0350       DEX 
+5055 D0EB       0360       BNE RSTAR3
+                0370 ;
+5057 A6C9       0380       LDX REGS            RESTORE SP
+5059 9A         0390       TXS 
+505A A5C6       0400       LDA REGA            PUSH SAVED ACCU
+505C 48         0410       PHA 
+505D A5BE       0420       LDA SANTIC+14       PUSH NMIEN
+505F 48         0430       PHA 
+5060 A5CA       0440       LDA VCNT
+5062 38         0450       SEC 
+5063 E901       0460       SBC #1
+5065 48         0470       PHA 
+5066 A214       0480       LDX #20             PUSH LAST RESTART PHASE
+5068 BD1E11     0490 RSTAR5 LDA LPHASE,X
+506B 48         0500       PHA 
+506C CA         0510       DEX 
+506D 10F9       0520       BPL RSTAR5
+
+
+
+PAGE 22   FREEZER V2.3
+                                                                                                                    D:RESTART.M65
+
+
+
+506F BA         0530       TSX                 CALC START VECTOR
+5070 E8         0540       INX 
+5071 86CD       0550       STX RSVECL
+5073 A901       0560       LDA #1
+5075 85CE       0570       STA RSVECH
+5077 A6C9       0580       LDX REGS            RESTORE SP
+5079 CA         0590       DEX 
+507A CA         0600       DEX 
+507B CA         0610       DEX 
+507C 9A         0620       TXS 
+                0630 ;
+507D A20B       0640       LDX #11             MOVE STORE ROUTINE
+507F BD9010     0650 RSTAR6 LDA WRITES,X
+5082 9D0041     0660       STA CPAGE,X
+5085 CA         0670       DEX 
+5086 10F7       0680       BPL RSTAR6
+5088 A200       0690       LDX #0              MOVE STACK
+508A BD0001     0700 RSTAR7 LDA $0100,X
+508D 4C0041     0710       JMP CPAGE
+5090 8D00D7     0720 WRITES STA BRKCTL
+5093 9D0001     0730       STA $0100,X
+5096 8D00D7     0740       STA BRKCTL
+5099 4C9C10     0750       JMP RSTAR8
+509C CA         0760 RSTAR8 DEX 
+509D D0EB       0770       BNE RSTAR7
+                0780 ;
+509F A200       0790       LDX #0              RESTORE CPAGE
+50A1 BD0005     0800 RSTAR9 LDA SPAGE,X
+50A4 9D0041     0810       STA CPAGE,X
+50A7 CA         0820       DEX 
+50A8 D0F7       0830       BNE RSTAR9
+                0840 ;
+                0850 ;RESTORE ANTIC, POKEY, GTIA REGS
+                0860 ;
+50AA 78         0870       SEI 
+50AB A20F       0880       LDX #15
+50AD B5B0       0890 RSTA10 LDA SANTIC,X
+50AF 9D0004     0900       STA ANTIC-OFFSET,X
+50B2 E00E       0910       CPX #14
+50B4 F007       0920       BEQ RSTA11          NO NMIS
+50B6 E000       0930       CPX #0              NO DMA
+50B8 F003       0940       BEQ RSTA11
+50BA 9D00D4     0950       STA ANTIC,X
+50BD B580       0960 RSTA11 LDA SGTIA,X
+50BF 9500       0970       STA GTIA-OFFSET,X
+50C1 9D00D0     0980       STA GTIA,X
+50C4 B590       0990       LDA SGTIA+16,X
+50C6 9510       1000       STA GTIA-OFFSET+16,X
+50C8 9D10D0     1010       STA GTIA+16,X
+50CB B5A0       1020       LDA SPOKEY,X
+50CD 9D0002     1030       STA POKEY-OFFSET,X
+50D0 9D00D2     1040       STA POKEY,X
+50D3 CA         1050       DEX 
+50D4 10D7       1060       BPL RSTA10
+                1070 ;
+                1080 ;RESTORE PIA REGISTERS
+                1090 ;
+50D6 A938       1100       LDA #$38
+50D8 8D02D3     1110       STA PACTL
+50DB 8D03D3     1120       STA PBCTL
+50DE A5C2       1130       LDA SDIRA
+50E0 8D00D3     1140       STA PORTA
+
+
+
+PAGE 23   FREEZER V2.3
+                                                                                                                    D:RESTART.M65
+
+
+
+50E3 A5C3       1150       LDA SDIRB
+50E5 8D01D3     1160       STA PORTB
+50E8 A93C       1170       LDA #$3C
+50EA 8D02D3     1180       STA PACTL
+50ED 8D03D3     1190       STA PBCTL
+50F0 A5C0       1200       LDA SPORTA
+50F2 8D00D3     1210       STA PORTA
+50F5 A5C1       1220       LDA SPORTB
+50F7 8D01D3     1230       STA PORTB
+50FA A5C4       1240       LDA SCTLA
+50FC 8D02D3     1250       STA PACTL
+50FF 8D0203     1260       STA PACTL-OFFSET
+5102 A5C5       1270       LDA SCTLB
+5104 8D03D3     1280       STA PBCTL
+5107 8D0303     1290       STA PBCTL-OFFSET
+                1300 ;
+                1310 ;RESTART, LAST PHASE
+                1320 ;
+510A 78         1330       SEI 
+510B A6C7       1340       LDX REGX
+510D A4C8       1350       LDY REGY
+510F A903       1360       LDA #3
+5111 CD0BD4     1370 RSTA12 CMP VCOUNT
+5114 D0FB       1380       BNE RSTA12
+5116 8D0AD4     1390       STA WSYNC
+5119 A5B0       1400       LDA SANTIC
+511B 6CCD00     1410       JMP (RSVECL)
+                1420 ;
+511E 2C00D7     1430 LPHASE BIT BRKCTL
+5121 8D0AD4     1440       STA WSYNC
+5124 8D00D4     1450       STA DMACTL
+5127 68         1460       PLA 
+5128 CD0BD4     1470 LPHAS1 CMP VCOUNT
+512B D0FB       1480       BNE LPHAS1
+512D 68         1490       PLA 
+512E 8D0ED4     1500       STA NMIEN
+5131 68         1510       PLA 
+5132 40         1520       RTI 
+                0300       .INCLUDE #D:INTHAND.M65
+                0100 ;
+                0110 ;-------------------------------
+                0120 ;IRQ & NMI INTERRUPT HANDLERS
+                0130 ;-------------------------------
+                0140 ;
+5133 E614       0150 MYVBL INC RTCLOK+2
+5135 D006       0160       BNE MYVB1
+5137 E613       0170       INC RTCLOK+1
+5139 D002       0180       BNE MYVB1
+513B E612       0190       INC RTCLOK
+                0200 ;
+513D AD1802     0210 MYVB1 LDA CDTMV1          PROCESS SYSTEM TIMER 1
+5140 0D1902     0220       ORA CDTMV1+1
+5143 F016       0230       BEQ MYVB3           NOT RUNNING
+5145 AD1802     0240       LDA CDTMV1          DECREMENT
+5148 D003       0250       BNE MYVB2
+514A CE1902     0260       DEC CDTMV1+1
+514D CE1802     0270 MYVB2 DEC CDTMV1
+5150 AD1802     0280       LDA CDTMV1
+5153 0D1902     0290       ORA CDTMV1+1
+5156 D003       0300       BNE MYVB3           NOT YET ZERO
+5158 206111     0310       JSR MYVB4           EXECUTE ROUTINE
+                0320 ;
+
+
+
+PAGE 24   FREEZER V2.3
+                                                                                                                    D:INTHAND.M65
+
+
+
+515B 68         0330 MYVB3 PLA 
+515C A8         0340       TAY 
+515D 68         0350       PLA 
+515E AA         0360       TAX 
+515F 68         0370       PLA 
+5160 40         0380       RTI 
+                0390 ;
+5161 6C2602     0400 MYVB4 JMP (CDTMA1)
+                0410 ;
+                0420 ;INTERRUPT HANDLER & SIO SUPPORT
+                0430 ;
+5164 48         0440 MYIRQ PHA 
+5165 98         0450       TYA 
+5166 48         0460       PHA 
+5167 A920       0470       LDA #$20            SERIN READY INT?
+5169 2C0ED2     0480       BIT IRQST
+516C D05B       0490       BNE MYIRQ7          NO
+                0500 ;
+516E 205E12     0510       JSR RIRQ
+5171 AD0FD2     0520       LDA SKSTAT
+5174 8D0AD2     0530       STA SKRES
+5177 3004       0540       BMI MYIRQ1          NO FRAMING ERROR
+5179 A08C       0550       LDY #$8C
+517B 8430       0560       STY STATUS
+517D 2920       0570 MYIRQ1 AND #$20
+517F D004       0580       BNE MYIRQ2          NO OVERRUN ERROR
+5181 A08E       0590       LDY #$8E
+5183 8430       0600       STY STATUS
+5185 A538       0610 MYIRQ2 LDA BUFRFL
+5187 F012       0620       BEQ MYIRQ4          BUFFER NOT YET FULL
+                0630 ;
+5189 AD0DD2     0640       LDA SERIN           BYTE IS CHECKSUM
+518C C531       0650       CMP CHKSUM
+518E F004       0660       BEQ MYIRQ3          CHECKSUM MATCH
+5190 A08F       0670       LDY #$8F
+5192 8430       0680       STY STATUS          CHECKSUM ERROR
+                0690 ;
+5194 A9FF       0700 MYIRQ3 LDA #$FF
+5196 8539       0710       STA RECVDN
+5198 4C5A12     0720 MYIRQX JMP MYIR16
+                0730 ;
+519B AD0DD2     0740 MYIRQ4 LDA SERIN          BYTE IS DATA
+519E A000       0750       LDY #0
+51A0 9132       0760       STA (BUFRLO),Y
+51A2 18         0770       CLC                 ADD TO CHECKSUM
+51A3 6531       0780       ADC CHKSUM
+51A5 6900       0790       ADC #0
+51A7 8531       0800       STA CHKSUM
+51A9 E632       0810       INC BUFRLO          INC BUFFER POINTER
+51AB D002       0820       BNE MYIRQ5
+51AD E633       0830       INC BUFRHI
+51AF A532       0840 MYIRQ5 LDA BUFRLO
+51B1 C534       0850       CMP BFENLO
+51B3 A533       0860       LDA BUFRHI
+51B5 E535       0870       SBC BFENHI
+51B7 90DF       0880       BCC MYIRQX          BUFFER NOT YET FULL
+                0890 ;
+51B9 A53C       0900       LDA NOCKSM
+51BB F006       0910       BEQ MYIRQ6          CHECKSUM WILL FOLLOW
+51BD A900       0920       LDA #0
+51BF 853C       0930       STA NOCKSM
+51C1 F0D1       0940       BEQ MYIRQ3          ALWAYS
+
+
+
+PAGE 25   FREEZER V2.3
+                                                                                                                    D:INTHAND.M65
+
+
+
+                0950 ;
+51C3 A9FF       0960 MYIRQ6 LDA #$FF           SET BUFFER FULL FLAG
+51C5 8538       0970       STA BUFRFL
+51C7 D0CF       0980       BNE MYIRQX          ALWAYS
+                0990 ;
+51C9 4A         1000 MYIRQ7 LSR A              SEROUT RDY INT?
+51CA 2C0ED2     1010       BIT IRQST
+51CD D052       1020       BNE MYIR12          NO
+                1030 ;
+51CF 4A         1040       LSR A               COMMAND FRAME?
+51D0 2C03D3     1050       BIT PBCTL
+51D3 D00C       1060       BNE MYIRQ8          NO
+51D5 A5D3       1070       LDA TURFLG          TURBO ON?
+51D7 F008       1080       BEQ MYIRQ8          NO
+51D9 AD3D02     1090       LDA CAUX2           ACTIVATE TURBO
+51DC 0980       1100       ORA #$80
+51DE 8D3D02     1110       STA CAUX2
+                1120 ;
+51E1 A910       1130 MYIRQ8 LDA #$10
+51E3 205E12     1140       JSR RIRQ
+51E6 E632       1150       INC BUFRLO          INC BUFFER POINTER
+51E8 D002       1160       BNE MYIRQ9
+51EA E633       1170       INC BUFRHI
+51EC A532       1180 MYIRQ9 LDA BUFRLO
+51EE C534       1190       CMP BFENLO
+51F0 A533       1200       LDA BUFRHI
+51F2 E535       1210       SBC BFENHI
+51F4 901A       1220       BCC MYIR11          BUFFER NOT YET EMPTY
+                1230 ;
+51F6 A53B       1240       LDA CHKSNT
+51F8 D00B       1250       BNE MYIR10          CHECKSUM ALREADY SENT
+51FA A531       1260       LDA CHKSUM          SEND CHECKSUM
+51FC 8D0DD2     1270       STA SEROUT
+51FF A9FF       1280       LDA #$FF            SET CHECKSUM SENT FLAG
+5201 853B       1290       STA CHKSNT
+5203 D055       1300       BNE MYIR16          ALWAYS
+                1310 ;
+5205 A510       1320 MYIR10 LDA POKMSK         ENABLE XMIT DONE INTERRUPT
+5207 0908       1330       ORA #$08
+5209 8510       1340       STA POKMSK
+520B 8D0ED2     1350       STA IRQEN
+520E D04A       1360       BNE MYIR16          ALWAYS
+                1370 ;
+5210 A000       1380 MYIR11 LDY #0             SEND BYTE FROM BUFFER
+5212 B132       1390       LDA (BUFRLO),Y
+5214 8D0DD2     1400       STA SEROUT
+5217 18         1410       CLC                 ADD TO CHECKSUM
+5218 6531       1420       ADC CHKSUM
+521A 6900       1430       ADC #0
+521C 8531       1440       STA CHKSUM
+521E 4C5A12     1450       JMP MYIR16
+                1460 ;
+5221 4A         1470 MYIR12 LSR A              SEROUT COMPLETE IRQ?
+5222 2410       1480       BIT POKMSK
+5224 F024       1490       BEQ MYIR15          NO
+5226 2C0ED2     1500       BIT IRQST
+5229 D01F       1510       BNE MYIR15
+522B 205E12     1520       JSR RIRQ
+                1530 ;
+522E A53B       1540       LDA CHKSNT          CHECKSUM SENT?
+5230 F015       1550       BEQ MYIR14          NO
+5232 853A       1560       STA XMTDON          SET XMIT DONE FLAG
+
+
+
+PAGE 26   FREEZER V2.3
+                                                                                                                    D:INTHAND.M65
+
+
+
+5234 AD3D02     1570       LDA CAUX2           TURBO?
+5237 1005       1580       BPL MYIR13          NO
+5239 A906       1590       LDA #6
+523B 8D04D2     1600       STA AUDF3           SET 70000 BAUD
+                1610 ;
+523E A510       1620 MYIR13 LDA POKMSK         DISABLE TRANSMIT DONE IRQ
+5240 29F7       1630       AND #$F7
+5242 8510       1640       STA POKMSK
+5244 8D0ED2     1650       STA IRQEN
+                1660 ;
+5247 4C5A12     1670 MYIR14 JMP MYIR16
+                1680 ;
+524A 2C0ED2     1690 MYIR15 BIT IRQST          BREAK KEY?
+524D 08         1700       PHP 
+524E A9FF       1710       LDA #$FF
+5250 205E12     1720       JSR RIRQ            RESET ALL INTS
+5253 28         1730       PLP 
+5254 3004       1740       BMI MYIR16          NO
+5256 A900       1750       LDA #0
+5258 8511       1760       STA BRKKEY
+                1770 ;
+525A 68         1780 MYIR16 PLA 
+525B A8         1790       TAY 
+525C 68         1800       PLA 
+525D 40         1810       RTI 
+                1820 ;
+525E 49FF       1830 RIRQ  EOR #$FF            RESET INTERRUPT
+5260 8D0ED2     1840       STA IRQEN
+5263 A510       1850       LDA POKMSK
+5265 8D0ED2     1860       STA IRQEN
+5268 60         1870       RTS 
+                0310       .INCLUDE #D:SAVER.M65
+                0100 ;-------------------------------
+                0110 ;SAVER: DIVIDES SYSTEM STATUS IN
+                0120 ;       BLOCKS OF LENGTH NCOUNT
+                0130 ;       AND SAVES THEM VIA CALLS
+                0140 ;       TO THE DEVICE HANDLERS.
+                0150 ;-------------------------------
+                0160 ;
+5269 A24E       0170 SAVE  LDX #RSVECH-SGTIA
+526B B580       0180 SAV1  LDA SGTIA,X
+526D 9D0007     0190       STA DBUF,X
+5270 CA         0200       DEX 
+5271 10F8       0210       BPL SAV1
+5273 20BC13     0220       JSR WRITE
+                0230 ;
+5276 24F9       0240       BIT FILENO
+5278 704E       0250       BVS SAV7            DON'T COMPACT
+                0260 ;
+527A A241       0270       LDX #65             PREPARE MAP OF USED BLOCKS
+527C A900       0280       LDA #0
+527E 9D0001     0290 SAV2  STA USEMAP,X
+5281 CA         0300       DEX 
+5282 10FA       0310       BPL SAV2
+5284 85F7       0320       STA MAPIDX
+5286 85CF       0330       STA RPNT
+5288 85D0       0340       STA RPNT+1
+528A A980       0350       LDA #$80
+528C 85F8       0360       STA MAPMSK
+528E 20FB12     0370 SAV3  JSR TOBUF           COPY BLOCK TO BUFFER
+5291 A200       0380       LDX #0
+5293 BD0007     0390 SAV4  LDA DBUF,X
+
+
+
+PAGE 27   FREEZER V2.3
+                                                                                                                    D:SAVER.M65
+
+
+
+5296 D015       0400       BNE SAV5            NOT ZERO
+5298 E8         0410       INX 
+5299 E4F5       0420       CPX DCOUNT
+529B D0F6       0430       BNE SAV4
+529D A5F2       0440       LDA NEXT
+529F 05F3       0450       ORA NEXT+1
+52A1 F00A       0460       BEQ SAV5            LAST BLOCK ALWAYS USED
+52A3 A6F7       0470       LDX MAPIDX          SET BLOCK UNUSED BIT
+52A5 BD0001     0480       LDA USEMAP,X
+52A8 05F8       0490       ORA MAPMSK
+52AA 9D0001     0500       STA USEMAP,X
+52AD 206D13     0510 SAV5  JSR ADVMAP
+52B0 207613     0520       JSR ADVPNT
+52B3 90D9       0530       BCC SAV3
+52B5 A242       0540       LDX #66             SAVE MAP
+52B7 86F5       0550       STX DCOUNT
+52B9 CA         0560       DEX 
+52BA BD0001     0570 SAV6  LDA USEMAP,X
+52BD 9D0007     0580       STA DBUF,X
+52C0 CA         0590       DEX 
+52C1 10F7       0600       BPL SAV6
+52C3 E6F2       0610       INC NEXT            FORCE SECTOR ALLOCATION
+52C5 20BC13     0620       JSR WRITE
+                0630 ;
+52C8 A900       0640 SAV7  LDA #0
+52CA 85CF       0650       STA RPNT
+52CC 85D0       0660       STA RPNT+1
+52CE 85F7       0670       STA MAPIDX
+52D0 A980       0680       LDA #$80
+52D2 85F8       0690       STA MAPMSK
+52D4 A5F6       0700       LDA NCOUNT
+52D6 85F5       0710       STA DCOUNT
+                0720 ;
+52D8 20FB12     0730 SAV8  JSR TOBUF
+52DB 24F9       0740       BIT FILENO
+52DD 7009       0750       BVS SAV9
+52DF A6F7       0760       LDX MAPIDX          UNUSED BLOCK?
+52E1 BD0001     0770       LDA USEMAP,X
+52E4 25F8       0780       AND MAPMSK
+52E6 D003       0790       BNE SAV10           YES, SKIP
+52E8 20BC13     0800 SAV9  JSR WRITE
+52EB 206D13     0810 SAV10 JSR ADVMAP
+52EE 207613     0820       JSR ADVPNT
+52F1 90E5       0830       BCC SAV8
+52F3 A9FF       0840       LDA #$FF
+52F5 8D01D3     0850       STA PORTB
+52F8 4C1A10     0860       JMP DMAON
+                0870 ;
+                0880 ;COPY DATA FROM (RPNT) TO DBUF
+                0890 ;
+52FB A5D0       0900 TOBUF LDA RPNT+1          (RPNT) TO DBUF
+52FD C940       0910       CMP #$40
+52FF B045       0920       BCS TOBU5
+                0930 ;
+5301 A900       0940       LDA #0              0000-3FFF
+5303 8D00D4     0950       STA DMACTL
+5306 A214       0960       LDX #TOBU3-TOBU2
+5308 BD0041     0970 TOBU1 LDA CPAGE,X
+530B 9D0005     0980       STA SPAGE,X
+530E BD2613     0990       LDA TOBU2,X
+5311 9D0041     1000       STA CPAGE,X
+5314 CA         1010       DEX 
+
+
+
+PAGE 28   FREEZER V2.3
+                                                                                                                    D:SAVER.M65
+
+
+
+5315 10F1       1020       BPL TOBU1
+5317 A5CF       1030       LDA RPNT
+5319 8D0441     1040       STA CPAGE+4
+531C A5D0       1050       LDA RPNT+1
+531E 8D0541     1060       STA CPAGE+5
+5321 A000       1070       LDY #0
+5323 4C0041     1080       JMP CPAGE
+                1090 ;
+5326 8D00D7     1100 TOBU2 STA BRKCTL
+5329 B9EEEE     1110       LDA $EEEE,Y
+532C 8D00D7     1120       STA BRKCTL
+532F 990007     1130       STA DBUF,Y
+5332 C8         1140       INY 
+5333 C4F5       1150       CPY DCOUNT
+5335 D0EF       1160       BNE TOBU2
+5337 4C3A13     1170       JMP TOBU3
+                1180 ;
+533A A214       1190 TOBU3 LDX #TOBU3-TOBU2
+533C BD0005     1200 TOBU4 LDA SPAGE,X
+533F 9D0041     1210       STA CPAGE,X
+5342 CA         1220       DEX 
+5343 10F7       1230       BPL TOBU4
+5345 60         1240       RTS 
+                1250 ;
+5346 C9BF       1260 TOBU5 CMP #$BF
+5348 B017       1270       BCS TOBU8
+534A A921       1280       LDA #$21            4000-BF00
+534C 8D00D4     1290       STA DMACTL
+534F A000       1300 TOBU6 LDY #0
+5351 B1CF       1310 TOBU7 LDA (RPNT),Y
+5353 990007     1320       STA DBUF,Y
+5356 C8         1330       INY 
+5357 C4F5       1340       CPY DCOUNT
+5359 D0F6       1350       BNE TOBU7
+535B A9FF       1360       LDA #$FF
+535D 8D01D3     1370       STA PORTB
+5360 60         1380       RTS 
+                1390 ;
+5361 A900       1400 TOBU8 LDA #0              BF00-FFFF
+5363 8D00D4     1410       STA DMACTL
+5366 A9FE       1420       LDA #$FE            OS OFF
+5368 8D01D3     1430       STA PORTB
+536B D0E2       1440       BNE TOBU6           ALWAYS
+                1450 ;
+                1460 ;ADVANCE ONE BIT POS IN USEMAP
+                1470 ;
+536D 46F8       1480 ADVMAP LSR MAPMSK
+536F 9004       1490       BCC ADVMA1
+5371 66F8       1500       ROR MAPMSK
+5373 E6F7       1510       INC MAPIDX
+5375 60         1520 ADVMA1 RTS 
+                1530 ;
+                1540 ;ADVANCE RPNT ONE BLOCK
+                1550 ;
+5376 A5F6       1560 ADVPNT LDA NCOUNT
+5378 85F5       1570       STA DCOUNT
+537A 38         1580       SEC 
+537B F005       1590       BEQ ADVPN0
+537D 18         1600       CLC 
+537E 65CF       1610       ADC RPNT
+5380 85CF       1620       STA RPNT
+5382 A5D0       1630 ADVPN0 LDA RPNT+1
+
+
+
+PAGE 29   FREEZER V2.3
+                                                                                                                    D:SAVER.M65
+
+
+
+5384 6900       1640       ADC #0
+5386 85D0       1650       STA RPNT+1
+5388 B031       1660       BCS ADVPN3          ALL BLOCKS DONE
+538A C9CF       1670       CMP #$CF            END PAGES?
+538C F014       1680       BEQ ADVPN1          YES
+538E C9FF       1690       CMP #$FF
+5390 F010       1700       BEQ ADVPN1          YES
+5392 29F8       1710       AND #$F8            IO AREA?
+5394 C9D0       1720       CMP #$D0
+5396 D022       1730       BNE ADVPN2          NO
+5398 A900       1740       LDA #0              SKIP IO AREA
+539A 85CF       1750       STA RPNT
+539C A9D8       1760       LDA #$D8
+539E 85D0       1770       STA RPNT+1
+53A0 D018       1780       BNE ADVPN2          ALWAYS
+53A2 A5CF       1790 ADVPN1 LDA RPNT           PROCESS END PAGES
+53A4 18         1800       CLC 
+53A5 65F6       1810       ADC NCOUNT
+53A7 9011       1820       BCC ADVPN2          STILL ENOUGH DATA
+53A9 F00F       1830       BEQ ADVPN2          EXACTLY ONE BLOCK LEFT
+53AB A900       1840       LDA #0              CALC REMAINING BYTES COUNT
+53AD E5CF       1850       SBC RPNT
+53AF 85F5       1860       STA DCOUNT
+53B1 A6D0       1870       LDX RPNT+1          LAST BLOCK?
+53B3 E8         1880       INX 
+53B4 D004       1890       BNE ADVPN2          NO
+53B6 86F2       1900       STX NEXT
+53B8 86F3       1910       STX NEXT+1
+53BA 18         1920 ADVPN2 CLC 
+53BB 60         1930 ADVPN3 RTS 
+                1940 ;
+                1950 ;JUMP TO DEVICE HANDLERS TO
+                1960 ;SAVE DBUF TO DEVICES
+                1970 ;
+53BC A6FA       1980 WRITE LDX DEVICE
+53BE F006       1990       BEQ WRITE1
+53C0 CA         2000       DEX 
+53C1 F006       2010       BEQ WRITE2
+53C3 4CC019     2020       JMP WCASS
+53C6 4CC514     2030 WRITE1 JMP WRAMD
+53C9 4C8915     2040 WRITE2 JMP WDISK
+                0320       .INCLUDE #D:LOADER.M65
+                0100 ;-------------------------------
+                0110 ;LOADER:DIVIDES SYSTEM STATUS IN
+                0120 ;       BLOCKS OF LENGTH NCOUNT
+                0130 ;       AND LOADS THEM VIA CALLS
+                0140 ;       TO THE DEVICE HANDLERS.
+                0150 ;-------------------------------
+                0160 ;
+53CC 208A14     0170 LOAD  JSR READ
+53CF A24E       0180       LDX #RSVECH-SGTIA
+53D1 BD0007     0190 LOA1  LDA DBUF,X
+53D4 9580       0200       STA SGTIA,X
+53D6 CA         0210       DEX 
+53D7 10F8       0220       BPL LOA1
+                0230 ;
+53D9 24F9       0240       BIT FILENO
+53DB 700E       0250       BVS LOA3            NOT COMPACTED DATA
+                0260 ;
+53DD 208A14     0270       JSR READ            READ MAP OF USED BLOCKS
+53E0 A241       0280       LDX #65
+53E2 BD0007     0290 LOA2  LDA DBUF,X
+
+
+
+PAGE 30   FREEZER V2.3
+                                                                                                                    D:LOADER.M65
+
+
+
+53E5 9D0001     0300       STA USEMAP,X
+53E8 CA         0310       DEX 
+53E9 10F7       0320       BPL LOA2
+                0330 ;
+53EB A900       0340 LOA3  LDA #0
+53ED 85CF       0350       STA RPNT
+53EF 85D0       0360       STA RPNT+1
+53F1 85F7       0370       STA MAPIDX
+53F3 A980       0380       LDA #$80
+53F5 85F8       0390       STA MAPMSK
+53F7 A5F6       0400       LDA NCOUNT
+53F9 85F5       0410       STA DCOUNT
+                0420 ;
+53FB 24F9       0430 LOA4  BIT FILENO          ACTUAL LOAD LOOP
+53FD 7014       0440       BVS LOA6            NOT COMPACTED DATA
+53FF A6F7       0450       LDX MAPIDX
+5401 BD0001     0460       LDA USEMAP,X
+5404 25F8       0470       AND MAPMSK
+5406 F00B       0480       BEQ LOA6            BLOCK NOT ZERO
+5408 A200       0490       LDX #0
+540A 8A         0500       TXA 
+540B 9D0007     0510 LOA5  STA DBUF,X
+540E E8         0520       INX 
+540F D0FA       0530       BNE LOA5
+5411 F003       0540       BEQ LOA7
+                0550 ;
+5413 208A14     0560 LOA6  JSR READ
+5416 202914     0570 LOA7  JSR TORAM
+5419 206D13     0580       JSR ADVMAP
+541C 207613     0590       JSR ADVPNT
+541F 90DA       0600       BCC LOA4
+                0610 ;
+5421 A9FF       0620       LDA #$FF
+5423 8D01D3     0630       STA PORTB
+5426 4C1A10     0640       JMP DMAON
+                0650 ;
+                0660 ;MOVE BLOCK FROM DBUF TO (RPNT)
+                0670 ;
+5429 A5D0       0680 TORAM LDA RPNT+1          DBUF TO (RPNT)
+542B C940       0690       CMP #$40
+542D B034       0700       BCS TORA4
+                0710 ;
+542F A900       0720       LDA #0
+5431 8D00D4     0730       STA DMACTL          0000-3FFF
+5434 A214       0740       LDX #TORA3-TORA2
+5436 BD4E14     0750 TORA1 LDA TORA2,X
+5439 9D0041     0760       STA CPAGE,X
+543C CA         0770       DEX 
+543D 10F7       0780       BPL TORA1
+543F A5CF       0790       LDA RPNT
+5441 8D0741     0800       STA CPAGE+7
+5444 A5D0       0810       LDA RPNT+1
+5446 8D0841     0820       STA CPAGE+8
+5449 A000       0830       LDY #0
+544B 4C0041     0840       JMP CPAGE
+                0850 ;
+544E B90007     0860 TORA2 LDA DBUF,Y
+5451 8D00D7     0870       STA BRKCTL
+5454 99EEEE     0880       STA $EEEE,Y
+5457 8D00D7     0890       STA BRKCTL
+545A C8         0900       INY 
+545B C4F5       0910       CPY DCOUNT
+
+
+
+PAGE 31   FREEZER V2.3
+                                                                                                                    D:LOADER.M65
+
+
+
+545D D0EF       0920       BNE TORA2
+545F 4C6214     0930       JMP TORA3
+                0940 ;
+5462 60         0950 TORA3 RTS 
+5463 C9BF       0960 TORA4 CMP #$BF
+5465 B017       0970       BCS TORA7
+5467 A921       0980       LDA #$21            4000-BF00
+5469 8D00D4     0990       STA DMACTL
+546C A000       1000 TORA5 LDY #0
+546E B90007     1010 TORA6 LDA DBUF,Y
+5471 91CF       1020       STA (RPNT),Y
+5473 C8         1030       INY 
+5474 C4F5       1040       CPY DCOUNT
+5476 D0F6       1050       BNE TORA6
+5478 A9FF       1060       LDA #$FF
+547A 8D01D3     1070       STA PORTB
+547D 60         1080       RTS 
+                1090 ;
+547E A900       1100 TORA7 LDA #0              BF00-FFFF
+5480 8D00D4     1110       STA DMACTL
+5483 A9FE       1120       LDA #$FE
+5485 8D01D3     1130       STA PORTB           OS OFF
+5488 D0E2       1140       BNE TORA5           ALWAYS
+                1150 ;
+                1160 ;JUMP TO DEVICE HANDLERS TO
+                1170 ;LOAD BLOCK INTO DBUF
+                1180 ;
+548A A6FA       1190 READ  LDX DEVICE
+548C F006       1200       BEQ READ1
+548E CA         1210       DEX 
+548F F006       1220       BEQ READ2
+5491 4CD519     1230       JMP RCASS
+5494 4CD614     1240 READ1 JMP RRAMD
+5497 4C5715     1250 READ2 JMP RDISK
+                0330       .INCLUDE #D:RAMDISK.M65
+                0100 ;-------------------------------
+                0110 ;SAVE/EXEC RAMDISK AND HANDLER
+                0120 ;-------------------------------
+549A 20AC14     0130 DKEY  JSR IRAMD           SAVE TO RAMDISK
+549D 206912     0140       JSR SAVE
+54A0 4C990A     0150       JMP ENDCMD
+                0160 ;
+54A3 20AC14     0170 EKEY  JSR IRAMD           EXEC RAMDISK
+54A6 20CC13     0180       JSR LOAD
+54A9 4C2710     0190       JMP RSTART
+                0200 ;
+                0210 ;INIT RAMDISK ACTIONS
+                0220 ;
+54AC A900       0230 IRAMD LDA #0
+54AE 85F3       0240       STA NEXT+1
+54B0 85F4       0250       STA SIZE
+54B2 85F6       0260       STA NCOUNT
+54B4 85FA       0270       STA DEVICE
+54B6 85D1       0280       STA BPNT
+54B8 A940       0290       LDA #$40
+54BA 85D2       0300       STA BPNT+1
+54BC A9E3       0310       LDA #$E3
+54BE 85D4       0320       STA BANK
+54C0 85F9       0330       STA FILENO
+54C2 85F2       0340       STA NEXT
+54C4 60         0350       RTS 
+                0360 ;
+
+
+
+PAGE 32   FREEZER V2.3
+                                                                                                                    D:RAMDISK.M65
+
+
+
+                0370 ;WRITE DBUF TO RAMDISK
+                0380 ;
+54C5 A5D4       0390 WRAMD LDA BANK
+54C7 8D01D3     0400       STA PORTB
+54CA A000       0410       LDY #0
+54CC B90007     0420 WRAM1 LDA DBUF,Y
+54CF 91D1       0430       STA (BPNT),Y
+54D1 C8         0440       INY 
+54D2 D0F8       0450       BNE WRAM1
+54D4 F00F       0460       BEQ RRAM2
+                0470 ;
+                0480 ;LOAD DBUF FROM RAMDISK
+                0490 ;
+54D6 A5D4       0500 RRAMD LDA BANK
+54D8 8D01D3     0510       STA PORTB
+54DB A000       0520       LDY #0
+54DD B1D1       0530 RRAM1 LDA (BPNT),Y
+54DF 990007     0540       STA DBUF,Y
+54E2 C8         0550       INY 
+54E3 D0F8       0560       BNE RRAM1
+                0570 ;
+54E5 A9FF       0580 RRAM2 LDA #$FF
+54E7 8D01D3     0590       STA PORTB
+54EA E6D2       0600       INC BPNT+1
+54EC 100B       0610       BPL RRAM3
+54EE A940       0620       LDA #$40
+54F0 85D2       0630       STA BPNT+1
+54F2 A5D4       0640       LDA BANK
+54F4 18         0650       CLC 
+54F5 6904       0660       ADC #4
+54F7 85D4       0670       STA BANK
+54F9 60         0680 RRAM3 RTS 
+                0340       .INCLUDE #D:DISK.M65
+                0100 ;-------------------------------
+                0110 ;     DISK DEVICE HANDLER
+                0120 ;-------------------------------
+                0130 ;
+                0140 ;ENTRY --- SAVE DISK BOOT
+                0150 ;
+54FA 202916     0160 SAVDBO JSR DENSTY
+54FD 206716     0170       JSR IBOOT
+5500 206912     0180       JSR SAVE
+5503 4C990A     0190       JMP ENDCMD
+                0200 ;
+                0210 ;ENTRY --- EXEC DISK BOOT
+                0220 ;
+5506 202916     0230 EXEDBO JSR DENSTY
+5509 206716     0240       JSR IBOOT
+550C 20CC13     0250       JSR LOAD
+550F 4C2710     0260       JMP RSTART
+                0270 ;
+                0280 ;ENTRY --- SAVE DISK FILE
+                0290 ;
+5512 202916     0300 SAVFIL JSR DENSTY
+5515 20E116     0310       JSR RVTOC
+5518 207618     0320       JSR SEARCH
+551B B009       0330       BCS SAVFI0          FOUND, DELETE
+551D 24F9       0340       BIT FILENO          FOUND HOLE?
+551F 1011       0350       BPL SAVFI1          YES
+5521 A007       0360       LDY #7              DIRECTORY FULL
+5523 4CF30E     0370       JMP ERROR
+5526 A20A       0380 SAVFI0 LDX #10            GET REAL NAME
+
+
+
+PAGE 33   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+5528 B5E7       0390 SAVFI3 LDA DENTRY+5,X
+552A 95D5       0400       STA NAME,X
+552C CA         0410       DEX 
+552D 10F9       0420       BPL SAVFI3
+552F 200518     0430       JSR DELETE          DELETE FILE
+5532 20A816     0440 SAVFI1 JSR IWFILE
+5535 206912     0450       JSR SAVE
+5538 202917     0460       JSR WVTOC
+553B 4C990A     0470 SAVFI2 JMP ENDCMD
+                0480 ;
+                0490 ;ENTRY --- EXEC DISK FILE
+                0500 ;
+553E 202916     0510 EXEFIL JSR DENSTY
+5541 20CF16     0520       JSR IVTOC
+5544 207618     0530       JSR SEARCH
+5547 B005       0540       BCS *+7
+5549 A000       0550       LDY #0              FILE NOT FOUND
+554B 4CF30E     0560       JMP ERROR
+554E 208716     0570       JSR IRFILE
+5551 20CC13     0580       JSR LOAD
+5554 4C2710     0590       JMP RSTART
+                0600 ;
+                0610 ;READ DISK BLOCK
+                0620 ;
+5557 20BF15     0630 RDISK JSR RSEC
+555A 24F9       0640       BIT FILENO          BOOT?
+555C 3022       0650       BMI RDIS1           YES
+555E A6F6       0660       LDX NCOUNT
+5560 BD0007     0670       LDA DBUF,X
+5563 4A         0680       LSR A
+5564 4A         0690       LSR A
+5565 45F9       0700       EOR FILENO
+5567 293F       0710       AND #$3F
+5569 F005       0720       BEQ *+7
+556B A001       0730       LDY #1              FILE STRUCTURE DAMAGED
+556D 4CF30E     0740       JMP ERROR
+5570 BD0007     0750       LDA DBUF,X
+5573 2903       0760       AND #3
+5575 8D0B03     0770       STA DAUX2
+5578 E8         0780       INX 
+5579 BD0007     0790       LDA DBUF,X
+557C 8D0A03     0800       STA DAUX1
+557F 60         0810       RTS 
+5580 EE0A03     0820 RDIS1 INC DAUX1
+5583 D003       0830       BNE RDIS2
+5585 EE0B03     0840       INC DAUX2
+5588 60         0850 RDIS2 RTS 
+                0860 ;
+                0870 ;WRITE BLOCK TO DISK
+                0880 ;
+5589 24F9       0890 WDISK BIT FILENO          BOOT?
+558B 3020       0900       BMI WDIS2           YES
+558D A5F2       0910       LDA NEXT            LAST SECTOR?
+558F 05F3       0920       ORA NEXT+1
+5591 F003       0930       BEQ WDIS1           YES
+5593 208417     0940       JSR ALLOCS          ALLOCATE SECTOR
+5596 A6F6       0950 WDIS1 LDX NCOUNT          SET UP LINK BYTES
+5598 A5F9       0960       LDA FILENO
+559A 0A         0970       ASL A
+559B 0A         0980       ASL A
+559C 05F3       0990       ORA NEXT+1
+559E 9D0007     1000       STA DBUF,X
+
+
+
+PAGE 34   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+55A1 E8         1010       INX 
+55A2 A5F2       1020       LDA NEXT
+55A4 9D0007     1030       STA DBUF,X
+55A7 E8         1040       INX 
+55A8 A5F6       1050       LDA NCOUNT
+55AA 9D0007     1060       STA DBUF,X
+55AD 20C515     1070 WDIS2 JSR WSEC
+55B0 24F9       1080       BIT FILENO          BOOT?
+55B2 30CC       1090       BMI RDIS1           YES
+55B4 A5F2       1100       LDA NEXT
+55B6 8D0A03     1110       STA DAUX1
+55B9 A5F3       1120       LDA NEXT+1
+55BB 8D0B03     1130       STA DAUX2
+55BE 60         1140       RTS 
+                1150 ;
+                1160 ;READ SECTOR
+                1170 ;
+55BF A952       1180 RSEC  LDA #$52
+55C1 A240       1190       LDX #$40
+55C3 D004       1200       BNE WSE1
+                1210 ;
+                1220 ;WRITE SECTOR
+                1230 ;
+55C5 A950       1240 WSEC  LDA #$50
+55C7 A280       1250       LDX #$80
+55C9 48         1260 WSE1  PHA 
+55CA A009       1270       LDY #9
+55CC B91F16     1280 WSE2  LDA SIOTAB,Y
+55CF 990003     1290       STA DDEVIC,Y
+55D2 88         1300       DEY 
+55D3 10F7       1310       BPL WSE2
+55D5 68         1320       PLA 
+55D6 8D0203     1330       STA DCOMND
+55D9 8E0303     1340       STX DSTATS
+55DC C923       1350       CMP #$23
+55DE B005       1360       BCS WSE3
+55E0 A928       1370       LDA #40
+55E2 8D0603     1380       STA DTIMLO
+55E5 A5F4       1390 WSE3  LDA SIZE
+55E7 8D0803     1400       STA DBYTLO
+55EA D003       1410       BNE WSE4
+55EC EE0903     1420       INC DBYTHI
+55EF A980       1430 WSE4  LDA #$80
+55F1 8510       1440       STA POKMSK
+55F3 8D0ED2     1450       STA IRQEN
+55F6 58         1460       CLI 
+55F7 A940       1470       LDA #$40
+55F9 8D0ED4     1480       STA NMIEN
+55FC 2059E4     1490       JSR SIOV
+55FF A900       1500       LDA #0
+5601 8510       1510       STA POKMSK
+5603 8D0ED2     1520       STA IRQEN
+5606 78         1530       SEI 
+5607 8D0ED4     1540       STA NMIEN
+560A C001       1550       CPY #1
+560C F010       1560       BEQ WSE5
+560E AD0203     1570       LDA DCOMND          STATUS?
+5611 C94E       1580       CMP #$4E            PERCOM?
+5613 F009       1590       BEQ WSE5
+5615 C953       1600       CMP #$53
+5617 F005       1610       BEQ WSE5
+5619 A003       1620       LDY #3              DISK I/O ERROR
+
+
+
+PAGE 35   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+561B 4CF30E     1630       JMP ERROR
+561E 60         1640 WSE5  RTS 
+561F 31010000   1650 SIOTAB .BYTE $31,1,0,0
+5623 0007       1660       .WORD DBUF,7,$80
+5625 0700
+5627 8000
+                1670 ;
+                1680 ;DETERMINE DENSITY
+                1690 ;SET TURFLG IF 1050 TURBO FLOPPY
+                1700 ;
+5629 A900       1710 DENSTY LDA #0
+562B 85D3       1720       STA TURFLG
+562D 205C16     1730       JSR FDSTAT
+5630 88         1740       DEY 
+5631 F005       1750       BEQ DENST0
+5633 A004       1760       LDY #4              DRIVE DOES NOT RESPOND
+5635 4CF30E     1770       JMP ERROR
+5638 A201       1780 DENST0 LDX #1             ASSUME ED
+563A AD0007     1790       LDA DBUF
+563D 3007       1800       BMI DENST1          TRUE
+563F E8         1810       INX                 ASSUME DD
+5640 2920       1820       AND #$20
+5642 D002       1830       BNE DENST1
+5644 A200       1840       LDX #0              SD
+5646 86E1       1850 DENST1 STX DENTYP
+5648 E6D3       1860       INC TURFLG          DEVICE TURBO?
+564A A900       1870       LDA #0
+564C 8541       1880       STA SOUNDR
+564E 205C16     1890       JSR FDSTAT
+5651 88         1900       DEY 
+5652 F005       1910       BEQ DENST2          YES
+5654 C6D3       1920       DEC TURFLG
+5656 205C16     1930       JSR FDSTAT          NO
+5659 E641       1940 DENST2 INC SOUNDR
+565B 60         1950       RTS 
+                1960 ;
+565C A904       1970 FDSTAT LDA #4
+565E 85F4       1980       STA SIZE
+5660 A953       1990       LDA #$53
+5662 A240       2000       LDX #$40
+5664 4CC915     2010       JMP WSE1
+                2020 ;
+                2030 ;INIT LOAD/SAVE FOR BOOT DISKS
+                2040 ;
+5667 A901       2050 IBOOT LDA #1
+5669 85F2       2060       STA NEXT
+566B 85FA       2070       STA DEVICE
+566D A904       2080       LDA #4
+566F 8D0A03     2090       STA DAUX1
+5672 A900       2100       LDA #0
+5674 85F3       2110       STA NEXT+1
+5676 8D0B03     2120       STA DAUX2
+5679 A9C0       2130       LDA #$C0
+567B 85F9       2140       STA FILENO
+567D A6E1       2150       LDX DENTYP
+567F BDC916     2160       LDA SIZTAB,X
+5682 85F4       2170       STA SIZE
+5684 85F6       2180       STA NCOUNT
+5686 60         2190       RTS 
+                2200 ;
+                2210 ;INIT FOR FILE LOAD
+                2220 ;
+
+
+
+PAGE 36   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+5687 A901       2230 IRFILE LDA #1
+5689 85F2       2240       STA NEXT
+568B 85FA       2250       STA DEVICE
+568D A6E1       2260       LDX DENTYP
+568F BDC916     2270       LDA SIZTAB,X
+5692 85F4       2280       STA SIZE
+                2290 ;
+5694 BDCC16     2300       LDA LNKTAB,X
+5697 85F6       2310       STA NCOUNT
+5699 A900       2320       LDA #0
+569B 85F3       2330       STA NEXT+1
+569D A5E5       2340       LDA DENTRY+3
+569F 8D0A03     2350       STA DAUX1
+56A2 A5E6       2360       LDA DENTRY+4
+56A4 8D0B03     2370       STA DAUX2
+56A7 60         2380       RTS 
+                2390 ;
+                2400 ;INIT FOR FILE WRITE
+                2410 ;
+56A8 A900       2420 IWFILE LDA #0
+56AA 85E3       2430       STA DENTRY+1
+56AC 85E4       2440       STA DENTRY+2
+56AE A942       2450       LDA #$42
+56B0 85E2       2460       STA DENTRY
+56B2 A20A       2470       LDX #10
+56B4 B5D5       2480 IWFIL1 LDA NAME,X
+56B6 95E7       2490       STA DENTRY+5,X
+56B8 CA         2500       DEX 
+56B9 10F9       2510       BPL IWFIL1
+56BB 208417     2520       JSR ALLOCS
+56BE A5F2       2530       LDA NEXT
+56C0 85E5       2540       STA DENTRY+3
+56C2 A5F3       2550       LDA NEXT+1
+56C4 85E6       2560       STA DENTRY+4
+56C6 4C8716     2570       JMP IRFILE
+                2580 ;
+56C9 808000     2590 SIZTAB .BYTE 128,128,0
+56CC 7D7DFD     2600 LNKTAB .BYTE 125,125,253
+                2610 ;
+                2620 ;INIT FOR VTOC READ/WRITE
+                2630 ;
+56CF A6E1       2640 IVTOC LDX DENTYP
+56D1 BDC916     2650       LDA SIZTAB,X
+56D4 85F4       2660       STA SIZE
+56D6 A968       2670       LDA #$68
+56D8 8D0A03     2680       STA DAUX1
+56DB A901       2690       LDA #1
+56DD 8D0B03     2700       STA DAUX2
+56E0 60         2710       RTS 
+                2720 ;
+                2730 ;READ VTOC
+                2740 ;
+56E1 20CF16     2750 RVTOC JSR IVTOC
+56E4 20BF15     2760       JSR RSEC
+56E7 A200       2770       LDX #0
+56E9 8E8A06     2780       STX VTOC+$8A
+56EC 8E8B06     2790       STX VTOC+$8B
+56EF BD0007     2800 RVTO1 LDA DBUF,X
+56F2 9D0006     2810       STA VTOC,X
+56F5 E8         2820       INX 
+56F6 10F7       2830       BPL RVTO1
+56F8 A900       2840       LDA #0
+
+
+
+PAGE 37   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+56FA 9D0006     2850 RVTO2 STA VTOC,X
+56FD E8         2860       INX 
+56FE D0FA       2870       BNE RVTO2
+5700 A6E1       2880       LDX DENTYP          ED?
+5702 CA         2890       DEX 
+5703 D018       2900       BNE RVTO4           NO
+5705 AD0006     2910       LDA VTOC            DOS 2.5 FORMAT?
+5708 C902       2920       CMP #2
+570A D011       2930       BNE RVTO4           NO
+570C 201E17     2940       JSR SVTOC2          SET DAUX=VTOC2
+570F 20BF15     2950       JSR RSEC
+5712 A200       2960       LDX #0
+5714 BD0007     2970 RVTO3 LDA DBUF,X
+5717 9D1006     2980       STA VTOC+$10,X
+571A E8         2990       INX 
+571B 10F7       3000       BPL RVTO3
+571D 60         3010 RVTO4 RTS 
+                3020 ;
+571E A900       3030 SVTOC2 LDA #0
+5720 8D0A03     3040       STA DAUX1
+5723 A904       3050       LDA #4
+5725 8D0B03     3060       STA DAUX2
+5728 60         3070       RTS 
+                3080 ;
+                3090 ;WRITE VTOC & UPDATE DIRECTORY
+                3100 ;
+5729 20CF16     3110 WVTOC JSR IVTOC
+572C A6E1       3120       LDX DENTYP          ED?
+572E CA         3130       DEX 
+572F D025       3140       BNE WVTO3           NO
+5731 AD0006     3150       LDA VTOC            DOS 2.5 FORMAT?
+5734 C902       3160       CMP #2
+5736 D01E       3170       BNE WVTO3           NO
+5738 A200       3180       LDX #0
+573A BD1006     3190 WVTO1 LDA VTOC+$10,X
+573D 9D0007     3200       STA DBUF,X
+5740 E8         3210       INX 
+5741 10F7       3220       BPL WVTO1
+5743 201E17     3230       JSR SVTOC2
+5746 20C515     3240       JSR WSEC
+5749 20CF16     3250       JSR IVTOC
+574C A900       3260       LDA #0
+574E A264       3270       LDX #$64
+5750 9D0006     3280 WVTO2 STA VTOC,X
+5753 E8         3290       INX 
+5754 10FA       3300       BPL WVTO2
+5756 A200       3310 WVTO3 LDX #0
+5758 BD0006     3320 WVTO4 LDA VTOC,X
+575B 9D0007     3330       STA DBUF,X
+575E E8         3340       INX 
+575F D0F7       3350       BNE WVTO4
+5761 20C515     3360       JSR WSEC
+5764 24F9       3370       BIT FILENO
+5766 701B       3380       BVS WVTO6
+5768 20E917     3390       JSR DIRACC
+576B 8A         3400       TXA                 SAVE INDEX
+576C 48         3410       PHA 
+576D 20BF15     3420       JSR RSEC            DIRECTORY SECTOR LESEN
+5770 68         3430       PLA 
+5771 AA         3440       TAX                 COPY DENTRY TO DIRECTORY
+5772 A000       3450       LDY #0
+5774 B9E200     3460 WVTO5 LDA DENTRY,Y
+
+
+
+PAGE 38   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+5777 9D0007     3470       STA DBUF,X
+577A E8         3480       INX 
+577B C8         3490       INY 
+577C C010       3500       CPY #16
+577E D0F4       3510       BNE WVTO5
+5780 20C515     3520       JSR WSEC            DIRECTORY SECTOR SCHREIBEN
+5783 60         3530 WVTO6 RTS 
+                3540 ;
+                3550 ;ALLOCATE SECTOR
+                3560 ;
+5784 A20A       3570 ALLOCS LDX #10            SEARCH VTOC FOR FREE SECTOR
+5786 BD0006     3580 ALLOC1 LDA VTOC,X
+5789 D008       3590       BNE ALLOC2          FOUND
+578B E8         3600       INX 
+578C D0F8       3610       BNE ALLOC1
+578E A005       3620       LDY #5              DISK FULL
+5790 4CF30E     3630       JMP ERROR
+5793 A000       3640 ALLOC2 LDY #0             CALC SECTOR NO
+5795 0A         3650 ALLOC3 ASL A
+5796 B003       3660       BCS ALLOC4
+5798 C8         3670       INY 
+5799 D0FA       3680       BNE ALLOC3
+579B BD0006     3690 ALLOC4 LDA VTOC,X         CLEAR BIT
+579E 59E117     3700       EOR BITMSK,Y
+57A1 9D0006     3710       STA VTOC,X
+57A4 84F2       3720       STY NEXT
+57A6 A900       3730       LDA #0
+57A8 85F3       3740       STA NEXT+1
+57AA 8A         3750       TXA 
+57AB 38         3760       SEC 
+57AC E90A       3770       SBC #10
+57AE 0A         3780       ASL A
+57AF 26F3       3790       ROL NEXT+1
+57B1 0A         3800       ASL A
+57B2 26F3       3810       ROL NEXT+1
+57B4 0A         3820       ASL A
+57B5 26F3       3830       ROL NEXT+1
+57B7 05F2       3840       ORA NEXT
+57B9 85F2       3850       STA NEXT
+57BB E6E3       3860       INC DENTRY+1
+57BD D002       3870       BNE ALLOC5
+57BF E6E4       3880       INC DENTRY+2
+57C1 E064       3890 ALLOC5 CPX #$64           DEC FREE SECTOR COUNT
+57C3 9010       3900       BCC ALLOC7          VTOC1
+57C5 A903       3910       LDA #3              SET VTOC2 USED FLAG
+57C7 85E2       3920       STA DENTRY
+57C9 AD8A06     3930       LDA VTOC+$8A
+57CC D003       3940       BNE ALLOC6
+57CE CE8B06     3950       DEC VTOC+$8B
+57D1 CE8A06     3960 ALLOC6 DEC VTOC+$8A
+57D4 60         3970       RTS 
+57D5 AD0306     3980 ALLOC7 LDA VTOC+3
+57D8 D003       3990       BNE ALLOC8
+57DA CE0406     4000       DEC VTOC+4
+57DD CE0306     4010 ALLOC8 DEC VTOC+3
+57E0 60         4020       RTS 
+                4030 ;
+57E1 80402010   4040 BITMSK .BYTE $80,$40,$20,$10,8,4,2,1
+57E5 08040201
+                4050 ;
+                4060 ;ACCESS DIRECTORY SECTOR:
+                4070 ;SET DAUX1,2 FROM FILENO
+
+
+
+PAGE 39   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+                4080 ;X=ENTRY INDEX
+                4090 ;
+57E9 A5F9       4100 DIRACC LDA FILENO
+57EB 293F       4110       AND #$3F
+57ED 4A         4120       LSR A
+57EE 4A         4130       LSR A
+57EF 4A         4140       LSR A
+57F0 38         4150       SEC 
+57F1 6968       4160       ADC #$68
+57F3 8D0A03     4170       STA DAUX1
+57F6 A901       4180       LDA #1
+57F8 8D0B03     4190       STA DAUX2
+57FB A5F9       4200       LDA FILENO
+57FD 2907       4210       AND #7
+57FF 0A         4220       ASL A
+5800 0A         4230       ASL A
+5801 0A         4240       ASL A
+5802 0A         4250       ASL A
+5803 AA         4260       TAX 
+5804 60         4270       RTS 
+                4280 ;
+                4290 ;DELETE FILE
+                4300 ;
+5805 A5E2       4310 DELETE LDA DENTRY
+5807 2920       4320       AND #$20            LOCKED?
+5809 F005       4330       BEQ DELET1
+580B A006       4340       LDY #6              FILE LOCKED
+580D 4CF30E     4350       JMP ERROR
+5810 208716     4360 DELET1 JSR IRFILE
+5813 AD0A03     4370 DELET2 LDA DAUX1
+5816 AA         4380       TAX 
+5817 2907       4390       AND #7
+5819 A8         4400       TAY 
+581A AD0B03     4410       LDA DAUX2
+581D 85F2       4420       STA NEXT
+581F 8A         4430       TXA 
+5820 46F2       4440       LSR NEXT
+5822 6A         4450       ROR A
+5823 46F2       4460       LSR NEXT
+5825 6A         4470       ROR A
+5826 46F2       4480       LSR NEXT
+5828 6A         4490       ROR A
+5829 18         4500       CLC 
+582A 690A       4510       ADC #10
+582C AA         4520       TAX 
+582D BD0006     4530       LDA VTOC,X          SET VTOC BIT
+5830 19E117     4540       ORA BITMSK,Y
+5833 9D0006     4550       STA VTOC,X
+5836 E064       4560 DELET3 CPX #$64
+5838 900A       4570       BCC DELET4
+583A EE8A06     4580       INC VTOC+$8A
+583D D00D       4590       BNE DELET5
+583F EE8B06     4600       INC VTOC+$8B
+5842 D008       4610       BNE DELET5          ALWAYS
+5844 EE0306     4620 DELET4 INC VTOC+3
+5847 D003       4630       BNE DELET5
+5849 EE0406     4640       INC VTOC+4
+584C 20BF15     4650 DELET5 JSR RSEC           READ SECTOR
+584F A6F6       4660       LDX NCOUNT
+5851 BD0007     4670       LDA DBUF,X
+5854 4A         4680       LSR A
+5855 4A         4690       LSR A
+
+
+
+PAGE 40   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+5856 45F9       4700       EOR FILENO
+5858 293F       4710       AND #$3F
+585A F005       4720       BEQ DELET6
+585C A001       4730       LDY #1              FILE STRUCTURE DAMAGED
+585E 4CF30E     4740       JMP ERROR
+5861 BD0007     4750 DELET6 LDA DBUF,X
+5864 2903       4760       AND #3
+5866 8D0B03     4770       STA DAUX2
+5869 E8         4780       INX 
+586A BD0007     4790       LDA DBUF,X
+586D 8D0A03     4800       STA DAUX1
+5870 0D0B03     4810       ORA DAUX2
+5873 D09E       4820       BNE DELET2
+5875 60         4830       RTS 
+                4840 ;
+                4850 ;SEARCH FILE NAME IN DIRECTORY
+                4860 ;IF FOUND, COPY TO DENTRY, CY=1
+                4870 ;IF NOT FOUND, FILENO=HOLE, CY=0
+                4880 ;
+5876 A2FF       4890 SEARCH LDX #$FF           INIT HOLE
+5878 86F8       4900       STX MAPMSK
+587A E8         4910       INX 
+587B 86F9       4920       STX FILENO
+587D 20E917     4930 SEARC1 JSR DIRACC
+5880 E000       4940       CPX #0
+5882 D005       4950       BNE SEARC2          SAME SECTOR
+5884 20BF15     4960       JSR RSEC            NEW SECTOR
+5887 A200       4970       LDX #0
+5889 A000       4980 SEARC2 LDY #0             COPY ENTRY TO DENTRY
+588B BD0007     4990 SEARC3 LDA DBUF,X
+588E 99E200     5000       STA DENTRY,Y
+5891 E8         5010       INX 
+5892 C8         5020       INY 
+5893 C010       5030       CPY #16
+5895 D0F4       5040       BNE SEARC3
+5897 A5E2       5050       LDA DENTRY          LOOK AT FLAG
+5899 301B       5060       BMI SEARC8          DELETED, HOLE, SKIP
+589B F019       5070       BEQ SEARC8          LAST, HOLE, EXIT
+589D 2941       5080       AND #$41
+589F F015       5090       BEQ SEARC8          FREE, HOLE, SKIP
+58A1 C941       5100       CMP #$41
+58A3 F019       5110       BEQ SEARC9          TRASH, AVOID, SKIP
+58A5 A20A       5120       LDX #10             FOUND LIVE ENTRY
+58A7 B5D5       5130 SEARC4 LDA NAME,X         COMPARE NAMES
+58A9 C93F       5140       CMP #'?
+58AB F004       5150       BEQ SEARC5
+58AD D5E7       5160       CMP DENTRY+5,X
+58AF D00D       5170       BNE SEARC9          NO MATCH
+58B1 CA         5180 SEARC5 DEX 
+58B2 10F3       5190       BPL SEARC4
+58B4 38         5200       SEC 
+58B5 60         5210       RTS 
+58B6 24F8       5220 SEARC8 BIT MAPMSK         FIRST HOLE?
+58B8 1004       5230       BPL SEARC9          NO
+58BA A5F9       5240       LDA FILENO
+58BC 85F8       5250       STA MAPMSK
+58BE E6F9       5260 SEARC9 INC FILENO         GO TO NEXT ENTRY
+58C0 24F9       5270       BIT FILENO
+58C2 7004       5280       BVS SEAR10
+58C4 A5E2       5290       LDA DENTRY
+58C6 D0B5       5300       BNE SEARC1
+58C8 A5F8       5310 SEAR10 LDA MAPMSK         GET HOLE
+
+
+
+PAGE 41   FREEZER V2.3
+                                                                                                                    D:DISK.M65
+
+
+
+58CA 85F9       5320       STA FILENO
+58CC 18         5330       CLC 
+58CD 60         5340       RTS 
+                5350 ;
+                5360 ;PRINT DIRECTORY
+                5370 ;
+58CE 202916     5380 DDIR  JSR DENSTY
+58D1 20CF16     5390       JSR IVTOC
+58D4 A2FF       5400       LDX #$FF
+58D6 86F8       5410       STX MAPMSK
+58D8 E8         5420       INX 
+58D9 86F9       5430       STX FILENO
+                5440 ;
+58DB 207D18     5450 DDI1  JSR SEARC1
+58DE 9009       5460       BCC DDI2            NOT FOUND, END
+58E0 201619     5470       JSR DDI6            PRINT DENTRY
+58E3 E6F9       5480       INC FILENO
+58E5 24F9       5490       BIT FILENO
+58E7 50F2       5500       BVC DDI1
+                5510 ;
+58E9 20E116     5520 DDI2  JSR RVTOC
+58EC AD0306     5530       LDA VTOC+3
+58EF 18         5540       CLC 
+58F0 6D8A06     5550       ADC VTOC+$8A
+58F3 85FC       5560       STA TPNT
+58F5 AD0406     5570       LDA VTOC+4
+58F8 6D8B06     5580       ADC VTOC+$8B
+58FB 85FD       5590       STA TPNT+1
+                5600 ;
+58FD A5F5       5610 DDI5  LDA DCOUNT
+58FF F003       5620       BEQ DDI11
+5901 20AB1B     5630       JSR SCROLL
+5904 A4E1       5640 DDI11 LDY DENTYP
+5906 20A11D     5650       JSR PRTSTR
+5909 A003       5660       LDY #3
+590B 20A11D     5670       JSR PRTSTR
+590E 20221E     5680       JSR PRTTPN
+5911 A004       5690       LDY #4
+5913 4CA11D     5700       JMP PRTSTR
+                5710 ;
+5916 A5F5       5720 DDI6  LDA DCOUNT
+5918 C915       5730       CMP #21
+591A 9003       5740       BCC DDI10
+591C 20AB1B     5750       JSR SCROLL
+591F A920       5760 DDI10 LDA #$20
+5921 AA         5770       TAX 
+5922 207E1B     5780       JSR PUTBYT
+5925 A5E2       5790       LDA DENTRY
+5927 2920       5800       AND #$20
+5929 F002       5810       BEQ DDI7
+592B A22A       5820       LDX #'*             LOCKED
+592D 8A         5830 DDI7  TXA 
+592E 207E1B     5840       JSR PUTBYT
+5931 20CD1E     5850       JSR PRTNAM
+5934 A5E3       5860       LDA DENTRY+1
+5936 A6E4       5870       LDX DENTRY+2
+5938 85FC       5880       STA TPNT
+593A 86FD       5890       STX TPNT+1
+593C 4C221E     5900       JMP PRTTPN
+593F A920       5910       LDA #$20
+5941 4C7E1B     5920       JMP PUTBYT
+                0350       .INCLUDE #D:CASS.M65
+
+
+
+PAGE 42   FREEZER V2.3
+                                                                                                                    D:CASS.M65
+
+
+
+                0100 ;-------------------------------
+                0110 ;    CASSETTE DEVICE HANDLER
+                0120 ;-------------------------------
+5944 207719     0130 ECASS JSR OPCR            EXEC CASSETTE
+5947 206219     0140       JSR INCA
+594A 20CC13     0150       JSR LOAD
+594D 20BA19     0160       JSR CLCR
+5950 4C2710     0170       JMP RSTART
+                0180 ;
+5953 208619     0190 SCASS JSR OPCW            SAVE CASSETTE
+5956 206219     0200       JSR INCA
+5959 206912     0210       JSR SAVE
+595C 20BA19     0220       JSR CLCW
+595F 4C990A     0230       JMP ENDCMD
+                0240 ;
+                0250 ;INIT CASSETTE
+                0260 ;
+5962 A900       0270 INCA  LDA #0
+5964 85F3       0280       STA NEXT+1
+5966 85D3       0290       STA TURFLG
+5968 A980       0300       LDA #$80
+596A 85F4       0310       STA SIZE
+596C 85F6       0320       STA NCOUNT
+596E 85F9       0330       STA FILENO
+5970 A902       0340       LDA #2
+5972 85FA       0350       STA DEVICE
+5974 85F2       0360       STA NEXT
+5976 60         0370       RTS 
+                0380 ;
+                0390 ;OPEN CASSETTE READ
+                0400 ;
+5977 20391A     0410 OPCR  JSR BEEP
+597A 20AD0B     0420       JSR GETKEY
+597D A934       0430       LDA #$34
+597F 8D02D3     0440       STA PACTL
+5982 A902       0450       LDA #2
+5984 D022       0460       BNE OPC1
+                0470 ;
+                0480 ;OPEN CASSETTE WRITE
+                0490 ;
+5986 20391A     0500 OPCW  JSR BEEP
+5989 20391A     0510       JSR BEEP
+598C 20AD0B     0520       JSR GETKEY
+598F A9CC       0530       LDA #$CC
+5991 8D04D2     0540       STA AUDF3
+5994 A905       0550       LDA #5
+5996 8D06D2     0560       STA AUDF4
+5999 A960       0570       LDA #$60
+599B 8D0003     0580       STA DDEVIC
+599E 2068E4     0590       JSR SENDEV
+59A1 A934       0600       LDA #$34
+59A3 8D02D3     0610       STA PACTL
+59A6 A904       0620       LDA #4
+59A8 18         0630 OPC1  CLC 
+59A9 6513       0640       ADC RTCLOK+1
+59AB A240       0650       LDX #$40
+59AD 8E0ED4     0660       STX NMIEN
+59B0 C513       0670 OPC2  CMP RTCLOK+1
+59B2 D0FC       0680       BNE OPC2
+59B4 A900       0690       LDA #0
+59B6 8D0ED4     0700       STA NMIEN
+59B9 60         0710       RTS 
+
+
+
+PAGE 43   FREEZER V2.3
+                                                                                                                    D:CASS.M65
+
+
+
+                0720 ;
+                0730 ;CLOSE READ
+                0740 ;
+59BA            0750 CLCR
+                0760 ;
+                0770 ;CLOSE WRITE
+                0780 ;
+59BA A93C       0790 CLCW  LDA #$3C
+59BC 8D02D3     0800       STA PACTL
+59BF 60         0810       RTS 
+                0820 ;
+                0830 ;WRITE CASSETTE BLOCK
+                0840 ;
+59C0 20211A     0850 WCASS JSR CSIOIN
+59C3 A957       0860       LDA #$57
+59C5 8D0203     0870       STA DCOMND
+59C8 0E0303     0880       ASL DSTATS
+59CB A955       0890       LDA #$55
+59CD 8DFF06     0900       STA DBUF-1
+59D0 8DFE06     0910       STA DBUF-2
+59D3 D003       0920       BNE RCAS1
+                0930 ;
+                0940 ;READ CASSETTE BLOCK
+                0950 ;
+59D5 20211A     0960 RCASS JSR CSIOIN
+59D8 A980       0970 RCAS1 LDA #$80
+59DA 8510       0980       STA POKMSK
+59DC 8D0ED2     0990       STA IRQEN
+59DF 58         1000       CLI 
+59E0 A940       1010       LDA #$40
+59E2 8D0ED4     1020       STA NMIEN
+59E5 2C0303     1030       BIT DSTATS
+59E8 3009       1040       BMI RCAS5
+59EA A514       1050       LDA RTCLOK+2
+59EC 18         1060       CLC 
+59ED 6905       1070       ADC #5
+59EF C514       1080 RCAS6 CMP RTCLOK+2
+59F1 D0FC       1090       BNE RCAS6
+59F3 2059E4     1100 RCAS5 JSR SIOV
+59F6 A900       1110       LDA #0
+59F8 8510       1120       STA POKMSK
+59FA 8D0ED2     1130       STA IRQEN
+59FD 78         1140       SEI 
+59FE 88         1150       DEY 
+59FF F00A       1160       BEQ RCAS2
+5A01 A008       1170       LDY #8
+5A03 A93C       1180       LDA #$3C
+5A05 8D02D3     1190       STA PACTL
+5A08 4CF30E     1200       JMP ERROR
+5A0B AD0203     1210 RCAS2 LDA DCOMND
+5A0E C957       1220       CMP #$57
+5A10 D009       1230       BNE RCAS4
+5A12 A514       1240       LDA RTCLOK+2
+5A14 18         1250       CLC 
+5A15 690A       1260       ADC #10
+5A17 C514       1270 RCAS3 CMP RTCLOK+2
+5A19 D0FC       1280       BNE RCAS3
+5A1B A900       1290 RCAS4 LDA #0
+5A1D 8D0ED4     1300       STA NMIEN
+5A20 60         1310       RTS 
+                1320 ;
+                1330 ;INIT CASSETTE SIO OPERATION
+
+
+
+PAGE 44   FREEZER V2.3
+                                                                                                                    D:CASS.M65
+
+
+
+                1340 ;
+5A21 A20B       1350 CSIOIN LDX #$0B
+5A23 BD2D1A     1360 CSIOI1 LDA CSITAB,X
+5A26 9D0003     1370       STA DDEVIC,X
+5A29 CA         1380       DEX 
+5A2A 10F7       1390       BPL CSIOI1
+5A2C 60         1400       RTS 
+                1410 ;
+5A2D 60005240   1420 CSITAB .BYTE $60,0,$52,$40
+5A31 FE06       1430       .WORD DBUF-2
+5A33 2300       1440       .WORD 35
+5A35 8200       1450       .WORD 130
+5A37 0080       1460       .BYTE 0,$80
+                1470 ;
+                1480 ;BEEP
+                1490 ;
+5A39 A940       1500 BEEP  LDA #$40
+5A3B 8D0ED4     1510       STA NMIEN
+5A3E A514       1520 BEEP1 LDA RTCLOK+2
+5A40 18         1530       CLC 
+5A41 691E       1540       ADC #30
+5A43 AA         1550       TAX 
+5A44 A908       1560 BEEP2 LDA #$08
+5A46 8D1FD0     1570       STA CONSOL
+5A49 A0F0       1580       LDY #$F0
+5A4B 88         1590 BEEP3 DEY 
+5A4C D0FD       1600       BNE BEEP3
+5A4E 8C1FD0     1610       STY CONSOL
+5A51 A0F0       1620       LDY #$F0
+5A53 88         1630 BEEP4 DEY 
+5A54 D0FD       1640       BNE BEEP4
+5A56 E414       1650       CPX RTCLOK+2
+5A58 D0EA       1660       BNE BEEP2
+5A5A A514       1670       LDA RTCLOK+2
+5A5C 18         1680       CLC 
+5A5D 690A       1690       ADC #10
+5A5F C514       1700 BEEP5 CMP RTCLOK+2
+5A61 D0FC       1710       BNE BEEP5
+5A63 A900       1720       LDA #0
+5A65 8D0ED4     1730       STA NMIEN
+5A68 60         1740       RTS 
+                0360       .INCLUDE #D:MONITOR.M65
+                0100 ;
+                0110 ;-------------------------------
+                0120 ;    DEBUGGER AND DIRECTORY
+                0130 ;-------------------------------
+                0140 ;
+5A69            0150 FKEY
+5A69 A900       0160 DEBUG LDA #0
+5A6B 8D00D4     0170       STA DMACTL
+5A6E A9CE       0180       LDA #XDLIST&$FF
+5A70 A21F       0190       LDX #XDLIST/256
+5A72 8D02D4     0200       STA DLISTL
+5A75 8E03D4     0210       STX DLISTH
+5A78 A922       0220       LDA #$22
+5A7A 8D00D4     0230       STA DMACTL
+5A7D A900       0240       LDA #0
+5A7F 8D1AD0     0250       STA COLPF0+4
+5A82 AA         0260       TAX 
+5A83 9D4003     0270 DEBU2 STA MONSCR,X
+5A86 9D4004     0280       STA MONSCR+256,X
+5A89 9D4005     0290       STA MONSCR+512,X
+
+
+
+PAGE 45   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5A8C E8         0300       INX 
+5A8D D0F4       0310       BNE DEBU2
+5A8F 85F5       0320       STA DCOUNT
+                0330 ;
+5A91 A900       0340 DEBU3 LDA #0              CLEAR CMD LINE
+5A93 A227       0350       LDX #39
+5A95 9DC005     0360 DEBU4 STA MONSCR+40*16,X
+5A98 CA         0370       DEX 
+5A99 10FA       0380       BPL DEBU4
+5A9B 85F6       0390       STA NCOUNT
+5A9D A900       0400       LDA #0
+5A9F 8D0ED2     0410       STA IRQEN
+5AA2 A93E       0420       LDA #'>             SHOW PROMPT
+5AA4 D00D       0430       BNE DEBU6
+                0440 ;
+5AA6 A6F6       0450 DEBU5 LDX NCOUNT          SET CURSOR
+5AA8 BDC005     0460       LDA MONSCR+40*16,X
+5AAB 0980       0470       ORA #$80
+5AAD 9DC005     0480       STA MONSCR+40*16,X
+5AB0 20AD0B     0490       JSR GETKEY
+5AB3 48         0500 DEBU6 PHA                 CLEAR CURSOR
+5AB4 A6F6       0510       LDX NCOUNT
+5AB6 BDC005     0520       LDA MONSCR+40*16,X
+5AB9 297F       0530       AND #$7F
+5ABB 9DC005     0540       STA MONSCR+40*16,X
+5ABE 68         0550       PLA 
+5ABF C99B       0560       CMP #$9B
+5AC1 F057       0570       BEQ DEB15           EOL
+5AC3 C9FF       0580       CMP #$FF
+5AC5 F03F       0590       BEQ DEB12           INSERT
+5AC7 C9FE       0600       CMP #$FE
+5AC9 F029       0610       BEQ DEB11           DELETE
+5ACB C97E       0620       CMP #$7E
+5ACD F011       0630       BEQ DEBU7           BACKSPACE
+5ACF C91F       0640       CMP #$1F
+5AD1 F01A       0650       BEQ DEB10           CURSOR ->
+5AD3 C91E       0660       CMP #$1E
+5AD5 F00E       0670       BEQ DEBU8           CURSOR <-
+5AD7 38         0680       SEC 
+5AD8 E920       0690       SBC #$20
+5ADA 9DC005     0700       STA MONSCR+40*16,X
+5ADD 4CED1A     0710       JMP DEB10
+                0720 ;
+NAE0 A900       0730 DEBU7 LDA #0
+5AE2 9DC005     0740       STA MONSCR+40*16,X
+5AE5 CA         0750 DEBU8 DEX 
+5AE6 F0BE       0760       BEQ DEBU5
+5AE8 86F6       0770 DEBU9 STX NCOUNT
+5AEA 4CA61A     0780       JMP DEBU5
+5AED E8         0790 DEB10 INX 
+5AEE E028       0800       CPX #40
+5AF0 90F6       0810       BCC DEBU9
+5AF2 B0B2       0820       BCS DEBU5
+5AF4 BDC105     0830 DEB11 LDA MONSCR+40*16+1,X
+5AF7 9DC005     0840       STA MONSCR+40*16,X
+5AFA E8         0850       INX 
+5AFB E027       0860       CPX #39
+5AFD 90F5       0870       BCC DEB11
+5AFF A900       0880       LDA #0
+5B01 8DE705     0890       STA MONSCR+40*16+39
+5B04 F0A0       0900       BEQ DEBU5
+5B06 A226       0910 DEB12 LDX #38
+
+
+
+PAGE 46   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5B08 BDC005     0920 DEB13 LDA MONSCR+40*16,X
+5B0B 9DC105     0930       STA MONSCR+40*16+1,X
+5B0E CA         0940       DEX 
+5B0F E4F6       0950       CPX NCOUNT
+5B11 B0F5       0960       BCS DEB13
+5B13 A900       0970       LDA #0
+5B15 9DC105     0980       STA MONSCR+40*16+1,X
+5B18 F08C       0990       BEQ DEBU5
+                1000 ;
+5B1A A208       1010 DEB15 LDX #8              NO OF CMD-1
+5B1C ADC105     1020       LDA MONSCR+40*16+1
+5B1F DD491B     1030 DEB16 CMP COMTB,X
+5B22 F009       1040       BEQ DEB17
+5B24 CA         1050       DEX 
+5B25 10F8       1060       BPL DEB16
+5B27 20AB1B     1070       JSR SCROLL
+5B2A 4C911A     1080       JMP DEBU3
+                1090 ;
+5B2D 8A         1100 DEB17 TXA 
+5B2E 0A         1110       ASL A
+5B2F AA         1120       TAX 
+5B30 A902       1130       LDA #2
+5B32 85F6       1140       STA NCOUNT
+5B34 78         1150       SEI 
+5B35 A980       1160       LDA #$80
+5B37 8D0ED2     1170       STA IRQEN
+5B3A BD531B     1180       LDA COMAD+1,X
+5B3D 48         1190       PHA 
+5B3E BD521B     1200       LDA COMAD,X
+5B41 48         1210       PHA 
+5B42 ADC205     1220       LDA MONSCR+40*16+2
+5B45 AEC305     1230       LDX MONSCR+40*16+3
+5B48 60         1240       RTS 
+                1250 ;
+5B49 2431322C   1260 COMTB .SBYTE "DQRLGFSCU"
+5B4D 27263323
+5B51 35
+5B52 621C       1270 COMAD .WORD DISP-1
+5B54 B609       1280       .WORD RES3-1
+5B56 FF1F       1290       .WORD CPU-1
+5B58 1122       1300       .WORD COML-1
+5B5A 021F       1310       .WORD COMG-1
+5B5C FC24       1320       .WORD COMF-1
+5B5E E625       1330       .WORD COMS-1
+5B60 241F       1340       .WORD COMC-1
+5B62 A721       1350       .WORD COMU-1
+                1360 ;
+                1370 ;PRINT ADDRESS IN A,X
+                1380 ;
+5B64 48         1390 PRTADR PHA 
+5B65 8A         1400       TXA 
+5B66 206A1B     1410       JSR PRTBYT
+5B69 68         1420       PLA 
+                1430 ;
+                1440 ;PRINT BYTE A
+                1450 ;
+5B6A 48         1460 PRTBYT PHA 
+5B6B 4A         1470       LSR A
+5B6C 4A         1480       LSR A
+5B6D 4A         1490       LSR A
+5B6E 4A         1500       LSR A
+5B6F 20751B     1510       JSR PRTBY1
+
+
+
+PAGE 47   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5B72 68         1520       PLA 
+5B73 290F       1530       AND #$0F
+5B75 18         1540 PRTBY1 CLC 
+5B76 6930       1550       ADC #$30
+5B78 C93A       1560       CMP #$3A
+5B7A 9002       1570       BCC PUTBYT
+5B7C 6906       1580       ADC #6
+                1590 ;
+                1600 ;PUT A TO MONSCR
+                1610 ;
+5B7E 85F8       1620 PUTBYT STA MAPMSK
+5B80 98         1630       TYA 
+5B81 48         1640       PHA 
+5B82 8A         1650       TXA 
+5B83 48         1660       PHA 
+5B84 A5F8       1670       LDA MAPMSK
+5B86 2A         1680       ROL A
+5B87 2A         1690       ROL A
+5B88 2A         1700       ROL A
+5B89 2A         1710       ROL A
+5B8A 2903       1720       AND #3
+5B8C AA         1730       TAX 
+5B8D A5F8       1740       LDA MAPMSK
+5B8F 299F       1750       AND #$9F
+5B91 1DA71B     1760       ORA SCRCOD,X
+5B94 A6F5       1770       LDX DCOUNT
+5B96 9D9805     1780       STA MONSCR+40*15,X
+5B99 E6F5       1790       INC DCOUNT
+5B9B E027       1800       CPX #39
+5B9D D003       1810       BNE PUTBY1
+5B9F 20AB1B     1820       JSR SCROLL
+5BA2 68         1830 PUTBY1 PLA 
+5BA3 AA         1840       TAX 
+5BA4 68         1850       PLA 
+5BA5 A8         1860       TAY 
+5BA6 60         1870       RTS 
+                1880 ;
+5BA7 40002060   1890 SCRCOD .BYTE $40,$00,$20,$60
+                1900 ;
+5BAB AD0ED2     1910 SCROLL LDA IRQST
+5BAE 3003       1920       BMI SCROL5
+5BB0 4C911A     1930 SCROL8 JMP DEBU3          BREAK ABORT
+5BB3 AD09D2     1940 SCROL5 LDA KBCODE         S=STOP?
+5BB6 C93E       1950       CMP #$3E
+5BB8 D00C       1960       BNE SCROL7          NO
+5BBA AD0ED2     1970 SCROL6 LDA IRQST
+5BBD 10F1       1980       BPL SCROL8
+5BBF AD09D2     1990       LDA KBCODE          Q=CONT?
+5BC2 C92F       2000       CMP #$2F
+5BC4 D0F4       2010       BNE SCROL6
+5BC6 A940       2020 SCROL7 LDA #MONSCR&$FF
+5BC8 A203       2030       LDX #MONSCR/256
+5BCA 85D1       2040       STA BPNT
+5BCC 86D2       2050       STX BPNT+1
+5BCE A20F       2060       LDX #15
+5BD0 86F5       2070       STX DCOUNT
+5BD2 A228       2080 SCROL1 LDX #40
+5BD4 A028       2090 SCROL2 LDY #40
+5BD6 B1D1       2100       LDA (BPNT),Y
+5BD8 A000       2110       LDY #0
+5BDA 91D1       2120       STA (BPNT),Y
+5BDC E6D1       2130       INC BPNT
+
+
+
+PAGE 48   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5BDE D002       2140       BNE SCROL3
+5BE0 E6D2       2150       INC BPNT+1
+5BE2 CA         2160 SCROL3 DEX 
+5BE3 D0EF       2170       BNE SCROL2
+5BE5 C6F5       2180       DEC DCOUNT
+5BE7 D0E9       2190       BNE SCROL1
+5BE9 A900       2200       LDA #0
+5BEB A227       2210       LDX #39
+5BED 9D9805     2220 SCROL4 STA MONSCR+40*15,X
+5BF0 CA         2230       DEX 
+5BF1 10FA       2240       BPL SCROL4
+5BF3 60         2250       RTS 
+                2260 ;
+                2270 ;-------------------------------
+                2280 ;
+                2290 ;MATCH CHAR A OR ADDRESS IF A=0
+                2300 ;CY=MATCH FLAG
+                2310 ;
+5BF4 A6F6       2320 MATCH LDX NCOUNT
+5BF6 E028       2330       CPX #40
+5BF8 B03B       2340       BCS MATC6
+5BFA A8         2350       TAY 
+5BFB F00B       2360       BEQ MATC2           MATCH ADDRESS
+5BFD 38         2370       SEC                 MATCH CHAR
+5BFE E920       2380       SBC #$20
+5C00 DDC005     2390       CMP MONSCR+40*16,X
+5C03 D030       2400       BNE MATC6           NO MATCH
+5C05 E8         2410       INX 
+5C06 102D       2420       BPL MATC6           ALWAYS
+5C08 85FC       2430 MATC2 STA TPNT
+5C0A 85FD       2440       STA TPNT+1
+5C0C BDC005     2450 MATC3 LDA MONSCR+40*16,X
+5C0F 38         2460       SEC 
+5C10 E910       2470       SBC #$10
+5C12 9021       2480       BCC MATC6
+5C14 C90A       2490       CMP #10
+5C16 900A       2500       BCC MATC4           0...9
+5C18 E907       2510       SBC #7
+5C1A C90A       2520       CMP #10
+5C1C 9017       2530       BCC MATC6
+5C1E C910       2540       CMP #16
+5C20 B013       2550       BCS MATC6           NOT A...F
+5C22 0A         2560 MATC4 ASL A
+5C23 0A         2570       ASL A
+5C24 0A         2580       ASL A
+5C25 0A         2590       ASL A
+5C26 A004       2600       LDY #4
+5C28 0A         2610 MATC5 ASL A
+5C29 26FC       2620       ROL TPNT
+5C2B 26FD       2630       ROL TPNT+1
+5C2D 88         2640       DEY 
+5C2E D0F8       2650       BNE MATC5
+5C30 E8         2660       INX 
+5C31 E028       2670       CPX #40
+5C33 90D7       2680       BCC MATC3
+5C35 E4F6       2690 MATC6 CPX NCOUNT
+5C37 86F6       2700       STX NCOUNT
+5C39 D002       2710       BNE MATC7
+5C3B 18         2720       CLC 
+5C3C 60         2730       RTS 
+5C3D A5FC       2740 MATC7 LDA TPNT
+5C3F A6FD       2750       LDX TPNT+1
+
+
+
+PAGE 49   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5C41 38         2760       SEC 
+5C42 60         2770       RTS 
+                2780 ;
+                2790 ;ADVANCE RPNT BY A AND CMP TPNT
+                2800 ;
+5C43 18         2810 ADVADR CLC 
+5C44 65CF       2820       ADC RPNT
+5C46 85CF       2830       STA RPNT
+5C48 A5D0       2840       LDA RPNT+1
+5C4A 6900       2850       ADC #0
+5C4C 85D0       2860       STA RPNT+1
+5C4E B00F       2870       BCS ADVAD2          STOP IF CY
+5C50 A5CF       2880       LDA RPNT
+5C52 C5FC       2890       CMP TPNT
+5C54 A5D0       2900       LDA RPNT+1
+5C56 E5FD       2910       SBC TPNT+1
+5C58 D004       2920       BNE ADVAD1
+5C5A A5CF       2930       LDA RPNT
+5C5C 45FC       2940       EOR TPNT
+5C5E 60         2950 ADVAD1 RTS 
+5C5F 18         2960 ADVAD2 CLC 
+5C60 A901       2970       LDA #1
+5C62 60         2980       RTS 
+                2990 ;
+                3000 ;DISPLAY BYTES COMMAND PROCESSOR
+                3010 ;
+5C63 ADC205     3020 DISP  LDA MONSCR+40*16+2  MIGHT BE
+5C66 AEC305     3030       LDX MONSCR+40*16+3  DIR OR DEL
+5C69 C929       3040       CMP #'I-$20
+5C6B D004       3050       BNE DISP01
+5C6D E032       3060       CPX #'R-$20
+5C6F F07E       3070       BEQ DISD
+5C71 C925       3080 DISP01 CMP #'E-$20
+5C73 D007       3090       BNE DISP02
+5C75 E02C       3100       CPX #'L-$20
+5C77 D003       3110       BNE DISP02
+5C79 4C511E     3120       JMP DELF
+5C7C A900       3130 DISP02 LDA #0
+5C7E 20F41B     3140       JSR MATCH
+5C81 9004       3150       BCC DISP1
+5C83 85CF       3160       STA RPNT
+5C85 86D0       3170       STX RPNT+1
+5C87 A92C       3180 DISP1 LDA #',
+5C89 20F41B     3190       JSR MATCH
+5C8C 9007       3200       BCC DISP2
+5C8E A900       3210       LDA #0
+5C90 20F41B     3220       JSR MATCH
+5C93 B00A       3230       BCS DISP3
+5C95 A5CF       3240 DISP2 LDA RPNT
+5C97 A6D0       3250       LDX RPNT+1
+5C99 18         3260       CLC 
+5C9A 6907       3270       ADC #7
+5C9C 9001       3280       BCC DISP3
+5C9E E8         3290       INX 
+5C9F 85FC       3300 DISP3 STA TPNT
+5CA1 86FD       3310       STX TPNT+1
+5CA3 20AB1B     3320 DISP4 JSR SCROLL
+5CA6 A920       3330       LDA #$20
+5CA8 207E1B     3340       JSR PUTBYT
+5CAB A5CF       3350       LDA RPNT            PRINT ADDRESS
+5CAD A6D0       3360       LDX RPNT+1
+5CAF 20641B     3370       JSR PRTADR
+
+
+
+PAGE 50   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5CB2 A920       3380       LDA #$20
+5CB4 207E1B     3390       JSR PUTBYT
+5CB7 A000       3400       LDY #0
+5CB9 98         3410 DISP5 TYA                 PRINT DATA BYTES
+5CBA 48         3420       PHA 
+5CBB A920       3430       LDA #$20
+5CBD 207E1B     3440       JSR PUTBYT
+5CC0 20021D     3450       JSR GETBYT
+5CC3 206A1B     3460       JSR PRTBYT
+5CC6 68         3470       PLA 
+5CC7 A8         3480       TAY 
+5CC8 C8         3490       INY 
+5CC9 C008       3500       CPY #8
+5CCB 90EC       3510       BCC DISP5
+5CCD A920       3520       LDA #$20
+5CCF 207E1B     3530       JSR PUTBYT
+5CD2 A000       3540       LDY #0
+5CD4 98         3550 DISP6 TYA 
+5CD5 48         3560       PHA 
+5CD6 20021D     3570       JSR GETBYT
+5CD9 207E1B     3580       JSR PUTBYT
+5CDC 68         3590       PLA 
+5CDD A8         3600       TAY 
+5CDE C8         3610       INY 
+5CDF C008       3620       CPY #8
+5CE1 90F1       3630       BCC DISP6
+5CE3 A908       3640       LDA #8
+5CE5 20431C     3650       JSR ADVADR
+5CE8 90B9       3660       BCC DISP4
+5CEA F0B7       3670       BEQ DISP4
+5CEC 4C911A     3680       JMP DEBU3
+                3690 ;
+                3700 ;DISPLAY DIRECTORY
+                3710 ;
+5CEF 20AB1B     3720 DISD  JSR SCROLL
+5CF2 20AB1B     3730       JSR SCROLL
+5CF5 A905       3740       LDA #5
+5CF7 85F6       3750       STA NCOUNT
+5CF9 20611E     3760       JSR FDECOD
+5CFC 20CE18     3770       JSR DDIR            IN DISK.M65
+5CFF 4C911A     3780       JMP DEBU3
+                3790 ;
+                3800 ;GET BYTE FROM (RPNT),Y
+                3810 ;
+5D02 98         3820 GETBYT TYA                CALC ADDRESS
+5D03 18         3830       CLC 
+5D04 65CF       3840       ADC RPNT
+5D06 A8         3850       TAY 
+5D07 A5D0       3860       LDA RPNT+1
+5D09 6900       3870       ADC #0
+5D0B AA         3880       TAX 
+5D0C C941       3890       CMP #$41
+5D0E F067       3900       BEQ GETBY7          CPAGE, SPECIAL CASE
+5D10 C9D1       3910       CMP #$D1            DISK BUFFER?
+5D12 F07C       3920       BEQ GETB11
+5D14 C9D0       3930       CMP #$D0
+5D16 F071       3940       BEQ GETB10          GTIA
+5D18 C9D2       3950       CMP #$D2
+5D1A F066       3960       BEQ GETBY9          POKEY
+5D1C C9D4       3970       CMP #$D4
+5D1E F05B       3980       BEQ GETBY8          ANTIC
+5D20 C9D3       3990       CMP #$D3
+
+
+
+PAGE 51   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5D22 F045       4000       BEQ GETBY5          PIA
+5D24 29F8       4010       AND #$F8
+5D26 C9D0       4020       CMP #$D0
+5D28 F04A       4030       BEQ GETBY6          IO AREA
+5D2A 8A         4040       TXA 
+5D2B 48         4050       PHA 
+5D2C A20B       4060       LDX #$0B
+5D2E BD0041     4070 GETBY1 LDA CPAGE,X
+5D31 9D0001     4080       STA USEMAP,X
+5D34 BD4A1D     4090       LDA GETBY2,X
+5D37 9D0041     4100       STA CPAGE,X
+5D3A CA         4110       DEX 
+5D3B 10F1       4120       BPL GETBY1
+5D3D 68         4130       PLA 
+5D3E 8D0541     4140       STA CPAGE+5
+5D41 8C0441     4150       STY CPAGE+4
+5D44 20941D     4160       JSR NOJERK
+5D47 4C0041     4170       JMP CPAGE
+                4180 ;
+5D4A 8D00D7     4190 GETBY2 STA BRKCTL
+5D4D ADEEEE     4200       LDA $EEEE
+5D50 8D00D7     4210       STA BRKCTL
+5D53 4C561D     4220       JMP GETBY3
+                4230 ;
+5D56 48         4240 GETBY3 PHA 
+5D57 A9FF       4250       LDA #$FF
+5D59 8D01D3     4260       STA PORTB
+5D5C A20B       4270       LDX #$0B
+5D5E BD0001     4280 GETBY4 LDA USEMAP,X
+5D61 9D0041     4290       STA CPAGE,X
+5D64 CA         4300       DEX 
+5D65 10F7       4310       BPL GETBY4
+5D67 68         4320       PLA 
+5D68 60         4330       RTS 
+                4340 ;
+5D69 98         4350 GETBY5 TYA 
+5D6A 2907       4360       AND #$07
+5D6C C906       4370       CMP #6
+5D6E B004       4380       BCS GETBY6
+5D70 AA         4390       TAX 
+5D71 B5C0       4400       LDA SPORTA,X
+5D73 60         4410       RTS 
+                4420 ;
+5D74 A900       4430 GETBY6 LDA #0
+5D76 60         4440       RTS 
+                4450 ;
+5D77 B90041     4460 GETBY7 LDA CPAGE,Y
+5D7A 60         4470       RTS 
+                4480 ;
+5D7B 98         4490 GETBY8 TYA 
+5D7C 290F       4500       AND #$0F
+5D7E AA         4510       TAX 
+5D7F B5B0       4520       LDA SANTIC,X
+5D81 60         4530       RTS 
+                4540 ;
+5D82 98         4550 GETBY9 TYA 
+5D83 290F       4560       AND #$0F
+5D85 AA         4570       TAX 
+5D86 B5A0       4580       LDA SPOKEY,X
+5D88 60         4590       RTS 
+                4600 ;
+5D89 98         4610 GETB10 TYA 
+
+
+
+PAGE 52   FREEZER V2.3
+                                        N                                                                           D:MONITOR.M65
+
+
+
+5D8A 291F       4620       AND #$1F
+5D8C AA         4630       TAX 
+5D8D B580       4640       LDA SGTIA,X
+5D8F 60         4650       RTS 
+                4660 ;
+5D90 B90007     4670 GETB11 LDA DBUF,Y
+5D93 60         4680       RTS 
+                4690 ;
+5D94 AD0BD4     4700 NOJERK LDA VCOUNT
+5D97 C95D       4710       CMP #93
+5D99 90F9       4720       BCC NOJERK
+5D9B A9FE       4730       LDA #$FE
+5D9D 8D01D3     4740       STA PORTB
+5DA0 60         4750       RTS 
+                4760 ;
+                4770 ;-------------------------------
+                4780 ;
+                4790 ;PRINT TEXT Y
+                4800 ;
+5DA1 A200       4810 PRTSTR LDX #0
+5DA3 BDC21D     4820 PRTST1 LDA PRTTAB,X
+5DA6 3003       4830       BMI PRTST2
+5DA8 E8         4840       INX 
+5DA9 D0F8       4850       BNE PRTST1
+5DAB E8         4860 PRTST2 INX 
+5DAC 88         4870       DEY 
+5DAD 10F4       4880       BPL PRTST1
+5DAF A920       4890       LDA #$20
+5DB1 207E1B     4900       JSR PUTBYT
+5DB4 BDC21D     4910 PRTST3 LDA PRTTAB,X
+5DB7 08         4920       PHP 
+5DB8 297F       4930       AND #$7F
+5DBA 207E1B     4940       JSR PUTBYT
+5DBD E8         4950       INX 
+5DBE 28         4960       PLP 
+5DBF 10F3       4970       BPL PRTST3
+5DC1 60         4980       RTS 
+                4990 ;
+5DC2 A0         5000 PRTTAB .CBYTE " "
+5DC3 53494E47   5010       .CBYTE "SINGLE"
+5DC7 4CC5
+5DC9 454E4841   5020       .CBYTE "ENHANCED"
+5DCD 4E4345C4
+5DD1 444F5542   5030       .CBYTE "DOUBLE"
+5DD5 4CC5
+5DD7 44454E53   5040       .CBYTE "DENSITY, "
+5DDB 4954592C
+5DDF A0
+5DE0 53454354   5050       .CBYTE "SECTORS FREE"
+5DE4 4F525320
+5DE8 465245C5
+5DEC 44454C45   5060       .CBYTE "DELETE: "
+5DF0 54453AA0
+5DF4 41202058   5070       .CBYTE "A  X  Y  S  NV-BDIZC  PC"
+5DF8 20205920
+5DFC 20532020
+5E00 4E562D42
+5E04 44495A43
+5E08 202050C3
+5E0C 52454E41   5080       .CBYTE "RENAME: "
+5E10 4D453AA0
+5E14 4C4F434B   5090       .CBYTE "LOCK: "
+
+
+
+PAGE 53   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5E18 3AA0
+5E1A 554E4C4F   5100       .CBYTE "UNLOCK: "
+5E1E 434B3AA0
+                5110 ;
+                5120 ;PRINT TPNT IN DECIMAL
+                5130 ;
+5E22 A207       5140 PRTTPN LDX #7
+5E24 A000       5150 PRTTP1 LDY #0
+5E26 A5FC       5160 PRTTP2 LDA TPNT
+5E28 DD481E     5170       CMP DECTAB-1,X
+5E2B A5FD       5180       LDA TPNT+1
+5E2D FD491E     5190       SBC DECTAB,X
+5E30 900C       5200       BCC PRTTP3
+5E32 85FD       5210       STA TPNT+1
+5E34 A5FC       5220       LDA TPNT
+5E36 FD481E     5230       SBC DECTAB-1,X
+5E39 85FC       5240       STA TPNT
+5E3B C8         5250       INY 
+5E3C 10E8       5260       BPL PRTTP2
+5E3E 98         5270 PRTTP3 TYA 
+5E3F 6930       5280       ADC #$30
+5E41 207E1B     5290       JSR PUTBYT
+5E44 CA         5300       DEX 
+5E45 CA         5310       DEX 
+5E46 10DC       5320       BPL PRTTP1
+5E48 60         5330       RTS 
+                5340 ;
+5E49 0100       5350 DECTAB .WORD 1
+5E4B 0A00       5360       .WORD 10
+5E4D 6400       5370       .WORD 100
+5E4F E803       5380       .WORD 1000
+                5390 ;
+                5400 ;-------------------------------
+                5410 ;
+                5420 ;DELETE FILE HANDLER
+                5430 ;
+5E51 A905       5440 DELF  LDA #5
+5E53 85F6       5450       STA NCOUNT
+5E55 20611E     5460       JSR FDECOD
+5E58 20ED1E     5470       JSR GETOPT
+5E5B 204926     5480       JSR FDELET
+5E5E 4C911A     5490       JMP DEBU3
+                5500 ;
+                5510 ;DECODE FILENAME FROM (NCOUNT)
+                5520 ;TO /NAME/. CY=0 IF DEFAULT.
+                5530 ;
+5E61 A000       5540 FDECOD LDY #0
+5E63 A6F6       5550       LDX NCOUNT
+5E65 A908       5560       LDA #8
+5E67 85F9       5570       STA FILENO
+5E69 BDC005     5580 FDECO1 LDA MONSCR+40*16,X
+5E6C E8         5590       INX 
+5E6D 18         5600       CLC 
+5E6E 6920       5610       ADC #$20
+5E70 C920       5620 FDECO2 CMP #$20
+5E72 F008       5630       BEQ FDECO3
+5E74 C92F       5640       CMP #'/
+5E76 F004       5650       BEQ FDECO3
+5E78 C92C       5660       CMP #',
+5E7A D021       5670       BNE FDECO7          NO TERMINAL
+5E7C C00B       5680 FDECO3 CPY #11
+5E7E B008       5690       BCS FDECO4
+
+
+
+PAGE 54   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5E80 A920       5700       LDA #$20
+5E82 99D500     5710       STA NAME,Y
+5E85 C8         5720       INY 
+5E86 D0F4       5730       BNE FDECO3
+5E88 CA         5740 FDECO4 DEX 
+5E89 86F6       5750       STX NCOUNT
+5E8B A5D5       5760       LDA NAME
+5E8D C920       5770       CMP #$20
+5E8F D00B       5780       BNE FDECO6
+5E91 A00A       5790       LDY #10
+5E93 A93F       5800 FDECO5 LDA #'?
+5E95 99D500     5810       STA NAME,Y
+5E98 88         5820       DEY 
+5E99 10F8       5830       BPL FDECO5
+5E9B 18         5840       CLC 
+5E9C 60         5850 FDECO6 RTS 
+5E9D C4F9       5860 FDECO7 CPY FILENO
+5E9F D00A       5870       BNE FDECO9
+5EA1 C92E       5880       CMP #'.
+5EA3 D0C4       5890       BNE FDECO1
+5EA5 A90B       5900 FDECO8 LDA #11
+5EA7 85F9       5910       STA FILENO
+5EA9 D0BE       5920       BNE FDECO1
+5EAB C92E       5930 FDECO9 CMP #'.
+5EAD F00A       5940       BEQ FDEC10
+5EAF C92A       5950       CMP #'*
+5EB1 F00A       5960       BEQ FDEC11
+5EB3 99D500     5970       STA NAME,Y
+5EB6 C8         5980       INY 
+5EB7 D0B0       5990       BNE FDECO1
+5EB9 A920       6000 FDEC10 LDA #$20
+5EBB D002       6010       BNE FDEC12
+5EBD A93F       6020 FDEC11 LDA #'?
+5EBF 99D500     6030 FDEC12 STA NAME,Y
+5EC2 C8         6040       INY 
+5EC3 C4F9       6050       CPY FILENO
+5EC5 D0F8       6060       BNE FDEC12
+5EC7 C920       6070       CMP #$20
+5EC9 F0DA       6080       BEQ FDECO8
+5ECB D09C       6090       BNE FDECO1
+                6100 ;
+                6110 ;PRINT FILE NAME
+                6120 ;
+5ECD A200       6130 PRTNAM LDX #0
+5ECF B5E7       6140 PRTNA1 LDA DENTRY+5,X
+5ED1 207E1B     6150       JSR PUTBYT
+5ED4 E8         6160       INX 
+5ED5 E008       6170       CPX #8
+5ED7 D0F6       6180       BNE PRTNA1
+5ED9 A92E       6190       LDA #'.
+5EDB 207E1B     6200       JSR PUTBYT
+5EDE B5E7       6210 PRTNA2 LDA DENTRY+5,X
+5EE0 207E1B     6220       JSR PUTBYT
+5EE3 E8         6230       INX 
+5EE4 E00B       6240       CPX #11
+5EE6 D0F6       6250       BNE PRTNA2
+5EE8 A920       6260       LDA #$20
+5EEA 4C7E1B     6270       JMP PUTBYT
+                6280 ;
+                6290 ;GET CMD LINE OPTIONS
+                6300 ;
+5EED A6F6       6310 GETOPT LDX NCOUNT
+
+
+
+PAGE 55   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5EEF BDC005     6320       LDA MONSCR+40*16,X
+5EF2 C90F       6330       CMP #'/-$20
+5EF4 D009       6340       BNE GETOP1          NO OPTION
+5EF6 BDC105     6350       LDA MONSCR+40*16+1,X
+5EF9 18         6360       CLC 
+5EFA 6920       6370       ADC #$20
+5EFC 85FE       6380 GETOP2 STA OPTION
+5EFE 60         6390       RTS 
+5EFF A900       6400 GETOP1 LDA #0
+5F01 F0F9       6410       BEQ GETOP2
+                6420 ;
+                6430 ;CHANGE START ADDRESS
+                6440 ;
+5F03 20AA20     6450 COMG  JSR PARBYT
+5F06 901A       6460       BCC COMG1
+5F08 A901       6470       LDA #1
+5F0A 85D0       6480       STA RPNT+1
+5F0C 18         6490       CLC 
+5F0D 65C9       6500       ADC REGS
+5F0F 85CF       6510       STA RPNT
+5F11 A5FC       6520       LDA TPNT
+5F13 A001       6530       LDY #1
+5F15 20B220     6540       JSR STOBYT
+5F18 A5FD       6550       LDA TPNT+1
+5F1A A002       6560       LDY #2
+5F1C 20B220     6570       JSR STOBYT
+5F1F 4C0F20     6580       JMP CPU1
+5F22 4C911A     6590 COMG1 JMP DEBU3
+                6600 ;
+                6610 ;CHANGE BYTES
+                6620 ;
+5F25 A900       6630 COMC  LDA #0
+5F27 20F41B     6640       JSR MATCH
+5F2A 9004       6650       BCC COMC1
+5F2C 85CF       6660       STA RPNT
+5F2E 86D0       6670       STX RPNT+1
+5F30 A93C       6680 COMC1 LDA #'<
+5F32 20F41B     6690       JSR MATCH
+5F35 90EB       6700       BCC COMG1
+5F37 A900       6710 COMC2 LDA #0
+5F39 20F41B     6720       JSR MATCH
+5F3C 902D       6730       BCC COMC4
+5F3E A000       6740       LDY #0
+5F40 20B220     6750       JSR STOBYT
+                6760 ;
+5F43 20AB1B     6770       JSR SCROLL
+5F46 A920       6780       LDA #$20
+5F48 207E1B     6790       JSR PUTBYT
+5F4B A5CF       6800       LDA RPNT
+5F4D A6D0       6810       LDX RPNT+1
+5F4F 20641B     6820       JSR PRTADR
+5F52 A93C       6830       LDA #'<
+5F54 207E1B     6840       JSR PUTBYT
+5F57 A5FC       6850       LDA TPNT
+5F59 206A1B     6860       JSR PRTBYT
+                6870 ;
+5F5C E6CF       6880       INC RPNT
+5F5E D002       6890       BNE COMC3
+5F60 E6D0       6900       INC RPNT+1
+5F62 A92C       6910 COMC3 LDA #',
+5F64 20F41B     6920       JSR MATCH
+5F67 B0CE       6930       BCS COMC2
+
+
+
+PAGE 56   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5F69 90B7       6940       BCC COMG1
+                6950 ;
+5F6B A92C       6960 COMC4 LDA #',
+5F6D 20F41B     6970       JSR MATCH
+5F70 90B0       6980       BCC COMG1
+5F72 E6CF       6990       INC RPNT
+5F74 D0C1       7000       BNE COMC2
+5F76 E6D0       7010       INC RPNT+1
+5F78 4C371F     7020       JMP COMC2
+                7030 ;
+                7040 ;GET DISK BYTE
+                7050 ;
+5F7B A6F6       7060 GDIBYT LDX NCOUNT
+5F7D A4F7       7070       LDY MAPIDX
+5F7F 98         7080       TYA 
+5F80 DD0207     7090       CMP DBUF+2,X
+5F83 9013       7100       BCC GDIBY2
+5F85 AD0A03     7110       LDA DAUX1
+5F88 0D0B03     7120       ORA DAUX2
+5F8B F009       7130       BEQ GDIBY1
+5F8D 205715     7140       JSR RDISK
+5F90 A900       7150       LDA #0
+5F92 85F7       7160       STA MAPIDX
+5F94 F0E5       7170       BEQ GDIBYT
+5F96 38         7180 GDIBY1 SEC 
+5F97 60         7190       RTS 
+5F98 B90007     7200 GDIBY2 LDA DBUF,Y
+5F9B E6F7       7210       INC MAPIDX
+5F9D 60         7220       RTS 
+                7230 ;
+5F9E A000       7240 OSRCLR LDY #0
+5FA0 84CF       7250       STY RPNT
+5FA2 8C0ED4     7260       STY NMIEN
+5FA5 8C00D4     7270       STY DMACTL
+5FA8 A9FE       7280       LDA #$FE            OS OFF
+5FAA 8D01D3     7290       STA PORTB
+5FAD A9C0       7300       LDA #$C0
+5FAF 85D0       7310 OSRCL1 STA RPNT+1
+NFB1 A900       7320       LDA #0
+5FB3 91CF       7330 OSRCL2 STA (RPNT),Y
+5FB5 C8         7340       INY 
+5FB6 D0FB       7350       BNE OSRCL2
+5FB8 E6D0       7360       INC RPNT+1
+5FBA F00A       7370       BEQ OSRCL3
+5FBC A5D0       7380       LDA RPNT+1
+5FBE C9D0       7390       CMP #$D0
+5FC0 D0ED       7400       BNE OSRCL1
+5FC2 A9D8       7410       LDA #$D8
+5FC4 D0E9       7420       BNE OSRCL1
+5FC6 A9FF       7430 OSRCL3 LDA #$FF
+5FC8 8D01D3     7440       STA PORTB
+5FCB 4C1A10     7450       JMP DMAON
+                7460 ;
+5FCE 707070     7470 XDLIST .BYTE $70,$70,$70
+5FD1 42         7480       .BYTE $42
+5FD2 4003       7490       .WORD MONSCR
+5FD4 00020002   7500       .BYTE 0,2,0,2,0,2,0
+5FD8 000200
+5FDB 02000200   7510       .BYTE 2,0,2,0,2,0,2,0
+5FDF 02000200
+5FE3 02000200   7520       .BYTE 2,0,2,0,2,0,2,0
+5FE7 02000200
+
+
+
+PAGE 57   FREEZER V2.3
+                                                                                                                    D:MONITOR.M65
+
+
+
+5FEB 02000200   7530       .BYTE 2,0,2,0,2,0,2
+5FEF 020002
+5FF2 2002       7540       .BYTE $20,2
+5FF4 41         7550       .BYTE $41
+5FF5 CE1F       7560       .WORD XDLIST
+                0370 ;
+5FF7            0380       *=  $1FF8
+5FF8 8C6C1808   0390       .BYTE $8C,$6C,$18,$08,$AA,$08,$2C,$08
+5FFC AA082C08
+                0400 ;
+6000            0410       *=  $2000
+    =2000       0420       .SET 6,$2000
+                0430 ;
+                0440       .INCLUDE #D:EXTRAS.M65
+                0100 ;-------------------------------
+                0110 ;
+                0120 ;DISPLAY/ALTER CPU REGISTERS
+                0130 ;
+4000 C91C       0140 CPU   CMP #'<-$20
+4002 F070       0150       BEQ CPU6            ALTER
+4004 C925       0160       CMP #'E-$20
+4006 D007       0170       BNE CPU1
+4008 E02E       0180       CPX #'N-$20
+400A D003       0190       BNE CPU1
+400C 4C4721     0200       JMP RENCMD          RENAME FILE
+                0210 ;
+400F 20AB1B     0220 CPU1  JSR SCROLL
+4012 A006       0230       LDY #6
+4014 20A11D     0240       JSR PRTSTR
+4017 20AB1B     0250       JSR SCROLL
+401A 205F20     0260       JSR CPU3
+401D A5C6       0270       LDA REGA
+401F 205C20     0280       JSR CPU2
+4022 A5C7       0290       LDA REGX
+4024 205C20     0300       JSR CPU2
+4027 A5C8       0310       LDA REGY
+4029 205C20     0320       JSR CPU2
+402C A5C9       0330       LDA REGS
+402E 205C20     0340       JSR CPU2
+4031 A901       0350       LDA #1
+4033 85D0       0360       STA RPNT+1
+4035 18         0370       CLC 
+4036 65C9       0380       ADC REGS
+4038 85CF       0390       STA RPNT
+403A A000       0400       LDY #0
+403C 20021D     0410       JSR GETBYT
+403F 206420     0420       JSR CPU4
+4042 205F20     0430       JSR CPU3
+4045 E6CF       0440       INC RPNT
+4047 A000       0450       LDY #0
+4049 20021D     0460       JSR GETBYT
+404C 48         0470       PHA 
+404D E6CF       0480       INC RPNT
+404F A000       0490       LDY #0
+4051 20021D     0500       JSR GETBYT
+4054 AA         0510       TAX 
+4055 68         0520       PLA 
+4056 20641B     0530       JSR PRTADR
+4059 4C911A     0540       JMP DEBU3
+                0550 ;
+405C 206A1B     0560 CPU2  JSR PRTBYT
+405F A920       0570 CPU3  LDA #$20
+
+
+
+PAGE 58   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4061 4C7E1B     0580       JMP PUTBYT
+4064 A208       0590 CPU4  LDX #8
+4066 0A         0600 CPU5  ASL A
+4067 48         0610       PHA 
+4068 A930       0620       LDA #$30
+406A 6900       0630       ADC #0
+406C 207E1B     0640       JSR PUTBYT
+406F 68         0650       PLA 
+4070 CA         0660       DEX 
+4071 D0F3       0670       BNE CPU5
+4073 60         0680       RTS 
+                0690 ;
+                0700 ;ALTER CPU REGISTERS
+                0710 ;
+4074 A903       0720 CPU6  LDA #3
+4076 85F6       0730       STA NCOUNT
+4078 20AA20     0740       JSR PARBYT          PARSE BYTE
+407B 9002       0750       BCC CPU7
+407D 85C6       0760       STA REGA
+407F 20AA20     0770 CPU7  JSR PARBYT
+4082 9002       0780       BCC CPU8
+4084 85C7       0790       STA REGX
+4086 20AA20     0800 CPU8  JSR PARBYT
+4089 9002       0810       BCC CPU9
+408B 85C8       0820       STA REGY
+408D 20AA20     0830 CPU9  JSR PARBYT
+4090 9002       0840       BCC CP10
+4092 85C9       0850       STA REGS
+4094 A901       0860 CP10  LDA #1
+4096 85D0       0870       STA RPNT+1
+4098 18         0880       CLC 
+4099 65C9       0890       ADC REGS
+409B 85CF       0900       STA RPNT
+409D 20AA20     0910       JSR PARBYT
+40A0 9005       0920       BCC CP11
+40A2 A000       0930       LDY #0
+40A4 20B220     0940       JSR STOBYT
+40A7 4C0F20     0950 CP11  JMP CPU1
+                0960 ;
+                0970 ;PARSE BYTE
+                0980 ;
+40AA A900       0990 PARBYT LDA #0
+40AC 20F41B     1000       JSR MATCH
+40AF E6F6       1010       INC NCOUNT          IGNORE SEPERATOR
+40B1 60         1020       RTS 
+                1030 ;
+                1040 ;STORE BYTE TO (RPNT),Y
+                1050 ;
+40B2 48         1060 STOBYT PHA 
+40B3 98         1070       TYA                 CALC ADDRESS
+40B4 18         1080       CLC 
+40B5 65CF       1090       ADC RPNT
+40B7 A8         1100       TAY 
+40B8 A5D0       1110       LDA RPNT+1
+40BA 6900       1120       ADC #0
+40BC AA         1130       TAX 
+40BD C941       1140       CMP #$41
+40BF F064       1150       BEQ STOBY7          CPAGE, SPECIAL CASE
+40C1 C9D1       1160       CMP #$D1            DISK BUFFER?
+40C3 F07D       1170       BEQ STOB11
+40C5 C9D0       1180       CMP #$D0
+40C7 F071       1190       BEQ STOB10          GTIA
+
+
+
+PAGE 59   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+40C9 C9D2       1200       CMP #$D2
+40CB F065       1210       BEQ STOBY9          POKEY
+40CD C9D4       1220       CMP #$D4
+40CF F059       1230       BEQ STOBY8          ANTIC
+40D1 C9D3       1240       CMP #$D3
+40D3 F044       1250       BEQ STOBY5          PIA
+40D5 29F8       1260       AND #$F8
+40D7 C9D0       1270       CMP #$D0
+40D9 F049       1280       BEQ STOBY6          IO AREA
+40DB 8A         1290       TXA 
+40DC 48         1300       PHA 
+40DD A20B       1310       LDX #$0B
+40DF BD0041     1320 STOBY1 LDA CPAGE,X
+40E2 9D0001     1330       STA USEMAP,X
+40E5 BDFC20     1340       LDA STOBY2,X
+40E8 9D0041     1350       STA CPAGE,X
+40EB CA         1360       DEX 
+40EC 10F1       1370       BPL STOBY1
+40EE 68         1380       PLA 
+40EF 8D0541     1390       STA CPAGE+5
+40F2 8C0441     1400       STY CPAGE+4
+40F5 20941D     1410       JSR NOJERK
+40F8 68         1420       PLA 
+40F9 4C0041     1430       JMP CPAGE
+                1440 ;
+40FC 8D00D7     1450 STOBY2 STA BRKCTL
+40FF 8DEEEE     1460       STA $EEEE
+4102 8D00D7     1470       STA BRKCTL
+4105 4C0821     1480       JMP STOBY3
+                1490 ;
+4108 A9FF       1500 STOBY3 LDA #$FF
+410A 8D01D3     1510       STA PORTB
+410D A20B       1520       LDX #$0B
+410F BD0001     1530 STOBY4 LDA USEMAP,X
+4112 9D0041     1540       STA CPAGE,X
+4115 CA         1550       DEX 
+4116 10F7       1560       BPL STOBY4
+4118 60         1570       RTS 
+                1580 ;
+4119 98         1590 STOBY5 TYA 
+411A 2907       1600       AND #$07
+411C C906       1610       CMP #6
+411E B004       1620       BCS STOBY6
+4120 AA         1630       TAX 
+4121 68         1640       PLA 
+4122 95C0       1650       STA SPORTA,X
+4124 60         1660 STOBY6 RTS 
+                1670 ;
+4125 68         1680 STOBY7 PLA 
+4126 990041     1690       STA CPAGE,Y
+4129 60         1700       RTS 
+                1710 ;
+412A 98         1720 STOBY8 TYA 
+412B 290F       1730       AND #$0F
+412D AA         1740       TAX 
+412E 68         1750       PLA 
+412F 95B0       1760       STA SANTIC,X
+4131 60         1770       RTS 
+                1780 ;
+4132 98         1790 STOBY9 TYA 
+4133 290F       1800       AND #$0F
+4135 AA         1810       TAX 
+
+
+
+PAGE 60   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4136 68         1820       PLA 
+4137 95A0       1830       STA SPOKEY,X
+4139 60         1840       RTS 
+                1850 ;
+413A 98         1860 STOB10 TYA 
+413B 291F       1870       AND #$1F
+413D AA         1880       TAX 
+413E 68         1890       PLA 
+413F 9580       1900       STA SGTIA,X
+4141 60         1910       RTS 
+                1920 ;
+4142 68         1930 STOB11 PLA 
+4143 990007     1940       STA DBUF,Y
+4146 60         1950       RTS 
+                1960 ;
+                1970 ;-------------------------------
+                1980 ;RENAME FILE
+                1990 ;
+4147 207126     2000 RENCMD JSR GFNAME
+414A E6F6       2010       INC NCOUNT
+414C A20A       2020       LDX #10
+414E B5D5       2030 RENCM1 LDA NAME,X
+4150 9D0006     2040       STA VTOC,X
+4153 CA         2050       DEX 
+4154 10F8       2060       BPL RENCM1
+4156 20611E     2070       JSR FDECOD
+4159 A20A       2080       LDX #10
+415B B5D5       2090 RENCM2 LDA NAME,X
+415D BC0006     2100       LDY VTOC,X
+4160 9D0006     2110       STA VTOC,X
+4163 98         2120       TYA 
+4164 95D5       2130       STA NAME,X
+4166 CA         2140       DEX 
+4167 10F2       2150       BPL RENCM2
+4169 20ED1E     2160       JSR GETOPT
+416C 207221     2170       JSR RENAME
+416F 4C911A     2180       JMP DEBU3
+                2190 ;
+4172 207826     2200 RENAME JSR IUTILS
+4175 207D18     2210 RENAM1 JSR SEARC1
+4178 902D       2220       BCC RENAM5          NO MATCH, EXIT
+417A A5E2       2230       LDA DENTRY
+417C 2920       2240       AND #$20
+417E D022       2250       BNE RENAM3          LOCKED, SKIP
+4180 A907       2260       LDA #7
+4182 208626     2270       JSR QUERY
+4185 D01B       2280       BNE RENAM3          DON'T RENAME
+4187 20E917     2290 RENAM2 JSR DIRACC
+418A A000       2300       LDY #0
+418C B90006     2310 RENAM6 LDA VTOC,Y         REPLACE PATTERN
+418F C93F       2320       CMP #'?
+4191 D003       2330       BNE RENAM7
+4193 B9E700     2340       LDA DENTRY+5,Y
+4196 9D0507     2350 RENAM7 STA DBUF+5,X
+4199 E8         2360       INX 
+419A C8         2370       INY 
+419B C00B       2380       CPY #11
+419D D0ED       2390       BNE RENAM6
+419F 20C515     2400       JSR WSEC
+41A2 20B926     2410 RENAM3 JSR NEXENT
+41A5 90CE       2420       BCC RENAM1
+41A7 60         2430 RENAM5 RTS 
+
+
+
+PAGE 61   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+                2440 ;
+                2450 ;-------------------------------
+                2460 ;UNLOCK FILES
+                2470 ;
+41A8 207126     2480 COMU  JSR GFNAME
+41AB 20ED1E     2490       JSR GETOPT
+41AE 20B421     2500       JSR UNLOCK
+41B1 4C911A     2510       JMP DEBU3
+                2520 ;
+41B4 207826     2530 UNLOCK JSR IUTILS
+41B7 207D18     2540 UNLOC1 JSR SEARC1
+41BA 9020       2550       BCC UNLOC5          NO MATCH, EXIT
+41BC A5E2       2560       LDA DENTRY
+41BE 2920       2570       AND #$20
+41C0 F015       2580       BEQ UNLOC3          UNLOCKED, SKIP
+41C2 A909       2590       LDA #9
+41C4 208626     2600       JSR QUERY
+41C7 D00E       2610       BNE UNLOC3          DON'T UNLOCK
+41C9 20E917     2620 UNLOC2 JSR DIRACC
+41CC BD0007     2630       LDA DBUF,X
+41CF 29DF       2640       AND #$DF
+41D1 9D0007     2650       STA DBUF,X
+41D4 20C515     2660       JSR WSEC
+41D7 20B926     2670 UNLOC3 JSR NEXENT
+41DA 90DB       2680       BCC UNLOC1
+41DC 60         2690 UNLOC5 RTS 
+                2700 ;
+                2710 ;LOCK FILES
+                2720 ;
+41DD 207126     2730 FLOCK JSR GFNAME
+41E0 20ED1E     2740       JSR GETOPT
+41E3 20E921     2750       JSR LOCK
+41E6 4C911A     2760       JMP DEBU3
+                2770 ;
+41E9 207826     2780 LOCK  JSR IUTILS
+41EC 207D18     2790 LOC1  JSR SEARC1
+41EF 9020       2800       BCC LOC5            NO MATCH, EXIT
+41F1 A5E2       2810       LDA DENTRY
+41F3 2920       2820       AND #$20
+41F5 D015       2830       BNE LOC3            LOCKED, SKIP
+41F7 A908       2840       LDA #8
+41F9 208626     2850       JSR QUERY
+41FC D00E       2860       BNE LOC3            DON'T LOCK
+41FE 20E917     2870 LOC2  JSR DIRACC
+4201 BD0007     2880       LDA DBUF,X
+4204 0920       2890       ORA #$20
+4206 9D0007     2900       STA DBUF,X
+4209 20C515     2910       JSR WSEC
+420C 20B926     2920 LOC3  JSR NEXENT
+420F 90DB       2930       BCC LOC1
+4211 60         2940 LOC5  RTS 
+                2950 ;
+                2960 ;LOCK/LOAD FILE, DISASM COMMANDS
+                2970 ;
+4212 C92F       2980 COML  CMP #'O-$20
+4214 D00E       2990       BNE COML2
+4216 E023       3000       CPX #'C-$20
+4218 D003       3010       BNE COML1
+421A 4CDD21     3020       JMP FLOCK
+421D E021       3030 COML1 CPX #'A-$20
+421F D003       3040       BNE COML2
+4221 4C8127     3050       JMP BLOAD
+
+
+
+PAGE 62   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+                3060 ;
+                3070 ;DISASSEMBLY
+                3080 ;
+4224 A900       3090 COML2 LDA #0
+4226 85FE       3100       STA OPTION
+4228 20F41B     3110       JSR MATCH
+422B 9004       3120       BCC DASM1
+422D 85CF       3130       STA RPNT            START ADDRESS
+422F 86D0       3140       STX RPNT+1
+4231 A92C       3150 DASM1 LDA #',
+4233 20F41B     3160       JSR MATCH
+4236 9007       3170       BCC DASM2
+4238 A900       3180       LDA #0
+423A 20F41B     3190       JSR MATCH
+423D B004       3200       BCS DASM3
+423F A910       3210 DASM2 LDA #16             DISASM 16 LINES
+4241 85FE       3220       STA OPTION
+4243 85FC       3230 DASM3 STA TPNT
+4245 86FD       3240       STX TPNT+1
+                3250 ;
+4247 20AB1B     3260 DASM4 JSR SCROLL
+424A 206522     3270       JSR DISASM
+424D 20431C     3280       JSR ADVADR
+4250 08         3290       PHP 
+4251 A5FE       3300       LDA OPTION
+4253 F008       3310       BEQ DASM5           TEST FOR ADDRESS
+4255 28         3320       PLP 
+4256 C6FE       3330       DEC OPTION          COUNT LINES
+4258 D0ED       3340       BNE DASM4
+425A 4C911A     3350       JMP DEBU3
+425D 28         3360 DASM5 PLP 
+425E F0E7       3370       BEQ DASM4
+4260 90E5       3380       BCC DASM4
+4262 4C911A     3390       JMP DEBU3
+                3400 ;
+4265 A000       3410 DISASM LDY #0
+4267 20021D     3420       JSR GETBYT
+426A 85F6       3430       STA NCOUNT          SAVE OPCODE
+426C A22B       3440       LDX #43             IMPLIED/SPECIAL OPS
+426E DD7624     3450 DISAS1 CMP OPTAB1,X
+4271 F061       3460       BEQ DISA11
+4273 CA         3470       DEX 
+4274 10F8       3480       BPL DISAS1
+4276 A208       3490       LDX #8              ILLEGAL OPS?
+4278 DDA224     3500 DISAS2 CMP OPTAB2,X
+427B F011       3510       BEQ DISAS3
+427D CA         3520       DEX 
+427E 10F8       3530       BPL DISAS2
+4280 290F       3540       AND #$0F            TRANSFORM OPCODES
+4282 AA         3550       TAX 
+4283 A5F6       3560       LDA NCOUNT
+4285 4A         3570       LSR A
+4286 4A         3580       LSR A
+4287 4A         3590       LSR A
+4288 4A         3600       LSR A
+4289 1DAB24     3610       ORA TRANTB,X
+428C 1004       3620       BPL DISAS5
+428E A939       3630 DISAS3 LDA #57            ILLEGAL OP
+4290 D062       3640       BNE DISA13
+4292 48         3650 DISAS5 PHA 
+4293 4A         3660       LSR A
+4294 9002       3670       BCC DISAS6
+
+
+
+PAGE 63   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4296 0940       3680       ORA #$40
+4298 4A         3690 DISAS6 LSR A
+4299 4A         3700       LSR A
+429A 4A         3710       LSR A
+429B AA         3720       TAX 
+429C BDD324     3730       LDA MODETB,X        GET MODE
+429F A8         3740       TAY 
+42A0 68         3750       PLA 
+42A1 C969       3760       CMP #$69            SOME EXCEPTIONS
+42A3 F00C       3770       BEQ DISAS7
+42A5 C96B       3780       CMP #$6B
+42A7 F008       3790       BEQ DISAS7
+42A9 C97B       3800       CMP #$7B
+42AB D006       3810       BNE DISAS8
+42AD A009       3820       LDY #9              ABS,Y
+42AF D002       3830       BNE DISAS8
+42B1 A00C       3840 DISAS7 LDY #12            ZP,Y
+42B3 4A         3850 DISAS8 LSR A              GET MNEMONIC INDEX
+42B4 C930       3860       CMP #$30
+42B6 9008       3870       BCC DISAS9
+42B8 2907       3880       AND #7
+42BA AA         3890       TAX 
+42BB BDBB24     3900       LDA MNTAB1,X
+42BE D034       3910       BNE DISA13
+42C0 C920       3920 DISAS9 CMP #$20
+42C2 9008       3930       BCC DISA10
+42C4 2907       3940       AND #7
+42C6 AA         3950       TAX 
+42C7 BDC324     3960       LDA MNTAB2,X
+42CA D028       3970       BNE DISA13
+42CC 2907       3980 DISA10 AND #7
+42CE AA         3990       TAX 
+42CF BDCB24     4000       LDA MNTAB3,X
+42D2 D020       4010       BNE DISA13
+42D4 A00B       4020 DISA11 LDY #11            ASSUME IND?
+42D6 E02B       4030       CPX #43
+42D8 F019       4040       BEQ DISA12
+42DA A001       4050       LDY #1              ASSUME ABS
+42DC E029       4060       CPX #41
+42DE B013       4070       BCS DISA12
+42E0 88         4080       DEY                 ASSUME IMM
+42E1 E025       4090       CPX #37
+42E3 B00E       4100       BCS DISA12
+42E5 A00A       4110       LDY #10             ASSUME REL
+42E7 E01D       4120       CPX #29
+42E9 B008       4130       BCS DISA12
+42EB A003       4140       LDY #3              ASSUME ACCUM
+42ED E019       4150       CPX #25
+42EF B002       4160       BCS DISA12
+42F1 A004       4170       LDY #4              IMPLIED
+42F3 8A         4180 DISA12 TXA 
+42F4 C939       4190 DISA13 CMP #57            A=MNEMONIC IDX
+42F6 D002       4200       BNE DISA14
+42F8 A004       4210       LDY #4              ILLEGAL ALWAYS IMP
+42FA 48         4220 DISA14 PHA 
+42FB 98         4230       TYA 
+42FC 48         4240       PHA 
+42FD B9E324     4250       LDA LENTAB,Y
+4300 85F6       4260       STA NCOUNT
+4302 A920       4270       LDA #$20
+4304 207E1B     4280       JSR PUTBYT
+4307 A5CF       4290       LDA RPNT
+
+
+
+PAGE 64   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4309 A6D0       4300       LDX RPNT+1
+430B 20641B     4310       JSR PRTADR
+430E A920       4320       LDA #$20
+4310 207E1B     4330       JSR PUTBYT
+4313 A920       4340       LDA #$20
+4315 207E1B     4350       JSR PUTBYT
+4318 A000       4360       LDY #0
+431A 84D8       4370 DISA15 STY NAME+3
+431C 20021D     4380       JSR GETBYT
+431F A4D8       4390       LDY NAME+3
+4321 99D500     4400       STA NAME,Y
+4324 206A1B     4410       JSR PRTBYT
+4327 A920       4420       LDA #$20
+4329 207E1B     4430       JSR PUTBYT
+432C A4D8       4440       LDY NAME+3
+432E C8         4450       INY 
+432F C6F6       4460       DEC NCOUNT
+4331 D0E7       4470       BNE DISA15
+4333 A920       4480 DISA16 LDA #$20
+4335 207E1B     4490       JSR PUTBYT
+4338 A5F5       4500       LDA DCOUNT
+433A C914       4510       CMP #20
+433C D0F5       4520       BNE DISA16
+433E 68         4530       PLA 
+433F A8         4540       TAY 
+4340 68         4550       PLA 
+4341 85F6       4560       STA NCOUNT
+4343 0A         4570       ASL A
+4344 65F6       4580       ADC NCOUNT
+4346 AA         4590       TAX 
+4347 84F6       4600       STY NCOUNT
+4349 A003       4610       LDY #3
+434B BDC823     4620 DISA17 LDA MNETAB,X
+434E 207E1B     4630       JSR PUTBYT
+4351 E8         4640       INX 
+4352 88         4650       DEY 
+4353 D0F6       4660       BNE DISA17
+4355 A920       4670       LDA #$20
+4357 207E1B     4680       JSR PUTBYT
+435A A6F6       4690       LDX NCOUNT
+435C BDF024     4700       LDA PRFTAB,X
+435F 85F6       4710       STA NCOUNT
+4361 BDE324     4720       LDA LENTAB,X
+4364 85D8       4730       STA NAME+3
+                4740 ;
+4366 A907       4750       LDA #7
+4368 85D9       4760       STA NAME+4
+436A 06F6       4770 DISA18 ASL NCOUNT
+436C 904B       4780       BCC DISA25
+436E A4D9       4790       LDY NAME+4
+4370 B9C023     4800       LDA DPRTTB,Y
+4373 F020       4810       BEQ DISA21          PRINT ADR OR DEST
+4375 3011       4820       BMI DISA20          PRINT BYTE
+4377 C958       4830       CMP #'X
+4379 9007       4840       BCC DISA19          PRINT CHAR
+437B 48         4850       PHA 
+437C A92C       4860       LDA #',             PRINT ,X OR ,Y
+437E 207E1B     4870       JSR PUTBYT
+4381 68         4880       PLA 
+4382 207E1B     4890 DISA19 JSR PUTBYT
+4385 4CB923     4900       JMP DISA25
+4388 A924       4910 DISA20 LDA #'$
+
+
+
+PAGE 65   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+438A 207E1B     4920       JSR PUTBYT
+438D A5D6       4930       LDA NAME+1
+438F 206A1B     4940       JSR PRTBYT
+4392 4CB923     4950       JMP DISA25
+4395 A924       4960 DISA21 LDA #'$
+4397 207E1B     4970       JSR PUTBYT
+439A A5D6       4980       LDA NAME+1
+439C A6D7       4990       LDX NAME+2
+439E A4D8       5000       LDY NAME+3
+43A0 C002       5010       CPY #2
+43A2 D012       5020       BNE DISA24
+43A4 A6D0       5030       LDX RPNT+1          CALC DEST
+43A6 A8         5040       TAY 
+43A7 1001       5050       BPL DISA22
+43A9 CA         5060       DEX 
+43AA 38         5070 DISA22 SEC 
+43AB 65CF       5080       ADC RPNT
+43AD 9001       5090       BCC DISA23
+43AF E8         5100       INX 
+43B0 18         5110 DISA23 CLC 
+43B1 6901       5120       ADC #1
+43B3 9001       5130       BCC DISA24
+43B5 E8         5140       INX 
+43B6 20641B     5150 DISA24 JSR PRTADR
+43B9 C6D9       5160 DISA25 DEC NAME+4
+43BB 10AD       5170       BPL DISA18
+43BD A5D8       5180 DISA28 LDA NAME+3
+43BF 60         5190       RTS 
+                5200 ;
+43C0 59295800   5210 DPRTTB .BYTE "Y)X",0,$80,"(#A"
+43C4 80282341
+                5220 ;
+43C8 42524B43   5230 MNETAB .BYTE "BRKCLCCLDCLI"
+43CC 4C43434C
+43D0 44434C49
+43D4 434C5644   5240       .BYTE "CLVDEXDEYINX"
+43D8 45584445
+43DC 59494E58
+43E0 494E594E   5250       .BYTE "INYNOPPHAPHP"
+43E4 4F505048
+43E8 41504850
+43EC 504C4150   5260       .BYTE "PLAPLPRTIRTS"
+43F0 4C505254
+43F4 49525453
+43F8 53454353   5270       .BYTE "SECSEDSEITAX"
+43FC 45445345
+4400 49544158
+4404 54415954   5280       .BYTE "TAYTSXTXATXS"
+4408 53585458
+440C 41545853
+4410 54594141   5290       .BYTE "TYAASLROLLSR"
+4414 534C524F
+4418 4C4C5352
+441C 524F5242   5300       .BYTE "RORBCCBCSBEQ"
+4420 43434243
+4424 53424551
+4428 424D4942   5310       .BYTE "BMIBNEBPLBVC"
+442C 4E454250
+4430 4C425643
+4434 4256534C   5320       .BYTE "BVSLDXLDYCPX"
+4438 44584C44
+443C 59435058
+
+
+
+PAGE 66   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4440 4350594A   5330       .BYTE "CPYJSRJMPJMP"
+4444 53524A4D
+4448 504A4D50
+444C 41444341   5340       .BYTE "ADCANDCMPDEC"
+4450 4E44434D
+4454 50444543
+4458 454F5249   5350       .BYTE "EORINCLDAORA"
+445C 4E434C44
+4460 414F5241
+4464 53424353   5360       .BYTE "SBCSTASTXSTY"
+4468 54415354
+446C 58535459
+4470 4249543F   5370       .BYTE "BIT???"
+4474 3F3F
+                5380 ;
+4476 0018D858   5390 OPTAB1 .BYTE $00,$18,$D8,$58
+447A B8CA88E8   5400       .BYTE $B8,$CA,$88,$E8
+447E C8EA4808   5410       .BYTE $C8,$EA,$48,$08
+4482 68284060   5420       .BYTE $68,$28,$40,$60
+4486 38F878AA   5430       .BYTE $38,$F8,$78,$AA
+448A A8BA8A9A   5440       .BYTE $A8,$BA,$8A,$9A
+448E 980A2A4A   5450       .BYTE $98,$0A,$2A,$4A
+4492 6A90B0F0   5460       .BYTE $6A,$90,$B0,$F0
+4496 30D01050   5470       .BYTE $30,$D0,$10,$50
+449A 70A2A0E0   5480       .BYTE $70,$A2,$A0,$E0
+449E C0204C6C   5490       .BYTE $C0,$20,$4C,$6C
+                5500 ;
+44A2 899E9C34   5510 OPTAB2 .BYTE $89,$9E,$9C,$34
+44A6 3CD4DCF4   5520       .BYTE $3C,$D4,$DC,$F4,$FC
+44AA FC
+                5530 ;
+44AB 80108080   5540 TRANTB .BYTE $80,$10,$80,$80
+44AF 50206080   5550       .BYTE $50,$20,$60,$80
+44B3 80008080   5560       .BYTE $80,$00,$80,$80
+44B7 40307080   5570       .BYTE $40,$30,$70,$80
+                5580 ;
+44BB 191A1B1C   5590 MNTAB1 .BYTE 25,26,27,28
+44BF 36252F31   5600       .BYTE 54,37,47,49
+                5610 ;
+44C3 39383939   5620 MNTAB2 .BYTE 57,56,57,57
+44C7 37262827   5630       .BYTE 55,38,40,39
+                5640 ;
+44CB 332D302C   5650 MNTAB3 .BYTE 51,45,48,44
+44CF 35322E34   5660       .BYTE 53,50,46,52
+                5670 ;
+44D3 00050201   5680 MODETB .BYTE 0,5,2,1,1,2,2,1
+44D7 01020201
+44DB 09060708   5690       .BYTE 9,6,7,8,8,7,7,8
+44DF 08070708
+                5700 ;
+44E3 02030201   5710 LENTAB .BYTE 2,3,2,1,1,2,2,2
+44E7 01020202
+44EB 03030203   5720       .BYTE 3,3,2,3,2
+44EF 02
+                5730 ;
+44F0 50081080   5740 PRFTAB .BYTE $50,$08,$10,$80
+44F4 00363314   5750       .BYTE $00,$36,$33,$14
+44F8 0C09082A   5760       .BYTE $0C,$09,$08,$2A,$11
+44FC 11
+                5770 ;
+                5780 ;FORMAT DISK
+                5790 ;
+
+
+
+PAGE 67   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+44FD C92D       5800 COMF  CMP #'M-$20
+44FF D00E       5810       BNE COMF1
+4501 A000       5820       LDY #0
+4503 E033       5830       CPX #'S-$20
+4505 F00D       5840       BEQ COMF4
+4507 E025       5850       CPX #'E-$20
+4509 F008       5860       BEQ COMF3
+450B E024       5870       CPX #'D-$20
+450D F003       5880       BEQ COMF2
+450F 4C911A     5890 COMF1 JMP DEBU3
+4512 C8         5900 COMF2 INY 
+4513 C8         5910 COMF3 INY 
+4514 84FE       5920 COMF4 STY OPTION          FORMAT SD,ED,DD
+4516 202916     5930       JSR DENSTY          FOR TURFLG
+4519 A90C       5940       LDA #12             GET PERCOM BLOCK
+451B 85F4       5950       STA SIZE
+451D A94E       5960       LDA #$4E
+451F A240       5970       LDX #$40
+4521 20C915     5980       JSR WSE1
+4524 88         5990       DEY 
+4525 D03E       6000       BNE COMF8           NOT PERCOM
+4527 A4FE       6010       LDY OPTION
+4529 A91A       6020       LDA #$1A
+452B C001       6030       CPY #1
+452D F002       6040       BEQ COMF5
+452F A912       6050       LDA #$12
+4531 8D0307     6060 COMF5 STA DBUF+3
+4534 A900       6070       LDA #0
+4536 C000       6080       CPY #0
+4538 F002       6090       BEQ COMF6
+453A A904       6100       LDA #4
+453C 8D0507     6110 COMF6 STA DBUF+5
+453F A901       6120       LDA #1
+4541 A200       6130       LDX #0
+4543 C002       6140       CPY #2
+4545 F004       6150       BEQ COMF7
+4547 A900       6160       LDA #0
+4549 A280       6170       LDX #$80
+454B 8D0607     6180 COMF7 STA DBUF+6
+454E 8E0707     6190       STX DBUF+7
+4551 A94F       6200       LDA #$4F
+4553 A280       6210       LDX #$80
+4555 20C915     6220       JSR WSE1
+4558 202916     6230       JSR DENSTY
+455B A5E1       6240       LDA DENTYP
+455D C5FE       6250       CMP OPTION
+455F D0AE       6260       BNE COMF1
+4561 A921       6270       LDA #$21
+4563 D00B       6280       BNE COMF9
+                6290 ;
+4565 A921       6300 COMF8 LDA #$21
+4567 A4FE       6310       LDY OPTION
+4569 F005       6320       BEQ COMF9
+456B A922       6330       LDA #$22
+456D 88         6340       DEY 
+456E D09F       6350       BNE COMF1
+4570 48         6360 COMF9 PHA 
+4571 A5FE       6370       LDA OPTION
+4573 85E1       6380       STA DENTYP
+4575 206716     6390       JSR IBOOT
+4578 68         6400       PLA 
+4579 A240       6410       LDX #$40
+
+
+
+PAGE 68   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+457B 20C915     6420       JSR WSE1
+457E 88         6430       DEY 
+457F D08E       6440       BNE COMF1
+4581 FFE100     6450       JSR DENTYP
+                6460 ;
+                6470 ;DISK FORMATTED, BUILD VTOC
+                6480 ;
+4584 A900       6490       LDA #0
+4586 AA         6500       TAX 
+4587 9D0006     6510 COF10 STA VTOC,X
+458A E8         6520       INX 
+458B D0FA       6530       BNE COF10
+458D A902       6540       LDA #2
+458F 8D0006     6550       STA VTOC
+4592 8D0206     6560       STA VTOC+2
+4595 8D0406     6570       STA VTOC+4
+4598 A9C3       6580       LDA #$C3
+459A 8D0106     6590       STA VTOC+1
+459D 8D0306     6600       STA VTOC+3
+45A0 A90F       6610       LDA #$0F
+45A2 8D0A06     6620       STA VTOC+$0A
+45A5 A964       6630       LDA #$64
+45A7 A6E1       6640       LDX DENTYP
+45A9 CA         6650       DEX 
+45AA D012       6660       BNE COF11
+45AC A9F2       6670       LDA #$F2
+45AE 8D0106     6680       STA VTOC+1
+45B1 EE0206     6690       INC VTOC+2
+45B4 A92F       6700       LDA #$2F
+45B6 8D8A06     6710       STA VTOC+$8A
+N5B9 EE8B06     6720       INC VTOC+$8B
+45BC A98A       6730       LDA #$8A
+45BE 85FE       6740 COF11 STA OPTION
+45C0 A20B       6750       LDX #$0B
+45C2 A9FF       6760       LDA #$FF
+45C4 9D0006     6770 COF12 STA VTOC,X
+45C7 E8         6780       INX 
+45C8 E4FE       6790       CPX OPTION
+45CA D0F8       6800       BNE COF12
+45CC EE3706     6810       INC VTOC+$37
+45CF 4E3806     6820       LSR VTOC+$38
+45D2 A9FF       6830       LDA #$FF
+45D4 85F9       6840       STA FILENO
+45D6 202917     6850       JSR WVTOC
+45D9 A00A       6860       LDY #10
+45DB 20931E     6870       JSR FDECO5
+45DE 20AB1B     6880       JSR SCROLL
+45E1 20CE18     6890       JSR DDIR
+45E4 4C911A     6900       JMP DEBU3
+                6910 ;
+                6920 ;READ/WRITE SECTOR
+                6930 ;
+45E7 C921       6940 COMS  CMP #'A-$20
+45E9 F00B       6950       BEQ COMS2
+45EB C932       6960       CMP #'R-$20
+45ED F00E       6970       BEQ COMS3
+45EF C937       6980       CMP #'W-$20
+45F1 F025       6990       BEQ COMS5
+45F3 4C911A     7000 COMS1 JMP DEBU3
+45F6 E036       7010 COMS2 CPX #'V-$20
+45F8 D0F9       7020       BNE COMS1
+45FA 4CCF26     7030       JMP BSAVE
+
+
+
+PAGE 69   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+45FD E6F6       7040 COMS3 INC NCOUNT          READ SECTOR
+45FF 202916     7050       JSR DENSTY
+4602 20CF16     7060       JSR IVTOC
+4605 A900       7070       LDA #0
+4607 20F41B     7080       JSR MATCH
+460A 9006       7090       BCC COMS4
+460C 8D0A03     7100       STA DAUX1
+460F 8E0B03     7110       STX DAUX2
+4612 20BF15     7120 COMS4 JSR RSEC
+4615 4C911A     7130       JMP DEBU3
+                7140 ;
+4618 E6F6       7150 COMS5 INC NCOUNT          WRITE SECTOR
+461A A200       7160       LDX #0
+461C BD0007     7170 COMS6 LDA DBUF,X
+461F 9D0006     7180       STA VTOC,X
+N622 CA         7190       DEX 
+4623 D0F7       7200       BNE COMS6
+4625 202916     7210       JSR DENSTY
+4628 20CF16     7220       JSR IVTOC
+462B A200       7230       LDX #0
+462D BD0006     7240 COMS7 LDA VTOC,X
+4630 9D0007     7250       STA DBUF,X
+4633 CA         7260       DEX 
+4634 D0F7       7270       BNE COMS7
+4636 A900       7280       LDA #0
+4638 20F41B     7290       JSR MATCH
+463B 9006       7300       BCC COMS8
+463D 8D0A03     7310       STA DAUX1
+4640 8E0B03     7320       STX DAUX2
+4643 20C515     7330 COMS8 JSR WSEC
+4646 4C911A     7340       JMP DEBU3
+                7350 ;
+                7360 ;FILE DELETE
+                7370 ;
+4649 207826     7380 FDELET JSR IUTILS
+464C 20E116     7390       JSR RVTOC
+464F 207D18     7400 FDELE1 JSR SEARC1
+4652 901C       7410       BCC FDELE5          NO MATCH, EXIT
+4654 A5E2       7420       LDA DENTRY
+4656 2920       7430       AND #$20
+4658 D011       7440       BNE FDELE3
+465A A905       7450       LDA #5
+465C 208626     7460       JSR QUERY
+465F D00A       7470       BNE FDELE3          DON'T DELETE
+4661 200518     7480 FDELE2 JSR DELETE
+4664 A980       7490       LDA #$80
+4666 85E2       7500       STA DENTRY
+4668 202917     7510       JSR WVTOC
+466B 20B926     7520 FDELE3 JSR NEXENT
+466E 90DF       7530       BCC FDELE1
+4670 60         7540 FDELE5 RTS 
+                7550 ;
+                7560 ;GET FILE NAME
+                7570 ;
+4671 A905       7580 GFNAME LDA #5
+4673 85F6       7590       STA NCOUNT
+4675 4C611E     7600       JMP FDECOD
+                7610 ;
+                7620 ;INIT DUP UTILS
+                7630 ;
+4678 202916     7640 IUTILS JSR DENSTY
+467B 20CF16     7650       JSR IVTOC
+
+
+
+PAGE 70   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+467E A2FF       7660       LDX #$FF
+4680 86F8       7670       STX MAPMSK
+4682 E8         7680       INX 
+4683 86F9       7690       STX FILENO
+4685 60         7700       RTS 
+                7710 ;
+                7720 ;QUERY A
+                7730 ;
+4686 48         7740 QUERY PHA 
+4687 A5FE       7750       LDA OPTION
+4689 C951       7760       CMP #'Q
+468B D028       7770       BNE QUERY2
+468D 20AB1B     7780       JSR SCROLL
+4690 68         7790       PLA 
+4691 A8         7800       TAY 
+4692 20A11D     7810       JSR PRTSTR
+4695 20CD1E     7820       JSR PRTNAM
+4698 A93F       7830       LDA #'?
+469A 207E1B     7840       JSR PUTBYT
+469D 20AD0B     7850       JSR GETKEY
+46A0 48         7860       PHA 
+46A1 A92D       7870       LDA #'-
+46A3 207E1B     7880       JSR PUTBYT
+46A6 68         7890       PLA 
+46A7 C959       7900       CMP #'Y
+46A9 F002       7910       BEQ QUERY1
+46AB A94E       7920       LDA #'N
+46AD 48         7930 QUERY1 PHA 
+46AE 207E1B     7940       JSR PUTBYT
+46B1 68         7950       PLA 
+46B2 C959       7960       CMP #'Y
+46B4 60         7970       RTS 
+46B5 68         7980 QUERY2 PLA 
+46B6 A900       7990       LDA #0
+46B8 60         8000       RTS 
+                8010 ;
+                8020 ;NEXT ENTRY FOR DUP UTILS
+                8030 ;CONTINUE IF CY=0
+                8040 ;
+46B9 A5FE       8050 NEXENT LDA OPTION
+46BB C941       8060       CMP #'A
+46BD F006       8070       BEQ NEXEN1
+46BF C951       8080       CMP #'Q
+46C1 F002       8090       BEQ NEXEN1
+46C3 38         8100       SEC 
+46C4 60         8110       RTS 
+46C5 E6F9       8120 NEXEN1 INC FILENO
+46C7 A5F9       8130       LDA FILENO
+46C9 C940       8140       CMP #$40
+46CB 60         8150       RTS 
+                8160 ;
+46CC 4C911A     8170 BSAVEX JMP DEBU3
+46CF 207126     8180 BSAVE JSR GFNAME
+46D2 A92C       8190       LDA #',
+46D4 20F41B     8200       JSR MATCH
+46D7 90F3       8210       BCC BSAVEX
+46D9 A900       8220       LDA #0
+46DB 20F41B     8230       JSR MATCH
+46DE 90EC       8240       BCC BSAVEX
+46E0 85CF       8250       STA RPNT
+46E2 86D0       8260       STX RPNT+1
+46E4 A92C       8270       LDA #',
+
+
+
+PAGE 71   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+46E6 20F41B     8280       JSR MATCH
+46E9 90E1       8290       BCC BSAVEX
+46EB A900       8300       LDA #0
+46ED 20F41B     8310       JSR MATCH
+46F0 90DA       8320       BCC BSAVEX
+46F2 202916     8330       JSR DENSTY
+46F5 20E116     8340       JSR RVTOC
+46F8 207618     8350       JSR SEARCH
+46FB B009       8360       BCS BSAV1
+46FD 24F9       8370       BIT FILENO
+46FF 1011       8380       BPL BSAV3           FOUND HOLE
+4701 A007       8390       LDY #7
+4703 4CF30E     8400       JMP ERROR
+4706 A20A       8410 BSAV1 LDX #10
+4708 B5E7       8420 BSAV2 LDA DENTRY+5,X
+470A 95D5       8430       STA NAME,X
+470C CA         8440       DEX 
+470D 10F9       8450       BPL BSAV2
+470F 200518     8460       JSR DELETE
+4712 20A816     8470 BSAV3 JSR IWFILE
+4715 A900       8480       LDA #0
+4717 85F7       8490       STA MAPIDX          BYTE INDEX
+4719 A9FF       8500       LDA #$FF
+471B 206C27     8510       JSR PDIBYT
+471E A9FF       8520       LDA #$FF
+4720 206C27     8530       JSR PDIBYT
+4723 A5CF       8540       LDA RPNT
+4725 206C27     8550       JSR PDIBYT
+4728 A5D0       8560       LDA RPNT+1
+472A 206C27     8570       JSR PDIBYT
+472D A5FC       8580       LDA TPNT
+472F 206C27     8590       JSR PDIBYT
+4732 A5FD       8600       LDA TPNT+1
+4734 206C27     8610       JSR PDIBYT
+4737 A000       8620 BSAV4 LDY #0
+4739 20021D     8630       JSR GETBYT
+473C 206C27     8640       JSR PDIBYT
+473F A901       8650       LDA #1
+4741 20431C     8660       JSR ADVADR
+4744 F0F1       8670       BEQ BSAV4
+4746 90EF       8680       BCC BSAV4
+4748 A6F6       8690       LDX NCOUNT
+474A A5F9       8700       LDA FILENO          CLOSE FILE
+474C 0A         8710       ASL A
+474D 0A         8720       ASL A
+474E 9D0007     8730       STA DBUF,X
+4751 E8         8740       INX 
+4752 A900       8750       LDA #0
+4754 9D0007     8760       STA DBUF,X
+4757 E8         8770       INX 
+4758 A5F7       8780       LDA MAPIDX
+475A 9D0007     8790       STA DBUF,X
+475D 20C515     8800       JSR WSEC
+4760 202917     8810       JSR WVTOC
+4763 20AB1B     8820       JSR SCROLL
+4766 20CE18     8830       JSR DDIR
+4769 4C911A     8840       JMP DEBU3
+                8850 ;
+                8860 ;PUT BYTE TO DISK
+                8870 ;
+476C A4F7       8880 PDIBYT LDY MAPIDX
+476E C4F6       8890       CPY NCOUNT
+
+
+
+PAGE 72   FREEZER V2.3
+                                                                                                                    D:EXTRAS.M65
+
+
+
+4770 9009       8900       BCC PDIBY1
+4772 48         8910       PHA 
+4773 208915     8920       JSR WDISK
+4776 68         8930       PLA 
+4777 A000       8940       LDY #0
+4779 84F7       8950       STY MAPIDX
+477B 990007     8960 PDIBY1 STA DBUF,Y
+477E E6F7       8970       INC MAPIDX
+4780 60         8980       RTS 
+                8990 ;
+4781 207126     9000 BLOAD JSR GFNAME
+4784 207826     9010       JSR IUTILS
+4787 207618     9020       JSR SEARCH
+478A B005       9030       BCS BLOA1
+478C A000       9040       LDY #0
+478E 4CF30E     9050       JMP ERROR
+4791 208716     9060 BLOA1 JSR IRFILE
+4794 A9FF       9070       LDA #$FF            FORCE READ OF NEW
+4796 85F7       9080       STA MAPIDX          SECTOR
+4798 207B1F     9090 BLOA2 JSR GDIBYT
+479B B04D       9100       BCS BLOA4
+479D 85CF       9110       STA RPNT
+479F 207B1F     9120       JSR GDIBYT
+47A2 B046       9130       BCS BLOA4
+47A4 85D0       9140       STA RPNT+1
+47A6 25CF       9150       AND RPNT
+47A8 C9FF       9160       CMP #$FF
+47AA F0EC       9170       BEQ BLOA2           IGNORE $FFFF HEADER
+47AC 207B1F     9180       JSR GDIBYT
+47AF B039       9190       BCS BLOA4
+47B1 85FC       9200       STA TPNT
+47B3 207B1F     9210       JSR GDIBYT
+47B6 B032       9220       BCS BLOA4
+47B8 85FD       9230       STA TPNT+1
+47BA 20AB1B     9240       JSR SCROLL          PRINT FROM-TO
+47BD A920       9250       LDA #$20
+47BF 207E1B     9260       JSR PUTBYT
+47C2 A5CF       9270       LDA RPNT
+47C4 A6D0       9280       LDX RPNT+1
+47C6 20641B     9290       JSR PRTADR
+47C9 A92D       9300       LDA #'-
+47CB 207E1B     9310       JSR PUTBYT
+47CE A5FC       9320       LDA TPNT
+47D0 A6FD       9330       LDX TPNT+1
+47D2 20641B     9340       JSR PRTADR
+47D5 207B1F     9350 BLOA3 JSR GDIBYT          GET DATA BYTE
+47D8 B010       9360       BCS BLOA4
+47DA A000       9370       LDY #0
+47DC 20B220     9380       JSR STOBYT
+47DF A901       9390       LDA #1
+47E1 20431C     9400       JSR ADVADR
+47E4 F0EF       9410       BEQ BLOA3
+47E6 90ED       9420       BCC BLOA3
+47E8 B0AE       9430       BCS BLOA2
+47EA 4C911A     9440 BLOA4 JMP DEBU3
+                0450 ;
+47ED            0460       .END 
+
+ASSEMBLY ERRORS: 0   19697 BYTES FREE
+
+
+
+
+
+
+PAGE 73   FREEZER V2.3
+SYMBOLS                                                                                                              
+
+
+
+
+ 1C5E ADVAD1         1C5F ADVAD2         1C43 ADVADR         1375 ADVMA1        
+ 136D ADVMAP         1382 ADVPN0         13A2 ADVPN1         13BA ADVPN2        
+ 13BB ADVPN3         1376 ADVPNT         0CBC AKEY           1786 ALLOC1        
+ 1793 ALLOC2         1795 ALLOC3         179B ALLOC4         17C1 ALLOC5        
+ 17D1 ALLOC6         17D5 ALLOC7         17DD ALLOC8         1784 ALLOCS        
+=D400 ANTIC         =D204 AUDF3         =D206 AUDF4         
+ 00D4 BANK           0A01 BARLIN         1A39 BEEP           1A3E BEEP1         
+ 1A44 BEEP2          1A4B BEEP3          1A53 BEEP4          1A5F BEEP5         
+ 0035 BFENHI         0034 BFENLO         17E1 BITMSK         0E65 BKEY          
+ 2791 BLOA1          2798 BLOA2          27D5 BLOA3          27EA BLOA4         
+ 2781 BLOAD          00D1 BPNT          =D700 BRKCTL        =0011 BRKKEY        
+ 2706 BSAV1          2708 BSAV2          2712 BSAV3          2737 BSAV4         
+ 26CF BSAVE          26CC BSAVEX         0038 BUFRFL         0033 BUFRHI        
+ 0032 BUFRLO        
+=023D CAUX2         =02EF CBAUDH        =02EE CBAUDL        =0226 CDTMA1        
+=0218 CDTMV1        =D401 CHACTL        =D409 CHBASE         003B CHKSNT        
+ 0031 CHKSUM         1014 CKEY           19BA CLCR           19BA CLCW          
+ 0B88 CMDV           2587 COF10          25BE COF11          25C4 COF12         
+=D01A COLBK         =D016 COLPF0         09DE COLTAB         1B52 COMAD         
+ 1F25 COMC           1F30 COMC1          1F37 COMC2          1F62 COMC3         
+ 1F6B COMC4          24FD COMF           250F COMF1          2512 COMF2         
+ 2513 COMF3          2514 COMF4          2531 COMF5          253C COMF6         
+ 254B COMF7          2565 COMF8          2570 COMF9          1F03 COMG          
+ 1F22 COMG1          2212 COML           221D COML1          2224 COML2         
+ 25E7 COMS           25F3 COMS1          25F6 COMS2          25FD COMS3         
+ 2612 COMS4          2618 COMS5          261C COMS6          262D COMS7         
+ 2643 COMS8          1B49 COMTB          21A8 COMU          =D01F CONSOL        
+ 09CD COPYPF         2094 CP10           20A7 CP11          =4100 CPAGE         
+ 2000 CPU            200F CPU1           205C CPU2           205F CPU3          
+ 2064 CPU4           2066 CPU5           2074 CPU6           207F CPU7          
+ 2086 CPU8           208D CPU9           0036 CRETRY         1A23 CSIOI1        
+ 1A21 CSIOIN         1A2D CSITAB        
+ 2231 DASM1          223F DASM2          2243 DASM3          2247 DASM4         
+ 225D DASM5         =030A DAUX1         =030B DAUX2         =0700 DBUF          
+=0305 DBUFHI        =0304 DBUFLO        =0309 DBYTHI        =0308 DBYTLO        
+=0302
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

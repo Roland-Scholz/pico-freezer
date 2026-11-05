@@ -1,0 +1,169 @@
+;-------------------------------
+;    CASSETTE DEVICE HANDLER
+;-------------------------------
+ECASS 
+      DBGTXT "eCA     "
+      JSR OPCR            ; EXEC CASSETTE
+      JSR INCA
+      JSR LOAD
+      JSR CLCR
+      JMP RSTART
+
+SCASS 
+      DBGTXT "sCA     "
+      JSR OPCW            ; SAVE CASSETTE
+      JSR INCA
+      JSR SAVE
+      JSR CLCW
+      JMP ENDCMD
+
+;INIT CASSETTE
+
+INCA  LDA #0
+      STA NEXT+1
+;      STA TURFLG
+      LDA #$80
+      STA SIZE
+      STA NCOUNT
+      STA FILENO
+      LDA #2
+      STA DEVICE
+      STA NEXT
+      RTS 
+
+;OPEN CASSETTE READ
+
+OPCR  JSR BEEP
+      JSR GETKEY
+      LDA #$34
+      STA PACTL
+      LDA #2
+      BNE OPC1
+
+;OPEN CASSETTE WRITE
+
+OPCW  JSR BEEP
+      JSR BEEP
+      JSR GETKEY
+      LDA #$CC
+      STA AUDF3
+      LDA #5
+      STA AUDF4
+      LDA #$60
+      STA DDEVIC
+      JSR SENDEV
+      LDA #$34
+      STA PACTL
+      LDA #4
+OPC1  CLC 
+      ADC RTCLOK+1
+      LDX #$40
+      STX NMIEN
+OPC2  CMP RTCLOK+1
+      BNE OPC2
+      LDA #0
+      STA NMIEN
+      RTS 
+
+;CLOSE READ
+
+CLCR
+
+;CLOSE WRITE
+
+CLCW  LDA #$3C
+      STA PACTL
+      RTS 
+
+;WRITE CASSETTE BLOCK
+
+WCASS JSR CSIOIN
+      LDA #$57
+      STA DCOMND
+      ASL DSTATS
+      LDA #$55
+      STA DBUF-1
+      STA DBUF-2
+      BNE RCAS1
+
+;READ CASSETTE BLOCK
+
+RCASS JSR CSIOIN
+RCAS1 LDA #$80
+      STA POKMSK
+      STA IRQEN
+      CLI 
+      LDA #$40
+      STA NMIEN
+      BIT DSTATS
+      BMI RCAS5
+      LDA RTCLOK+2
+      CLC 
+      ADC #5
+RCAS6 CMP RTCLOK+2
+      BNE RCAS6
+RCAS5 JSR SIOV
+      LDA #0
+      STA POKMSK
+      STA IRQEN
+      SEI 
+      DEY 
+      BEQ RCAS2
+      LDY #8
+      LDA #$3C
+      STA PACTL
+      JMP ERROR
+RCAS2 LDA DCOMND
+      CMP #$57
+      BNE RCAS4
+      LDA RTCLOK+2
+      CLC 
+      ADC #10
+RCAS3 CMP RTCLOK+2
+      BNE RCAS3
+RCAS4 LDA #0
+      STA NMIEN
+      RTS 
+
+;INIT CASSETTE SIO OPERATION
+
+CSIOIN LDX #$0B
+CSIOI1 LDA CSITAB,X
+      STA DDEVIC,X
+      DEX 
+      BPL CSIOI1
+      RTS 
+
+CSITAB .BYTE $60,0,$52,$40
+      .WORD DBUF-2
+      .WORD 35
+      .WORD 130
+      .BYTE 0,$80
+
+;BEEP
+
+BEEP  LDA #$40
+      STA NMIEN
+BEEP1 LDA RTCLOK+2
+      CLC 
+      ADC #30
+      TAX 
+BEEP2 LDA #$08
+      STA CONSOL
+      LDY #$F0
+BEEP3 DEY 
+      BNE BEEP3
+      STY CONSOL
+      LDY #$F0
+BEEP4 DEY 
+      BNE BEEP4
+      CPX RTCLOK+2
+      BNE BEEP2
+      LDA RTCLOK+2
+      CLC 
+      ADC #10
+BEEP5 CMP RTCLOK+2
+      BNE BEEP5
+      LDA #0
+      STA NMIEN
+      RTS 

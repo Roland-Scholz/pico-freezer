@@ -1,0 +1,181 @@
+
+;-------------------------------
+;IRQ & NMI INTERRUPT HANDLERS
+;-------------------------------
+
+MYVBL INC RTCLOK+2
+      BNE MYVB1
+      INC RTCLOK+1
+      BNE MYVB1
+      INC RTCLOK
+
+MYVB1 LDA CDTMV1          ; PROCESS SYSTEM TIMER 1
+      ORA CDTMV1+1
+      BEQ MYVB3           ; NOT RUNNING
+      LDA CDTMV1          ; DECREMENT
+      BNE MYVB2
+      DEC CDTMV1+1
+MYVB2 DEC CDTMV1
+      LDA CDTMV1
+      ORA CDTMV1+1
+      BNE MYVB3           ; NOT YET ZERO
+      JSR MYVB4           ; EXECUTE ROUTINE
+
+MYVB3 PLA 
+      TAY 
+      PLA 
+      TAX 
+      PLA 
+      RTI 
+
+MYVB4 JMP (CDTMA1)
+
+;INTERRUPT HANDLER & SIO SUPPORT
+
+MYIRQ PHA 
+      TYA 
+      PHA 
+      LDA #$20            ; SERIN READY INT?
+      BIT IRQST
+      BNE MYIRQ7          ; NO
+
+      JSR RIRQ
+      LDA SKSTAT
+      STA SKRES
+      BMI MYIRQ1          ; NO FRAMING ERROR
+      LDY #$8C
+      STY STATUS
+MYIRQ1 AND #$20
+      BNE MYIRQ2          ; NO OVERRUN ERROR
+      LDY #$8E
+      STY STATUS
+MYIRQ2 LDA BUFRFL
+      BEQ MYIRQ4          ; BUFFER NOT YET FULL
+
+      LDA SERIN           ; BYTE IS CHECKSUM
+      CMP CHKSUM
+      BEQ MYIRQ3          ; CHECKSUM MATCH
+      LDY #$8F
+      STY STATUS          ; CHECKSUM ERROR
+
+MYIRQ3 LDA #$FF
+      STA RECVDN
+MYIRQX JMP MYIR16
+
+MYIRQ4 LDA SERIN          ; BYTE IS DATA
+      LDY #0
+      STA (BUFRLO),Y
+      CLC                 ; ADD TO CHECKSUM
+      ADC CHKSUM
+      ADC #0
+      STA CHKSUM
+      INC BUFRLO          ; INC BUFFER POINTER
+      BNE MYIRQ5
+      INC BUFRHI
+MYIRQ5 LDA BUFRLO
+      CMP BFENLO
+      LDA BUFRHI
+      SBC BFENHI
+      BCC MYIRQX          ; BUFFER NOT YET FULL
+
+      LDA NOCKSM
+      BEQ MYIRQ6          ; CHECKSUM WILL FOLLOW
+      LDA #0
+      STA NOCKSM
+      BEQ MYIRQ3          ; ALWAYS
+
+MYIRQ6 LDA #$FF           ; SET BUFFER FULL FLAG
+      STA BUFRFL
+      BNE MYIRQX          ; ALWAYS
+
+MYIRQ7 LSR A              ; SEROUT RDY INT?
+      BIT IRQST
+      BNE MYIR12          ; NO
+
+      LSR A               ; COMMAND FRAME?
+      BIT PBCTL
+      BNE MYIRQ8          ; NO
+
+; Hias: removed Turbo stuff (this is now handled in the highspeed SIO routine)
+;      LDA TURFLG          ; TURBO ON?
+;      BEQ MYIRQ8          ; NO
+;      LDA CAUX2           ; ACTIVATE TURBO
+;      ORA #$80
+;      STA CAUX2
+
+MYIRQ8 LDA #$10
+      JSR RIRQ
+      INC BUFRLO          ; INC BUFFER POINTER
+      BNE MYIRQ9
+      INC BUFRHI
+MYIRQ9 LDA BUFRLO
+      CMP BFENLO
+      LDA BUFRHI
+      SBC BFENHI
+      BCC MYIR11          ; BUFFER NOT YET EMPTY
+
+      LDA CHKSNT
+      BNE MYIR10          ; CHECKSUM ALREADY SENT
+      LDA CHKSUM          ; SEND CHECKSUM
+      STA SEROUT
+      LDA #$FF            ; SET CHECKSUM SENT FLAG
+      STA CHKSNT
+      BNE MYIR16          ; ALWAYS
+
+MYIR10 LDA POKMSK         ; ENABLE XMIT DONE INTERRUPT
+      ORA #$08
+      STA POKMSK
+      STA IRQEN
+      BNE MYIR16          ; ALWAYS
+
+MYIR11 LDY #0             ; SEND BYTE FROM BUFFER
+      LDA (BUFRLO),Y
+      STA SEROUT
+      CLC                 ; ADD TO CHECKSUM
+      ADC CHKSUM
+      ADC #0
+      STA CHKSUM
+      JMP MYIR16
+
+MYIR12 LSR A              ; SEROUT COMPLETE IRQ?
+      BIT POKMSK
+      BEQ MYIR15          ; NO
+      BIT IRQST
+      BNE MYIR15
+      JSR RIRQ
+
+      LDA CHKSNT          ; CHECKSUM SENT?
+      BEQ MYIR14          ; NO
+      STA XMTDON          ; SET XMIT DONE FLAG
+; Hias: removed Turbo stuff (this is now handled in the highspeed SIO routine)
+;      LDA CAUX2           ; TURBO?
+;      BPL MYIR13          ; NO
+;      LDA #6
+;      STA AUDF3           ; SET 70000 BAUD
+
+MYIR13 LDA POKMSK         ; DISABLE TRANSMIT DONE IRQ
+      AND #$F7
+      STA POKMSK
+      STA IRQEN
+
+MYIR14 JMP MYIR16
+
+MYIR15 BIT IRQST          ; BREAK KEY?
+      PHP 
+      LDA #$FF
+      JSR RIRQ            ; RESET ALL INTS
+      PLP 
+      BMI MYIR16          ; NO
+      LDA #0
+      STA BRKKEY
+
+MYIR16 PLA 
+      TAY 
+      PLA 
+      RTI 
+
+RIRQ  EOR #$FF            ; RESET INTERRUPT
+      STA IRQEN
+      LDA POKMSK
+      STA IRQEN
+      RTS 

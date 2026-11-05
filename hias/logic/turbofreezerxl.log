@@ -1,0 +1,84 @@
+|--------------------------------------------|
+|- ispLEVER Fitter Report File              -|
+|- Version 4.1.00.22.28.04_Synplify_Pack                       -|
+|- (c)Copyright, Lattice Semiconductor 2002 -|
+|--------------------------------------------|
+
+
+
+*** Source file is turbofreezerxl.tt4 . Device is M4A5-64/32-10JC .
+
+<Note>  F40016:  0 pins have been reserved out of 34 .
+<Note>  F40021:  34 pins are available after reservation, 34 are required
+                 by the design.
+<Note> Node a_0_ := a_in_0_ as Input Register.
+<Note> Node a_1_ := a_in_1_ as Input Register.
+<Note> Node a_2_ := a_in_2_ as Input Register.
+<Note> Node a_3_ := a_in_3_ as Input Register.
+<Note> Node a_4_ := a_in_4_ as Input Register.
+<Note> Node a_5_ := a_in_5_ as Input Register.
+<Note> Node a_6_ := a_in_6_ as Input Register.
+<Note> Node a_7_ := a_in_7_ as Input Register.
+<Note> Node a_8_ := a_in_8_ as Input Register.
+<Note> Node a_9_ := a_in_9_ as Input Register.
+<Note> Node a_10_ := a_in_10_ as Input Register.
+<Note> Node a_11_ := a_in_11_ as Input Register.
+<Note> Node a_12_ := a_in_12_ as Input Register.
+<Note> Node a_13_ := a_in_13_ as Input Register.
+<Note> Node a_14_ := a_in_14_ as Input Register.
+<Note> Node a_15_ := a_in_15_ as Input Register.
+<Note> Node activate_inputreg := activate_in as Input Register.
+<Note>  F35065:  For outputs, implicit output enables will be set to VCC.
+<Note>  F35068:  Since SET/RESET DON'T CARE is turned off, any unspecified
+                 SET/RESET will be defaulted to GND.
+
+*** End of Pla2db. 
+Check preplaced pins/nodes
+Check preplaced blocks
+Check unreferenced pins/nodes
+Check clock rules
+
+List of global clocks:
+   phi2:
+...... Controls a preplaced input register/latch.
+...... Is preplaced at a global clock pin.
+...... Controls a signal with both SET & RESET non-GND.
+
+List of non-global clocks:
+   None.
+
+*** End of Normalization.
+
+*** End of DRC. 
+
+*** Start Partitioning
+. . 
+<Warning>  F40008:  Failed to partition with assigned constraints. Pin/Node
+                    reservation, Input limit constraints, Utilization
+                    Percentages will be IGNORED!
+                    Pins/Nodes assignments kept.
+.
+. . . . . . . . 
+Reshuffle Equations
+. . . . . . 
+Shift to FANIN_PHASE.
+. . . .  
+. 
+Shift to FANIN_PHASE2.
+. . . . . . . . . . . . . . . 
+Shift to BUR_NOD_PHASE.
+. . . . .  
+
+*** Partitioning successful.
+
+
+*** Starting Place&Route
+
+*** Place&Route Successful
+...... Zero Hold Time For Input Registers? N
+*** The JEDEC file generated is turbofreezerxl.jed .
+*** Report Generator invoked.
+*** Report Generator end.
+
+// Fitting successful.
+// ERROR count 0 WARNING count 1 .

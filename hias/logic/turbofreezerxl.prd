@@ -1,0 +1,1053 @@
+|--------------------------------------------|
+|- ispLEVER Fitter Report File              -|
+|- Version 4.1.00.22.28.04_Synplify_Pack                       -|
+|- (c)Copyright, Lattice Semiconductor 2002 -|
+|--------------------------------------------|
+
+
+Start: Wed May 04 18:07:28 2005
+End  : Wed May 04 18:07:29 2005    $$$ Elapsed time: 00:00:01
+===========================================================================
+Part [D:\ispTOOLS4_1\ispcpld/dat/mach4a/mach463a] Design [turbofreezerxl.tt4]
+
+* Place/Route options (keycode = 540674)
+	= Spread Placement:			      ON
+	= No. Routing Attempts/Placement	       2
+
+* Placement Completion
+
+ +- Block                       +------- IO Pins Available
+ |    +- Macrocells Available   |    +-- IO Pins Used
+ |    |    +- Signals to Place  |    |             +----- Logic Array Inputs
+ |    |    |    +- Placed       |    |             |   +- Array Inputs Used
+_|____|____|____|_______________|____|_____________|___|________________
+ 0 | 16 | 15 | 15 => 100% |     8 |  8 => 100% |  33 | 33    => 100%
+ 1 | 16 | 14 | 14 => 100% |     8 |  8 => 100% |  33 | 33    => 100%
+ 2 | 16 | 14 | 14 => 100% |     8 |  8 => 100% |  33 | 33    => 100%
+ 3 | 16 | 11 | 11 => 100% |     8 |  8 => 100% |  33 | 33    => 100%
+---|----|----|------------|-------|------------|-----|------------------
+        | Avg number of array inputs in used blocks :  33.00 => 100%
+
+* Input/Clock Signal count:  41 -> placed:  41 = 100%
+
+          Resources           Available   Used
+-----------------------------------------------------------------
+	Input Pins            :   0        0    =>   0%
+	I/O Pins              :  32       32    => 100%
+	Clock Only Pins       :   0        0    =>   0%
+	Clock/Input Pins      :   2        2    => 100%
+	Logic Blocks          :   4        4    => 100%
+	Macrocells            :  64       54    =>  84%
+	PT Clusters           :  64       55    =>  85%
+	 - Single PT Clusters :  64        9    =>  14%
+	Input Registers       :           17
+
+* Routing Completion: 100%
+* Attempts: Place [     180] Route [       0]
+===========================================================================
+	Signal Fanout Table
+===========================================================================
+   +- Signal Number
+   |  +- Block Location ('+' for dedicated inputs)
+   |  |  +- Sig Type
+   |  |  |    +- Signal-to-Pin Assignment
+   |  |  |    |    Fanout to Logic Blocks               Signal Name
+___|__|__|____|____________________________________________________________
+   1| 2|NOD|  . |=> 0..3| N_272
+   2| 1|NOD|  . |=> 01.3| N_275
+   3| 1|Rin|  17|=> .12.| a_0_
+		|=> Paired w/: a_in_0_
+   4| 2|Rin|  30|=> 0..3| a_10_
+		|=> Paired w/: a_in_10_
+   5| 2|Rin|  31|=> 01.3| a_11_
+		|=> Paired w/: a_in_11_
+   6| 2|Rin|  27|=> 0123| a_12_
+		|=> Paired w/: a_in_12_
+   7| 2|Rin|  28|=> 0123| a_13_
+		|=> Paired w/: a_in_13_
+   8| 2|Rin|  26|=> 0123| a_14_
+		|=> Paired w/: a_in_14_
+   9| 2|Rin|  25|=> 0123| a_15_
+		|=> Paired w/: a_in_15_
+  10| 1|Rin|  18|=> ..23| a_1_
+		|=> Paired w/: a_in_1_
+  11| 1|Rin|  19|=> 0.23| a_2_
+		|=> Paired w/: a_in_2_
+  12| 1|Rin|  20|=> 012.| a_3_
+		|=> Paired w/: a_in_3_
+  13| 1|Rin|  21|=> 0123| a_4_
+		|=> Paired w/: a_in_4_
+  14| 2|Rin|  24|=> 0.2.| a_5_
+		|=> Paired w/: a_in_5_
+  15| 3|Rin|  40|=> 0...| a_6_
+		|=> Paired w/: a_in_6_
+  16| 3|Rin|  38|=> 0.2.| a_7_
+		|=> Paired w/: a_in_7_
+  17| 3|Rin|  37|=> 0..3| a_8_
+		|=> Paired w/: a_in_8_
+  18| 3|Rin|  36|=> 0..3| a_9_
+		|=> Paired w/: a_in_9_
+  19| 1|INP|  17|=> ....| a_in_0_
+		|=> Paired w/: => (inreg) a_0_
+  20| 2|INP|  30|=> ....| a_in_10_
+		|=> Paired w/: => (inreg) a_10_
+  21| 2|INP|  31|=> ....| a_in_11_
+		|=> Paired w/: => (inreg) a_11_
+  22| 2|INP|  27|=> ....| a_in_12_
+		|=> Paired w/: => (inreg) a_12_
+  23| 2|INP|  28|=> ....| a_in_13_
+		|=> Paired w/: => (inreg) a_13_
+  24| 2|INP|  26|=> ....| a_in_14_
+		|=> Paired w/: => (inreg) a_14_
+  25| 2|INP|  25|=> ....| a_in_15_
+		|=> Paired w/: => (inreg) a_15_
+  26| 1|INP|  18|=> ....| a_in_1_
+		|=> Paired w/: => (inreg) a_1_
+  27| 1|INP|  19|=> ....| a_in_2_
+		|=> Paired w/: => (inreg) a_2_
+  28| 1|INP|  20|=> ....| a_in_3_
+		|=> Paired w/: => (inreg) a_3_
+  29| 1|INP|  21|=> ....| a_in_4_
+		|=> Paired w/: => (inreg) a_4_
+  30| 2|INP|  24|=> ....| a_in_5_
+		|=> Paired w/: => (inreg) a_5_
+  31| 3|INP|  40|=> ....| a_in_6_
+		|=> Paired w/: => (inreg) a_6_
+  32| 3|INP|  38|=> ....| a_in_7_
+		|=> Paired w/: => (inreg) a_7_
+  33| 3|INP|  37|=> ....| a_in_8_
+		|=> Paired w/: => (inreg) a_8_
+  34| 3|INP|  36|=> ....| a_in_9_
+		|=> Paired w/: => (inreg) a_9_
+  35| 0|INP|   6|=> ....| activate_in
+		|=> Paired w/: => (inreg) activate_inputreg
+  36| 0|Rin|   6|=> 0...| activate_inputreg
+		|=> Paired w/: activate_in
+  37| 2|NOD|  . |=> 01.3| cart_access_un13_flash_enable_n
+  38| 2|NOD|  . |=> ..2.| cart_bank_13_
+  39| 2|NOD|  . |=> 0.23| cart_bank_14_
+  40| 2|NOD|  . |=> 0.2.| cart_bank_15_
+  41| 1|NOD|  . |=> 01..| cart_bank_16_
+  42| 2|NOD|  . |=> ..23| cart_bank_17_
+  43| 2|NOD|  . |=> 0.2.| cart_bank_18_
+  44| 0|NOD|  . |=> .12.| cart_bank_select_std_match_result_n
+  45| 2|NOD|  . |=> .12.| cart_mode_0_
+  46| 2|NOD|  . |=> .12.| cart_mode_1_
+  47| 0|NOD|  . |=> ...3| check_d700_d71f_access_std_match_result_n
+  48| 0|NOD|  . |=> .1..| check_oss_bank_std_match_result_n
+  49| 0|NOD|  . |=> .1..| check_sdx_enable_std_match_result_n
+  50| 0|NOD|  . |=> 01.3| check_vector_access_un1_activate_n
+  51| 0|NOD|  . |=> ..2.| flash_config_access
+  52| 0|INP|   8|=> ..2.| flash_enable_in
+  53| 0|INP|   7|=> ..2.| flash_writable_in
+  54| 1|NOD|  . |=> .1..| freezer_ram_bank_12_
+  55| 3|NOD|  . |=> ...3| freezer_ram_bank_13_
+  56| 3|NOD|  . |=> ...3| freezer_ram_bank_14_
+  57| 1|NOD|  . |=> 01..| freezer_ram_bank_15_
+  58| 1|NOD|  . |=> .1..| freezer_ram_bank_16_
+  59| 0|NOD|  . |=> .1.3| freezer_ram_bank_select_std_match_result_n
+  60| 1|NOD|  . |=> .1.3| freezer_rom_bank_13_
+  61| 3|NOD|  . |=> ...3| freezer_rom_bank_14_
+  62| 0|NOD|  . |=> 0...| freezer_rom_bank_15_
+  63| 1|NOD|  . |=> .1..| freezer_rom_bank_16_
+  64| 0|NOD|  . |=> 0..3| freezer_rom_bank_17_
+  65| 0|NOD|  . |=> 0...| freezer_rom_bank_18_
+  66| 0|NOD|  . |=> 01.3| freezer_rom_bank_select_std_match_result_n
+  67| 3|NOD|  . |=> 01.3| freezer_state_0_
+  68| 3|NOD|  . |=> 01.3| freezer_state_1_
+  69| 2|NOD|  . |=> ..2.| inst_cart_keepsettings
+  70| 2|NOD|  . |=> 0.23| inst_cart_mode_ram
+  71| 2|NOD|  . |=> ..2.| inst_cart_write_enable
+  72| 2|NOD|  . |=> ..2.| inst_flash_enable
+  73| 1|NOD|  . |=> .12.| inst_sdx_enable
+  74| 3|NOD|  . |=> ...3| inst_use_vector_bankno
+  75| 3|NOD|  . |=> ...3| inst_vector_a2
+  76| 2|INP|  29|=> 01.3| os_select
+  77| 1|NOD|  . |=> .1..| oss_bank_12_
+  78| 1|NOD|  . |=> .12.| oss_bank_13_
+  79| +|Cin|  33|=> ....| phi2
+  80| 0|INP|   5|=> ..2.| poweron
+  81| 0|OUT|   3|=> ....| ram_ce
+  82| 1|OUT|  16|=> ....| ram_rom_a_12_
+  83| 3|OUT|  39|=> ....| ram_rom_a_13_
+  84| 3|OUT|  41|=> ....| ram_rom_a_14_
+  85| 0|OUT|   2|=> ....| ram_rom_a_15_
+  86| 1|OUT|  15|=> ....| ram_rom_a_16_
+  87| 3|OUT|  43|=> ....| ram_rom_a_17_
+  88| 0|OUT|   4|=> ....| ram_rom_a_18_
+  89| 0|OUT|   9|=> ....| refresh
+  90| 1|INP|  14|=> ..23| reset
+  91| 2|NOD|  . |=> .12.| reset_cartemu
+  92| 3|OUT|  42|=> ....| rom_ce
+  93| 1|NOD|  . |=> 0123| rw
+  94| +|INP|  11|=> .1..| rw_in
+  95| 1|NOD|  . |=> ..2.| un1_result_2
+---------------------------------------------------------------------------
+===========================================================================
+	< D:\ispTOOLS4_1\ispcpld/dat/mach4a/mach463a Device Pin Assignments >
+===========================================================================
+    +- Device Pin No
+    |   Pin Type    +- Signal Fixed (*)
+    |     |         |   Signal Name
+____|_____|_________|______________________________________________________
+    1 |  GND |     | |    (pwr/test)
+    2 |  I_O | 0_07|*| ram_rom_a_15_
+    3 |  I_O | 0_06|*| ram_ce
+    4 |  I_O | 0_05|*| ram_rom_a_18_
+    5 |  I_O | 0_04|*| poweron
+    6 |  I_O | 0_03|*| activate_in
+    7 |  I_O | 0_02|*| flash_writable_in
+    8 |  I_O | 0_01|*| flash_enable_in
+    9 |  I_O | 0_00|*| refresh
+   10 | JTAG |     | |    (pwr/test)
+   11 | CkIn |     |*| rw_in
+   12 |  GND |     | |    (pwr/test)
+   13 | JTAG |     | |    (pwr/test)
+   14 |  I_O | 1_00|*| reset
+   15 |  I_O | 1_01|*| ram_rom_a_16_
+   16 |  I_O | 1_02|*| ram_rom_a_12_
+   17 |  I_O | 1_03|*| a_in_0_
+   18 |  I_O | 1_04|*| a_in_1_
+   19 |  I_O | 1_05|*| a_in_2_
+   20 |  I_O | 1_06|*| a_in_3_
+   21 |  I_O | 1_07|*| a_in_4_
+   22 |  Vcc |     | |    (pwr/test)
+   23 |  GND |     | |    (pwr/test)
+   24 |  I_O | 2_07|*| a_in_5_
+   25 |  I_O | 2_06|*| a_in_15_
+   26 |  I_O | 2_05|*| a_in_14_
+   27 |  I_O | 2_04|*| a_in_12_
+   28 |  I_O | 2_03|*| a_in_13_
+   29 |  I_O | 2_02|*| os_select
+   30 |  I_O | 2_01|*| a_in_10_
+   31 |  I_O | 2_00|*| a_in_11_
+   32 | JTAG |     | |    (pwr/test)
+   33 | CkIn |     |*| phi2
+   34 |  GND |     | |    (pwr/test)
+   35 | JTAG |     | |    (pwr/test)
+   36 |  I_O | 3_00|*| a_in_9_
+   37 |  I_O | 3_01|*| a_in_8_
+   38 |  I_O | 3_02|*| a_in_7_
+   39 |  I_O | 3_03|*| ram_rom_a_13_
+   40 |  I_O | 3_04|*| a_in_6_
+   41 |  I_O | 3_05|*| ram_rom_a_14_
+   42 |  I_O | 3_06|*| rom_ce
+   43 |  I_O | 3_07|*| ram_rom_a_17_
+   44 |  Vcc |     | |    (pwr/test)
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	Macrocell (MCell) Cluster Assignments
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+  +--- Macrocell PT Cluster Size
+ |      Sync/Async-------+   |     |  |    Cluster to Mcell Assignment
+ |   Node Fixed(*)----+  |   |     |  |      |   +- XOR PT Size
+ |        Sig Type-+  |  |   |     |  |      |   |  XOR to Mcell Assignment
+ |  Signal Name    |  |  |   |     |  |      |   |          |
+_|_________________|__|__|___|_____|__|______|___|__________|______________
+ 0|       refresh|OUT| | S |10      | 4 to [ 0]| 1 XOR to [ 0] as logic PT
+ 1|        ram_ce|OUT| | S | 6      | 4 to [ 0]| 1 XOR to [ 0] as logic PT
+ 2|cart_bank_select_std_match_result_n|NOD| | S | 1      | 4 to [ 1]| 1 XOR to [ 2] for 1 PT sig
+ 3|flash_config_access|NOD| | S | 1      | 4 to [ 1]| 1 XOR to [ 3] for 1 PT sig
+ 4| ram_rom_a_15_|OUT| | S | 7      | 4 to [ 4]| 1 XOR to [ 4] as logic PT
+ 5|freezer_rom_bank_select_std_match_result_n|NOD| | S | 1      | 4 to [ 4]| 1 XOR to [ 5] for 1 PT sig
+ 6|freezer_rom_bank_18_|NOD| | S | 2      | 4 to [ 6]| 1 XOR free
+ 7|check_oss_bank_std_match_result_n|NOD| | S | 1      | 4 free   | 1 XOR to [ 7] for 1 PT sig
+ 8|check_vector_access_un1_activate_n|NOD| | S | 1      | 4 free   | 1 XOR to [ 8] for 1 PT sig
+ 9|freezer_rom_bank_17_|NOD| | S | 2      | 4 to [ 9]| 1 XOR free
+10|freezer_rom_bank_15_|NOD| | S | 2      | 4 to [10]| 1 XOR free
+11|check_d700_d71f_access_std_match_result_n|NOD| | S | 1      | 4 free   | 1 XOR to [11] for 1 PT sig
+12| ram_rom_a_18_|OUT| | S | 6      | 4 to [12]| 1 XOR to [12] as logic PT
+13|freezer_ram_bank_select_std_match_result_n|NOD| | S | 1      | 4 to [12]| 1 XOR to [13] for 1 PT sig
+14|check_sdx_enable_std_match_result_n|NOD| | S | 1      | 4 free   | 1 XOR to [14] for 1 PT sig
+15|              | ? | | S |        | 4 free   | 1 XOR free
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	Maximum PT Capacity
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+
+ |      Sync/Async-------+   |     |
+ |   Node Fixed(*)----+  |   |     |
+ |        Sig Type-+  |  |   |     |
+ |  Signal Name    |  |  |   |     |     Maximum PT Capacity
+_|_________________|__|__|___|_____|_______________________________________
+ 0|       refresh|OUT| | S |10      |=> can support up to [ 10] logic PT(s)
+ 1|        ram_ce|OUT| | S | 6      |=> can support up to [  8] logic PT(s)
+ 2|cart_bank_select_std_match_result_n|NOD| | S | 1      |=> can support up to [  1] logic PT(s)
+ 3|flash_config_access|NOD| | S | 1      |=> can support up to [  1] logic PT(s)
+ 4| ram_rom_a_15_|OUT| | S | 7      |=> can support up to [  9] logic PT(s)
+ 5|freezer_rom_bank_select_std_match_result_n|NOD| | S | 1      |=> can support up to [  5] logic PT(s)
+ 6|freezer_rom_bank_18_|NOD| | S | 2      |=> can support up to [ 13] logic PT(s)
+ 7|check_oss_bank_std_match_result_n|NOD| | S | 1      |=> can support up to [  9] logic PT(s)
+ 8|check_vector_access_un1_activate_n|NOD| | S | 1      |=> can support up to [  9] logic PT(s)
+ 9|freezer_rom_bank_17_|NOD| | S | 2      |=> can support up to [ 13] logic PT(s)
+10|freezer_rom_bank_15_|NOD| | S | 2      |=> can support up to [  9] logic PT(s)
+11|check_d700_d71f_access_std_match_result_n|NOD| | S | 1      |=> can support up to [  5] logic PT(s)
+12| ram_rom_a_18_|OUT| | S | 6      |=> can support up to [ 17] logic PT(s)
+13|freezer_ram_bank_select_std_match_result_n|NOD| | S | 1      |=> can support up to [ 10] logic PT(s)
+14|check_sdx_enable_std_match_result_n|NOD| | S | 1      |=> can support up to [ 10] logic PT(s)
+15|              | ? | | S |        |=> can support up to [  9] logic PT(s)
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	Node-Pin Assignments
+===========================================================================
+ + Macrocell Number
+ | Node Fixed(*)------+
+ |      Sig Type---+  |  to | Block [ 0] IO Pin  |   Device Pin
+ |  Signal Name    |  | pin |      Numbers       |     Numbers
+_|_________________|__|_____|____________________|________________________
+ 0|       refresh|OUT| | => |   5    6    7 (  0)|   4    3    2 (  9)
+ 1|        ram_ce|OUT| | => |   5 (  6)   7    0 |   4 (  3)   2    9 
+ 2|cart_bank_select_std_match_result_n|NOD| | => |   6    7    0    1 |   3    2    9    8 
+ 3|flash_config_access|NOD| | => |   6    7    0    1 |   3    2    9    8 
+ 4| ram_rom_a_15_|OUT| | => |(  7)   0    1    2 |(  2)   9    8    7 
+ 5|freezer_rom_bank_select_std_match_result_n|NOD| | => |   7    0    1    2 |   2    9    8    7 
+ 6|freezer_rom_bank_18_|NOD| | => |   0    1    2    3 |   9    8    7    6 
+ 7|check_oss_bank_std_match_result_n|NOD| | => |   0    1    2    3 |   9    8    7    6 
+ 8|check_vector_access_un1_activate_n|NOD| | => |   1    2    3    4 |   8    7    6    5 
+ 9|freezer_rom_bank_17_|NOD| | => |   1    2    3    4 |   8    7    6    5 
+10|freezer_rom_bank_15_|NOD| | => |   2    3    4    5 |   7    6    5    4 
+11|check_d700_d71f_access_std_match_result_n|NOD| | => |   2    3    4    5 |   7    6    5    4 
+12| ram_rom_a_18_|OUT| | => |   3    4 (  5)   6 |   6    5 (  4)   3 
+13|freezer_ram_bank_select_std_match_result_n|NOD| | => |   3    4    5    6 |   6    5    4    3 
+14|check_sdx_enable_std_match_result_n|NOD| | => |   4    5    6    7 |   5    4    3    2 
+15|              |   | | => |   4    5    6    7 |   5    4    3    2 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	IO-to-Node Pin Mapping
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Node Destinations Via Output Matrix
+_|_________________|__|___|_____|___________________________________________
+ 0|       refresh|OUT|*|  9| => | ( 0)   1    2    3    4    5    6    7 
+ 1|flash_enable_in|INP|*|  8| => |   2    3    4    5    6    7    8    9 
+ 2|flash_writable_in|INP|*|  7| => |   4    5    6    7    8    9   10   11 
+ 3|   activate_in|INP|*|  6| => |   6    7    8    9   10   11   12   13 
+ 4|       poweron|INP|*|  5| => |   8    9   10   11   12   13   14   15 
+ 5| ram_rom_a_18_|OUT|*|  4| => |  10   11  (12)  13   14   15    0    1 
+ 6|        ram_ce|OUT|*|  3| => |  12   13   14   15    0  ( 1)   2    3 
+ 7| ram_rom_a_15_|OUT|*|  2| => |  14   15    0    1    2    3  ( 4)   5 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	IO/Node and IO/Input Macrocell Pairing Table
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Input Macrocell and Node Pairs
+_|_________________|__|___|_____|__________________________________________
+ 0|       refresh|OUT|*|  9| => | Input macrocell   [             -]
+ 1|flash_enable_in|INP|*|  8| => | Input macrocell   [             -]
+ 2|flash_writable_in|INP|*|  7| => | Input macrocell   [             -]
+ 3|   activate_in|INP|*|  6| => | Input macrocell   [activate_inputreg]
+ 4|       poweron|INP|*|  5| => | Input macrocell   [             -]
+ 5| ram_rom_a_18_|OUT|*|  4| => | Input macrocell   [             -]
+ 6|        ram_ce|OUT|*|  3| => | Input macrocell   [             -]
+ 7| ram_rom_a_15_|OUT|*|  2| => | Input macrocell   [             -]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	Input Multiplexer (IMX) Assignments
+===========================================================================
+           +----- IO pin/Input Register, or Macrocell
+IMX No.    |    +---- Block IO Pin or Macrocell Number
+   |       |    |  ABEL Node/      +-- Signal using the Pin or Macrocell
+   |       |    |  Pin Number      |      +- Signal Fixed (*) to Pin/Mcell
+   |       |    |   |  Sig Type    |      | +- Feedback Required (*)
+---|-------|----|---|---|----------|------|-|------------------------------
+   0	[IOpin  0 |  9|OUT        refresh|*| ]
+	[RegIn  0 | 46|                 -| | ]
+	[MCell  0 | 45|OUT        refresh| | ]
+	[MCell  1 | 47|OUT         ram_ce| | ]
+
+   1	[IOpin  1 |  8|INP flash_enable_in|*|*]
+	[RegIn  1 | 49|                 -| | ]
+	[MCell  2 | 48|NOD cart_bank_select_std_match_result_n| |*]
+	[MCell  3 | 50|NOD flash_config_access| |*]
+
+   2	[IOpin  2 |  7|INP flash_writable_in|*|*]
+	[RegIn  2 | 52|                 -| | ]
+	[MCell  4 | 51|OUT  ram_rom_a_15_| | ]
+	[MCell  5 | 53|NOD freezer_rom_bank_select_std_match_result_n| |*]
+
+   3	[IOpin  3 |  6|INP    activate_in|*| ]
+	[RegIn  3 | 55|Rin activate_inputreg|*|*] paired w/[   activate_in]
+	[MCell  6 | 54|NOD freezer_rom_bank_18_| |*]
+	[MCell  7 | 56|NOD check_oss_bank_std_match_result_n| |*]
+
+   4	[IOpin  4 |  5|INP        poweron|*|*]
+	[RegIn  4 | 58|                 -| | ]
+	[MCell  8 | 57|NOD check_vector_access_un1_activate_n| |*]
+	[MCell  9 | 59|NOD freezer_rom_bank_17_| |*]
+
+   5	[IOpin  5 |  4|OUT  ram_rom_a_18_|*| ]
+	[RegIn  5 | 61|                 -| | ]
+	[MCell 10 | 60|NOD freezer_rom_bank_15_| |*]
+	[MCell 11 | 62|NOD check_d700_d71f_access_std_match_result_n| |*]
+
+   6	[IOpin  6 |  3|OUT         ram_ce|*| ]
+	[RegIn  6 | 64|                 -| | ]
+	[MCell 12 | 63|OUT  ram_rom_a_18_| | ]
+	[MCell 13 | 65|NOD freezer_ram_bank_select_std_match_result_n| |*]
+
+   7	[IOpin  7 |  2|OUT  ram_rom_a_15_|*| ]
+	[RegIn  7 | 67|                 -| | ]
+	[MCell 14 | 66|NOD check_sdx_enable_std_match_result_n| |*]
+	[MCell 15 | 68|                 -| | ]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 0] >	Logic Array Fan-in
+===========================================================================
+  +- Central Switch Matrix No.
+  |   Src (ABEL Node/Pin#)   Signal
+--|--|--------------------|---------------------------------------------------
+Mux00| RegIn  3  4  ( 130)|   a_6_
+Mux01|  Mcel  2 13  ( 113)|   cart_bank_18_
+Mux02|  Mcel  2  8  ( 105)|   inst_cart_mode_ram
+Mux03|  Mcel  2  9  ( 107)|   cart_bank_15_
+Mux04|  Mcel  0 10  (  60)|   freezer_rom_bank_15_
+Mux05|  Mcel  1  0  (  69)|   N_275
+Mux06|  Mcel  1  5  (  77)|   freezer_ram_bank_15_
+Mux07| RegIn  3  0  ( 118)|   a_9_
+Mux08|  Mcel  3  4  ( 123)|   freezer_state_0_
+Mux09| RegIn  2  1  (  97)|   a_10_
+Mux10|  Mcel  2  0  (  93)|   cart_bank_14_
+Mux11| IOPin  2  2  (  29)|   os_select
+Mux12| RegIn  2  4  ( 106)|   a_12_
+Mux13|  Mcel  0  5  (  53)|   freezer_rom_bank_select_std_match_result_n
+Mux14| RegIn  2  0  (  94)|   a_11_
+Mux15|  Mcel  3  5  ( 125)|   freezer_state_1_
+Mux16|  Mcel  1  9  (  83)|   cart_bank_16_
+Mux17| RegIn  3  1  ( 121)|   a_8_
+Mux18| RegIn  1  6  (  88)|   a_3_
+Mux19| RegIn  0  3  (  55)|   activate_inputreg
+Mux20|  Mcel  2  4  (  99)|   cart_access_un13_flash_enable_n
+Mux21|  Mcel  0  6  (  54)|   freezer_rom_bank_18_
+Mux22| RegIn  2  6  ( 112)|   a_15_
+Mux23| RegIn  2  3  ( 103)|   a_13_
+Mux24| RegIn  1  5  (  85)|   a_2_
+Mux25| RegIn  1  7  (  91)|   a_4_
+Mux26| RegIn  2  5  ( 109)|   a_14_
+Mux27| RegIn  3  2  ( 124)|   a_7_
+Mux28| RegIn  2  7  ( 115)|   a_5_
+Mux29|  Mcel  1 12  (  87)|   rw
+Mux30|  Mcel  0  8  (  57)|   check_vector_access_un1_activate_n
+Mux31|  Mcel  0  9  (  59)|   freezer_rom_bank_17_
+Mux32|  Mcel  2 12  ( 111)|   N_272
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	Macrocell (MCell) Cluster Assignments
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+  +--- Macrocell PT Cluster Size
+ |      Sync/Async-------+   |     |  |    Cluster to Mcell Assignment
+ |   Node Fixed(*)----+  |   |     |  |      |   +- XOR PT Size
+ |        Sig Type-+  |  |   |     |  |      |   |  XOR to Mcell Assignment
+ |  Signal Name    |  |  |   |     |  |      |   |          |
+_|_________________|__|__|___|_____|__|______|___|__________|______________
+ 0|         N_275|NOD| | S | 5      | 4 to [ 0]| 1 XOR to [ 0] as logic PT
+ 1|freezer_rom_bank_13_|NOD| | S | 2      | 4 to [ 1]| 1 XOR free
+ 2|  oss_bank_13_|NOD| | A | 2      | 2 to [ 2]| 1 XOR free
+ 3|freezer_ram_bank_12_|NOD| | S | 2      | 4 to [ 3]| 1 XOR free
+ 4| ram_rom_a_12_|OUT| | S |10      | 4 to [ 4]| 1 XOR to [ 4] as logic PT
+ 5|freezer_ram_bank_15_|NOD| | S | 2      | 4 to [ 5]| 1 XOR free
+ 6|freezer_rom_bank_16_|NOD| | S | 2      | 4 to [ 4]| 1 XOR to [ 4] as logic PT
+ 7|  oss_bank_12_|NOD| | A | 2      | 2 to [ 6]| 1 XOR free
+ 8| ram_rom_a_16_|OUT| | S | 7      | 4 to [ 7]| 1 XOR free
+ 9| cart_bank_16_|NOD| | A | 2      | 2 to [ 8]| 1 XOR to [ 8] as logic PT
+10|  un1_result_2|NOD| | S | 2      | 4 to [ 8]| 1 XOR free
+11|              | ? | | S |        | 4 to [ 9]| 1 XOR free
+12|            rw|NOD| | A | 1      | 2 to [10]| 1 XOR to [12] for 1 PT sig
+13|inst_sdx_enable|NOD| | A | 2      | 2 to [13]| 1 XOR free
+14|freezer_ram_bank_16_|NOD| | S | 2      | 4 to [14]| 1 XOR free
+15|              | ? | | S |        | 4 free   | 1 XOR free
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	Maximum PT Capacity
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+
+ |      Sync/Async-------+   |     |
+ |   Node Fixed(*)----+  |   |     |
+ |        Sig Type-+  |  |   |     |
+ |  Signal Name    |  |  |   |     |     Maximum PT Capacity
+_|_________________|__|__|___|_____|_______________________________________
+ 0|         N_275|NOD| | S | 5      |=> can support up to [  5] logic PT(s)
+ 1|freezer_rom_bank_13_|NOD| | S | 2      |=> can support up to [  5] logic PT(s)
+ 2|  oss_bank_13_|NOD| | A | 2      |=> can support up to [  3] logic PT(s)
+ 3|freezer_ram_bank_12_|NOD| | S | 2      |=> can support up to [  5] logic PT(s)
+ 4| ram_rom_a_12_|OUT| | S |10      |=> can support up to [ 10] logic PT(s)
+ 5|freezer_ram_bank_15_|NOD| | S | 2      |=> can support up to [  5] logic PT(s)
+ 6|freezer_rom_bank_16_|NOD| | S | 2      |=> can support up to [  3] logic PT(s)
+ 7|  oss_bank_12_|NOD| | A | 2      |=> can support up to [  5] logic PT(s)
+ 8| ram_rom_a_16_|OUT| | S | 7      |=> can support up to [  8] logic PT(s)
+ 9| cart_bank_16_|NOD| | A | 2      |=> can support up to [  5] logic PT(s)
+10|  un1_result_2|NOD| | S | 2      |=> can support up to [  2] logic PT(s)
+11|              | ? | | S |        |=> can support up to [  1] logic PT(s)
+12|            rw|NOD| | A | 1      |=> can support up to [  1] logic PT(s)
+13|inst_sdx_enable|NOD| | A | 2      |=> can support up to [  8] logic PT(s)
+14|freezer_ram_bank_16_|NOD| | S | 2      |=> can support up to [ 10] logic PT(s)
+15|              | ? | | S |        |=> can support up to [  5] logic PT(s)
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	Node-Pin Assignments
+===========================================================================
+ + Macrocell Number
+ | Node Fixed(*)------+
+ |      Sig Type---+  |  to | Block [ 1] IO Pin  |   Device Pin
+ |  Signal Name    |  | pin |      Numbers       |     Numbers
+_|_________________|__|_____|____________________|________________________
+ 0|         N_275|NOD| | => |   5    6    7    0 |  19   20   21   14 
+ 1|freezer_rom_bank_13_|NOD| | => |   5    6    7    0 |  19   20   21   14 
+ 2|  oss_bank_13_|NOD| | => |   6    7    0    1 |  20   21   14   15 
+ 3|freezer_ram_bank_12_|NOD| | => |   6    7    0    1 |  20   21   14   15 
+ 4| ram_rom_a_12_|OUT| | => |   7    0    1 (  2)|  21   14   15 ( 16)
+ 5|freezer_ram_bank_15_|NOD| | => |   7    0    1    2 |  21   14   15   16 
+ 6|freezer_rom_bank_16_|NOD| | => |   0    1    2    3 |  14   15   16   17 
+ 7|  oss_bank_12_|NOD| | => |   0    1    2    3 |  14   15   16   17 
+ 8| ram_rom_a_16_|OUT| | => |(  1)   2    3    4 |( 15)  16   17   18 
+ 9| cart_bank_16_|NOD| | => |   1    2    3    4 |  15   16   17   18 
+10|  un1_result_2|NOD| | => |   2    3    4    5 |  16   17   18   19 
+11|              |   | | => |   2    3    4    5 |  16   17   18   19 
+12|            rw|NOD| | => |   3    4    5    6 |  17   18   19   20 
+13|inst_sdx_enable|NOD| | => |   3    4    5    6 |  17   18   19   20 
+14|freezer_ram_bank_16_|NOD| | => |   4    5    6    7 |  18   19   20   21 
+15|              |   | | => |   4    5    6    7 |  18   19   20   21 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	IO-to-Node Pin Mapping
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Node Destinations Via Output Matrix
+_|_________________|__|___|_____|___________________________________________
+ 0|         reset|INP|*| 14| => |   0    1    2    3    4    5    6    7 
+ 1| ram_rom_a_16_|OUT|*| 15| => |   2    3    4    5    6    7  ( 8)   9 
+ 2| ram_rom_a_12_|OUT|*| 16| => | ( 4)   5    6    7    8    9   10   11 
+ 3|       a_in_0_|INP|*| 17| => |   6    7    8    9   10   11   12   13 
+ 4|       a_in_1_|INP|*| 18| => |   8    9   10   11   12   13   14   15 
+ 5|       a_in_2_|INP|*| 19| => |  10   11   12   13   14   15    0    1 
+ 6|       a_in_3_|INP|*| 20| => |  12   13   14   15    0    1    2    3 
+ 7|       a_in_4_|INP|*| 21| => |  14   15    0    1    2    3    4    5 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	IO/Node and IO/Input Macrocell Pairing Table
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Input Macrocell and Node Pairs
+_|_________________|__|___|_____|__________________________________________
+ 0|         reset|INP|*| 14| => | Input macrocell   [             -]
+ 1| ram_rom_a_16_|OUT|*| 15| => | Input macrocell   [             -]
+ 2| ram_rom_a_12_|OUT|*| 16| => | Input macrocell   [             -]
+ 3|       a_in_0_|INP|*| 17| => | Input macrocell   [          a_0_]
+ 4|       a_in_1_|INP|*| 18| => | Input macrocell   [          a_1_]
+ 5|       a_in_2_|INP|*| 19| => | Input macrocell   [          a_2_]
+ 6|       a_in_3_|INP|*| 20| => | Input macrocell   [          a_3_]
+ 7|       a_in_4_|INP|*| 21| => | Input macrocell   [          a_4_]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	Input Multiplexer (IMX) Assignments
+===========================================================================
+           +----- IO pin/Input Register, or Macrocell
+IMX No.    |    +---- Block IO Pin or Macrocell Number
+   |       |    |  ABEL Node/      +-- Signal using the Pin or Macrocell
+   |       |    |  Pin Number      |      +- Signal Fixed (*) to Pin/Mcell
+   |       |    |   |  Sig Type    |      | +- Feedback Required (*)
+---|-------|----|---|---|----------|------|-|------------------------------
+   0	[IOpin  0 | 14|INP          reset|*|*]
+	[RegIn  0 | 70|                 -| | ]
+	[MCell  0 | 69|NOD          N_275| |*]
+	[MCell  1 | 71|NOD freezer_rom_bank_13_| |*]
+
+   1	[IOpin  1 | 15|OUT  ram_rom_a_16_|*| ]
+	[RegIn  1 | 73|                 -| | ]
+	[MCell  2 | 72|NOD   oss_bank_13_| |*]
+	[MCell  3 | 74|NOD freezer_ram_bank_12_| |*]
+
+   2	[IOpin  2 | 16|OUT  ram_rom_a_12_|*| ]
+	[RegIn  2 | 76|                 -| | ]
+	[MCell  4 | 75|OUT  ram_rom_a_12_| | ]
+	[MCell  5 | 77|NOD freezer_ram_bank_15_| |*]
+
+   3	[IOpin  3 | 17|INP        a_in_0_|*| ]
+	[RegIn  3 | 79|Rin           a_0_|*|*] paired w/[       a_in_0_]
+	[MCell  6 | 78|NOD freezer_rom_bank_16_| |*]
+	[MCell  7 | 80|NOD   oss_bank_12_| |*]
+
+   4	[IOpin  4 | 18|INP        a_in_1_|*| ]
+	[RegIn  4 | 82|Rin           a_1_|*|*] paired w/[       a_in_1_]
+	[MCell  8 | 81|OUT  ram_rom_a_16_| | ]
+	[MCell  9 | 83|NOD  cart_bank_16_| |*]
+
+   5	[IOpin  5 | 19|INP        a_in_2_|*| ]
+	[RegIn  5 | 85|Rin           a_2_|*|*] paired w/[       a_in_2_]
+	[MCell 10 | 84|NOD   un1_result_2| |*]
+	[MCell 11 | 86|                 -| | ]
+
+   6	[IOpin  6 | 20|INP        a_in_3_|*| ]
+	[RegIn  6 | 88|Rin           a_3_|*|*] paired w/[       a_in_3_]
+	[MCell 12 | 87|NOD             rw| |*]
+	[MCell 13 | 89|NOD inst_sdx_enable| |*]
+
+   7	[IOpin  7 | 21|INP        a_in_4_|*| ]
+	[RegIn  7 | 91|Rin           a_4_|*|*] paired w/[       a_in_4_]
+	[MCell 14 | 90|NOD freezer_ram_bank_16_| |*]
+	[MCell 15 | 92|                 -| | ]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 1] >	Logic Array Fan-in
+===========================================================================
+  +- Central Switch Matrix No.
+  |   Src (ABEL Node/Pin#)   Signal
+--|--|--------------------|---------------------------------------------------
+Mux00|  Mcel  0  7  (  56)|   check_oss_bank_std_match_result_n
+Mux01|  Mcel  1  6  (  78)|   freezer_rom_bank_16_
+Mux02|  Input Pin   (  11)|   rw_in
+Mux03|  Mcel  0  2  (  48)|   cart_bank_select_std_match_result_n
+Mux04| RegIn  2  6  ( 112)|   a_15_
+Mux05|  Mcel  1 13  (  89)|   inst_sdx_enable
+Mux06|  Mcel  1  5  (  77)|   freezer_ram_bank_15_
+Mux07|  Mcel  1  1  (  71)|   freezer_rom_bank_13_
+Mux08|  Mcel  3  4  ( 123)|   freezer_state_0_
+Mux09|  Mcel  1  2  (  72)|   oss_bank_13_
+Mux10|  Mcel  1  3  (  74)|   freezer_ram_bank_12_
+Mux11| RegIn  1  6  (  88)|   a_3_
+Mux12|  Mcel  2  1  (  95)|   cart_mode_1_
+Mux13| RegIn  2  4  ( 106)|   a_12_
+Mux14| RegIn  2  0  (  94)|   a_11_
+Mux15|  Mcel  3  5  ( 125)|   freezer_state_1_
+Mux16|  Mcel  1  0  (  69)|   N_275
+Mux17|  Mcel  0  5  (  53)|   freezer_rom_bank_select_std_match_result_n
+Mux18|  Mcel  1  7  (  80)|   oss_bank_12_
+Mux19|  Mcel  2  5  ( 101)|   cart_mode_0_
+Mux20|  Mcel  2  4  (  99)|   cart_access_un13_flash_enable_n
+Mux21|  Mcel  1 12  (  87)|   rw
+Mux22|  Mcel  2  6  ( 102)|   reset_cartemu
+Mux23| RegIn  2  3  ( 103)|   a_13_
+Mux24|  Mcel  0 14  (  66)|   check_sdx_enable_std_match_result_n
+Mux25| RegIn  1  7  (  91)|   a_4_
+Mux26| RegIn  2  5  ( 109)|   a_14_
+Mux27| RegIn  1  3  (  79)|   a_0_
+Mux28|  Mcel  1 14  (  90)|   freezer_ram_bank_16_
+Mux29| IOPin  2  2  (  29)|   os_select
+Mux30|  Mcel  0  8  (  57)|   check_vector_access_un1_activate_n
+Mux31|  Mcel  0 13  (  65)|   freezer_ram_bank_select_std_match_result_n
+Mux32|  Mcel  1  9  (  83)|   cart_bank_16_
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	Macrocell (MCell) Cluster Assignments
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+  +--- Macrocell PT Cluster Size
+ |      Sync/Async-------+   |     |  |    Cluster to Mcell Assignment
+ |   Node Fixed(*)----+  |   |     |  |      |   +- XOR PT Size
+ |        Sig Type-+  |  |   |     |  |      |   |  XOR to Mcell Assignment
+ |  Signal Name    |  |  |   |     |  |      |   |          |
+_|_________________|__|__|___|_____|__|______|___|__________|______________
+ 0| cart_bank_14_|NOD| | A | 3      | 2 to [ 0]| 1 XOR to [ 0] as logic PT
+ 1|  cart_mode_1_|NOD| | A | 4      | 2 to [ 1]| 1 XOR to [ 1] as logic PT
+ 2| cart_bank_17_|NOD| | A | 2      | 2 to [ 1]| 1 XOR free
+ 3|inst_cart_write_enable|NOD| | A | 2 :+: 1| 2 to [ 3]| 1 XOR to [ 3]
+ 4|cart_access_un13_flash_enable_n|NOD| | S | 2      | 4 to [ 2]| 1 XOR free
+ 5|  cart_mode_0_|NOD| | A | 4      | 2 to [ 4]| 1 XOR free
+ 6| reset_cartemu|NOD| | S | 2      | 4 to [ 5]| 1 XOR free
+ 7|inst_cart_keepsettings|NOD| | A | 2 :+: 1| 2 to [ 6]| 1 XOR to [ 7]
+ 8|inst_cart_mode_ram|NOD| | A | 2 :+: 1| 2 to [ 7]| 1 XOR to [ 8]
+ 9| cart_bank_15_|NOD| | A | 3      | 2 to [ 8]| 1 XOR free
+10|inst_flash_enable|NOD| | S | 4      | 4 to [ 9]| 1 XOR free
+11|              | ? | | S |        | 4 to [10]| 1 XOR free
+12|         N_272|NOD| | S | 4      | 4 to [12]| 1 XOR free
+13| cart_bank_18_|NOD| | A | 2      | 2 to [13]| 1 XOR free
+14| cart_bank_13_|NOD| | A | 3      | 2 to [14]| 1 XOR to [14] as logic PT
+15|              | ? | | S |        | 4 free   | 1 XOR free
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	Maximum PT Capacity
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+
+ |      Sync/Async-------+   |     |
+ |   Node Fixed(*)----+  |   |     |
+ |        Sig Type-+  |  |   |     |
+ |  Signal Name    |  |  |   |     |     Maximum PT Capacity
+_|_________________|__|__|___|_____|_______________________________________
+ 0| cart_bank_14_|NOD| | A | 3      |=> can support up to [  3] logic PT(s)
+ 1|  cart_mode_1_|NOD| | A | 4      |=> can support up to [  6] logic PT(s)
+ 2| cart_bank_17_|NOD| | A | 2      |=> can support up to [  5] logic PT(s)
+ 3|inst_cart_write_enable|NOD| | A | 2 :+: 1|=> can support up to [  2] logic PT(s)
+ 4|cart_access_un13_flash_enable_n|NOD| | S | 2      |=> can support up to [  3] logic PT(s)
+ 5|  cart_mode_0_|NOD| | A | 4      |=> can support up to [  5] logic PT(s)
+ 6| reset_cartemu|NOD| | S | 2      |=> can support up to [  2] logic PT(s)
+ 7|inst_cart_keepsettings|NOD| | A | 2 :+: 1|=> can support up to [  2] logic PT(s)
+ 8|inst_cart_mode_ram|NOD| | A | 2 :+: 1|=> can support up to [  3] logic PT(s)
+ 9| cart_bank_15_|NOD| | A | 3      |=> can support up to [  5] logic PT(s)
+10|inst_flash_enable|NOD| | S | 4      |=> can support up to [  5] logic PT(s)
+11|              | ? | | S |        |=> can support up to [  1] logic PT(s)
+12|         N_272|NOD| | S | 4      |=> can support up to [  5] logic PT(s)
+13| cart_bank_18_|NOD| | A | 2      |=> can support up to [  8] logic PT(s)
+14| cart_bank_13_|NOD| | A | 3      |=> can support up to [  8] logic PT(s)
+15|              | ? | | S |        |=> can support up to [  5] logic PT(s)
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	Node-Pin Assignments
+===========================================================================
+ + Macrocell Number
+ | Node Fixed(*)------+
+ |      Sig Type---+  |  to | Block [ 2] IO Pin  |   Device Pin
+ |  Signal Name    |  | pin |      Numbers       |     Numbers
+_|_________________|__|_____|____________________|________________________
+ 0| cart_bank_14_|NOD| | => |   5    6    7    0 |  26   25   24   31 
+ 1|  cart_mode_1_|NOD| | => |   5    6    7    0 |  26   25   24   31 
+ 2| cart_bank_17_|NOD| | => |   6    7    0    1 |  25   24   31   30 
+ 3|inst_cart_write_enable|NOD| | => |   6    7    0    1 |  25   24   31   30 
+ 4|cart_access_un13_flash_enable_n|NOD| | => |   7    0    1    2 |  24   31   30   29 
+ 5|  cart_mode_0_|NOD| | => |   7    0    1    2 |  24   31   30   29 
+ 6| reset_cartemu|NOD| | => |   0    1    2    3 |  31   30   29   28 
+ 7|inst_cart_keepsettings|NOD| | => |   0    1    2    3 |  31   30   29   28 
+ 8|inst_cart_mode_ram|NOD| | => |   1    2    3    4 |  30   29   28   27 
+ 9| cart_bank_15_|NOD| | => |   1    2    3    4 |  30   29   28   27 
+10|inst_flash_enable|NOD| | => |   2    3    4    5 |  29   28   27   26 
+11|              |   | | => |   2    3    4    5 |  29   28   27   26 
+12|         N_272|NOD| | => |   3    4    5    6 |  28   27   26   25 
+13| cart_bank_18_|NOD| | => |   3    4    5    6 |  28   27   26   25 
+14| cart_bank_13_|NOD| | => |   4    5    6    7 |  27   26   25   24 
+15|              |   | | => |   4    5    6    7 |  27   26   25   24 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	IO-to-Node Pin Mapping
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Node Destinations Via Output Matrix
+_|_________________|__|___|_____|___________________________________________
+ 0|      a_in_11_|INP|*| 31| => |   0    1    2    3    4    5    6    7 
+ 1|      a_in_10_|INP|*| 30| => |   2    3    4    5    6    7    8    9 
+ 2|     os_select|INP|*| 29| => |   4    5    6    7    8    9   10   11 
+ 3|      a_in_13_|INP|*| 28| => |   6    7    8    9   10   11   12   13 
+ 4|      a_in_12_|INP|*| 27| => |   8    9   10   11   12   13   14   15 
+ 5|      a_in_14_|INP|*| 26| => |  10   11   12   13   14   15    0    1 
+ 6|      a_in_15_|INP|*| 25| => |  12   13   14   15    0    1    2    3 
+ 7|       a_in_5_|INP|*| 24| => |  14   15    0    1    2    3    4    5 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	IO/Node and IO/Input Macrocell Pairing Table
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Input Macrocell and Node Pairs
+_|_________________|__|___|_____|__________________________________________
+ 0|      a_in_11_|INP|*| 31| => | Input macrocell   [         a_11_]
+ 1|      a_in_10_|INP|*| 30| => | Input macrocell   [         a_10_]
+ 2|     os_select|INP|*| 29| => | Input macrocell   [             -]
+ 3|      a_in_13_|INP|*| 28| => | Input macrocell   [         a_13_]
+ 4|      a_in_12_|INP|*| 27| => | Input macrocell   [         a_12_]
+ 5|      a_in_14_|INP|*| 26| => | Input macrocell   [         a_14_]
+ 6|      a_in_15_|INP|*| 25| => | Input macrocell   [         a_15_]
+ 7|       a_in_5_|INP|*| 24| => | Input macrocell   [          a_5_]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	Input Multiplexer (IMX) Assignments
+===========================================================================
+           +----- IO pin/Input Register, or Macrocell
+IMX No.    |    +---- Block IO Pin or Macrocell Number
+   |       |    |  ABEL Node/      +-- Signal using the Pin or Macrocell
+   |       |    |  Pin Number      |      +- Signal Fixed (*) to Pin/Mcell
+   |       |    |   |  Sig Type    |      | +- Feedback Required (*)
+---|-------|----|---|---|----------|------|-|------------------------------
+   0	[IOpin  0 | 31|INP       a_in_11_|*| ]
+	[RegIn  0 | 94|Rin          a_11_|*|*] paired w/[      a_in_11_]
+	[MCell  0 | 93|NOD  cart_bank_14_| |*]
+	[MCell  1 | 95|NOD   cart_mode_1_| |*]
+
+   1	[IOpin  1 | 30|INP       a_in_10_|*| ]
+	[RegIn  1 | 97|Rin          a_10_|*|*] paired w/[      a_in_10_]
+	[MCell  2 | 96|NOD  cart_bank_17_| |*]
+	[MCell  3 | 98|NOD inst_cart_write_enable| |*]
+
+   2	[IOpin  2 | 29|INP      os_select|*|*]
+	[RegIn  2 |100|                 -| | ]
+	[MCell  4 | 99|NOD cart_access_un13_flash_enable_n| |*]
+	[MCell  5 |101|NOD   cart_mode_0_| |*]
+
+   3	[IOpin  3 | 28|INP       a_in_13_|*| ]
+	[RegIn  3 |103|Rin          a_13_|*|*] paired w/[      a_in_13_]
+	[MCell  6 |102|NOD  reset_cartemu| |*]
+	[MCell  7 |104|NOD inst_cart_keepsettings| |*]
+
+   4	[IOpin  4 | 27|INP       a_in_12_|*| ]
+	[RegIn  4 |106|Rin          a_12_|*|*] paired w/[      a_in_12_]
+	[MCell  8 |105|NOD inst_cart_mode_ram| |*]
+	[MCell  9 |107|NOD  cart_bank_15_| |*]
+
+   5	[IOpin  5 | 26|INP       a_in_14_|*| ]
+	[RegIn  5 |109|Rin          a_14_|*|*] paired w/[      a_in_14_]
+	[MCell 10 |108|NOD inst_flash_enable| |*]
+	[MCell 11 |110|                 -| | ]
+
+   6	[IOpin  6 | 25|INP       a_in_15_|*| ]
+	[RegIn  6 |112|Rin          a_15_|*|*] paired w/[      a_in_15_]
+	[MCell 12 |111|NOD          N_272| |*]
+	[MCell 13 |113|NOD  cart_bank_18_| |*]
+
+   7	[IOpin  7 | 24|INP        a_in_5_|*| ]
+	[RegIn  7 |115|Rin           a_5_|*|*] paired w/[       a_in_5_]
+	[MCell 14 |114|NOD  cart_bank_13_| |*]
+	[MCell 15 |116|                 -| | ]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 2] >	Logic Array Fan-in
+===========================================================================
+  +- Central Switch Matrix No.
+  |   Src (ABEL Node/Pin#)   Signal
+--|--|--------------------|---------------------------------------------------
+Mux00|  Mcel  2  9  ( 107)|   cart_bank_15_
+Mux01| IOPin  0  1  (   8)|   flash_enable_in
+Mux02|  Mcel  0  2  (  48)|   cart_bank_select_std_match_result_n
+Mux03| IOPin  1  0  (  14)|   reset
+Mux04| RegIn  2  6  ( 112)|   a_15_
+Mux05|  Mcel  1 13  (  89)|   inst_sdx_enable
+Mux06|  Mcel  2  1  (  95)|   cart_mode_1_
+Mux07|  Mcel  2 14  ( 114)|   cart_bank_13_
+Mux08| RegIn  2  4  ( 106)|   a_12_
+Mux09| RegIn  1  4  (  82)|   a_1_
+Mux10|  Mcel  2  0  (  93)|   cart_bank_14_
+Mux11| RegIn  1  6  (  88)|   a_3_
+Mux12| IOPin  0  4  (   5)|   poweron
+Mux13| RegIn  3  2  ( 124)|   a_7_
+Mux14|  Mcel  2 10  ( 108)|   inst_flash_enable
+Mux15|  Mcel  2  8  ( 105)|   inst_cart_mode_ram
+Mux16|  Mcel  2 13  ( 113)|   cart_bank_18_
+Mux17| RegIn  2  5  ( 109)|   a_14_
+Mux18|  Mcel  2  2  (  96)|   cart_bank_17_
+Mux19|  Mcel  2  5  ( 101)|   cart_mode_0_
+Mux20| RegIn  1  3  (  79)|   a_0_
+Mux21| RegIn  2  3  ( 103)|   a_13_
+Mux22|  Mcel  2  6  ( 102)|   reset_cartemu
+Mux23|  Mcel  1 10  (  84)|   un1_result_2
+Mux24| RegIn  1  5  (  85)|   a_2_
+Mux25| RegIn  1  7  (  91)|   a_4_
+Mux26| IOPin  0  2  (   7)|   flash_writable_in
+Mux27|  Mcel  2  7  ( 104)|   inst_cart_keepsettings
+Mux28| RegIn  2  7  ( 115)|   a_5_
+Mux29|  Mcel  1 12  (  87)|   rw
+Mux30|  Mcel  0  3  (  50)|   flash_config_access
+Mux31|  Mcel  1  2  (  72)|   oss_bank_13_
+Mux32|  Mcel  2  3  (  98)|   inst_cart_write_enable
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	Macrocell (MCell) Cluster Assignments
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+  +--- Macrocell PT Cluster Size
+ |      Sync/Async-------+   |     |  |    Cluster to Mcell Assignment
+ |   Node Fixed(*)----+  |   |     |  |      |   +- XOR PT Size
+ |        Sig Type-+  |  |   |     |  |      |   |  XOR to Mcell Assignment
+ |  Signal Name    |  |  |   |     |  |      |   |          |
+_|_________________|__|__|___|_____|__|______|___|__________|______________
+ 0| ram_rom_a_17_|OUT| | S | 8      | 4 to [ 0]| 1 XOR to [ 0] as logic PT
+ 1|        rom_ce|OUT| | S | 4      | 4 to [ 1]| 1 XOR free
+ 2|freezer_rom_bank_14_|NOD| | S | 2      | 4 to [ 0]| 1 XOR free
+ 3|              | ? | | S |        | 4 to [ 4]| 1 XOR free
+ 4|freezer_state_0_|NOD| | A | 4      | 2 to [ 2]| 1 XOR free
+ 5|freezer_state_1_|NOD| | A | 3      | 2 to [ 5]| 1 XOR to [ 5] as logic PT
+ 6|freezer_ram_bank_14_|NOD| | S | 2      | 4 to [ 6]| 1 XOR free
+ 7|              | ? | | S |        | 4 free   | 1 XOR free
+ 8| ram_rom_a_13_|OUT| | S | 8      | 4 to [ 8]| 1 XOR to [ 8] as logic PT
+ 9|inst_vector_a2|NOD| | A | 4      | 2 to [ 8]| 1 XOR to [ 8] as logic PT
+10|freezer_ram_bank_13_|NOD| | S | 2      | 4 to [10]| 1 XOR free
+11|              | ? | | S |        | 4 to [ 9]| 1 XOR free
+12| ram_rom_a_14_|OUT| | S | 8      | 4 to [12]| 1 XOR to [12] as logic PT
+13|inst_use_vector_bankno|NOD| | S | 3      | 4 to [13]| 1 XOR free
+14|              | ? | | S |        | 4 to [12]| 1 XOR free
+15|              | ? | | S |        | 4 free   | 1 XOR free
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	Maximum PT Capacity
+===========================================================================
+ + Macrocell Number
+ | PT Requirements------ Logic  XOR+
+ |      Sync/Async-------+   |     |
+ |   Node Fixed(*)----+  |   |     |
+ |        Sig Type-+  |  |   |     |
+ |  Signal Name    |  |  |   |     |     Maximum PT Capacity
+_|_________________|__|__|___|_____|_______________________________________
+ 0| ram_rom_a_17_|OUT| | S | 8      |=> can support up to [ 10] logic PT(s)
+ 1|        rom_ce|OUT| | S | 4      |=> can support up to [  5] logic PT(s)
+ 2|freezer_rom_bank_14_|NOD| | S | 2      |=> can support up to [  3] logic PT(s)
+ 3|              | ? | | S |        |=> can support up to [  1] logic PT(s)
+ 4|freezer_state_0_|NOD| | A | 4      |=> can support up to [  5] logic PT(s)
+ 5|freezer_state_1_|NOD| | A | 3      |=> can support up to [  8] logic PT(s)
+ 6|freezer_ram_bank_14_|NOD| | S | 2      |=> can support up to [ 10] logic PT(s)
+ 7|              | ? | | S |        |=> can support up to [  5] logic PT(s)
+ 8| ram_rom_a_13_|OUT| | S | 8      |=> can support up to [ 13] logic PT(s)
+ 9|inst_vector_a2|NOD| | A | 4      |=> can support up to [  5] logic PT(s)
+10|freezer_ram_bank_13_|NOD| | S | 2      |=> can support up to [  5] logic PT(s)
+11|              | ? | | S |        |=> can support up to [  1] logic PT(s)
+12| ram_rom_a_14_|OUT| | S | 8      |=> can support up to [ 10] logic PT(s)
+13|inst_use_vector_bankno|NOD| | S | 3      |=> can support up to [ 10] logic PT(s)
+14|              | ? | | S |        |=> can support up to [  6] logic PT(s)
+15|              | ? | | S |        |=> can support up to [  5] logic PT(s)
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	Node-Pin Assignments
+===========================================================================
+ + Macrocell Number
+ | Node Fixed(*)------+
+ |      Sig Type---+  |  to | Block [ 3] IO Pin  |   Device Pin
+ |  Signal Name    |  | pin |      Numbers       |     Numbers
+_|_________________|__|_____|____________________|________________________
+ 0| ram_rom_a_17_|OUT| | => |   5    6 (  7)   0 |  41   42 ( 43)  36 
+ 1|        rom_ce|OUT| | => |   5 (  6)   7    0 |  41 ( 42)  43   36 
+ 2|freezer_rom_bank_14_|NOD| | => |   6    7    0    1 |  42   43   36   37 
+ 3|              |   | | => |   6    7    0    1 |  42   43   36   37 
+ 4|freezer_state_0_|NOD| | => |   7    0    1    2 |  43   36   37   38 
+ 5|freezer_state_1_|NOD| | => |   7    0    1    2 |  43   36   37   38 
+ 6|freezer_ram_bank_14_|NOD| | => |   0    1    2    3 |  36   37   38   39 
+ 7|              |   | | => |   0    1    2    3 |  36   37   38   39 
+ 8| ram_rom_a_13_|OUT| | => |   1    2 (  3)   4 |  37   38 ( 39)  40 
+ 9|inst_vector_a2|NOD| | => |   1    2    3    4 |  37   38   39   40 
+10|freezer_ram_bank_13_|NOD| | => |   2    3    4    5 |  38   39   40   41 
+11|              |   | | => |   2    3    4    5 |  38   39   40   41 
+12| ram_rom_a_14_|OUT| | => |   3    4 (  5)   6 |  39   40 ( 41)  42 
+13|inst_use_vector_bankno|NOD| | => |   3    4    5    6 |  39   40   41   42 
+14|              |   | | => |   4    5    6    7 |  40   41   42   43 
+15|              |   | | => |   4    5    6    7 |  40   41   42   43 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	IO-to-Node Pin Mapping
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Node Destinations Via Output Matrix
+_|_________________|__|___|_____|___________________________________________
+ 0|       a_in_9_|INP|*| 36| => |   0    1    2    3    4    5    6    7 
+ 1|       a_in_8_|INP|*| 37| => |   2    3    4    5    6    7    8    9 
+ 2|       a_in_7_|INP|*| 38| => |   4    5    6    7    8    9   10   11 
+ 3| ram_rom_a_13_|OUT|*| 39| => |   6    7  ( 8)   9   10   11   12   13 
+ 4|       a_in_6_|INP|*| 40| => |   8    9   10   11   12   13   14   15 
+ 5| ram_rom_a_14_|OUT|*| 41| => |  10   11  (12)  13   14   15    0    1 
+ 6|        rom_ce|OUT|*| 42| => |  12   13   14   15    0  ( 1)   2    3 
+ 7| ram_rom_a_17_|OUT|*| 43| => |  14   15  ( 0)   1    2    3    4    5 
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	IO/Node and IO/Input Macrocell Pairing Table
+===========================================================================
+ +- Block IO Pin
+ |  Device Pin No.--------+
+ |    Pin Fixed(*)----+   |
+ |       Sig Type--+  |   |     |
+ |     Signal Name |  |   |     |  Input Macrocell and Node Pairs
+_|_________________|__|___|_____|__________________________________________
+ 0|       a_in_9_|INP|*| 36| => | Input macrocell   [          a_9_]
+ 1|       a_in_8_|INP|*| 37| => | Input macrocell   [          a_8_]
+ 2|       a_in_7_|INP|*| 38| => | Input macrocell   [          a_7_]
+ 3| ram_rom_a_13_|OUT|*| 39| => | Input macrocell   [             -]
+ 4|       a_in_6_|INP|*| 40| => | Input macrocell   [          a_6_]
+ 5| ram_rom_a_14_|OUT|*| 41| => | Input macrocell   [             -]
+ 6|        rom_ce|OUT|*| 42| => | Input macrocell   [             -]
+ 7| ram_rom_a_17_|OUT|*| 43| => | Input macrocell   [             -]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	Input Multiplexer (IMX) Assignments
+===========================================================================
+           +----- IO pin/Input Register, or Macrocell
+IMX No.    |    +---- Block IO Pin or Macrocell Number
+   |       |    |  ABEL Node/      +-- Signal using the Pin or Macrocell
+   |       |    |  Pin Number      |      +- Signal Fixed (*) to Pin/Mcell
+   |       |    |   |  Sig Type    |      | +- Feedback Required (*)
+---|-------|----|---|---|----------|------|-|------------------------------
+   0	[IOpin  0 | 36|INP        a_in_9_|*| ]
+	[RegIn  0 |118|Rin           a_9_|*|*] paired w/[       a_in_9_]
+	[MCell  0 |117|OUT  ram_rom_a_17_| | ]
+	[MCell  1 |119|OUT         rom_ce| | ]
+
+   1	[IOpin  1 | 37|INP        a_in_8_|*| ]
+	[RegIn  1 |121|Rin           a_8_|*|*] paired w/[       a_in_8_]
+	[MCell  2 |120|NOD freezer_rom_bank_14_| |*]
+	[MCell  3 |122|                 -| | ]
+
+   2	[IOpin  2 | 38|INP        a_in_7_|*| ]
+	[RegIn  2 |124|Rin           a_7_|*|*] paired w/[       a_in_7_]
+	[MCell  4 |123|NOD freezer_state_0_| |*]
+	[MCell  5 |125|NOD freezer_state_1_| |*]
+
+   3	[IOpin  3 | 39|OUT  ram_rom_a_13_|*| ]
+	[RegIn  3 |127|                 -| | ]
+	[MCell  6 |126|NOD freezer_ram_bank_14_| |*]
+	[MCell  7 |128|                 -| | ]
+
+   4	[IOpin  4 | 40|INP        a_in_6_|*| ]
+	[RegIn  4 |130|Rin           a_6_|*|*] paired w/[       a_in_6_]
+	[MCell  8 |129|OUT  ram_rom_a_13_| | ]
+	[MCell  9 |131|NOD inst_vector_a2| |*]
+
+   5	[IOpin  5 | 41|OUT  ram_rom_a_14_|*| ]
+	[RegIn  5 |133|                 -| | ]
+	[MCell 10 |132|NOD freezer_ram_bank_13_| |*]
+	[MCell 11 |134|                 -| | ]
+
+   6	[IOpin  6 | 42|OUT         rom_ce|*| ]
+	[RegIn  6 |136|                 -| | ]
+	[MCell 12 |135|OUT  ram_rom_a_14_| | ]
+	[MCell 13 |137|NOD inst_use_vector_bankno| |*]
+
+   7	[IOpin  7 | 43|OUT  ram_rom_a_17_|*| ]
+	[RegIn  7 |139|                 -| | ]
+	[MCell 14 |138|                 -| | ]
+	[MCell 15 |140|                 -| | ]
+---------------------------------------------------------------------------
+===========================================================================
+	< Block [ 3] >	Logic Array Fan-in
+===========================================================================
+  +- Central Switch Matrix No.
+  |   Src (ABEL Node/Pin#)   Signal
+--|--|--------------------|---------------------------------------------------
+Mux00|  Mcel  0 11  (  62)|   check_d700_d71f_access_std_match_result_n
+Mux01|  Mcel  3 10  ( 132)|   freezer_ram_bank_13_
+Mux02| RegIn  2  0  (  94)|   a_11_
+Mux03|  Mcel  3 13  ( 137)|   inst_use_vector_bankno
+Mux04|  Mcel  0  5  (  53)|   freezer_rom_bank_select_std_match_result_n
+Mux05|  Mcel  1  0  (  69)|   N_275
+Mux06| RegIn  2  6  ( 112)|   a_15_
+Mux07| RegIn  3  0  ( 118)|   a_9_
+Mux08| RegIn  2  4  ( 106)|   a_12_
+Mux09|  Mcel  1 12  (  87)|   rw
+Mux10| RegIn  2  5  ( 109)|   a_14_
+Mux11| IOPin  2  2  (  29)|   os_select
+Mux12|  Mcel  2  0  (  93)|   cart_bank_14_
+Mux13|  Mcel  0  9  (  59)|   freezer_rom_bank_17_
+Mux14|  Mcel  3  4  ( 123)|   freezer_state_0_
+Mux15|  Mcel  2  2  (  96)|   cart_bank_17_
+Mux16| RegIn  1  7  (  91)|   a_4_
+Mux17| RegIn  3  1  ( 121)|   a_8_
+Mux18|  Mcel  3  9  ( 131)|   inst_vector_a2
+Mux19| RegIn  2  1  (  97)|   a_10_
+Mux20|  Mcel  2  4  (  99)|   cart_access_un13_flash_enable_n
+Mux21| IOPin  1  0  (  14)|   reset
+Mux22| RegIn  1  4  (  82)|   a_1_
+Mux23| RegIn  2  3  ( 103)|   a_13_
+Mux24|  Mcel  2  8  ( 105)|   inst_cart_mode_ram
+Mux25|  Mcel  1  1  (  71)|   freezer_rom_bank_13_
+Mux26|  Mcel  3  2  ( 120)|   freezer_rom_bank_14_
+Mux27|  Mcel  2 12  ( 111)|   N_272
+Mux28| RegIn  1  5  (  85)|   a_2_
+Mux29|  Mcel  3  6  ( 126)|   freezer_ram_bank_14_
+Mux30|  Mcel  3  5  ( 125)|   freezer_state_1_
+Mux31|  Mcel  0 13  (  65)|   freezer_ram_bank_select_std_match_result_n
+Mux32|  Mcel  0  8  (  57)|   check_vector_access_un1_activate_n
+---------------------------------------------------------------------------

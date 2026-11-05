@@ -1,0 +1,644 @@
+
+;-------------------------------
+;MAIN MENU: WAIT FOR KEY AND
+;           CALL ACTION ROUTINES
+;           FORCE COLD START IF
+;           RESET DURING WAITING
+;-------------------------------
+
+;END OF COMMAND, UNMARK CHOICE
+
+ENDCMD 
+      DBGTXT "Endcmd  "
+      LDX SELTAB+KEYTBL
+
+ENDCM1 LDA SCREEN,X
+      AND #$7F
+      STA SCREEN,X
+      DEX 
+      CPX #$FF
+      BNE ENDCM1
+      TXS 
+
+;WAIT FOR KEY
+
+KEY
+      LDA COLTAB+4
+      STA COLPF0+4
+      LDA #0
+      STA SKCTL
+      STA CDTMV1
+      STA CDTMV1+1
+      STA PDVMSK
+      LDA #$03
+      STA SSKCTL
+      STA SKCTL
+      LDX #RESTOL-1  ; RESET ON
+RESON1 LDA CPAGE,X
+      STA SPAGE,X
+      LDA RESTOG,X
+      STA CPAGE,X
+      DEX 
+      BPL RESON1
+      LDA #1              ; set coldstart on reset
+      JSR CPAGE
+      STX TPNT            ; remember old reset setting
+      LDA #MYIRQ&$FF      ; SET IRQ VECTOR
+      LDX #MYIRQ/256
+      STA VIMIRQ
+      STX VIMIRQ+1
+      LDA #MYVBL&$FF      ; SET VBLANK VECTOR
+      LDX #MYVBL/256
+      STA VVBLKI
+      STX VVBLKI+1
+      LDA #1              ; NOISY I/O
+      STA SOUNDR
+      STA BRKKEY
+      LDA #$CC            ; SET BAUD RATE
+      LDX #$05            ; FOR CASSETTE
+      STA CBAUDL
+      STX CBAUDH
+      LDA PAL
+      LSR A
+      AND #1
+      EOR #1
+      STA PALNTS
+
+      DBGTXT "Freezer "
+
+KEY1  LDA SKSTAT          ; WAIT FOR NEW KEY
+      AND #4
+      BEQ KEY1
+KEY2  LDA SKSTAT
+      AND #4
+      BNE KEY2
+      LDA RTCLOK+2        ; SET AUTOREPEAT TIMER
+      CLC 
+      ADC #25
+      STA KEYTIM
+
+      LDA TPNT            ; restore old reset value
+      JSR CPAGE
+      LDX #RESTOL-1
+RESON2 LDA SPAGE,X
+      STA CPAGE,X
+      DEX 
+      BPL RESON2
+
+      LDA KBCODE          ; VALID?
+      TAY
+      AND #$3F
+; Hias: added 'C','F','H' commands
+; removed 'H' command for production ROM
+;0910       LDX #6
+;      LDX #9
+      LDX #KEYTBL
+KEY3  CMP KEYTAB,X
+      BEQ KEY4
+      DEX 
+      BPL KEY3
+KEY7  LDA SKSTAT
+      AND #4
+      BEQ KEY7
+      JMP KEY
+
+KEY4  TYA
+      AND #$C0
+      STA RESMODE
+      LDY #$7F
+KEY5  STY CONSOL          ; CLICK
+      STY WSYNC
+      DEY 
+      BPL KEY5
+
+; Hias: added 'H' command
+;      CPX #9
+;      BNE NOHKEY
+;      JMP HKEY
+;NOHKEY
+      CPX #KEYTBL
+      BEQ SPACE
+      LDY SELTAB,X        ; MARK CHOICE
+      TXA                 ; AND BRANCH
+      ASL A
+      TAX 
+      LDA CMDV+1,X
+      PHA 
+      LDA CMDV,X
+      PHA 
+      LDX #3
+KEY6  LDA SCREEN,Y
+      ORA #$80
+      STA SCREEN,Y
+      INY 
+      DEX 
+      BNE KEY6
+      LDA #2
+      STA CHACTL
+      RTS 
+
+; Hias: added 'C','F','H' commands
+
+KEYTAB .BYTE $3E ; S = save extern
+       .BYTE $38 ; F = save freezer ram
+       .BYTE $28 ; R = save ramdisk
+       .BYTE $2E ; W = swap freezer ram
+       .BYTE $17 ; Z = zero os ram
+       .BYTE $05 ; K = CartEmu
+
+       .BYTE $2A ; E = exec extern
+       .BYTE $12 ; C = exec freezer ram
+       .BYTE $16 ; X = exec ramdisk
+       .BYTE $3F ; A = swap ramdisk
+       .BYTE $3A ; D = dos/debugger
+
+       .BYTE $21 ; space = exit freezer
+
+KEYTBL = (* - KEYTAB) - 1
+
+;       .BYTE $39 ; H = hias test command
+
+SELTAB .BYTE 0
+      .BYTE 32
+      .BYTE 64
+      .BYTE 96
+      .BYTE 128
+      .BYTE 160
+
+      .BYTE 16
+      .BYTE 48
+      .BYTE 80
+      .BYTE 112
+      .BYTE 144
+
+;      .BYTE 146
+      .BYTE 162
+
+CMDV  .WORD AKEY-1 ; save extern
+      .WORD SFRZ-1 ; save frzram
+      .WORD DKEY-1 ; save ramdisk
+      .WORD SWAPF-1 ; swap frzram
+      .WORD CKEY-1 ; zero os ram
+      .WORD KKEY-1 ; start cartridge emulation
+
+      .WORD BKEY-1 ; load extern
+      .WORD EFRZ-1 ; exec frzram
+      .WORD EKEY-1 ; exec ramdisk
+      .WORD SWAPR-1 ; swap ramdisk
+      .WORD DEBUG-1 ; dos/debugger
+
+; old reset code changes PUPBT1
+
+;RESTOG STA BRKCTL
+;      LDA PUPBT1
+;      EOR #$FF
+;      STA PUPBT1
+;      STA BRKCTL
+;RESTO1 RTS 
+
+; new reset code also sets/restores COLDST
+; A is written to COLDST, X returns old value
+
+; A=1 -> coldstart
+RESTOG STA BRKCTL
+       LDX COLDST
+       STA COLDST
+       LDA PUPBT1
+       EOR #$FF
+       STA PUPBT1
+       STA BRKCTL
+       RTS
+
+RESTOL = * - RESTOG
+
+SPACE LDA SKSTAT          ; WAIT FOR KEY RELEASED
+      AND #4
+      BEQ SPACE
+      JMP RSTART
+
+;-------------------------------
+;USER INTERFACE ROUTINES
+;-------------------------------
+
+;SAVE EXTERN MENU
+
+AKEY  LDX #0
+SEXT  STA WSYNC
+      STA WSYNC
+      STA WSYNC
+      DEX 
+      BNE SEXT
+      LDX #$3F
+SEX1  LDA SCREEN,X
+      STA SPAGE,X
+      LDA MENUA,X
+      STA SCREEN,X
+      DEX 
+      BPL SEX1
+      JSR INIDLS
+
+SEX2  JSR GETKEY
+      CMP #'C
+      BEQ SEX3            ; SAVE CASSETTE
+      CMP #'B
+      BEQ SEX4            ; SAVE BOOT
+      CMP #'F
+      BNE SEX5
+      JSR FNAME           ; SAVE FILE
+      JSR OLDSCR
+      JMP SAVFIL
+SEX3  JSR OLDSCR
+      JMP SCASS
+SEX4  JSR OLDSCR
+      JMP SAVDBO
+SEX5  JSR OLDSCR
+      JMP ENDCMD
+
+MENUA .SBYTE +$80,"SAVE PROGRAM TO EXTERNAL STORAGE"
+      .SBYTE "[C] CASSETTE  [B] BOOT  [F] FILE"
+
+;RESTORE MAIN MENU
+OLDSCR LDX #$3F
+OLDSC1 LDA SPAGE,X
+      STA SCREEN,X
+      DEX
+      BPL OLDSC1
+      JMP INIDL
+
+;ASK FOR FILE NAME (TO /NAME/)
+
+FSTART = 11
+FEND   = $1E
+
+FNAME LDX #$1F
+FNAM1 LDA MENUN,X
+      STA SCREEN+(MENU2-MENU),X
+      DEX 
+      BPL FNAM1
+
+FNAM2 LDX #(MENU2-MENU+FSTART)  ; INIT CURSOR
+FNAM3 CPX #(MENU2-MENU+FSTART)  ; CURSOR BOUNDARY CHECK
+      BCC FNAM2
+      CPX #(MENU2-MENU+FEND)
+      BCC FNAM4
+      LDX #(MENU2-MENU+FEND)
+FNAM4 LDA SCREEN,X        ; SHOW CURSOR
+      ORA #$80
+      STA SCREEN,X
+      TXA 
+      PHA 
+      LDA #0
+      STA KBCAPS
+      JSR GETKEY
+      TAY 
+      PLA 
+      TAX 
+      LDA SCREEN,X        ; REMOVE CURSOR
+      AND #$7F
+      STA SCREEN,X
+      TYA 
+      CMP #$7E            ; BS?
+      BNE FNAM6
+      CPX #(MENU2-MENU+FSTART)
+      BEQ FNAM4
+      LDA #0
+      STA SCREEN-1,X
+FNAM5 DEX 
+      BNE FNAM3           ; ALWAYS
+FNAM6 CMP #$1E            ; CURSOR <-?
+      BEQ FNAM5
+      CMP #$1F            ; CURSOR ->?
+      BNE FNAM7
+      INX 
+      BNE FNAM3           ; ALWAYS
+FNAM7 CMP #$9B            ; EOL?
+      BEQ FNAM9
+      CPX #(MENU2-MENU+FEND)
+      BCS FNAM4
+      CMP #'.
+      BEQ FNAM8
+      CMP #':
+      BEQ FNAM8
+      CMP #'?
+      BEQ FNAM8
+      CMP #'*
+      BEQ FNAM8
+      CMP #$20
+      BEQ FNAM8
+      CMP #'0
+      BCC FNAM3
+      CMP #'9+1
+      BCC FNAM8
+      CMP #'A
+      BCC FNAM3
+      CMP #'Z+1
+      BCS FNAM3
+FNAM8 SEC 
+      SBC #$20
+      STA SCREEN,X
+      INX 
+      JMP FNAM3
+
+FNAM9 SEC 
+      SBC #$20
+      STA SCREEN,X
+      LDA #8
+      STA FILENO
+      LDA #1
+      STA DRIVENO
+      LDX #(MENU2-MENU+FSTART)
+
+; check for D: /Dx:
+      LDA SCREEN,X
+      CMP #'D-$20
+      BNE FNAD2
+      LDA SCREEN+1,X
+      CMP #':-$20
+      BNE FNAD1
+      INX
+      INX
+      BNE FNAD2
+FNAD1 LDA SCREEN+2,X
+      CMP #':-$20
+      BNE FNAD2
+      LDA SCREEN+1,X
+      CMP #'1-$20
+      BCC FNAD2
+      CMP #'9-$20
+      BCS FNAD2
+      SEC
+      SBC #$10
+      STA DRIVENO
+      INX
+      INX
+      INX
+
+FNAD2 LDY #0
+FNA10 LDA SCREEN,X        ; CONVERT FILENAME
+      INX 
+      CLC 
+      ADC #$20
+FNA11 CMP #$9B
+      BEQ FNA12
+      CMP #$20
+      BNE FNA15
+FNA12 CPY #11
+      BCS FNAX1
+      LDA #$20
+      STA NAME,Y
+      INY 
+      BNE FNA12           ; ALWAYS
+FNAX1 LDA NAME
+      CMP #$20
+      BNE FNA14           ; LEGAL NAME
+      LDX #10             ; USE DEFAULT NAME
+FNA13 LDA DEFNAM,X
+      STA NAME,X
+      DEX 
+      BPL FNA13
+FNA14 RTS 
+DEFNAM .BYTE "CORE       "
+FNA15 CPY FILENO
+      BNE FNA16
+      CMP #'.
+      BNE FNA10
+FNAX2 LDA #11
+      STA FILENO
+      BNE FNA10
+FNA16 CMP #'.
+      BEQ FNA17
+      CMP #'*
+      BEQ FNA18
+      STA NAME,Y
+      INY 
+      BNE FNA10
+FNA17 LDA #$20
+      BNE FNA19
+FNA18 LDA #'?
+FNA19 STA NAME,Y
+      INY 
+      CPY FILENO
+      BNE FNA19
+      CMP #$20
+      BEQ FNAX2
+      BNE FNA10
+
+MENUN .SBYTE "FILENAME ->                    <"
+
+;LOAD EXTERN MENU
+
+BKEY  LDX #0
+LEXT  STA WSYNC
+      STA WSYNC
+      STA WSYNC
+      DEX 
+      BNE LEXT
+      LDX #$3F
+LEX1  LDA SCREEN,X
+      STA SPAGE,X
+      LDA MENUB,X
+      STA SCREEN,X
+      DEX 
+      BPL LEX1
+      JSR INIDLS
+
+LEX2  JSR GETKEY
+      CMP #'C
+      BEQ LEX3            ; LOAD CASSETTE
+      CMP #'B
+      BEQ LEX4            ; LOAD BOOT
+      CMP #'F
+      BNE LEX5
+      JSR FNAME           ; LOAD FILE
+      JSR OLDSCR
+      JMP EXEFIL
+LEX3  JSR OLDSCR
+      JMP ECASS
+LEX4  JSR OLDSCR
+      JMP EXEDBO
+LEX5  JSR OLDSCR
+      JMP ENDCMD
+
+MENUB .SBYTE +$80, "EXEC PROGRAM FROM EXTERNAL STORE"
+      .SBYTE "[C] CASSETTE  [B] BOOT  [F] FILE"
+
+;ERROR HANDLER, Y=ERROR CODE
+
+ERROR LDA #$FF
+      STA PORTB           ; OS ON
+      LDA #0              ; DMA OFF
+      STA DMACTL
+      JSR INISCR
+
+      LDA COLTAB+4
+      STA COLPF0+4
+      JSR DMAON
+      LDX #$3F            ; SET ERROR SCREEN
+ERRO1 LDA SCREEN,X
+      STA SPAGE,X
+      LDA MENUE,X
+      STA SCREEN,X
+      DEX 
+      BPL ERRO1
+      JSR INIDLS
+      LDX #0              ; INDEX INTO ERROR TEXTS
+ERRO2 LDA MENUE,X
+      BMI ERRO3
+      INX 
+      BNE ERRO2
+ERRO3 INX 
+      DEY 
+      BPL ERRO2
+      LDY #7              ; COPY TEXT TO SCREEN
+ERRO4 LDA MENUE,X
+      PHP 
+      AND #$7F
+      SEC 
+      SBC #$20
+      STA SCREEN,Y
+      INX 
+      INY 
+      PLP 
+      BPL ERRO4
+      LDY #10             ; BEEP
+ERRO6 LDX #0
+ERRO7 STX CONSOL
+      STX WSYNC
+      INX 
+      BNE ERRO7
+ERRO8 INX 
+      BPL ERRO8
+      DEY 
+      BNE ERRO6
+      JSR GETKEY          ; WAIT FOR KEY
+      JSR OLDSCR
+      JMP ENDCMD
+
+MENUE .SBYTE "ERROR:                          "
+      .SBYTE "OPERATION TERMINATED, HIT RETURN",$80
+      .CBYTE "FILE NOT FOUND"
+      .CBYTE "FILE# MISMATCH"
+      .CBYTE " "
+      .CBYTE "BAD DISK I/O"
+      .CBYTE "NO DRIVE"
+      .CBYTE "DISK FULL"
+      .CBYTE "FILE LOCKED"
+      .CBYTE "DIRECTORY FULL"
+      .CBYTE "BAD CASSETTE I/O"
+
+;CLEAR OS RAM COMMAND
+
+CKEY  JSR OSRCLR          ; IN DEBUGGER
+      JMP ENDCMD
+
+; start cartridge emulation
+KKEY  LDA VCOUNT	; wait for end of screen
+      CMP #124
+      BCC KKEY
+
+      LDA #0		; disable DMA
+      STA DMACTL
+
+; setup stack address
+      LDA #1
+      STA RPNT+1
+      CLC
+      ADC REGS
+      STA RPNT
+
+      LDY #0
+      JSR GETBYT	; get flag register
+      AND #$F7		; clear D flag
+      ORA #4		; set I flag to disable IRQs
+      LDY #0
+      JSR STOBYT
+
+      LDA #$77		; default is $E477
+      BIT RESMODE
+      BVC KKEY1
+      LDA #$74  	; $E474 if shift-K is pressed
+KKEY1 LDY #1
+      JSR STOBYT
+      LDA #$E4
+      LDY #2
+      JSR STOBYT
+
+      LDA #0
+      STA DIOMODE ; disable DIOMODE
+
+; disable DMA and NMIs
+      LDA #0
+      STA SANTIC
+      STA SANTIC+$0E
+
+      LDA #$3C
+      STA SCTLB ; set PIA portb-ctl to default
+
+      LDA #$FF
+      STA SDIRB ; set PIA portb to output
+      STA SPORTB ; set PIA portb bits to default
+
+.if .def FREEZER2011
+      LDA CE_CFG	; clear write-enable, preserve source, set menu
+      AND #CE_CFG_SRC
+      ORA #CE_CFG_MENU
+      STA CE_CFG
+      LDA #0
+      STA CE_RENABLE	; disable RAM bank at $8000
+      STA WSYNC
+      STA WSYNC
+
+; check RESMODE, if warmstart update GINTLK and CARTCK
+      BIT RESMODE
+      BVC KKEY5	; no, coldstart, so ignore it
+
+; set GINTLK/$03FA to TRIG3 value
+      LDA #$03
+      STA RPNT+1
+      LDA #$FA
+      STA RPNT
+      LDA $D013
+      LDY #0
+      JSR STOBYT
+; update cart checksum
+      LDA #0
+      TAY
+      CLC
+KKEY4 ADC $BFF0,Y
+      INY
+      BNE KKEY4
+      LDX #$03
+      STX RPNT+1
+      LDX #$EB
+      STX RPNT
+      JSR STOBYT
+KKEY5
+.else
+      STA WRDIS
+      STA MODKEEP
+      STA ENABLE
+      STA MODEROM
+      STA MODE8K
+      STA SELBANK
+.endif
+
+      LDA #0
+      STA RESMODE ; reset RESMODE
+
+      JMP SPACE
+
+;DMA ON
+
+DMAON LDA #0
+      STA DMACTL
+      LDA #<MENUDL
+      LDX #>MENUDL
+      STA DLISTL
+      STX DLISTH
+
+DMAON1 LDA VCOUNT
+      CMP #124
+      BCC DMAON1
+      LDA #$21
+      STA DMACTL
+      RTS 

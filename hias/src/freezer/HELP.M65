@@ -1,0 +1,273 @@
+; turbo freezer online help
+
+PHELP	LDA #0
+PHELP1	STA TPNT2
+PHELP2	JSR PRHELP
+	LDA #HLPNO
+	JSR PRHELP0
+	JSR GETKEYH
+	BIT HELPFLG
+	BMI PHELPN
+	CMP #$20
+	BNE PHELP4
+PHELPN	INC TPNT2
+	LDA TPNT2
+	CMP #HLPNO
+	BCC PHELP2
+PHELP3	RTS
+PHELP4	CMP #126
+	BNE PHELP5
+	DEC TPNT2
+	BPL PHELP2
+	BMI PHELP
+PHELP5	CMP #'1
+	BCC PHELP3
+	CMP #'1+HLPNO
+	BCS PHELP3
+	SEC
+	SBC #'1
+	JMP PHELP1
+
+PRHELP	LDA TPNT2
+PRHELP0	ASL
+	TAX
+	LDA HLPTXTA,X
+	STA TPNT
+	LDA HLPTXTA+1,X
+	STA TPNT+1
+	JSR SCROLL
+PRHELP1	LDY #0
+	LDA (TPNT),Y
+	CMP #$FF
+	BNE PRHELP2
+	RTS
+PRHELP2	CMP #$FE
+	BNE PRHELP3
+	JSR SCROLL
+	JMP PRHELP4
+PRHELP3	JSR PUTBYT
+PRHELP4	INC TPNT
+	BNE PRHELP1
+	INC TPNT+1
+	JMP PRHELP1
+
+
+	;      0123456789012345678901234567890123456789
+	;      0123456789012345678998765432109876543210
+HLPTXT1	
+	.BYTE +$80,25,"1"
+	.BYTE 25," "
+	.BYTE +$80,25,"Turbo-Freezer XL/XE online help"
+	.BYTE 25,$FE
+	.BYTE $FE,$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"1"
+	.BYTE 25," help index (this page)",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"2"
+	.BYTE 25," monitor part 1",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"3"
+	.BYTE 25," monitor part 2 and address modes",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"4"
+	.BYTE 25," search and general usage",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"5"
+	.BYTE 25," sio commands",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"6"
+	.BYTE 25," dos commands",$FE
+
+	.BYTE "   "
+	.BYTE +$80,25,"7"
+	.BYTE 25," cartridge emulation commands",$FE
+
+	.DC 4 $FE
+	.BYTE $FF
+
+HLPTXT2
+	.BYTE +$80,25,"2"
+	.BYTE 25
+	.BYTE "        "
+	.BYTE +$80,25,"monitor commands"
+	.BYTE 25,$FE
+
+	.BYTE "D adr[,adr] dump memory + atascii",$FE
+	.BYTE "I adr[,adr] dump memory + screen code",$FE
+	.BYTE "L adr[,adr] disassemble memory",$FE
+	.BYTE "DL adr[,adr] displaylist disassembler",$FE
+	.BYTE "C adr<byte[,byte...] change memory",$FE
+	.BYTE "R show CPU registers",$FE
+	.BYTE "R <byte[,byte...] change CPU registers",$FE
+	.BYTE "G go address (set PC)",$FE
+	.BYTE "BS start,end,value set block to value",$FE
+	.BYTE "BM start,end,dest move block",$FE
+	.BYTE "BC start,end,dest compare block",$FE
+	.BYTE "PB [<byte] show/set PORTB for memaccess",$FE
+	.BYTE "M display memory map",$FE
+	.BYTE $FF
+
+HLPTXT3
+	.BYTE +$80,25,"3"
+	.BYTE 25
+	.BYTE "        "
+	.BYTE +$80,25,"monitor commands"
+	.BYTE 25,$FE
+
+	.BYTE $FE
+	.BYTE "DIO show direct IO mode",$FE
+	.BYTE "DIO <byte set DIO mode (0=off, 1=on)",$FE
+	.BYTE "HAT display HATABS handle table",$FE
+	.BYTE "VEC display OS vectors in page 0 and 2",$FE
+	.BYTE "V show IRQ, real and calculated VCOUNT",$FE
+	.BYTE "V <byte set VCOUNT",$FE
+	.BYTE "VER show software version",$FE
+
+	.BYTE $FE
+
+	.BYTE "          "
+	.BYTE +$80,25,"byte/address modes"
+	.BYTE 25,$FE
+	.BYTE "%val decimal value  *adr vector (word)",$FE
+	.BYTE "'c   ATASCII code   @c   screen code",$FE
+
+	.BYTE $FE
+	.BYTE $FF
+	
+HLPTXT4
+	.BYTE +$80,25,"4"
+	.BYTE 25
+
+	.BYTE "        "
+	.BYTE +$80,25,"search commands"
+	.BYTE 25,$FE
+	.BYTE $FE
+	.BYTE "//byte[,byte...] search $0000-$FFFF",$FE
+	.BYTE "/start,end/byte... search memory",$FE
+	.BYTE "/start/byte... search for first match",$FE
+	.BYTE "/ search for next match",$FE
+	.BYTE "if byte is 'val&mask', memory is ANDed",$FE
+	.BYTE "with mask before comparing with val",$FE
+
+	.BYTE $FE
+
+	.BYTE "            "
+	.BYTE +$80,25,"general usage"
+	.BYTE 25,$FE
+	.BYTE "use ",$1E,",",$1F,",CLEAR,INSERT,DELETE to edit",$FE
+	.BYTE $1C,",",$1D," move through history",$FE
+	.BYTE "S stops output, Q continues it",$FE
+	.BYTE "BREAK aborts current operation",$FE
+	.BYTE $FF
+
+HLPTXT5
+	.BYTE +$80,25,"5"
+	.BYTE 25
+
+	.BYTE "          "
+	.BYTE +$80,25,"sio commands"
+	.BYTE 25,$FE
+	.BYTE $FE
+	.BYTE "SR [Dx:]sector read sector (buf=$D700)",$FE
+	.BYTE "SW [Dx:]sector write sector",$FE
+	.BYTE "SIO dev,unit,cmd,dir,timeout,len,aux",$FE
+	.BYTE "    direct SIO call",$FE
+	.BYTE "SIOR reset highspeed SIO",$FE
+	.BYTE $FE
+	.BYTE "PR <byte set printer output (0=off)", $FE
+	.BYTE "; TEXT print text to debugger screen", $FE
+	.BYTE $FE
+	.BYTE "a command... AtariSIO remote control",$FE
+
+	.DC 2 $FE
+
+	.BYTE $FF
+
+HLPTXT6	
+	.BYTE +$80,25,"6"
+	.BYTE 25
+	.BYTE "          "
+	.BYTE +$80,25,"dos commands"
+	.BYTE 25,$FE
+	.BYTE $FE
+	.BYTE "DIR [Dx:][filename] show directory",$FE
+	.BYTE "FMS,FME,FMD [Dx:] format SD/ED/DD",$FE
+	.BYTE "LOC,UNL [Dx:]file[OPT] (un)lock",$FE
+	.BYTE "DEL [Dx:]file[OPT] delete",$FE
+	.BYTE "REN [Dx:]old,new[OPT] rename",$FE
+	.BYTE "SAV [Dx:]file,start,end save as COM",$FE
+	.BYTE "SAV [Dx:]file/N,start,end save RAW data",$FE
+	.BYTE "LOA [Dx:]file load COM file",$FE
+	.BYTE "LOA [Dx:]file/N trace COM file",$FE
+	.BYTE "LOA [Dx:]file,adr load RAW file to adr",$FE
+	.BYTE $FE
+	.BYTE "OPT can be /A (all) or /Q (query)",$FE
+	.BYTE $FF
+
+HLPTXT7	
+	.BYTE +$80,25,"7"
+	.BYTE 25
+	.BYTE "          "
+	.BYTE +$80,25,"cartemu commands"
+	.BYTE 25,$FE
+
+.if .def FREEZER2011
+	.BYTE $FE
+	.BYTE "K     show config",$FE
+	.BYTE "K<0   reset cartemu",$FE
+	.BYTE "KM<x  mode 0/8/8Ram/8Old/16/Oss/Amax",$FE
+	.BYTE "KB<x  KR<x main/ram bank",$FE
+	.BYTE "KBE<x KRE<x main/ram enable 0/1",$FE
+	.BYTE "KX<x  SDX mode 0/1/2/Ram",$FE
+	.BYTE "KXB<x SDX bank",$FE
+	.BYTE "KXM<x SDX config 0/1/Cart",$FE
+	.BYTE "KO<x  OSS bank 0-3",$FE
+	.BYTE "KW<x  write enable 0/1",$FE
+	.BYTE "KS<x  source 0=ROM 1=RAM",$FE
+	.BYTE "KN<x  menu override 0/1",$FE
+.else
+	.BYTE "KON enable cartemu",$FE
+	.BYTE "KOF disable cartemu",$FE
+	.BYTE "KDE reset to default",$FE
+	.BYTE "KM MODE set mode (8/16/OSS/SDX)",$FE
+	.BYTE "KB BANK set bank (0-3F)",$FE
+	.BYTE "KOS BANK set OSS bank (OFF/1-3)",$FE
+	.BYTE "KSD BANK set SDX bank (OFF/0-7)",$FE
+	.BYTE "KRA source is freezer RAM",$FE
+	.BYTE "KRO source is freezer ROM",$FE
+	.BYTE "KKE keep settings on",$FE
+	.BYTE "KRE keep settings off (reset)",$FE
+	.BYTE "KWE set write enable",$FE
+	.BYTE "KWP set write protect",$FE
+.endif
+	
+	.BYTE $FF
+
+
+
+HLPTXTN	.BYTE "page",
+	.BYTE +$80,25,"1"
+	.BYTE 25,"-"
+	.BYTE +$80,25,HLPNO+'0
+	.BYTE 25," "
+	.BYTE +$80,25,"del"
+	.BYTE 25,"prev "
+	.BYTE +$80,25,"space"
+	.BYTE 25
+	.BYTE +$80,25,"help"
+	.BYTE 25,"next"
+	.BYTE $FF
+
+HLPTXTA	.WORD HLPTXT1, HLPTXT2, HLPTXT3, HLPTXT4, HLPTXT5, HLPTXT6, HLPTXT7
+
+HLPNO	= ((* - HLPTXTA) / 2)
+	.WORD HLPTXTN
+
+

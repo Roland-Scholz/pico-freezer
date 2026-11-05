@@ -1,0 +1,30 @@
+CHIP GAL_F GAL16V8 Registered_Mode
+
+CLK A14 A15 A11 A13 Reset A12 RW PHI2 GND NOE 
+RomOE F_o13 F_o14 RamCE F_o16 F_rf17 F_rf18 F_rf19 VCC 
+
+F_rf18 := Reset & F_rf17 & F_rf18 +
+		 /Reset &  /RW & F_rf17 &  /F_rf18 +
+		A14 & A15 & A11 & A13 & A12 & RW &  /F_rf17 &  /F_rf18 &  /F_rf19;
+F_rf17 :=  /RW & F_rf17 +
+		Reset & F_rf17 +
+		A14 & A15 & A11 & A13 & A12 & RW &  /F_rf17 & F_rf18 &  /F_rf19 +
+		A14 & A15 & A11 & A13 & Reset & A12 & RW & F_rf18 &  /F_rf19;
+F_o16 = A14 & A15 &  /A12 +
+		A14 & A15 & A13 +
+		A14 & A15 &  /A11;
+F_o14 =  /A15 & A13 & F_rf17 &  /F_rf18 +
+		 /A15 & A12 & F_rf17 &  /F_rf18 +
+		 /A15 & A11 & F_rf17 &  /F_rf18 +
+		A14 & A13 +
+		A14 &  /A15;
+F_o13 =  /A15 &  /A11 &  /A13 &  /A12 & F_rf17 &  /F_rf18 +
+		A14 & A11 & A13 & A12 & RW &  /F_rf17 & F_rf18 &  /F_rf19 +
+		A14 &  /A11 &  /A13 & A12 +
+		A14 &  /A15;
+/RamCE = A14 & A15 &  /A11 &  /A13 & A12 &  /RW & PHI2 &  /F_rf17 &  /F_rf18 +
+		 /A14 &  /A15 &  /A11 &  /A13 &  /A12 & PHI2 & F_rf17 &  /F_rf18;
+/RomOE = A14 & A15 & A11 & A13 & A12 & RW &  /F_rf17 & F_rf18 &  /F_rf19 +
+		 /A14 &  /A15 & A12 & RW & F_rf17 &  /F_rf18 +
+		 /A14 &  /A15 & A13 & RW & F_rf17 &  /F_rf18 +
+		 /A14 &  /A15 & A11 & RW & F_rf17 &  /F_rf18;

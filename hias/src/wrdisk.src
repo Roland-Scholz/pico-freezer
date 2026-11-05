@@ -1,0 +1,338 @@
+;  wrdisk - write Freezer software disk from flash ROM
+;
+;  Copyright (C) 2005 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+.if .def FREEZER2011
+	.include "flash11.inc"
+
+	.MACRO SBANKX
+	STX CE_BANK
+	.ENDM
+.else
+	.include "flash05.inc"
+
+	.MACRO SBANKX
+	STA BANKREG,X
+	.ENDM
+.endif
+
+	.include "cio.inc"
+	.include "hisio.inc"
+
+; starting bank number
+SBANK	= 1
+
+; last sector number
+LSEC	= 1040
+
+SRC	= $E0
+DEST	= $E2
+
+BANKNO	= $E4
+BUF	= $0F00
+
+SPEEDTB	= $0E00
+HIBUF	= $0E08
+SIOSPEED = $0E0C
+
+	ORG = $A000
+
+	* = $1000
+
+	.SET 6,(ORG-*)
+
+MAIN	BPUT0 TITLE
+
+GDRV	JSR GETCHAR
+	CPY #128
+	BEQ GDRV
+
+	CMP #27
+	BNE GDRV1
+
+EXIT
+	INC CRITIC
+.if .def FREEZER2011
+	LDA #0
+	STA CE_ENABLE
+	LDA #CE_MODE_OFF
+	STA CE_MODE
+.else
+	STA DISABLE
+	STA MODKEEP
+	STA BANKREG
+.endif
+	JMP $E477
+
+GDRV1	CMP #'1
+	BCC GDRV
+	CMP #'9
+	BCS GDRV
+	STA DRIVENO
+	PHA
+	JSR PUTCHAR
+	LDA #155
+	JSR PUTCHAR
+	PLA
+	SEC
+	SBC #'0
+	STA DUNIT
+
+	BPUT0 HISPD
+	JSR YESNO
+	BPL HISP1
+	JMP MAIN
+HISP1	BEQ HISP2
+	LDA #$59
+	STA SIOVEC
+	LDA #$E4
+	STA SIOVEC+1
+	BNE HISP3
+
+HISP2	LDA #<HISIO
+	STA SIOVEC
+	LDA #>HISIO
+	STA SIOVEC+1
+
+	LDA DUNIT
+	PHA
+	LDA #0
+	STA DUNIT
+	JSR HISIO
+	PLA
+	STA DUNIT
+
+HISP3
+	BPUT0 TRET
+
+WRET	JSR GETCHAR
+	CPY #128
+	BNE WRET1
+	JMP MAIN
+
+WRET1	CMP #155
+	BNE WRET
+
+	BPUT0 TFOR
+
+	LDA #$31
+	STA DDEVIC
+	LDA #$22
+	STA DCOMND
+	LDA #$40
+	STA DSTATS
+	LDA #<BUF
+	STA DBUFLO
+	LDA #>BUF
+	STA DBUFHI
+	LDA #128
+	STA DBYTLO
+	LDA #0
+	STA DBYTHI
+	LDA #$A0
+	STA DTIMLO
+	JSR SIO
+	BPL FOK
+
+	JSR PERROR
+	JMP AGAIN
+
+FOK	JSR POK	
+	BPUT0 TWR
+
+	LDA #$50
+	STA DCOMND
+	LDA #1
+	STA DAUX1
+	LDA #0
+	STA DAUX2
+	LDA #<ORG
+	STA DBUFLO
+	LDA #>ORG
+	STA DBUFHI
+	LDX #SBANK
+	STX BANKNO
+	SBANKX
+	
+WRLOOP	LDA #$80
+	STA DSTATS
+	JSR SIO
+	BPL WROK
+	JSR PERROR
+	JMP AGAIN
+WROK	JSR ADVSEC
+	BCC WRLOOP
+	JSR POK
+
+AGAIN	BPUT0 TAG
+	JSR GETCHAR
+	JMP MAIN
+
+ADVSEC	LDA DAUX1
+	CMP #<LSEC
+	BNE ADVSEC1
+	LDA DAUX2
+	CMP #>LSEC
+	BNE ADVSEC1
+	SEC
+	RTS
+
+ADVSEC1	CLC
+	LDA DBUFLO
+	ADC #128
+	STA DBUFLO
+	BCC ADVSEC2
+	INC DBUFHI
+
+ADVSEC2	LDA DBUFHI
+	CMP #$C0
+	BCC ADVSEC3
+	INC BANKNO
+	LDX BANKNO
+	SBANKX
+	LDA #<ORG
+	STA DBUFLO
+	LDA #>ORG
+	STA DBUFHI
+ADVSEC3	INC DAUX1
+	BNE ADVSEC4
+	INC DAUX2
+
+ADVSEC4	CLC
+	RTS
+
+POK	BPUT0 TOK
+	RTS
+
+PERROR	BPUT0 TERR
+	RTS
+
+YESNO	JSR GETCHAR
+	CPY #128
+	BEQ ?YBRK
+	CMP #'Y
+	BEQ YYES
+	CMP #'y
+	BEQ YYES
+	CMP #'N
+	BEQ YNO
+	CMP #'n
+	BEQ YNO
+	JMP YESNO
+YNO	LDX #1
+YYES	PHP
+	JSR PUTCHAR
+	PLP
+	RTS
+
+?YBRK	LDY #$FF
+	RTS
+	
+PUTCHAR	TAY
+	LDA $E407
+	PHA
+	LDA $E406
+	PHA
+	TYA
+	RTS
+
+GETCHAR	LDA $E425
+	PHA
+	LDA $E424
+	PHA
+	RTS
+
+SIO	JMP (SIOVEC)
+
+SIOVEC	.WORD $E459
+
+TITLE	.BYTE 125
+	.BYTE "Turbo Freezer System Disk Writer V1.1",155
+	.BYTE "(c) 2005-2011 by Matthias Reichl",155
+	.BYTE 155
+	.BYTE "This program writes the Turbo Freezer",155
+	.BYTE "system disk to a floppy. During this", 155
+	.BYTE "process the disk will be formatted",155
+	.BYTE "in enhanced density",155,155
+	.BYTE "Drive number (1-8, ESC=quit) > "
+TITLEL	= * -TITLE
+
+HISPD	.BYTE "Use highspeed SIO (y/n)? "
+HISPDL	= * - HISPD
+
+TRET	.BYTE 155, 155, "Insert a blank disk into D"
+DRIVENO	.BYTE "1: and",155
+	.BYTE "press RETURN"
+TRETL	= * - TRET
+
+TFOR	.BYTE 155,155
+	.BYTE "Formatting..."
+TFORL	= * - TFOR
+
+TWR	.BYTE "Writing..."
+TWRL	= * - TWR
+
+TOK	.BYTE " OK",155
+TOKL	= * - TOK
+
+TERR	.BYTE " Error!",253,155
+TERRL	= * - TERR
+
+TAG	.BYTE 155
+	.BYTE "press any key to continue"
+TAGL	= * - TAG
+
+	.include "cio.src"
+
+	* = $1800
+
+	.include "hisiodet.src"
+	.include "hisiocode.src"
+
+	* = $BF00
+
+	.SET 6,0
+
+RUN	LDA #0
+	STA SRC
+	STA DEST
+	LDA #$A0
+	STA SRC+1
+	LDA #$10
+	STA DEST+1
+
+	LDY #0
+MOVLP	LDA (SRC),Y
+	STA (DEST),Y
+	INY
+	BNE MOVLP
+	INC SRC+1
+	INC DEST+1
+	LDA SRC+1
+	CMP #$B0
+	BNE MOVLP
+	JMP $1000
+
+XRTS	RTS
+
+	* = $BFFA
+
+	.WORD RUN
+	.BYTE 0
+	.BYTE 4
+	.WORD XRTS
+

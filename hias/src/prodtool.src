@@ -1,0 +1,569 @@
+;  prodtool - Turbo Freezer 2011 production tool
+;
+;  Copyright (C) 2011 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+	.include "cio.inc"
+	.include "libflash.inc"
+	.include "flash11.inc"
+
+; set ramdisk (0-31, 32=off)
+	.MACRO SETRDX
+	LDA $D301
+	AND #$3
+	ORA RDTAB,X
+	STA $D301
+	.ENDM
+
+; temporary ZP vectors
+SRC	= $E6
+DEST	= $E8
+
+DATABUF	= $2000
+START	= $8000
+
+	.BANK
+	* = START
+
+	JSR INIT
+
+MAINLP	BPUT0 TITLE
+	BPUT0L VERSION, 15
+	LDA #155
+	JSR PUTCHAR
+	LDA #155
+	JSR PUTCHAR
+
+	JSR FINIT
+
+	LDA #<DATABUF
+	STA DATAADR
+	LDA #>DATABUF
+	STA DATAADR+1
+
+	JSR FDISABLE
+
+; check if $A000 is writable
+	LDA $A000
+	EOR #$FF
+	STA $A000
+	CMP $A000
+	BEQ A0OK
+A0ERR	BPUT0 TA0ERR
+	JMP RESTART
+
+RESTARTC
+	CLOSE 1
+
+RESTART LDX #32
+	SETRDX
+
+	BPUT0 TREST
+	LDA #255
+	STA 764
+	JSR GETCHAR
+	JMP MAINLP
+
+A0OK	LDA $BFFF
+	EOR #$FF
+	STA $BFFF
+	CMP $BFFF
+	BNE A0ERR
+
+; check ramdisk
+	LDX #0
+RDLP1	SETRDX
+	TXA
+	STA $4000
+	LDA #$55
+	STA $7FFF
+	INX
+	CPX #33
+	BNE RDLP1
+	LDA #$AA
+	STA $7FFF
+
+	LDX #0
+RDLP2	SETRDX
+	CPX $4000
+	BNE RDERR1
+	LDA $7FFF
+	CMP #$55
+	BNE RDERR1
+	INX
+	CPX #32
+	BNE RDLP2
+	SETRDX
+	CPX $4000
+	BNE RDERR1
+	LDA $7FFF
+	CMP #$AA
+	BEQ RDOK1
+
+RDERR1	BPUT0 TRDERR
+	JMP RESTART
+
+; detect flash chip
+RDOK1	
+	JSR FENABLE
+	JSR FDETECT
+
+	LDA FTYPE
+	STA FFTYPE
+	BPL FL1OK
+	JSR FDISABLE
+
+FLERR	BPUT0 TFLERR
+	JMP RESTART
+
+FL1OK	LDA FSIZE
+	BNE FLERR
+	LDA FSIZE+1
+	BNE FLERR
+	LDA FSIZE+2
+	CMP #8
+	BNE FLERR
+
+	LDA #8
+	STA FLASHADR+2
+	JSR FDETECT
+	JSR FDISABLE
+
+	LDA FTYPE
+	CMP FFTYPE
+	BNE FLERR
+
+	OPEN 1,4,0,ROMFILE
+	BPL OPENOK1
+
+OPENER	BPUT0 TOPENER
+	JMP RESTARTC
+
+OPENOK1
+	LDA #0
+	STA ADR
+	STA ADR+1
+	JSR FADRZERO
+
+	BPUT0 TERAS
+
+	JSR FENABLE
+	JSR FCERAS
+	BPL ERASOK
+
+ERASERR	JSR FDISABLE
+	JSR PERROR
+	JMP RESTARTC
+
+ERASOK	LDA #8
+	STA FLASHADR+2
+	JSR FCERAS
+	BMI ERASERR
+
+	JSR FDISABLE
+
+; clear RAM banks 0-61 ($00000-$7BFFF)
+
+; set data buffer to $FF
+	LDA #<DATABUF
+	STA DEST
+	LDA #>DATABUF
+	STA DEST+1
+	LDA #$FF
+	LDY #0
+	LDX #$20
+CLBUF	STA (DEST),Y
+	INY
+	BNE CLBUF
+	INC DEST+1
+	DEX
+	BNE CLBUF
+
+	JSR SETRAM
+	JSR FADRZERO
+CLRAM	JSR FENABLE
+	LDX #$20
+	JSR FWPAGE
+	BMI ERASERR
+	JSR FDISABLE
+	CLC
+	LDA FLASHADR+1
+	ADC #$20
+	STA FLASHADR+1
+	BCC CLRAM1
+	INC FLASHADR+2
+CLRAM1	LDA FLASHADR+2
+	CMP #7
+	BNE CLRAM
+	LDA FLASHADR+1
+	CMP #$C0
+	BNE CLRAM
+
+	JSR POK
+
+	BPUT0 TPROG
+
+; read 8k block
+PROGLP	BGET 1,8192,DATABUF
+	BPL READOK1
+
+READER	BPUT0 TREADER
+	JMP RESTARTC
+
+; program flash
+READOK1	JSR FADRZERO
+	LDA ADR
+	STA FLASHADR+1
+	LDA ADR+1
+	STA FLASHADR+2
+	JSR SETROM
+	JSR FENABLE
+	LDX #$20
+	JSR FWPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+	BPL FPROG1
+
+ROMERR	BPUT0 TROM
+; report flash/ram error
+LFERR	BPUT0 TERRADR
+	LDA FLASHADI+2
+	JSR PUTHEX
+	LDA FLASHADI+1
+	JSR PUTHEX
+	LDA FLASHADI
+	JSR PUTHEX
+	LDA #155
+	JSR PUTCHAR
+	JMP RESTARTC
+
+; also program ram
+FPROG1	JSR RADRCK
+	BNE FPROG2	; no
+
+	JSR SETRAM
+	JSR FENABLE
+	LDX #$20
+	JSR FWPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+	BPL FPROG2
+RAMERR	BPUT0 TRAM
+	JMP LFERR
+
+; also copy to ramdisk
+FPROG2	JSR RDADRCK
+	BNE FPROG3	; no
+
+	LDX #$20
+	LDY #0
+PROGRD	LDA (SRC),Y
+	STA (DEST),Y
+	INY
+	BNE PROGRD
+	INC SRC+1
+	INC DEST+1
+	DEX
+	BNE PROGRD
+	LDX #32
+	SETRDX
+
+FPROG3	CLC
+	LDA ADR
+	ADC #$20
+	STA ADR
+	BCC FPROG4
+	INC ADR+1
+	LDA ADR+1
+	CMP #$10
+	BEQ PDONE
+
+FPROG4	JMP PROGLP
+
+PDONE	JSR POK
+	CLOSE 1
+
+	OPEN 1,4,0,ROMFILE
+	BPL OPENOK2
+	JMP OPENER
+
+OPENOK2
+	LDA #0
+	STA ADR
+	STA ADR+1
+	JSR FADRZERO
+
+	BPUT0 TVERIF
+
+; read 8k block
+VERILP	BGET 1,8192,DATABUF
+	BPL READOK2
+	JMP READER
+
+; verify flash
+READOK2	JSR FADRZERO
+	LDA ADR
+	STA FLASHADR+1
+	LDA ADR+1
+	STA FLASHADR+2
+	JSR SETROM
+	JSR FENABLE
+	LDX #$20
+	JSR FCPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+	BPL FVERI1
+	JMP ROMERR
+
+; also verify ram
+FVERI1	JSR RADRCK
+	BNE FVERI2	; no
+
+	JSR SETRAM
+	JSR FENABLE
+	LDX #$20
+	JSR FCPAGE
+	PHP
+	JSR FDISABLE
+	PLP
+	BPL FVERI2
+	JMP RAMERR
+
+; also verify ramdisk
+FVERI2	JSR RDADRCK
+	BNE FVERI3	; no
+
+	LDX #$20
+	LDY #0
+VERIRD	LDA (SRC),Y
+	CMP (DEST),Y
+	BNE RDERR
+	INY
+	BNE VERIRD
+	INC SRC+1
+	INC DEST+1
+	DEX
+	BNE VERIRD
+	LDX #32
+	SETRDX
+
+FVERI3	CLC
+	LDA ADR
+	ADC #$20
+	STA ADR
+	BCC FVERI4
+	INC ADR+1
+	LDA ADR+1
+	CMP #$10
+	BEQ VDONE
+
+FVERI4	JMP VERILP
+
+VDONE	JSR POK
+	CLOSE 1
+
+	BPUT0 TFINI
+	LDA #255
+	STA 764
+	JSR GETCHAR
+	RTS
+
+RDERR	TYA
+	PHA
+	BPUT0 TRAMD
+	BPUT0 TERRADR
+	LDA DEST+1
+	JSR PUTHEX
+	PLA
+	JSR PUTHEX
+	LDA #'/
+	JSR PUTCHAR
+	LDA TMPADR+1
+	JSR PUTHEX
+	LDA #155
+	JSR PUTCHAR
+	LDX #32
+	SETRDX
+	JMP RESTARTC
+
+SETRAM	LDA #TRAM128
+	JMP FSETCHP
+
+SETROM	LDA FFTYPE
+	JMP FSETCHP
+
+; check if data should be programmed into RAM
+; if yes setup addresses
+RADRCK	LDA ADR+1
+	CMP #8
+	BCS RADRCK1	; program upper 512k into RAM
+RADRCK0	LDA #1
+	RTS
+RADRCK1 CMP #$E
+	BCS RADRCK0	; program only 384k of RAM
+	JSR FADRZERO
+	LDA ADR
+	STA FLASHADR+1
+	LDA ADR+1
+	AND #7
+	STA FLASHADR+2
+	LDA #0
+	RTS
+
+; check if data should be programmed into ramdisk
+; if yes setup addresses
+RDADRCK	LDA ADR+1
+	CMP #8
+	BCC RDADRCK1	; program lower 512k into ramdisk
+	LDA #1
+	RTS
+
+RDADRCK1
+	LDA #<DATABUF
+	STA SRC
+	LDA #>DATABUF
+	STA SRC+1
+	LDA #0
+	STA DEST
+	LDA ADR
+	AND #$20
+	ORA #$40
+	STA DEST+1
+
+	LDA ADR
+	ASL
+	STA TMPADR
+	LDA ADR+1
+	AND #7
+	ROL
+	STA TMPADR+1
+	ASL TMPADR
+	ROL TMPADR+1
+	LDX TMPADR+1
+	SETRDX
+	LDA #0
+	RTS
+
+ROMFILE	.BYTE "D1:PROD.ROM",155
+
+TMPADR	.WORD 0
+
+; mid/hi adrress
+ADR	.WORD 0
+
+INIT	LDA 106
+	STA M106
+	LDA 740
+	STA M740
+	LDA #$A0
+	STA 106
+	STA 740
+	JSR GR0
+
+	LDA $D301
+	STA MD301
+	ORA #2
+	STA $D301
+	RTS
+
+CLEANUP	LDA MD301
+	STA $D301
+	LDA M106
+	STA 106
+	LDA M740
+	STA 740
+	JMP GR0
+
+M106	.BYTE 0
+M740	.BYTE 0
+MD301	.BYTE 0
+
+FFTYPE	.BYTE 0
+
+; ramdisk tab
+RDTAB	.BYTE $00, $04, $08, $0C
+	.BYTE $20, $24, $28, $2C
+	.BYTE $40, $44, $48, $4C
+	.BYTE $60, $64, $68, $6C
+	.BYTE $80, $84, $88, $8C
+	.BYTE $A0, $A4, $A8, $AC
+	.BYTE $C0, $C4, $C8, $CC
+	.BYTE $E0, $E4, $E8, $EC
+	.BYTE $FC
+
+TITLE	.BYTE 125, "Freezer 2011 Production Tool V1.0",155
+	.BYTE "(c) 2011 by Matthias Reichl",155,155
+	.BYTE "Software version: "
+TITLEL	= * - TITLE
+
+	.include "VERSION.M65"
+
+
+TA0ERR	.BYTE "remove cartridge!",155
+TA0ERRL	= * - TA0ERR
+
+TRDERR	.BYTE "enable ramdisk",155
+TRDERRL	= * - TRDERR
+
+TFLERR	.BYTE "enable flash write",155
+TFLERRL	= * - TFLERR
+
+TREST	.BYTE 155, "press any key to restart"
+TRESTL	= * - TREST
+
+TOPENER	.BYTE "Error opening PROD.ROM",155
+TOPENERL = * - TOPENER
+
+TREADER	.BYTE "Error reading PROD.ROM",155
+TREADERL = * - TREADER
+
+TERAS	.BYTE "  erase "
+TERASL	= * - TERAS
+
+TPROG	.BYTE "program "
+TPROGL	= * - TPROG
+
+TVERIF	.BYTE " verify "
+TVERIFL	= * - TVERIF
+
+TROM	.BYTE " flash"
+TROML	= * - TROM
+
+TRAM	.BYTE " RAM"
+TRAML	= * - TRAM
+
+TRAMD	.BYTE " ramdisk"
+TRAMDL	= * - TRAMD
+
+TERRADR .BYTE " error at $"
+TERRADRL = * - TERRADR
+
+TFINI	.BYTE 155, 155, "DONE - press any key to exit"
+TFINIL	= * - TFINI
+
+	.include "libflash.src"
+	.include "cio.src"
+	.include "iohelp.src"
+
+	* = (*+255) & $FF00
+
+	.BANK
+	* = $2E0
+	.WORD START
+

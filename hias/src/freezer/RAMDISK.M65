@@ -1,0 +1,82 @@
+;-------------------------------
+;SAVE/EXEC RAMDISK AND HANDLER
+;-------------------------------
+DKEY  
+      DBGTXT "sRD     "
+      JSR IRAMD           ; SAVE TO RAMDISK
+      JSR SAVE
+      JMP ENDCMD
+
+EKEY  DBGTXT "eRD     "
+      JSR IRAMD           ; EXEC RAMDISK
+      JSR LOAD
+      JMP RSTART
+
+SWAPR DBGTXT "wRD     "
+      JSR IRAMD
+      JSR SWAP
+      JMP RSTART
+
+;INIT RAMDISK ACTIONS
+
+IRAMD LDA #0
+      STA NEXT+1
+      STA SIZE
+      STA NCOUNT
+      STA DEVICE
+      STA BPNT
+      LDA #$40
+      STA BPNT+1
+      LDA #$E3
+      STA BANK
+      STA FILENO
+      STA NEXT
+      RTS 
+
+;WRITE DBUF TO RAMDISK
+
+WRAMD LDA BANK
+      STA PORTB
+      LDY #0
+WRAM1 LDA DBUF,Y
+      STA (BPNT),Y
+      INY 
+      BNE WRAM1
+      BEQ RRAM2
+
+;SWAP DBUF WITH RAMDISK
+
+SWRAMD LDA BANK
+      STA PORTB
+      LDY #0
+SWRAM1 LDA DBUF,Y
+      TAX
+      LDA (BPNT),Y
+      STA DBUF,Y
+      TXA
+      STA (BPNT),Y
+      INY 
+      BNE SWRAM1
+      BEQ RRAM2
+
+;LOAD DBUF FROM RAMDISK
+
+RRAMD LDA BANK
+      STA PORTB
+      LDY #0
+RRAM1 LDA (BPNT),Y
+      STA DBUF,Y
+      INY 
+      BNE RRAM1
+
+RRAM2 LDA #$FF
+      STA PORTB
+      INC BPNT+1
+      BPL RRAM3
+      LDA #$40
+      STA BPNT+1
+      LDA BANK
+      CLC 
+      ADC #4
+      STA BANK
+RRAM3 RTS 

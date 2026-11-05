@@ -1,0 +1,14 @@
+Synthesizing work.turbofreezerxl.turbofreezerxl_architecture
+@N: CD233 :"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":131:19:131:20|Using sequential encoding for type cartemu_type
+@N: CD233 :"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":159:17:159:18|Using sequential encoding for type state_type
+@W:"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":687:3:687:16|OTHERS clause is not synthesized 
+Post processing for work.turbofreezerxl.turbofreezerxl_architecture
+@W: CL117 :"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":251:2:251:3|Latch generated from process for signal a(15 downto 0), probably caused by a missing assignment in an if or case stmt
+@W: CL117 :"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":251:2:251:3|Latch generated from process for signal rw, probably caused by a missing assignment in an if or case stmt
+@N: CL201 :"U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.vhd":327:2:327:3|Trying to extract state machine for register freezer_state
+Extracted state machine for register freezer_state
+State machine has 4 reachable states with original encodings of:
+   00
+   01
+   10
+   11

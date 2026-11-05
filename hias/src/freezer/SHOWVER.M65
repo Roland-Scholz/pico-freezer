@@ -1,0 +1,14 @@
+; display software version
+
+SHOWVER	JSR SCROLL
+        LDA #32
+        JSR PUTBYT
+
+        LDX #0
+SHOWV1  LDA VERSION,X
+        BEQ SHOWV2
+        JSR PUTBYT
+        INX
+        BNE SHOWV1
+SHOWV2  JMP DEBU3
+

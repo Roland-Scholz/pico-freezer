@@ -1,0 +1,14 @@
+
+  FILENAME.EXT /   Bytes /    Gerät        / Typ          Funktion         Version  Jahr   CRC
+  ============================================================================================  
+
+  TURBO-FREEZER XL 3
+  ==================
+
+
+  TF3FPLA .JED /   4.553 / Turbo-Freezer 3 / FPLA 82S105  Freezer            v?.?        ----
+
+  TF3EPROM.16K /  16.384 / Turbo-Freezer 3 / EPROM 27128  Freezer + OldRun   v2.4   88   FC36
+
+  DUMPFRZ24    /   <DIR> / Turbo Freezer 3 / ROM & JEDEC                     v2.4  2K4   ----
+  ____________________________________________________________________________________________

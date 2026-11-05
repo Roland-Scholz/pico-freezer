@@ -1,0 +1,10 @@
+XDLIST .BYTE $70,$70,$70
+      .BYTE $42
+      .WORD MONSCR
+      .BYTE 0,2,0,2,0,2,0
+      .BYTE 2,0,2,0,2,0,2,0
+      .BYTE 2,0,2,0,2,0,2,0
+      .BYTE 2,0,2,0,2,0,2
+      .BYTE $20,2
+      .BYTE $41
+      .WORD XDLIST

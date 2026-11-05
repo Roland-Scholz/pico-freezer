@@ -1,0 +1,43 @@
+; JED2EQN -- JEDEC file to Boolean Equations disassembler (Version V063)
+; Copyright (c) National Semiconductor Corporation 1990-1993
+; Disassembled from galg1.jed. Date: 2-17-104
+
+chip galg1 PAL16L8
+
+A10=1 A9=2 A8=3 A1=4 A3=5 A5=6 A7=7 A6=8 A4=9 GND=10 G_i11=11 G_o12=12 
+G_o13=13 G_i14=14 G_o15=15 RamA4=16 RamA5=17 RamA6=18 RamA7=19 VCC=20 
+
+equations
+
+/RamA7 = /A7
+    + /G_i11
+RamA7.oe = vcc
+
+/RamA6 = /A6
+    + /G_i11
+RamA6.oe = vcc
+
+/RamA5 = /A5
+    + /G_i11
+RamA5.oe = vcc
+
+/RamA4 = A10 * /G_i11
+    + /A4
+    + A8 * /G_i11
+    + A9 * /G_i11
+RamA4.oe = vcc
+
+/G_o15 = A9 * A10 * A8 * /G_i11
+G_o15.oe = vcc
+
+/G_o13 = A1
+    + A10
+    + /A8
+    + /A9
+    + G_i11
+G_o13.oe = vcc
+
+; unused
+
+/G_o12 = A9 * A10 * A8 * A3 * A5 * A7 * G_i14 * A6 * A4
+G_o12.oe = vcc

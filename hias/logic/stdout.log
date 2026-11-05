@@ -1,0 +1,29 @@
+Using OEM Licensing.
+Starting:  D:\ISPTOOLS4_1\SYNPBASE\bin\mbin\synplify.exe
+Version:   7.6.1a    
+Date:      Wed May 04 18:06:46 2005
+Arguments:  -batch u:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TURBO~W#.PRJ
+ProductType: synplify
+
+
+
+
+Running synthesis on TURBO~W#:128K-~BY
+
+log file: "U:\private\xl\TURBO~M%\ISPLE~CN\128K-~BY\TurboFreezerXL.log"
+
+Running Vhdl Compiler...
+Vhdl Compiler Completed
+
+Vhdl Compiler: 0 errors, 3 warnings, 3 notes
+
+Total: 0 errors, 3 warnings, 3 notes
+Running mach Mapper...
+mach Mapper Completed
+
+mach Mapper: 0 errors, 0 warnings, 1 note
+
+Total: 0 errors, 3 warnings, 4 notes
+exit status=0
+
+

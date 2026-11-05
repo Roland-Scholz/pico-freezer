@@ -1,0 +1,37 @@
+; JED2EQN -- JEDEC file to Boolean Equations disassembler (Version V063)
+; Copyright (c) National Semiconductor Corporation 1990-1993
+; Disassembled from galm1.jed. Date: 2-17-104
+
+chip galm1 PAL16L8
+
+M_i1=1 M_i2=2 M_i3=3 PBD6=4 PBD5=5 RAS=6 M_i7=7 PBD4=8 M_i9=9 GND=10 OSselect=11 Dram3=12 
+Dram2=13 ExtSel=14 Refresh=15 Dram1=16 M_o17=17 Dram0=18 OldRomOE=19 VCC=20 
+
+equations
+
+/OldRomOE = /M_i1 * M_i3 * M_i7 * /OSselect
+
+/M_o17 = M_i1 * /M_i3 * /RAS * M_i7
+
+/Refresh = M_i1 * M_i3 * M_i7
+    + /M_i1 * M_i7 * /OSselect
+
+/ExtSel = /M_i1 * M_i3 * /M_i7
+    + M_i1 * /M_i3 * /M_i7
+    + M_i1 * M_i3 * M_i7
+    + /M_i1 * M_i7 * /OSselect
+    + M_i3 * /PBD6 * /M_i7 * OSselect
+    + /M_i2 * M_i3 * /PBD5 * /M_i7 * OSselect
+    + M_i2 * M_i3 * /M_i7 * /PBD4 * OSselect
+
+/Dram0 = /M_i2 * M_i1 * M_i3 * PBD6 * /PBD5 * /RAS * /M_i7 * /M_i9 * OSselect
+    + M_i2 * M_i1 * M_i3 * PBD6 * /RAS * /M_i7 * /PBD4 * /M_i9 * OSselect
+    + M_i1 * M_i3 * /PBD5 * /RAS * /M_i7 * /PBD4 * /M_i9 * OSselect
+
+/Dram1 = M_i1 * M_i3 * /PBD6 * /PBD5 * /RAS * /M_i7 * PBD4 * /M_i9 * OSselect
+
+/Dram2 = M_i1 * M_i3 * /PBD6 * PBD5 * /RAS * /M_i7 * /PBD4 * /M_i9 * OSselect
+Dram2.oe = vcc
+
+/Dram3 = M_i1 * M_i3 * /PBD6 * PBD5 * /RAS * /M_i7 * PBD4 * /M_i9 * OSselect
+Dram3.oe = vcc

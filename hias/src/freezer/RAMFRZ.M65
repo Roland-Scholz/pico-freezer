@@ -1,0 +1,81 @@
+;-------------------------------
+;SAVE/EXEC FREEZER RAM AND HANDLER
+;-------------------------------
+SFRZ
+      DBGTXT "sFR     "
+      JSR IFRZ           ; SAVE TO FREEZER RAM
+      JSR SAVE
+      JMP ENDCMD
+
+EFRZ  DBGTXT "eFR     "
+      JSR IFRZ           ; EXEC FREEZER RAM
+      JSR LOAD
+      JMP RSTART
+
+SWAPF DBGTXT "wFR     "
+      JSR IFRZ
+      JSR SWAP
+      JMP RSTART
+
+;INIT RAMDISK ACTIONS
+
+IFRZ  LDA #0
+      STA NEXT+1
+      STA SIZE
+      STA NCOUNT
+      STA BPNT
+      STA BANK
+      LDA #3
+      STA DEVICE
+      LDA #$10
+      STA BPNT+1
+      LDA #$E3
+      STA FILENO
+      STA NEXT
+      RTS 
+
+;WRITE DBUF TO FREEZER RAM
+
+WFRZ  LDY BANK
+      STA RAMBNK,Y
+      LDY #0
+WFRZ1 LDA DBUF,Y
+      STA (BPNT),Y
+      INY 
+      BNE WFRZ1
+      BEQ RFRZ2
+
+;SWAP DBUF WITH FREEZER RAM
+
+SWFRZ  LDY BANK
+      STA RAMBNK,Y
+      LDY #0
+SWFRZ1 LDA DBUF,Y
+      TAX
+      LDA (BPNT),Y
+      STA DBUF,Y
+      TXA
+      STA (BPNT),Y
+      INY 
+      BNE SWFRZ1
+      BEQ RFRZ2
+
+;LOAD DBUF FROM FREEZER RAM
+
+RFRZ  LDY BANK
+      STA RAMBNK,Y
+      LDY #0
+RFRZ1 LDA (BPNT),Y
+      STA DBUF,Y
+      INY 
+      BNE RFRZ1
+
+RFRZ2 STA RAMBNK
+      INC BPNT+1
+      LDA BPNT+1
+      CMP #$20
+      BNE RFRZ3
+      LDA #$10
+      STA BPNT+1
+      INC BANK
+RFRZ3 RTS 

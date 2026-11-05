@@ -1,0 +1,57 @@
+; JED2EQN -- JEDEC file to Boolean Equations disassembler (Version V063)
+; Copyright (c) National Semiconductor Corporation 1990-1993
+; Disassembled from galf1.jed. Date: 2-17-104
+;$GALMODE REGISTERED
+
+chip galf1 GAL16V8
+
+F_CLK=1 A14=2 A15=3 A11=4 A13=5 Reset=6 A12=7 RW=8 PHI2=9 GND=10 /OE=11 RomOE=12 
+F_o13=13 F_o14=14 RamCE=15 F_o16=16 F_rf17=17 F_rf18=18 F_f19=19 VCC=20 
+
+; clk = /PHI2
+
+@ues 0000000000000000
+@ptd unused
+
+equations
+
+; pin 19 is unused
+;/F_f19 = gnd
+;F_f19.oe = gnd
+
+F_rf18 := /F_rf18 * F_rf17 * /Reset * /RW
+    + F_rf18 * F_rf17 * Reset
+    + A14 * /F_rf19 * A15 * /F_rf18 * A11 * /F_rf17 * A13 * A12 * RW
+F_rf18.oe = OE
+
+F_rf17 := F_rf17 * /RW
+    + F_rf17 * Reset
+    + A14 * /F_rf19 * A15 * F_rf18 * A11 * /F_rf17 * A13 * A12 * RW
+F_rf17.oe = OE
+
+F_o16 = A14 * A15 * /A12
+    + A14 * A15 * /A11
+    + A14 * A15 * A13
+F_o16.oe = vcc
+
+F_o14 = A14 * /A15
+    + /A15 * /F_rf18 * A11 * F_rf17
+    + /A15 * /F_rf18 * F_rf17 * A12
+    + /A15 * /F_rf18 * F_rf17 * A13
+    + A14 * A13
+F_o14.oe = vcc
+F_o13 = A14 * /A15
+    + A14 * /A11 * /A13 * A12
+    + /A15 * /F_rf18 * /A11 * F_rf17 * /A13 * /A12
+    + A14 * /F_rf19 * F_rf18 * A11 * /F_rf17 * A13 * A12 * RW
+F_o13.oe = vcc
+
+/RamCE = /A14 * /A15 * /F_rf18 * /A11 * F_rf17 * /A13 * /A12 * PHI2
+    + A14 * A15 * /F_rf18 * /A11 * /F_rf17 * /A13 * A12 * /RW * PHI2
+RamCE.oe = vcc
+
+/RomOE = /A14 * /A15 * /F_rf18 * A11 * F_rf17 * RW
+    + /A14 * /A15 * /F_rf18 * F_rf17 * A12 * RW
+    + /A14 * /A15 * /F_rf18 * F_rf17 * A13 * RW
+    + A14 * /F_rf19 * A15 * F_rf18 * A11 * /F_rf17 * A13 * A12 * RW
+RomOE.oe = vcc

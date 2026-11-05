@@ -1,0 +1,24 @@
+; clear RAM under OS-ROM
+
+OSRCLR LDY #0
+      STY RPNT
+      STY NMIEN
+      STY DMACTL
+      LDA #$FE            ; OS OFF
+      STA PORTB
+      LDA #$C0
+OSRCL1 STA RPNT+1
+      LDA #0
+OSRCL2 STA (RPNT),Y
+      INY 
+      BNE OSRCL2
+      INC RPNT+1
+      BEQ OSRCL3
+      LDA RPNT+1
+      CMP #$D0
+      BNE OSRCL1
+      LDA #$D8
+      BNE OSRCL1
+OSRCL3 LDA #$FF
+      STA PORTB
+      JMP DMAON

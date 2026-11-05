@@ -1,0 +1,121 @@
+;READ SECTOR
+
+RSEC  LDA #$52
+      LDX #$40
+      BNE WSE1
+
+;WRITE SECTOR
+
+WSEC  LDA #$50
+      LDX #$80
+WSE1  PHA 
+      LDY #9
+WSE2  LDA SIOTAB,Y
+      STA DDEVIC,Y
+      DEY 
+      BPL WSE2
+      LDA DRIVENO
+      STA DUNIT
+      PLA 
+      STA DCOMND
+      STX DSTATS
+      CMP #$23
+      BCS WSE3
+      LDA #40
+      STA DTIMLO
+WSE3  LDA SIZE
+      STA DBYTLO
+      BNE WSE4
+      INC DBYTHI
+WSE4  LDA #$80
+      STA POKMSK
+      STA IRQEN
+      CLI 
+      LDA #$40
+      STA NMIEN
+;1490       JSR SIOV
+      JSR HISIO
+      LDA #0
+      STA POKMSK
+      STA IRQEN
+      SEI 
+      STA NMIEN
+      CPY #1
+      BEQ WSE5
+      LDA DCOMND          ; STATUS?
+      CMP #$4E            ; PERCOM?
+      BEQ WSE5
+      CMP #$53
+      BEQ WSE5
+      LDY #3              ; DISK I/O ERROR
+      JMP ERROR
+WSE5  RTS 
+SIOTAB .BYTE $31,1,0,0
+      .WORD DBUF,7,$80
+
+; general direct SIO call
+
+DSIO  LDA #0
+      STA DTIMHI
+      LDA #<DBUF
+      STA DBUFLO
+      LDA #>DBUF
+      STA DBUFHI
+      LDA #$80
+      STA POKMSK
+      STA IRQEN
+      CLI
+      LDA #$40
+      STA NMIEN
+      JSR SIOV
+      PHP
+      LDA #0
+      STA POKMSK
+      STA IRQEN
+      SEI
+      STA NMIEN
+      PLP
+      RTS
+
+;DETERMINE DENSITY
+; Hias: removed TURFLG (this is now handled by the highspeed SIO routine)
+;SET TURFLG IF 1050 TURBO FLOPPY
+
+DENSTY
+; reset highspeed SIO table
+;      LDA #0
+;      STA DUNIT
+;      JSR HISIO
+
+;      LDA #0
+;      STA TURFLG
+      JSR FDSTAT
+      DEY 
+      BEQ DENST0
+      LDY #4              ; DRIVE DOES NOT RESPOND
+      JMP ERROR
+DENST0 LDX #1             ; ASSUME ED
+      LDA DBUF
+      BMI DENST1          ; TRUE
+      INX                 ; ASSUME DD
+      AND #$20
+      BNE DENST1
+      LDX #0              ; SD
+DENST1 STX DENTYP
+      RTS
+;      INC TURFLG          ; DEVICE TURBO?
+;      LDA #0
+;      STA SOUNDR
+;      JSR FDSTAT
+;      DEY 
+;      BEQ DENST2          ; YES
+;      DEC TURFLG
+;      JSR FDSTAT          ; NO
+;DENST2 INC SOUNDR
+;      RTS 
+
+FDSTAT LDA #4
+      STA SIZE
+      LDA #$53
+      LDX #$40
+      JMP WSE1

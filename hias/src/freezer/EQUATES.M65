@@ -1,0 +1,287 @@
+.if .def FREEZER2011
+	.include "../flash11.inc"
+.else
+	.include "../flash05.inc"
+.endif
+
+GTIA  =   $D000
+ANTIC =   $D400
+POKEY =   $D200
+PORTA =   $D300
+PORTB =   $D301
+PACTL =   $D302
+PBCTL =   $D303
+COLPF0 =  $D016
+DLISTL =  $D402
+DLISTH =  $D403
+DMACTL =  $D400
+CHACTL =  $D401
+CHBASE =  $D409
+PAL   =   $D014
+HITCLR =  $D01E
+WSYNC =   $D40A
+CONSOL =  $D01F
+SKCTL =   $D20F
+SKSTAT =  $D20F
+SSKCTL =  $0232
+KBCODE =  $D209
+NMIEN =   $D40E
+IRQEN =   $D20E
+GRACTL =  $D01D
+COLBK =   $D01A
+GRAFM =   $D011
+GRAFP0 =  $D00D
+GRAFP1 =  $D00E
+GRAFP2 =  $D00F
+GRAFP3 =  $D010
+VCOUNT =  $D40B
+NMIST =   $D40F
+NMIRES =  $D40F
+IRQST =   $D20E
+PUPBT1 =  $033D
+SKRES =   $D20A
+SKREST = SKRES
+SERIN =   $D20D
+SEROUT =  $D20D
+AUDF3 =   $D204
+AUDF4 =   $D206
+AUDC4 = $D207
+AUDCTL = $D208
+CDTMV1 =  $0218
+CDTMA1 =  $0226
+CDEVIC = $23A
+CCOMND = $23B
+CAUX1 =   $023C
+CAUX2 =   $023D
+CBAUDL =  $02EE
+CBAUDH =  $02EF
+VIMIRQ =  $0216
+VVBLKI =  $0222
+COLDST =  $0244
+SOUNDR =  $41
+CRITIC =  $42
+POKMSK =  $10
+RTCLOK =  $12
+BRKKEY =  $11
+PALNTS =  $62
+PDVMSK =  $0247
+SIOV  =   $E459
+DDEVIC =  $0300
+DUNIT =   $0301
+DCOMND =  $0302
+DSTATS =  $0303
+DBUFLO =  $0304
+DBUFHI =  $0305
+DTIMLO =  $0306
+DTIMHI =  $0307
+DBYTLO =  $0308
+DBYTHI =  $0309
+DAUX1 =   $030A
+DAUX2 =   $030B
+SENDEV =  $E468
+SETVBV =  $E45C
+
+
+; search bytes stuff
+SRBUF1	= $0800
+SRBUF2	= $0900
+
+	* = $0A00
+
+SRVAL	* = *+8
+SRMSK	* = *+8
+SRCOUNT	* = *+1
+SRMODE	* = *+1
+SRADR	* = *+2
+SREND	* = *+2
+SRTMP	* = *+2
+
+; block copy/set uses the search buffers
+BLKBUF	= SRBUF2
+
+BLKSRC	* = *+2		; source address
+BLKDST	* = *+2		; dest address
+BLKSRCN	* = *+2		; next source address
+BLKDSTN	* = *+2		; next dest address
+BLKLEN	* = *+2		; length
+BLKEND	* = *+2		; ending address of current block
+BLKMOD	* = *+1		; block mode
+; block mode bits:
+; 7 : block move (set if 0)
+; 6 : TMP: read mem (set if 0)
+; 1 : block compare if mode = $82
+; 0 : reverse direction (normal dir if 0)
+
+; saved shadow of custom chips
+SGTIA *=  *+32            ; GTIA SHADOW
+SPOKEY *= *+16            ; POKEY SHADOW
+SANTIC *= *+16            ; ANTIC SHADOW
+SPORTA *= *+1             ; PORTA OUT
+SPORTB *= *+1             ; PORTB OUT
+SDIRA *=  *+1             ; PORTA DIRC
+SDIRB *=  *+1             ; PORTB DIRC
+SCTLA *=  *+1             ; PORTA CONTROL
+SCTLB *=  *+1             ; PORTB CONTROL
+REGA  *=  *+1             ; CPU ACCU
+REGX  *=  *+1             ; CPU X
+REGY  *=  *+1             ; CPU Y
+REGS  *=  *+1             ; CPU SP
+VCNT  *=  *+1             ; VCOUNT
+NMIF  *=  *+1             ; NMI STATUS
+IRQF  *=  *+1             ; IRQ STATUS
+RSVECL *= *+1             ; RESTART VECTOR
+RSVECH *= *+1
+DPOKEYF *= *+1		; flag if dual pokey is enabled (0=enabled, other=disabled)
+SPOKEY2 *= *+16		; second stereo pokey
+CHIPLEN = * - SGTIA	; length of custom chip/freezed state area, for saves
+
+; highspeed SIO (room for max. 8 drives)
+SIOSPEED	* = *+1
+SPEEDTB	* = *+8
+HIBUF	* = *+4
+
+; signature bytes, used to check if we need to initialize
+; persistent data (currently command history)
+PMAGIC	* = *+4
+
+; command line history 4 slots of 40 bytes, slot 5 is for current command line
+HISTCSR * = *+5		; cursor position
+HISTBUF * = *+(5*40)	; buffer for 5 slots
+HISTIDX * = *+1		; slot for next command line
+HISTPOS * = *+1		; currently recalled slot ($FF=default command line)
+
+SIOCMDB * = *+12	; last SIO command
+
+; keyboard status: $80 = inv, $40 = caps
+KBCAPS  * = *+1
+
+; freezer invocation status
+FRZINT  * = *+1		; 0 = nmi, 4 = irq, 8 = unknown
+FRZVEC  * = *+2		; original interrupt vector
+FRZVCNT * = *+1		; original vcount value at invocation
+
+; freezer resume mode (0 = normal, 1 = clear collision register)
+RESMODE	* = *+1
+
+; direct io mode to $D000-$D6FF
+DIOMODE	* = *+1
+
+; drive number (1-8) for disk/file access
+DRIVENO	* = *+1
+
+; help flag for GETKEY routine ($80 = help key pressed)
+HELPFLG * = *+1
+
+NAME  *=  *+11            ; FILE NAME
+DENTRY *= *+16            ; DIRECTORY ENTRY
+KEYTIM *= *+1             ; KEYBOARD AUTOREP TIMER
+
+PBMEM	* = *+1           ; PORTB value for memory access in debugger
+
+; printer flag:
+; b7=enable(1) / disable(0)
+; b6=skip next scroll(1) / std (0)
+; b0-b2: printer number
+PRFLAG	* = *+1
+PRTOUT	* = *+1		; printer timeout
+PRBUF	* = *+40	; printer buffer
+PRIDX	* = *+1		; index in printer buffer
+PRTMX	* = *+1		; temp X
+PRTMY	* = *+1		; temp Y
+PRTMSIO	* = *+12	; temp SIO buffer
+
+
+; estimated cycles per vcount (used for adjusting VCOUNT)
+VCYCLES = 80	
+VCYCRND = 40	; threshold for rounding cycle time
+
+SCREEN =  $0400
+MENUDL =  $0380
+MONSCR =  $0340
+MONLINE = MONSCR+40*15 ; address of last line of monitor screen
+CMDLINE = MONSCR+40*16 ; address of command input line
+SPAGE =   $0500
+VTOC  =   $0600
+DBUF  =   $0700
+OFFSET =  $D000
+CPAGE =   $4100
+BRKCTL =  $D700
+
+; signal freezer startup complete
+STUCPL	= $D720
+
+;RAM LOCATIONS
+
+      *=  $30
+
+STATUS *= *+1             ; ZP LOCS FOR SIO
+CHKSUM *= *+1
+BUFRLO *= *+1
+BUFRHI *= *+1
+BFENLO *= *+1
+BFENHI *= *+1
+CRETRY *= *+1
+DRETRY *= *+1
+BUFRFL *= *+1
+RECVDN *= *+1
+XMTDON *= *+1
+CHKSNT *= *+1
+NOCKSM *= *+1
+FTYPE = $3E
+FEOF = $3F
+
+      *=  $80
+
+RPNT  *=  *+2
+BPNT  *=  *+2
+;TURFLG *= *+1             ; FLOPPY HAS 1050 TURBO
+BANK  *=  *+1             ; CURRENT BANK CNTRL BYTE
+;DHOLE *=  *+1             ; DIRECTORY HOLE
+DENTYP *= *+1             ; DENSITY TYPE
+NEXT  *=  *+2             ; NEXT SECTOR
+SIZE  *=  *+1             ; BLOCK SIZE IN BYTES MOD 256
+DCOUNT *= *+1             ; DATA BYTE COUNT
+NCOUNT *= *+1             ; NORMAL DATA BYTE COUNT
+MAPIDX *= *+1             ; USEMAP INDEX
+MAPMSK *= *+1             ; USEMAP MASK
+FILENO *= *+1             ; FILE NUMBER & TYPE
+DEVICE *= *+1             ; DEVICE RAMD/DISK/CASS/FRZ RAM
+TPNT  *=  *+2             ; TEMP ADDRESS
+TPNT2  *=  *+2             ; TEMP ADDRESS 2
+OPTION *= *+1             ; COMMAND OPTION
+BLKBYT	* = *+1		; byte counter for block copy
+BLPNT	* = *+2		; block copy pointer
+
+      *=  $0100
+
+USEMAP *= *+66            ; MAP OF USED SECTORS
+
+; absolute addresses in freezer rom
+
+HISTART	= $3B00		; start of highspeed SIO code
+XDLADR	= $3EB0
+VERSADR	= $3EE0
+GO12ADR	= $3F00
+GO13ADR	= $3E80
+GO23ADR	= $3E00
+
+;-------------------------------
+
+      .MACRO NOX ; 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      .ENDM 

@@ -1,0 +1,47 @@
+[OPT WINDOWS]
+MAIN_WINDOW_POSITION=296,102,1255,848
+CHILD_FRAME_STATE=Maximal
+CHILD_WINDOW_SIZE=959,522
+CHILD_WINDOW_POS=-4,-23
+[OPT GUI SETTING]
+Remember_Setting=1
+ACTIVE_SHEET=Opt Global Constraints
+[Opt Global Constraints]
+sort_column_1=Constraint Name
+Constraint Name=147,no
+Constraint Value=107,no
+[WINDOWS]
+MAIN_WINDOW_POSITION=0,0,1280,1024
+LEFT_PANE_WIDTH=424
+CHILD_FRAME_STATE=Maximal
+CHILD_WINDOW_SIZE=1280,854
+CHILD_WINDOW_POS=-4,-23
+[GUI SETTING]
+Remember_Setting=1
+Open_PV_Opt=2
+Open_PV=0
+PV_IS_ACTIVE=0
+ACTIVE_SHEET=Pin Attributes
+Show_Def_Opt=2
+Show_Def_Val=0
+Expand_All_Column=0
+Show_All_Signals=0
+[Pin Attributes]
+sort_column_1=Signal/Group Name
+Type=77,no
+Signal/Group Name=120,no
+Group Members=100,no
+GLB=33,no
+Macrocell=65,no
+Pin=29,no
+Power=56,no
+Slewrate=62,no
+[Global Constraints]
+Constraint Name=210,no
+Constraint Value=107,no
+[Resource Reservation]
+Segment=61,no
+GLB=33,no
+Macrocell=65,no
+Pin=29,no
+State=43,no

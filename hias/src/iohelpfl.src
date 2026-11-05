@@ -1,0 +1,135 @@
+;  iohelpfl - various I/O helper routines for the libflash apps
+;
+;  Copyright (C) 2010 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+; print flash type
+PFTYPE	CMP #TAMD10
+	BNE PFTYPE1
+	PRINT 0, TFA10
+	RTS
+PFTYPE1	CMP #TAMD10B
+	BNE PFTYPE2
+	PRINT 0, TFA10B
+	RTS
+PFTYPE2	CMP #TAMD40B
+	BNE PFTYPE3
+	PRINT 0, TFA40B
+	RTS
+PFTYPE3	CMP #TST10B
+	BNE PFTYPE4
+	PRINT 0, TFS10B
+	RTS
+PFTYPE4	CMP #TST40B
+	BNE PFTYPE5
+	PRINT 0, TFS40B
+	RTS
+PFTYPE5	CMP #TBM40
+	BNE PFTYPE6
+	PRINT 0, TFB40
+	RTS
+
+PFTYPE6	PRINT 0, TUNKFL
+	RTS
+
+; print flash address
+PFLADR	LDA FLASHADR+2
+	JSR PUTHEX
+	LDA FLASHADR+1
+	JSR PUTHEX
+	LDA FLASHADR+0
+	JSR PUTHEX
+	RTS
+
+; print flash address as bank number
+PFLBNK	LDX FLASHADR+1
+	LDY FLASHADR+2
+	JSR ADR2BNK
+	TAX
+	LDY #0
+	JSR TODEC
+	JSR DEC0SP
+	BPUT0L DECBUF+2,3
+	RTS
+
+; print error plus internal flash address
+PERRADR	BPUT0 TERRADR
+	LDA FLASHADI+2
+	JSR PUTHEX
+	LDA FLASHADI+1
+	JSR PUTHEX
+	LDA FLASHADI
+	JSR PUTHEX
+	LDA #155
+	JMP PUTCHAR
+
+; print error type
+PERRTYP	LDA FERROR
+	CMP #EFLFTO
+	BNE PERRT1
+	BPUT 0, TERRTOL, TERRTO
+	RTS
+
+PERRT1	CMP #EFLDVE
+	BNE PERRT2
+	BPUT0 TERRVE
+	LDA FERRUD
+	JSR PUTHEX
+	BPUT0 TERRV2
+	LDA FERRFD
+	JSR PUTHEX
+	LDA #155
+	JSR PUTCHAR
+PERRT2	RTS
+
+TFA10	.BYTE "Detected ", $99
+	.BYTE +$80,"AMD 29F010"
+	.BYTE $19,155
+
+TFA10B	.BYTE "Detected ", $99
+	.BYTE +$80,"AMD 29F010B"
+	.BYTE $19,155
+
+TFA40B	.BYTE "Detected ", $99
+	.BYTE +$80,"AMD 29F040B"
+	.BYTE $19,155
+
+TFS10B	.BYTE "Detected ", $99
+	.BYTE +$80,"ST 29F010B"
+	.BYTE $19,155
+
+TFS40B	.BYTE "Detected ", $99
+	.BYTE +$80,"ST 29F040B"
+	.BYTE $19,155
+
+TFB40	.BYTE "Detected ", $99
+	.BYTE +$80,"BM 29F040"
+	.BYTE $19,155
+
+TUNKFL	.BYTE "No or unknown flash",155
+
+
+TERRADR	.BYTE 155, "Error at address $"
+TERRADRL = * - TERRADR
+
+TERRTO	.BYTE "programming failed",155
+TERRTOL	= * - TERRTO
+
+TERRVE	.BYTE "verify error: data = "
+TERRVEL	= * - TERRVE
+
+TERRV2	.BYTE " flash = "
+TERRV2L	= * - TERRV2

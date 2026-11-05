@@ -1,0 +1,383 @@
+;  cartmenu05 - simple cartrige text selection menu for Turbo Freezer 2005
+;
+;  Copyright (C) 2004-2005 Matthias Reichl <hias@horus.com>
+;
+;  This program is free software; you can redistribute it and/or modify
+;  it under the terms of the GNU General Public License as published by
+;  the Free Software Foundation; either version 2 of the License, or
+;  (at your option) any later version.
+;
+;  This program is distributed in the hope that it will be useful,
+;  but WITHOUT ANY WARRANTY; without even the implied warranty of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;  GNU General Public License for more details.
+;
+;  You should have received a copy of the GNU General Public License
+;  along with this program; if not, write to the Free Software
+;  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+	.include "cio.inc"
+	.include "flash05.inc"
+
+TYPEV	= $80
+BANKV	= $82
+SRCV	= $84
+PAGE	= $86
+
+DLADR	= $1000
+
+	ORG = $B800
+
+EXEC	= $180
+
+	* = ORG
+
+	LDA #0
+	STA PAGE
+
+; copy display list
+	LDX #0
+COPDL	LDA DL,X
+	STA DLADR,X
+	INX
+	CPX #DLLEN
+	BNE COPDL
+
+	JSR SETPAGE
+
+; init os stuff
+	LDA #$E0 ; character set
+	STA 756
+
+	LDA #$CC ; alternate character set
+	STA 619 
+	LDA #2   ; character control
+	STA 755
+
+	LDA 16   ; enable keyboard and break interrupts
+	ORA #$C0
+	STA 16
+	STA $D20E 
+
+	LDA #64  ; enable VBI
+	STA $D40E
+
+	LDA #33  ; narrow screen
+	STA 559
+	LDA #<DLADR ; set display list
+	STA 560
+	LDA #>DLADR
+	STA 561
+
+	LDX #4   ; set colors
+SETCOL	LDA COLTAB,X
+	STA 708,X
+	DEX
+	BPL SETCOL
+
+LOOP	JSR GETCHAR
+	BMI LOOP
+	CMP #'1
+	BCC NOPAG
+	CMP #'5
+	BCS NOPAG
+	SEC
+	SBC #'1
+	STA PAGE
+	JSR SETPAGE
+	JMP LOOP
+NOPAG	CMP #'A
+	BCC LOOP
+	CMP #'U
+	BCS LOOP
+	SEC
+	SBC #'A
+	TAY
+	LDA (TYPEV),Y
+	CMP #4
+	BCS LOOP
+
+GO	LDX #0
+	STX 559
+	STX $D400
+
+; set cartridge type ram/rom
+
+EACTIVE	LDA #$8D
+	STA EXEC,X
+	INX
+	LDA (SRCV),Y
+	BEQ EROM
+	LDA #<MODERAM
+	STA EXEC,X
+	JMP EROM2
+EROM	LDA #<MODEROM
+	STA EXEC,X
+EROM2	INX
+	LDA #>MODEROM
+	STA EXEC,X
+	INX
+
+; set mode
+
+	LDA #$8D
+	STA EXEC,X
+	INX
+	CLC
+	LDA (TYPEV),Y
+	ADC #<MODE8K
+	STA EXEC,X
+	INX
+	LDA #>MODE8K
+	STA EXEC,X
+	INX
+
+; set bank
+
+	LDA #$8D
+	STA EXEC,X
+	INX
+	CLC
+	LDA (BANKV),Y
+	ADC #<BANKREG
+	STA EXEC,X
+	INX
+	LDA #>BANKREG
+	STA EXEC,X
+	INX
+
+; set oss bank
+
+	LDA (TYPEV),Y
+	CMP #2
+	BNE NOSS
+	LDA #$8D
+	STA EXEC,X
+	INX
+	LDA #<OSSBNK1
+	STA EXEC,X
+	INX
+	LDA #>OSSBNK1
+	STA EXEC,X
+	INX
+	JMP EBOOT
+
+NOSS	CMP #3
+	BNE EBOOT
+	
+; set sdx bank
+
+	LDA #$8D
+	STA EXEC,X
+	INX
+	LDA #<SDXBANK
+	STA EXEC,X
+	INX
+	LDA #>SDXBANK
+	STA EXEC,X
+	INX
+
+EBOOT	LDA #$4C
+	STA EXEC,X
+	INX
+	LDA #$77
+	STA EXEC,X
+	INX
+	LDA #$E4
+	STA EXEC,X
+	INX
+
+	JMP EXEC
+
+GETCHAR	LDA $E425
+	PHA
+	LDA $E424
+	PHA
+	RTS
+
+SETPAGE	LDA PAGE
+	ASL
+	TAX
+	LDA SCRADR,X
+	STA DLSCR-DL+DLADR
+	LDA SCRADR+1,X
+	STA DLSCR-DL+DLADR+1
+	CLC
+	LDA SCRADR,X
+	ADC #16
+	STA DLSCR2-DL+DLADR
+	LDA SCRADR+1,X
+	ADC #0
+	STA DLSCR2-DL+DLADR+1
+	LDA TYPADR,X
+	STA TYPEV
+	LDA TYPADR+1,X
+	STA TYPEV+1
+	LDA BNKADR,X
+	STA BANKV
+	LDA BNKADR+1,X
+	STA BANKV+1
+	LDA SRCADR,X
+	STA SRCV
+	LDA SRCADR+1,X
+	STA SRCV+1
+	RTS
+
+SCRADR	.WORD SCREEN1, SCREEN2, SCREEN3, SCREEN4
+TYPADR	.WORD TYPE1, TYPE2, TYPE3, TYPE4
+SRCADR	.WORD SRC1, SRC2, SRC3, SRC4
+BNKADR	.WORD BANK1, BANK2, BANK3, BANK4
+
+COLTAB	.BYTE $D8,$0A,$C2,$88,$C2
+
+DL	.BYTE 112,112,112
+	.BYTE $49
+	.WORD BARLINE
+	.BYTE $46
+DLSCR	.WORD 0
+	.BYTE $49
+	.WORD BARLINE
+	.BYTE $42
+DLSCR2	.WORD 0
+	.DC 19 2
+	.BYTE $49
+	.WORD BARLINE
+	.BYTE $42
+	.WORD INFO
+	.BYTE $49
+	.WORD BARLINE
+	.BYTE $41
+	.WORD DLADR
+
+DLLEN	= * - DL
+	
+BARLINE	.BYTE $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+
+INFO	.SBYTE "[1]-[4] set page   [A]-[T] start"
+
+XEND	= *
+
+	* = $BFFA
+	.WORD ORG
+	.BYTE 0
+	.BYTE 0
+	.WORD ORG
+
+	* = $A000
+
+SCREEN1	.SBYTE "     TOOLS      "
+	.SBYTE "[A] DOS 2.0 (Maxflash image)    "
+	.SBYTE "[B] SpartaDosX 4.19             "
+	.SBYTE "[C] SpartaDosX 4.21             "
+	.SBYTE "[D] SpartaDosX 4.22             "
+	.SBYTE "[E]                             "
+	.SBYTE "[F] BasicXL                     "
+	.SBYTE "[G] BasicXE                     "
+	.SBYTE "[H]                             "
+	.SBYTE "[I] Mac65                       "
+	.SBYTE "[J] Action                      "
+	.SBYTE "[K]                             "
+	.SBYTE "[L]                             "
+	.SBYTE "[M]                             "
+	.SBYTE "[N]                             "
+	.SBYTE "[O]                             "
+	.SBYTE "[P]                             "
+	.SBYTE "[Q]                             "
+	.SBYTE "[R]                             "
+	.SBYTE "[S]                             "
+	.SBYTE "[T]                             "
+
+	* = $A400
+SCREEN2	.SBYTE "     GAMES      "
+	.SBYTE "[A] Ant Eater                   "
+	.SBYTE "[B] Asteroids                   "
+	.SBYTE "[C] BC's Quest for Tires        "
+	.SBYTE "[D] Defender                    "
+	.SBYTE "[E] Donkey Kong                 "
+	.SBYTE "[F] Galaxian                    "
+	.SBYTE "[G] Pac Man                     "
+	.SBYTE "[H] Pole Position               "
+	.SBYTE "[I] Popeye                      "
+	.SBYTE "[J] Zenji                       "
+	.SBYTE "[K]                             "
+	.SBYTE "[L]                             "
+	.SBYTE "[M]                             "
+	.SBYTE "[N]                             "
+	.SBYTE "[O]                             "
+	.SBYTE "[P]                             "
+	.SBYTE "[Q]                             "
+	.SBYTE "[R]                             "
+	.SBYTE "[S]                             "
+	.SBYTE "[T]                             "
+
+	* = $A800
+SCREEN3	.SBYTE "      RAM       "
+	.SBYTE "[A] SpartaDoxX 4.22             "
+	.SBYTE "[B] Basic XE                    "
+	.SBYTE "[C] Pole Position               "
+	.SBYTE "[D] Pac Man                     "
+	.SBYTE "[E] Galaxian                    "
+	.SBYTE "[F]                             "
+	.SBYTE "[G]                             "
+	.SBYTE "[H]                             "
+	.SBYTE "[I]                             "
+	.SBYTE "[J]                             "
+	.SBYTE "[K]                             "
+	.SBYTE "[L]                             "
+	.SBYTE "[M]                             "
+	.SBYTE "[N]                             "
+	.SBYTE "[O]                             "
+	.SBYTE "[P]                             "
+	.SBYTE "[Q]                             "
+	.SBYTE "[R]                             "
+	.SBYTE "[S]                             "
+	.SBYTE "[T]                             "
+
+	* = $AC00
+SCREEN4	.SBYTE "     EMPTY      "
+	.SBYTE "[A]                             "
+	.SBYTE "[B]                             "
+	.SBYTE "[C]                             "
+	.SBYTE "[D]                             "
+	.SBYTE "[E]                             "
+	.SBYTE "[F]                             "
+	.SBYTE "[G]                             "
+	.SBYTE "[H]                             "
+	.SBYTE "[I]                             "
+	.SBYTE "[J]                             "
+	.SBYTE "[K]                             "
+	.SBYTE "[L]                             "
+	.SBYTE "[M]                             "
+	.SBYTE "[N]                             "
+	.SBYTE "[O]                             "
+	.SBYTE "[P]                             "
+	.SBYTE "[Q]                             "
+	.SBYTE "[R]                             "
+	.SBYTE "[S]                             "
+	.SBYTE "[T]                             "
+
+	* = $B000
+
+; type: 0=8k, 1=16k 2=OSS, 3=SDX, other = disable
+
+TYPE1	.BYTE 0,3,3,3,$FF,2,2,$FF,2,2,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+TYPE2	.BYTE 0,0,1,1,1,0,0,1,1,0,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+TYPE3	.BYTE 3,2,1,0,0,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+TYPE4	.BYTE $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+
+; src: 0 = ROM, other = RAM
+
+SRC1	.BYTE 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SRC2	.BYTE 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SRC3	.BYTE 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SRC4	.BYTE 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+; bank number: 0-59
+
+BANK1	.BYTE 0,8,16,24,0,32,34,0,36,38,0,0,0,0,0,0,0,0,0,0
+BANK2	.BYTE 50,51,48,40,42,52,53,44,46,54,0,0,0,0,0,0,0,0,0,0
+BANK3	.BYTE 0,8,10,12,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BANK4	.BYTE 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+XEND2	= *
+

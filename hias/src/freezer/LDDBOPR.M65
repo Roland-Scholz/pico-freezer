@@ -1,0 +1,36 @@
+; DBO boot loader private equates
+
+.if .not .def LDDBOPR
+LDDBOPR=1
+
+SECBUF	= $400
+
+; length of memory/use map
+USELN	= $42
+
+DCOMND	= $302
+DSTATS	= $303
+DBUF	= $304
+DBYT	= $308
+DSEC	= $30A
+
+ADR	= $80
+DEST	= $82
+SECCNT	= $84
+RELPG	= $85
+
+IOPRG	= $86
+
+START	= $0500
+
+	.MACRO ADVADR
+	CLC
+	LDA ADR
+	ADC DBYT
+	STA ADR
+	LDA ADR+1
+	ADC DBYT+1
+	STA ADR+1
+	.ENDM
+
+.endif

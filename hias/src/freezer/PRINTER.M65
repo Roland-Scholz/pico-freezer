@@ -1,0 +1,115 @@
+; printer routines
+PRCHECK	LDX #PRSTABS-PRSTAB
+	LDA #30
+	STA PRTOUT
+	JSR PRSIO
+	PHP
+	LDA PRBUF+2
+        STA PRTOUT
+	PLP
+	RTS
+
+PRSIO	LDY #0
+PRSIO1	LDA DDEVIC,Y
+	STA PRTMSIO,Y
+	LDA PRSTAB,X
+	STA DDEVIC,Y
+	INX
+	INY
+	CPY #12
+	BNE PRSIO1
+	LDA PRTOUT
+	STA DTIMLO
+	LDA PRFLAG
+	AND #$0F
+	STA DUNIT
+	LDA #$40
+	STA NMIEN
+	LDA #$28
+	STA SIOSPEED
+	JSR DOHISIO
+	PHP
+	LDA #0
+	STA NMIEN
+	LDX #11
+PRSIO2	LDA PRTMSIO,X
+	STA DDEVIC,X
+	DEX
+	BPL PRSIO2
+	PLP
+	RTS
+
+; signal printer output finished, disable next EOL
+PRFIN	JSR PREOL
+	PHP
+	LDA PRFLAG
+	ORA #$40
+	STA PRFLAG
+	PLP
+	RTS
+
+; print EOL
+PREOL	BIT PRFLAG		; ignore EOL?
+	BVS PREOL2		; yes
+	STX PRTMX
+        LDX PRIDX
+	LDA #155
+PREOL1	STA PRBUF,X
+	LDA #32
+	INX
+	CPX #40
+	BNE PREOL1
+	BEQ PRCI2
+
+PREOL2	LDA PRFLAG
+	AND #$BF		; clear no-eol flag
+	STA PRFLAG
+	LDA #0
+	STA PRIDX
+	RTS
+
+; print character in internal screen code
+PRCINT	AND #$7F	; mask out inverse bit
+	CMP #123	; don't print high control/graphics char and "|"
+	BCS PRCI0
+	CMP #97
+	BCS PRCI1	; lower case chars are fine, print directly
+	CMP #64
+	BCS PRCI0	; don't print graphics chars 64-96
+	ADC #32		; convert from internal to ATASCII
+	BNE PRCI1	; always
+PRCI0	LDA #'.		; print a dot instead
+PRCI1	STX PRTMX
+	LDX PRIDX
+	STA PRBUF,X
+	INX
+	STX PRIDX
+PRCI2	LDA PRFLAG
+	AND #$BF
+	STA PRFLAG
+	CPX #40
+	BNE PRCI3
+	STY PRTMY
+	LDX #PRSTABW-PRSTAB
+	JSR PRSIO
+
+	PHP
+	LDA #0
+	STA PRIDX
+
+	LDY PRTMY
+	LDX PRTMX
+	PLP
+	RTS
+
+PRCI3	LDX PRTMX
+	RTS
+
+; printer SIO tables
+PRSTAB
+; SIO table for get status
+PRSTABS	.BYTE $40, 0, $53, $40
+	.WORD PRBUF, 0, 4, $53
+; SIO table for print buffer
+PRSTABW	.BYTE $40, 0, $57, $80
+	.WORD PRBUF, 0, 40, $4E

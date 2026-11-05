@@ -1,0 +1,110 @@
+|--------------------------------------------|
+|- ispLEVER Fitter Report File              -|
+|- Version 4.1.00.22.28.04_Synplify_Pack                       -|
+|- (c)Copyright, Lattice Semiconductor 2002 -|
+|--------------------------------------------|
+
+
+; Source file turbofreezerxl.tt4
+; FITTER-generated Placements.
+; DEVICE   mach463a
+; DATE     Wed May 04 18:07:29 2005
+
+
+Pin   27  a_in_12_ ;  IPair 106
+Pin   31  a_in_11_ ;  IPair 94
+Pin   25  a_in_15_ ;  IPair 112
+Pin   30  a_in_10_ ;  IPair 97
+Pin   36  a_in_9_ ;  IPair 118
+Pin   4  ram_rom_a_18_ Comb ; S6=1  S9=1  Pair 63
+Pin   37  a_in_8_ ;  IPair 121
+Pin   33  phi2
+Pin   38  a_in_7_ ;  IPair 124
+Pin   14  reset
+Pin   40  a_in_6_ ;  IPair 130
+Pin   11  rw_in
+Pin   24  a_in_5_ ;  IPair 115
+Pin   29  os_select
+Pin   21  a_in_4_ ;  IPair 91
+Pin   6  activate_in ;  IPair 55
+Pin   20  a_in_3_ ;  IPair 88
+Pin   5  poweron
+Pin   19  a_in_2_ ;  IPair 85
+Pin   8  flash_enable_in
+Pin   18  a_in_1_ ;  IPair 82
+Pin   7  flash_writable_in
+Pin   17  a_in_0_ ;  IPair 79
+Pin   9  refresh Comb ; S6=1  S9=1  Pair 45
+Pin   43  ram_rom_a_17_ Comb ; S6=1  S9=1  Pair 117
+Pin   3  ram_ce Comb ; S6=1  S9=1  Pair 47
+Pin   15  ram_rom_a_16_ Comb ; S6=1  S9=1  Pair 81
+Pin   42  rom_ce Comb ; S6=1  S9=1  Pair 119
+Pin   2  ram_rom_a_15_ Comb ; S6=1  S9=1  Pair 51
+Pin   41  ram_rom_a_14_ Comb ; S6=1  S9=1  Pair 135
+Pin   39  ram_rom_a_13_ Comb ; S6=1  S9=1  Pair 129
+Pin   16  ram_rom_a_12_ Comb ; S6=1  S9=1  Pair 75
+Pin   26  a_in_14_ ;  IPair 109
+Pin   28  a_in_13_ ;  IPair 103
+Node  106  a_12_ Lat ;
+Node  94  a_11_ Lat ;
+Node  112  a_15_ Lat ;
+Node  97  a_10_ Lat ;
+Node  118  a_9_ Lat ;
+Node  121  a_8_ Lat ;
+Node  124  a_7_ Lat ;
+Node  130  a_6_ Lat ;
+Node  115  a_5_ Lat ;
+Node  91  a_4_ Lat ;
+Node  55  activate_inputreg Reg ;
+Node  88  a_3_ Lat ;
+Node  85  a_2_ Lat ;
+Node  82  a_1_ Lat ;
+Node  79  a_0_ Lat ;
+Node  109  a_14_ Lat ;
+Node  103  a_13_ Lat ;
+Node  137  inst_use_vector_bankno Reg  ; S6=1  S9=1 
+Node  104  inst_cart_keepsettings Reg  ; S6=0  S9=0 
+Node  105  inst_cart_mode_ram Reg  ; S6=1  S9=0 
+Node  101  cart_mode_0_ Reg  ; S6=1  S9=0 
+Node  95  cart_mode_1_ Reg  ; S6=1  S9=0 
+Node  80  oss_bank_12_ Reg  ; S6=1  S9=0 
+Node  72  oss_bank_13_ Reg  ; S6=1  S9=0 
+Node  87  rw Lat  ; S6=1  S9=0 
+Node  98  inst_cart_write_enable Reg  ; S6=1  S9=0 
+Node  102  reset_cartemu Comb ; S6=1  S9=1 
+Node  89  inst_sdx_enable Reg  ; S6=1  S9=0 
+Node  108  inst_flash_enable Reg  ; S6=1  S9=1 
+Node  114  cart_bank_13_ Reg  ; S6=1  S9=0 
+Node  93  cart_bank_14_ Reg  ; S6=0  S9=0 
+Node  107  cart_bank_15_ Reg  ; S6=0  S9=0 
+Node  83  cart_bank_16_ Reg  ; S6=0  S9=0 
+Node  96  cart_bank_17_ Reg  ; S6=0  S9=0 
+Node  113  cart_bank_18_ Reg  ; S6=0  S9=0 
+Node  53  freezer_rom_bank_select_std_match_result_n Comb ; S6=1  S9=1 
+Node  48  cart_bank_select_std_match_result_n Comb ; S6=1  S9=1 
+Node  74  freezer_ram_bank_12_ Reg  ; S6=1  S9=1 
+Node  132  freezer_ram_bank_13_ Reg  ; S6=1  S9=1 
+Node  126  freezer_ram_bank_14_ Reg  ; S6=1  S9=1 
+Node  77  freezer_ram_bank_15_ Reg  ; S6=1  S9=1 
+Node  90  freezer_ram_bank_16_ Reg  ; S6=1  S9=1 
+Node  62  check_d700_d71f_access_std_match_result_n Comb ; S6=1  S9=1 
+Node  65  freezer_ram_bank_select_std_match_result_n Comb ; S6=1  S9=1 
+Node  131  inst_vector_a2 Reg  ; S6=1  S9=0 
+Node  56  check_oss_bank_std_match_result_n Comb ; S6=1  S9=1 
+Node  57  check_vector_access_un1_activate_n Comb ; S6=1  S9=1 
+Node  84  un1_result_2 Comb ; S6=1  S9=1 
+Node  71  freezer_rom_bank_13_ Reg  ; S6=1  S9=1 
+Node  120  freezer_rom_bank_14_ Reg  ; S6=1  S9=1 
+Node  60  freezer_rom_bank_15_ Reg  ; S6=1  S9=1 
+Node  78  freezer_rom_bank_16_ Reg  ; S6=0  S9=1 
+Node  59  freezer_rom_bank_17_ Reg  ; S6=1  S9=1 
+Node  54  freezer_rom_bank_18_ Reg  ; S6=1  S9=1 
+Node  111  N_272 Comb ; S6=1  S9=1 
+Node  69  N_275 Comb ; S6=1  S9=1 
+Node  123  freezer_state_0_ Reg  ; S6=1  S9=0 
+Node  125  freezer_state_1_ Reg  ; S6=1  S9=0 
+Node  50  flash_config_access Comb ; S6=1  S9=1 
+Node  99  cart_access_un13_flash_enable_n Comb ; S6=1  S9=1 
+Node  66  check_sdx_enable_std_match_result_n Comb ; S6=1  S9=1 
+; Unused Pins & Nodes
+; -> None Found.

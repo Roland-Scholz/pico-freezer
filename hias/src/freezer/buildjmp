@@ -1,0 +1,16 @@
+#!/usr/bin/awk -f
+{
+	if (NF == 2) {
+		if (MODE == 1) {
+			L1 = $1;
+			L2 = $2;
+		} else {
+			L1 = $2;
+			L2 = $1;
+		}
+		if (L1 == "UNUSED") {
+			L1 = "";
+		}
+		printf("%s\t%s %s\n", L1, CMD, L2);
+	}
+}

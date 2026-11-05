@@ -1,0 +1,1384 @@
+|--------------------------------------------|
+|- ispLEVER Fitter Report File              -|
+|- Version 4.1.00.22.28.04_Synplify_Pack                       -|
+|- (c)Copyright, Lattice Semiconductor 2002 -|
+|--------------------------------------------|
+
+
+
+
+Project_Summary
+~~~~~~~~~~~~~~~
+
+Project Name :          turbofreezerxl
+Project Path :          U:\private\xl\turbo-freezer\isplever4\128k-guus-test
+Project Fitted on :     Wed May 04 18:07:30 2005
+
+Device :                M4A5-64/32
+Package :               44PLCC
+Speed :                 -10
+Partnumber :            M4A5-64/32-10JC
+Source Format :         Schematic_VHDL
+
+
+// Project 'turbofreezerxl' was Fitted Successfully! //
+
+
+Compilation_Times
+~~~~~~~~~~~~~~~~~
+Reading/DRC                                   0 sec
+Partition                                     3 sec
+Place                                         0 sec
+Route                                         0 sec
+Jedec/Report generation                       2 sec
+                                         --------
+Fitter                                   00:00:05
+
+
+Design_Summary
+~~~~~~~~~~~~~~
+  Total Input Pins :                 24
+  Total Output Pins :                10
+  Total Bidir I/O Pins :              0
+  Total Flip-Flops :                 31
+  Total Product Terms :             173
+  Total Reserved Pins :               0
+  Total Reserved Blocks :             0
+
+
+Device_Resource_Summary
+~~~~~~~~~~~~~~~~~~~~~~~
+                                 Total
+                               Available  Used  Available  Utilization
+Dedicated Pins
+  Input-Only Pins                ..       ..     ..    -->    ..
+  Clock/Input Pins                2        2      0    -->   100%
+I/O Pins                         32       32      0    -->   100%
+Logic Macrocells                 64       54     10    -->    84%
+  Input Registers                32       17     15    -->    53%
+  Unusable Macrocells            ..        0     ..
+
+CSM Outputs/Total Block Inputs  132      132      0    -->   100%
+Logical Product Terms           320      176    144    -->    55%
+Product Term Clusters            64       59      5    -->    92%
+
+
+Blocks_Resource_Summary
+~~~~~~~~~~~~~~~~~~~~~~~
+                                                                  # of PT  
+                   I/O    Inp    Macrocells   Macrocells   logic  clusters 
+          Fanin    Pins   Reg   Used Unusable  available    PTs   available  Pwr
+---------------------------------------------------------------------------------
+Maximum     33      8      8     --     --         16       80       16       -
+---------------------------------------------------------------------------------
+Block  A    33      8      1     15      0          1       43        5       Hi 
+Block  B    33      8      5     14      0          2       43        1       Hi 
+Block  C    33      8      7     14      0          2       42        1       Hi 
+Block  D    33      8      4     11      0          5       48        2       Hi 
+---------------------------------------------------------------------------------
+
+<Note> Four rightmost columns above reflect last status of the placement process.
+<Note> Pwr (Power) : Hi = High
+                     Lo = Low.
+
+
+Optimizer_and_Fitter_Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pin Assignment :                       Yes
+Group Assignment :                     No
+Pin Reservation :                      No (1)
+Block Reservation :                    No
+
+@Ignore_Project_Constraints :
+  Pin Assignments :                    No
+      Keep Block Assignment            --
+      Keep Segment Assignment          --
+  Group Assignments :                  No
+  Macrocell Assignment :               No
+      Keep Block Assignment            --
+      Keep Segment Assignment          --
+
+@Backannotate_Project_Constraints
+  Pin Assignments :                    No
+  Pin And Block Assignments :          No
+  Pin, Macrocell and Block :           No
+
+@Timing_Constraints :                  No
+
+@Global_Project_Optimization :
+  Balanced Partitioning :              Yes
+  Spread Placement :                   Yes
+
+  Note :
+    Pack Design :
+       Balanced Partitioning = No
+       Spread Placement      = No
+    Spread Design :
+       Balanced Partitioning = Yes
+       Spread Placement      = Yes
+
+@Logic_Synthesis :
+  Logic Reduction :                    Yes
+  Node Collapsing :                    Yes
+  D/T Synthesis :                      Yes
+  Clock Optimization :                 No
+  Input Register Optimization :        Yes
+  XOR Synthesis :                      Yes
+  Max. P-Term for Collapsing :         16
+  Max. P-Term for Splitting :          16
+  Max. Equation Fanin :                32
+  Keep Xor :                           Yes
+
+@Utilization_options
+  Max. % of macrocells used :          100
+  Max. % of block inputs used :        100
+  Max. % of segment lines used :       ---
+  Max. % of macrocells used :          ---
+
+
+@Import_Source_Constraint_Option       No
+
+@Zero_Hold_Time                        No
+
+@Pull_up                               No
+
+@User_Signature                        HIAS
+
+@Output_Slew_Rate                      Default = Slow(2)
+
+@Power                                 Default = High(2)
+
+
+Device Options:
+<Note> 1 : Reserved unused I/Os can be independently driven to Low or High, and does not
+           follow the drive level set for the Global Configure Unused I/O Option.
+<Note> 2 : For user-specified constraints on individual signals, refer to the Output, 
+           Bidir and Burried Signal Lists.
+
+
+
+
+Pinout_Listing
+~~~~~~~~~~~~~~
+      | Pin  |Blk |Assigned|
+Pin No| Type |Pad |Pin     | Signal name
+---------------------------------------------------------------
+    1 |  GND |    |        |
+    2 |  I_O | A7 |   *    |ram_rom_a_15_
+3     |  I_O | A6 |   *    |ram_ce
+4     |  I_O | A5 |   *    |ram_rom_a_18_
+5     |  I_O | A4 |   *    |poweron
+6     |  I_O | A3 |   *    |activate_in
+7     |  I_O | A2 |   *    |flash_writable_in
+8     |  I_O | A1 |   *    |flash_enable_in
+9     |  I_O | A0 |   *    |refresh
+10    | JTAG |    |        |
+11    | CkIn |    |   *    |rw_in
+12    |  GND |    |        |
+13    | JTAG |    |        |
+14    |  I_O | B0 |   *    |reset
+15    |  I_O | B1 |   *    |ram_rom_a_16_
+16    |  I_O | B2 |   *    |ram_rom_a_12_
+17    |  I_O | B3 |   *    |a_in_0_
+18    |  I_O | B4 |   *    |a_in_1_
+19    |  I_O | B5 |   *    |a_in_2_
+20    |  I_O | B6 |   *    |a_in_3_
+21    |  I_O | B7 |   *    |a_in_4_
+22    |  Vcc |    |        |
+23    |  GND |    |        |
+24    |  I_O | C7 |   *    |a_in_5_
+25    |  I_O | C6 |   *    |a_in_15_
+26    |  I_O | C5 |   *    |a_in_14_
+27    |  I_O | C4 |   *    |a_in_12_
+28    |  I_O | C3 |   *    |a_in_13_
+29    |  I_O | C2 |   *    |os_select
+30    |  I_O | C1 |   *    |a_in_10_
+31    |  I_O | C0 |   *    |a_in_11_
+32    | JTAG |    |        |
+33    | CkIn |    |   *    |phi2
+34    |  GND |    |        |
+35    | JTAG |    |        |
+36    |  I_O | D0 |   *    |a_in_9_
+37    |  I_O | D1 |   *    |a_in_8_
+38    |  I_O | D2 |   *    |a_in_7_
+39    |  I_O | D3 |   *    |ram_rom_a_13_
+40    |  I_O | D4 |   *    |a_in_6_
+41    |  I_O | D5 |   *    |ram_rom_a_14_
+42    |  I_O | D6 |   *    |rom_ce
+43    |  I_O | D7 |   *    |ram_rom_a_17_
+44    |  Vcc |    |        |
+
+---------------------------------------------------------------------------
+
+<Note> Blk Pad : This notation refers to the Block I/O pad number in the device.
+<Note> Assigned Pin : user or dedicated input assignment (E.g. Clock pins).
+<Note> Pin Type : 
+           CkIn : Dedicated input or clock pin 
+           CLK  : Dedicated clock pin
+           INP  : Dedicated input pin
+           JTAG : JTAG Control and test pin
+           NC   : No connected
+
+
+
+Input_Signal_List
+~~~~~~~~~~~~~~~~~
+                 P R
+            Pin  r e O   Input 
+Pin Blk PTs Type e s E   Fanout Pwr Slew      Signal 
+----------------------------------------------------------------------
+ 17  B   .  I/O          ----    Hi Slow      a_in_0_   
+ 30  C   .  I/O          ----    Hi Slow      a_in_10_   
+ 31  C   .  I/O          ----    Hi Slow      a_in_11_   
+ 27  C   .  I/O          ----    Hi Slow      a_in_12_   
+ 28  C   .  I/O          ----    Hi Slow      a_in_13_   
+ 26  C   .  I/O          ----    Hi Slow      a_in_14_   
+ 25  C   .  I/O          ----    Hi Slow      a_in_15_   
+ 18  B   .  I/O          ----    Hi Slow      a_in_1_   
+ 19  B   .  I/O          ----    Hi Slow      a_in_2_   
+ 20  B   .  I/O          ----    Hi Slow      a_in_3_   
+ 21  B   .  I/O          ----    Hi Slow      a_in_4_   
+ 24  C   .  I/O          ----    Hi Slow      a_in_5_   
+ 40  D   .  I/O          ----    Hi Slow      a_in_6_   
+ 38  D   .  I/O          ----    Hi Slow      a_in_7_   
+ 37  D   .  I/O          ----    Hi Slow      a_in_8_   
+ 36  D   .  I/O          ----    Hi Slow      a_in_9_   
+  6  A   .  I/O          ----    Hi Slow      activate_in   
+  8  A   .  I/O          --C-    Hi Slow      flash_enable_in   
+  7  A   .  I/O          --C-    Hi Slow      flash_writable_in   
+ 29  C   .  I/O          AB-D    Hi Slow      os_select   
+  5  A   .  I/O          --C-    Hi Slow      poweron   
+ 14  B   .  I/O          --CD    Hi Slow      reset   
+ 11  .   . Ck/I          -B--    -  Slow      rw_in   
+ 33  .   . Ck/I          ABCD    -  Slow      phi2   
+----------------------------------------------------------------------
+
+<Note> Power : Hi = High
+               MH = Medium High
+               ML = Medium Low
+               Lo = Low
+
+
+
+Output_Signal_List
+~~~~~~~~~~~~~~~~~~
+                 P R
+            Pin  r e O   Output 
+Pin Blk PTs Type e s E   Fanout Pwr Slew      Signal 
+----------------------------------------------------------------------
+  3  A   6  COM          ----    Hi Slow      ram_ce   
+ 16  B  10  COM          ----    Hi Slow      ram_rom_a_12_   
+ 39  D   8  COM          ----    Hi Slow      ram_rom_a_13_   
+ 41  D   8  COM          ----    Hi Slow      ram_rom_a_14_   
+  2  A   7  COM          ----    Hi Slow      ram_rom_a_15_   
+ 15  B   7  COM          ----    Hi Slow      ram_rom_a_16_   
+ 43  D   8  COM          ----    Hi Slow      ram_rom_a_17_   
+  4  A   6  COM          ----    Hi Slow      ram_rom_a_18_   
+  9  A  10  COM          ----    Hi Slow      refresh   
+ 42  D   4  COM          ----    Hi Slow      rom_ce   
+----------------------------------------------------------------------
+
+<Note> Power : Hi = High
+               MH = Medium High
+               ML = Medium Low
+               Lo = Low
+
+
+
+Bidir_Signal_List
+~~~~~~~~~~~~~~~~~
+                 P R
+            Pin  r e O   Bidir 
+Pin Blk PTs Type e s E   Fanout Pwr Slew      Signal 
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+<Note> Power : Hi = High
+               MH = Medium High
+               ML = Medium Low
+               Lo = Low
+
+
+
+Buried_Signal_List
+~~~~~~~~~~~~~~~~~~
+                 P R
+            Pin  r e O   Node 
+#Mc Blk PTs Type e s E   Fanout Pwr Slew      Signal 
+----------------------------------------------------------------------
+ C12  C   4  COM          A--D    Hi Slow      N_272   
+ B0  B   5  COM          AB-D    Hi Slow      N_275   
+ B3  B   . In_L          -BC-    Hi Slow      a_0_   --> a_in_0_
+ C1  C   . In_L          A--D    Hi Slow      a_10_   --> a_in_10_
+ C0  C   . In_L          AB-D    Hi Slow      a_11_   --> a_in_11_
+ C4  C   . In_L          ABCD    Hi Slow      a_12_   --> a_in_12_
+ C3  C   . In_L          ABCD    Hi Slow      a_13_   --> a_in_13_
+ C5  C   . In_L          ABCD    Hi Slow      a_14_   --> a_in_14_
+ C6  C   . In_L          ABCD    Hi Slow      a_15_   --> a_in_15_
+ B4  B   . In_L          --CD    Hi Slow      a_1_   --> a_in_1_
+ B5  B   . In_L          A-CD    Hi Slow      a_2_   --> a_in_2_
+ B6  B   . In_L          ABC-    Hi Slow      a_3_   --> a_in_3_
+ B7  B   . In_L          ABCD    Hi Slow      a_4_   --> a_in_4_
+ C7  C   . In_L          A-C-    Hi Slow      a_5_   --> a_in_5_
+ D4  D   . In_L          A---    Hi Slow      a_6_   --> a_in_6_
+ D2  D   . In_L          A-C-    Hi Slow      a_7_   --> a_in_7_
+ D1  D   . In_L          A--D    Hi Slow      a_8_   --> a_in_8_
+ D0  D   . In_L          A--D    Hi Slow      a_9_   --> a_in_9_
+ A3  A   . In_D          A---    Hi Slow      activate_inputreg   --> activate_in
+ C4  C   2  COM          AB-D    Hi Slow      cart_access_un13_flash_enable_n   
+ C14  C   3  DFF  * *     --C-    Hi Slow      cart_bank_13_   
+ C0  C   3  DFF  * *     A-CD    Hi Slow      cart_bank_14_   
+ C9  C   3  DFF  * *     A-C-    Hi Slow      cart_bank_15_   
+ B9  B   2  DFF  * *     AB--    Hi Slow      cart_bank_16_   
+ C2  C   2  DFF  * *     --CD    Hi Slow      cart_bank_17_   
+ C13  C   2  DFF  * *     A-C-    Hi Slow      cart_bank_18_   
+ A2  A   1  COM          -BC-    Hi Slow      cart_bank_select_std_match_result_n   
+ C5  C   4  DFF  * *     -BC-    Hi Slow      cart_mode_0_   
+ C1  C   4  DFF  * *     -BC-    Hi Slow      cart_mode_1_   
+ A11  A   1  COM          ---D    Hi Slow      check_d700_d71f_access_std_match_result_n   
+ A7  A   1  COM          -B--    Hi Slow      check_oss_bank_std_match_result_n   
+ A14  A   1  COM          -B--    Hi Slow      check_sdx_enable_std_match_result_n   
+ A8  A   1  COM          AB-D    Hi Slow      check_vector_access_un1_activate_n   
+ A3  A   1  COM          --C-    Hi Slow      flash_config_access   
+ B3  B   2  DFF  * *     -B--    Hi Slow      freezer_ram_bank_12_   
+ D10  D   2  DFF  * *     ---D    Hi Slow      freezer_ram_bank_13_   
+ D6  D   2  DFF  * *     ---D    Hi Slow      freezer_ram_bank_14_   
+ B5  B   2  DFF  * *     AB--    Hi Slow      freezer_ram_bank_15_   
+ B14  B   2  DFF  * *     -B--    Hi Slow      freezer_ram_bank_16_   
+ A13  A   1  COM          -B-D    Hi Slow      freezer_ram_bank_select_std_match_result_n   
+ B1  B   2  DFF  * *     -B-D    Hi Slow      freezer_rom_bank_13_   
+ D2  D   2  DFF  * *     ---D    Hi Slow      freezer_rom_bank_14_   
+ A10  A   2  DFF  * *     A---    Hi Slow      freezer_rom_bank_15_   
+ B6  B   2  DFF  * *     -B--    Hi Slow      freezer_rom_bank_16_   
+ A9  A   2  DFF  * *     A--D    Hi Slow      freezer_rom_bank_17_   
+ A6  A   2  DFF  * *     A---    Hi Slow      freezer_rom_bank_18_   
+ A5  A   1  COM          AB-D    Hi Slow      freezer_rom_bank_select_std_match_result_n   
+ D4  D   4  DFF  * *     AB-D    Hi Slow      freezer_state_0_   
+ D5  D   3  DFF  * *     AB-D    Hi Slow      freezer_state_1_   
+ C7  C   2  DFF  * *     --C-    Hi Slow      inst_cart_keepsettings   
+ C8  C   2  DFF  * *     A-CD    Hi Slow      inst_cart_mode_ram   
+ C3  C   2  DFF  * *     --C-    Hi Slow      inst_cart_write_enable   
+ C10  C   4  TFF  * *     --C-    Hi Slow      inst_flash_enable   
+ B13  B   2  DFF  * *     -BC-    Hi Slow      inst_sdx_enable   
+ D13  D   3  DFF  * *     ---D    Hi Slow      inst_use_vector_bankno   
+ D9  D   4  DFF  * *     ---D    Hi Slow      inst_vector_a2   
+ B7  B   2  DFF  * *     -B--    Hi Slow      oss_bank_12_   
+ B2  B   2  DFF  * *     -BC-    Hi Slow      oss_bank_13_   
+ C6  C   2  COM          -BC-    Hi Slow      reset_cartemu   
+ B12  B   1  LAT  * *     ABCD    Hi Slow      rw   
+ B10  B   2  COM          --C-    Hi Slow      un1_result_2   
+----------------------------------------------------------------------
+
+<Note> Power : Hi = High
+               MH = Medium High
+               ML = Medium Low
+               Lo = Low
+
+
+
+
+Signals_Fanout_List
+~~~~~~~~~~~~~~~~~~~
+Signal Source  :    Fanout List
+-----------------------------------------------------------------------------
+      a_12_{ D}:        refresh{ A}  ram_rom_a_17_{ D}         ram_ce{ A}
+               :  ram_rom_a_16_{ B}  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}
+               :  ram_rom_a_13_{ D}  ram_rom_a_12_{ B}freezer_rom_bank_select_std_match_result_n{ A}
+               :cart_bank_select_std_match_result_n{ A}check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}
+               :check_oss_bank_std_match_result_n{ A}check_vector_access_un1_activate_n{ A}          N_272{ C}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      a_11_{ D}:  ram_rom_a_17_{ D}         ram_ce{ A}  ram_rom_a_16_{ B}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      a_15_{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}          N_272{ C}          N_275{ B}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      a_10_{ D}:  ram_rom_a_17_{ D}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+       a_9_{ E}:  ram_rom_a_17_{ D}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+       a_8_{ E}:  ram_rom_a_17_{ D}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+       a_7_{ E}:  cart_bank_13_{ C}  cart_bank_14_{ C}  cart_bank_15_{ C}
+               :freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}check_d700_d71f_access_std_match_result_n{ A}
+               :freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}check_vector_access_un1_activate_n{ A}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      reset{ C}:inst_cart_write_enable{ C}  reset_cartemu{ C}freezer_state_0_{ D}
+               :freezer_state_1_{ D}
+       a_6_{ E}:freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}check_d700_d71f_access_std_match_result_n{ A}
+               :freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}check_vector_access_un1_activate_n{ A}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      rw_in{. }:             rw{ B}
+       a_5_{ D}:  cart_bank_18_{ C}check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}
+               :check_oss_bank_std_match_result_n{ A}check_vector_access_un1_activate_n{ A}freezer_rom_bank_18_{ A}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+  os_select{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :  ram_rom_a_16_{ B}         rom_ce{ D}  ram_rom_a_15_{ A}
+               :  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}  ram_rom_a_12_{ B}
+       a_4_{ C}:  ram_rom_a_17_{ D}inst_use_vector_bankno{ D}  cart_bank_17_{ C}
+               :freezer_ram_bank_16_{ B}check_oss_bank_std_match_result_n{ A}check_vector_access_un1_activate_n{ A}
+               :freezer_rom_bank_17_{ A}freezer_state_0_{ D}freezer_state_1_{ D}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+activate_inputreg{ B}:check_vector_access_un1_activate_n{ A}
+       a_3_{ C}:inst_cart_keepsettings{ C}inst_cart_mode_ram{ C}   cart_mode_0_{ C}
+               :   cart_mode_1_{ C}   oss_bank_12_{ B}inst_cart_write_enable{ C}
+               :inst_sdx_enable{ B}inst_flash_enable{ C}  cart_bank_16_{ B}
+               :freezer_ram_bank_15_{ B}check_vector_access_un1_activate_n{ A}freezer_rom_bank_16_{ B}
+    poweron{ B}:inst_cart_keepsettings{ C}  reset_cartemu{ C}
+       a_2_{ C}:inst_cart_keepsettings{ C}inst_cart_mode_ram{ C}   cart_mode_0_{ C}
+               :   cart_mode_1_{ C}inst_cart_write_enable{ C}inst_flash_enable{ C}
+               :  cart_bank_15_{ C}freezer_ram_bank_14_{ D} inst_vector_a2{ D}
+               :freezer_rom_bank_15_{ A}
+flash_enable_in{ B}:inst_flash_enable{ C}
+       a_1_{ C}:inst_cart_keepsettings{ C}inst_cart_mode_ram{ C}   cart_mode_1_{ C}
+               :inst_cart_write_enable{ C}inst_flash_enable{ C}  cart_bank_14_{ C}
+               :freezer_ram_bank_13_{ D}freezer_rom_bank_14_{ D}
+flash_writable_in{ B}:inst_flash_enable{ C}cart_access_un13_flash_enable_n{ C}
+       a_0_{ C}:inst_cart_keepsettings{ C}inst_cart_mode_ram{ C}   cart_mode_0_{ C}
+               :   oss_bank_13_{ B}inst_cart_write_enable{ C}inst_flash_enable{ C}
+               :  cart_bank_13_{ C}freezer_ram_bank_12_{ B}freezer_rom_bank_13_{ B}
+      a_14_{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}          N_272{ C}          N_275{ B}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+      a_13_{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}freezer_rom_bank_select_std_match_result_n{ A}cart_bank_select_std_match_result_n{ A}
+               :check_d700_d71f_access_std_match_result_n{ A}freezer_ram_bank_select_std_match_result_n{ A}check_oss_bank_std_match_result_n{ A}
+               :check_vector_access_un1_activate_n{ A}          N_272{ C}          N_275{ B}
+               :flash_config_access{ A}check_sdx_enable_std_match_result_n{ A}
+inst_use_vector_bankno{ E}:  ram_rom_a_17_{ D}inst_use_vector_bankno{ D}
+inst_cart_keepsettings{ D}:inst_cart_keepsettings{ C}  reset_cartemu{ C}
+inst_cart_mode_ram{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}         rom_ce{ D}inst_cart_mode_ram{ C}
+cart_mode_0_{ D}:  ram_rom_a_12_{ B}   cart_mode_0_{ C}   un1_result_2{ B}
+               :          N_272{ C}          N_275{ B}
+cart_mode_1_{ D}:  ram_rom_a_12_{ B}   cart_mode_1_{ C}   un1_result_2{ B}
+               :          N_272{ C}          N_275{ B}
+oss_bank_12_{ C}:  ram_rom_a_12_{ B}   oss_bank_12_{ B}          N_275{ B}
+oss_bank_13_{ C}:   oss_bank_13_{ B}          N_272{ C}          N_275{ B}
+         rw{ C}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}inst_use_vector_bankno{ D}check_vector_access_un1_activate_n{ A}
+               :freezer_state_0_{ D}freezer_state_1_{ D}cart_access_un13_flash_enable_n{ C}
+inst_cart_write_enable{ D}:inst_cart_write_enable{ C}cart_access_un13_flash_enable_n{ C}
+reset_cartemu{ D}:inst_cart_mode_ram{ C}   cart_mode_0_{ C}   cart_mode_1_{ C}
+               :inst_flash_enable{ C}  cart_bank_13_{ C}  cart_bank_14_{ C}
+               :  cart_bank_15_{ C}  cart_bank_16_{ B}  cart_bank_17_{ C}
+               :  cart_bank_18_{ C}
+inst_sdx_enable{ C}:  ram_rom_a_12_{ B}inst_sdx_enable{ B}          N_272{ C}
+               :          N_275{ B}
+inst_flash_enable{ D}:inst_flash_enable{ C}cart_access_un13_flash_enable_n{ C}
+cart_bank_13_{ D}:  cart_bank_13_{ C}          N_272{ C}
+cart_bank_14_{ D}:        refresh{ A}         ram_ce{ A}  ram_rom_a_14_{ D}
+               :  cart_bank_14_{ C}
+cart_bank_15_{ D}:        refresh{ A}         ram_ce{ A}  ram_rom_a_15_{ A}
+               :  cart_bank_15_{ C}
+cart_bank_16_{ C}:        refresh{ A}         ram_ce{ A}  ram_rom_a_16_{ B}
+               :  cart_bank_16_{ B}
+cart_bank_17_{ D}:  ram_rom_a_17_{ D}  cart_bank_17_{ C}
+cart_bank_18_{ D}:  ram_rom_a_18_{ A}  cart_bank_18_{ C}
+freezer_rom_bank_select_std_match_result_n{ B}:freezer_rom_bank_13_{ B}freezer_rom_bank_14_{ D}freezer_rom_bank_15_{ A}
+               :freezer_rom_bank_16_{ B}freezer_rom_bank_17_{ A}freezer_rom_bank_18_{ A}
+cart_bank_select_std_match_result_n{ B}:  cart_bank_16_{ B}  cart_bank_17_{ C}  cart_bank_18_{ C}
+               :   un1_result_2{ B}
+freezer_ram_bank_12_{ C}:  ram_rom_a_12_{ B}freezer_ram_bank_12_{ B}
+freezer_ram_bank_13_{ E}:  ram_rom_a_13_{ D}freezer_ram_bank_13_{ D}
+freezer_ram_bank_14_{ E}:  ram_rom_a_14_{ D}freezer_ram_bank_14_{ D}
+freezer_ram_bank_15_{ C}:  ram_rom_a_15_{ A}freezer_ram_bank_15_{ B}
+freezer_ram_bank_16_{ C}:  ram_rom_a_16_{ B}freezer_ram_bank_16_{ B}
+check_d700_d71f_access_std_match_result_n{ B}:inst_use_vector_bankno{ D}freezer_state_0_{ D}freezer_state_1_{ D}
+freezer_ram_bank_select_std_match_result_n{ B}:freezer_ram_bank_12_{ B}freezer_ram_bank_13_{ D}freezer_ram_bank_14_{ D}
+               :freezer_ram_bank_15_{ B}freezer_ram_bank_16_{ B}
+inst_vector_a2{ E}:  ram_rom_a_17_{ D} inst_vector_a2{ D}
+check_oss_bank_std_match_result_n{ B}:   oss_bank_12_{ B}   oss_bank_13_{ B}
+check_vector_access_un1_activate_n{ B}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :  ram_rom_a_16_{ B}         rom_ce{ D}  ram_rom_a_15_{ A}
+               :  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}  ram_rom_a_12_{ B}
+               :inst_use_vector_bankno{ D}freezer_ram_bank_12_{ B}freezer_ram_bank_13_{ D}
+               :freezer_ram_bank_14_{ D}freezer_ram_bank_15_{ B}freezer_ram_bank_16_{ B}
+               : inst_vector_a2{ D}freezer_rom_bank_13_{ B}freezer_rom_bank_14_{ D}
+               :freezer_rom_bank_15_{ A}freezer_rom_bank_16_{ B}freezer_rom_bank_17_{ A}
+               :freezer_rom_bank_18_{ A}freezer_state_0_{ D}freezer_state_1_{ D}
+un1_result_2{ C}:  cart_bank_13_{ C}  cart_bank_14_{ C}  cart_bank_15_{ C}
+freezer_rom_bank_13_{ C}:  ram_rom_a_13_{ D}freezer_rom_bank_13_{ B}
+freezer_rom_bank_14_{ E}:  ram_rom_a_14_{ D}freezer_rom_bank_14_{ D}
+freezer_rom_bank_15_{ B}:  ram_rom_a_15_{ A}freezer_rom_bank_15_{ A}
+freezer_rom_bank_16_{ C}:  ram_rom_a_16_{ B}freezer_rom_bank_16_{ B}
+freezer_rom_bank_17_{ B}:  ram_rom_a_17_{ D}freezer_rom_bank_17_{ A}
+freezer_rom_bank_18_{ B}:  ram_rom_a_18_{ A}freezer_rom_bank_18_{ A}
+      N_272{ D}:        refresh{ A}         ram_ce{ A}  ram_rom_a_13_{ D}
+      N_275{ C}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}
+freezer_state_0_{ E}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}inst_use_vector_bankno{ D}freezer_ram_bank_12_{ B}
+               :freezer_ram_bank_13_{ D}freezer_ram_bank_14_{ D}freezer_ram_bank_15_{ B}
+               :freezer_ram_bank_16_{ B} inst_vector_a2{ D}freezer_rom_bank_13_{ B}
+               :freezer_rom_bank_14_{ D}freezer_rom_bank_15_{ A}freezer_rom_bank_16_{ B}
+               :freezer_rom_bank_17_{ A}freezer_rom_bank_18_{ A}freezer_state_0_{ D}
+               :freezer_state_1_{ D}
+freezer_state_1_{ E}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}inst_use_vector_bankno{ D}freezer_ram_bank_12_{ B}
+               :freezer_ram_bank_13_{ D}freezer_ram_bank_14_{ D}freezer_ram_bank_15_{ B}
+               :freezer_ram_bank_16_{ B} inst_vector_a2{ D}freezer_rom_bank_13_{ B}
+               :freezer_rom_bank_14_{ D}freezer_rom_bank_15_{ A}freezer_rom_bank_16_{ B}
+               :freezer_rom_bank_17_{ A}freezer_rom_bank_18_{ A}freezer_state_0_{ D}
+               :freezer_state_1_{ D}
+flash_config_access{ B}:inst_cart_keepsettings{ C}inst_cart_mode_ram{ C}   cart_mode_0_{ C}
+               :   cart_mode_1_{ C}inst_cart_write_enable{ C}inst_flash_enable{ C}
+cart_access_un13_flash_enable_n{ D}:  ram_rom_a_18_{ A}        refresh{ A}  ram_rom_a_17_{ D}
+               :         ram_ce{ A}  ram_rom_a_16_{ B}         rom_ce{ D}
+               :  ram_rom_a_15_{ A}  ram_rom_a_14_{ D}  ram_rom_a_13_{ D}
+               :  ram_rom_a_12_{ B}
+check_sdx_enable_std_match_result_n{ B}:inst_sdx_enable{ B}   un1_result_2{ B}
+-----------------------------------------------------------------------------
+
+<Note> {.} : Indicates block location of signal
+
+
+Set_Reset_Summary
+~~~~~~~~~~~~~~~~~
+
+Block  A
+block level set pt   : check_vector_access_un1_activate_n & !freezer_state_0_ & !freezer_state_1_
+block level reset pt : GND
+Equations :
+|     |     |Block|Block| Signal
+| Reg |Mode |Set  |Reset| Name
++-----+-----+-----+-----+------------------------
+|     |     |     |     | refresh
+|     |     |     |     | ram_rom_a_15_
+|     |     |     |     | ram_rom_a_18_
+|     |     |     |     | ram_ce
+|     |     |     |     | check_vector_access_un1_activate_n
+|     |     |     |     | freezer_rom_bank_select_std_match_result_n
+|  *  |  S  | BS  | BR  | freezer_rom_bank_17_
+|     |     |     |     | freezer_ram_bank_select_std_match_result_n
+|     |     |     |     | cart_bank_select_std_match_result_n
+|  *  |  S  | BS  | BR  | freezer_rom_bank_18_
+|  *  |  S  | BS  | BR  | freezer_rom_bank_15_
+|     |     |     |     | check_sdx_enable_std_match_result_n
+|     |     |     |     | flash_config_access
+|     |     |     |     | check_oss_bank_std_match_result_n
+|     |     |     |     | check_d700_d71f_access_std_match_result_n
+|     |     |     |     | activate_in
+|     |     |     |     | activate_inputreg
+|     |     |     |     | flash_enable_in
+|     |     |     |     | flash_writable_in
+|     |     |     |     | poweron
+
+
+Block  B
+block level set pt   : GND
+block level reset pt : check_vector_access_un1_activate_n & !freezer_state_0_ & !freezer_state_1_
+Equations :
+|     |     |Block|Block| Signal
+| Reg |Mode |Set  |Reset| Name
++-----+-----+-----+-----+------------------------
+|     |     |     |     | ram_rom_a_12_
+|     |     |     |     | ram_rom_a_16_
+|  *  |  A  |     |     | rw
+|     |     |     |     | N_275
+|  *  |  S  | BS  | BR  | freezer_rom_bank_13_
+|  *  |  S  | BS  | BR  | freezer_ram_bank_15_
+|  *  |  A  |     |     | cart_bank_16_
+|  *  |  A  |     |     | inst_sdx_enable
+|  *  |  A  |     |     | oss_bank_13_
+|  *  |  S  | BR  | BS  | freezer_rom_bank_16_
+|     |     |     |     | un1_result_2
+|  *  |  S  | BS  | BR  | freezer_ram_bank_16_
+|  *  |  S  | BS  | BR  | freezer_ram_bank_12_
+|  *  |  A  |     |     | oss_bank_12_
+|     |     |     |     | a_in_4_
+|     |     |     |     | a_in_3_
+|     |     |     |     | a_in_2_
+|     |     |     |     | a_in_1_
+|     |     |     |     | a_in_0_
+|     |     |     |     | a_4_
+|     |     |     |     | a_3_
+|     |     |     |     | a_2_
+|     |     |     |     | a_1_
+|     |     |     |     | a_0_
+|     |     |     |     | reset
+
+
+Block  C
+block level set pt   : !flash_enable_in & reset_cartemu
+block level reset pt : flash_enable_in & reset_cartemu
+Equations :
+|     |     |Block|Block| Signal
+| Reg |Mode |Set  |Reset| Name
++-----+-----+-----+-----+------------------------
+|  *  |  A  |     |     | cart_bank_14_
+|     |     |     |     | cart_access_un13_flash_enable_n
+|  *  |  A  |     |     | inst_cart_mode_ram
+|     |     |     |     | N_272
+|  *  |  A  |     |     | cart_mode_1_
+|  *  |  A  |     |     | cart_mode_0_
+|  *  |  A  |     |     | cart_bank_15_
+|  *  |  A  |     |     | cart_bank_18_
+|  *  |  A  |     |     | cart_bank_17_
+|     |     |     |     | reset_cartemu
+|  *  |  S  | BS  | BR  | inst_flash_enable
+|  *  |  A  |     |     | cart_bank_13_
+|  *  |  A  |     |     | inst_cart_write_enable
+|  *  |  A  |     |     | inst_cart_keepsettings
+|     |     |     |     | a_in_11_
+|     |     |     |     | a_in_10_
+|     |     |     |     | a_in_13_
+|     |     |     |     | a_in_12_
+|     |     |     |     | a_in_14_
+|     |     |     |     | a_in_15_
+|     |     |     |     | a_in_5_
+|     |     |     |     | a_15_
+|     |     |     |     | a_14_
+|     |     |     |     | a_12_
+|     |     |     |     | a_13_
+|     |     |     |     | a_11_
+|     |     |     |     | a_5_
+|     |     |     |     | a_10_
+|     |     |     |     | os_select
+
+
+Block  D
+block level set pt   : GND
+block level reset pt : check_vector_access_un1_activate_n & !freezer_state_0_ & !freezer_state_1_
+Equations :
+|     |     |Block|Block| Signal
+| Reg |Mode |Set  |Reset| Name
++-----+-----+-----+-----+------------------------
+|     |     |     |     | ram_rom_a_17_
+|     |     |     |     | ram_rom_a_14_
+|     |     |     |     | ram_rom_a_13_
+|     |     |     |     | rom_ce
+|  *  |  A  |     |     | freezer_state_0_
+|  *  |  A  |     |     | freezer_state_1_
+|  *  |  A  |     |     | inst_vector_a2
+|  *  |  S  | BS  | BR  | inst_use_vector_bankno
+|  *  |  S  | BS  | BR  | freezer_rom_bank_14_
+|  *  |  S  | BS  | BR  | freezer_ram_bank_14_
+|  *  |  S  | BS  | BR  | freezer_ram_bank_13_
+|     |     |     |     | a_in_6_
+|     |     |     |     | a_in_7_
+|     |     |     |     | a_in_8_
+|     |     |     |     | a_in_9_
+|     |     |     |     | a_7_
+|     |     |     |     | a_8_
+|     |     |     |     | a_9_
+|     |     |     |     | a_6_
+
+
+<Note> (S) means the macrocell is configured in synchronous mode
+       i.e. it uses the block-level set and reset pt.
+       (A) means the macrocell is configured in asynchronous mode
+       i.e. it can have its independant set or reset pt.
+       (BS) means the block-level set pt is selected.
+       (BR) means the block-level reset pt is selected.
+
+
+
+
+BLOCK_A_LOGIC_ARRAY_FANIN
+~~~~~~~~~~~~~~~~~~~~~~~~~
+CSM             Signal    Source        CSM             Signal    Source
+------------------------------------    ------------------------------------
+mx A0            a_6_      inode 94     mx A17            a_8_      inode 91
+mx A1   cart_bank_18_    mcell  C13     mx A18            a_3_      inode 80
+mx A2inst_cart_mode_ram     mcell  C8     mx A19activate_inputreg      inode 69
+mx A3   cart_bank_15_     mcell  C9     mx A20cart_access_un13_flash_enable_n     mcell  C4
+mx A4freezer_rom_bank_15_    mcell  A10     mx A21freezer_rom_bank_18_     mcell  A6
+mx A5           N_275     mcell  B0     mx A22           a_15_      inode 88
+mx A6freezer_ram_bank_15_     mcell  B5     mx A23           a_13_      inode 85
+mx A7            a_9_      inode 90     mx A24            a_2_      inode 79
+mx A8freezer_state_0_     mcell  D4     mx A25            a_4_      inode 81
+mx A9           a_10_      inode 83     mx A26           a_14_      inode 87
+mx A10   cart_bank_14_     mcell  C0     mx A27            a_7_      inode 92
+mx A11       os_select        pin 29     mx A28            a_5_      inode 89
+mx A12           a_12_      inode 86     mx A29              rw    mcell  B12
+mx A13freezer_rom_bank_select_std_match_result_n     mcell  A5     mx A30check_vector_access_un1_activate_n     mcell  A8
+mx A14           a_11_      inode 82     mx A31freezer_rom_bank_17_     mcell  A9
+mx A15freezer_state_1_     mcell  D5     mx A32           N_272    mcell  C12
+mx A16   cart_bank_16_     mcell  B9
+----------------------------------------------------------------------------
+
+
+BLOCK_B_LOGIC_ARRAY_FANIN
+~~~~~~~~~~~~~~~~~~~~~~~~~
+CSM             Signal    Source        CSM             Signal    Source
+------------------------------------    ------------------------------------
+mx B0check_oss_bank_std_match_result_n     mcell  A7     mx B17freezer_rom_bank_select_std_match_result_n     mcell  A5
+mx B1freezer_rom_bank_16_     mcell  B6     mx B18    oss_bank_12_     mcell  B7
+mx B2           rw_in        pin 11     mx B19    cart_mode_0_     mcell  C5
+mx B3cart_bank_select_std_match_result_n     mcell  A2     mx B20cart_access_un13_flash_enable_n     mcell  C4
+mx B4           a_15_      inode 88     mx B21              rw    mcell  B12
+mx B5 inst_sdx_enable    mcell  B13     mx B22   reset_cartemu     mcell  C6
+mx B6freezer_ram_bank_15_     mcell  B5     mx B23           a_13_      inode 85
+mx B7freezer_rom_bank_13_     mcell  B1     mx B24check_sdx_enable_std_match_result_n    mcell  A14
+mx B8freezer_state_0_     mcell  D4     mx B25            a_4_      inode 81
+mx B9    oss_bank_13_     mcell  B2     mx B26           a_14_      inode 87
+mx B10freezer_ram_bank_12_     mcell  B3     mx B27            a_0_      inode 77
+mx B11            a_3_      inode 80     mx B28freezer_ram_bank_16_    mcell  B14
+mx B12    cart_mode_1_     mcell  C1     mx B29       os_select        pin 29
+mx B13           a_12_      inode 86     mx B30check_vector_access_un1_activate_n     mcell  A8
+mx B14           a_11_      inode 82     mx B31freezer_ram_bank_select_std_match_result_n    mcell  A13
+mx B15freezer_state_1_     mcell  D5     mx B32   cart_bank_16_     mcell  B9
+mx B16           N_275     mcell  B0
+----------------------------------------------------------------------------
+
+
+BLOCK_C_LOGIC_ARRAY_FANIN
+~~~~~~~~~~~~~~~~~~~~~~~~~
+CSM             Signal    Source        CSM             Signal    Source
+------------------------------------    ------------------------------------
+mx C0   cart_bank_15_     mcell  C9     mx C17           a_14_      inode 87
+mx C1 flash_enable_in         pin 8     mx C18   cart_bank_17_     mcell  C2
+mx C2cart_bank_select_std_match_result_n     mcell  A2     mx C19    cart_mode_0_     mcell  C5
+mx C3           reset        pin 14     mx C20            a_0_      inode 77
+mx C4           a_15_      inode 88     mx C21           a_13_      inode 85
+mx C5 inst_sdx_enable    mcell  B13     mx C22   reset_cartemu     mcell  C6
+mx C6    cart_mode_1_     mcell  C1     mx C23    un1_result_2    mcell  B10
+mx C7   cart_bank_13_    mcell  C14     mx C24            a_2_      inode 79
+mx C8           a_12_      inode 86     mx C25            a_4_      inode 81
+mx C9            a_1_      inode 78     mx C26flash_writable_in         pin 7
+mx C10   cart_bank_14_     mcell  C0     mx C27inst_cart_keepsettings     mcell  C7
+mx C11            a_3_      inode 80     mx C28            a_5_      inode 89
+mx C12         poweron         pin 5     mx C29              rw    mcell  B12
+mx C13            a_7_      inode 92     mx C30flash_config_access     mcell  A3
+mx C14inst_flash_enable    mcell  C10     mx C31    oss_bank_13_     mcell  B2
+mx C15inst_cart_mode_ram     mcell  C8     mx C32inst_cart_write_enable     mcell  C3
+mx C16   cart_bank_18_    mcell  C13
+----------------------------------------------------------------------------
+
+
+BLOCK_D_LOGIC_ARRAY_FANIN
+~~~~~~~~~~~~~~~~~~~~~~~~~
+CSM             Signal    Source        CSM             Signal    Source
+------------------------------------    ------------------------------------
+mx D0check_d700_d71f_access_std_match_result_n    mcell  A11     mx D17            a_8_      inode 91
+mx D1freezer_ram_bank_13_    mcell  D10     mx D18  inst_vector_a2     mcell  D9
+mx D2           a_11_      inode 82     mx D19           a_10_      inode 83
+mx D3inst_use_vector_bankno    mcell  D13     mx D20cart_access_un13_flash_enable_n     mcell  C4
+mx D4freezer_rom_bank_select_std_match_result_n     mcell  A5     mx D21           reset        pin 14
+mx D5           N_275     mcell  B0     mx D22            a_1_      inode 78
+mx D6           a_15_      inode 88     mx D23           a_13_      inode 85
+mx D7            a_9_      inode 90     mx D24inst_cart_mode_ram     mcell  C8
+mx D8           a_12_      inode 86     mx D25freezer_rom_bank_13_     mcell  B1
+mx D9              rw    mcell  B12     mx D26freezer_rom_bank_14_     mcell  D2
+mx D10           a_14_      inode 87     mx D27           N_272    mcell  C12
+mx D11       os_select        pin 29     mx D28            a_2_      inode 79
+mx D12   cart_bank_14_     mcell  C0     mx D29freezer_ram_bank_14_     mcell  D6
+mx D13freezer_rom_bank_17_     mcell  A9     mx D30freezer_state_1_     mcell  D5
+mx D14freezer_state_0_     mcell  D4     mx D31freezer_ram_bank_select_std_match_result_n    mcell  A13
+mx D15   cart_bank_17_     mcell  C2     mx D32check_vector_access_un1_activate_n     mcell  A8
+mx D16            a_4_      inode 81
+----------------------------------------------------------------------------
+
+<Note> CSM indicates the mux inputs from the Central Switch Matrix.
+<Note> Source indicates where the signal comes from (pin or macrocell). 
+
+
+
+
+PostFit_Equations
+~~~~~~~~~~~~~~~~~
+
+
+ P-Terms   Fan-in  Fan-out  Type  Name (attributes)
+---------  ------  -------  ----  -----------------
+   6         13        1    Pin   ram_rom_a_18_ 
+  10         16        1    Pin   refresh- 
+   8         21        1    Pin   ram_rom_a_17_ 
+   6         15        1    Pin   ram_ce- 
+   7         15        1    Pin   ram_rom_a_16_ 
+   4         11        1    Pin   rom_ce- 
+   7         15        1    Pin   ram_rom_a_15_ 
+   8         15        1    Pin   ram_rom_a_14_ 
+   8         14        1    Pin   ram_rom_a_13_ 
+  10         16        1    Pin   ram_rom_a_12_ 
+   1          3        1    Node  inst_use_vector_bankno.AR 
+   3          4        1    Node  inst_use_vector_bankno.D 
+   1          1        1    Node  inst_use_vector_bankno.C 
+   2          6        1    NodeX1  inst_cart_keepsettings.D.X1 
+   1          1        1    NodeX2  inst_cart_keepsettings.D.X2 
+   1          1        1    Node  inst_cart_keepsettings.AP 
+   1          1        1    Node  inst_cart_keepsettings.C 
+   2          6        1    NodeX1  inst_cart_mode_ram.D.X1 
+   1          1        1    NodeX2  inst_cart_mode_ram.D.X2 
+   1          1        1    Node  inst_cart_mode_ram.AR 
+   1          1        1    Node  inst_cart_mode_ram.C 
+   1          1        1    Node  cart_mode_0_.AR 
+   4          5        1    Node  cart_mode_0_.D 
+   1          1        1    Node  cart_mode_0_.C 
+   1          1        1    Node  cart_mode_1_.AR 
+   4          5        1    Node  cart_mode_1_.D 
+   1          1        1    Node  cart_mode_1_.C 
+   2          3        1    Node  oss_bank_12_.D 
+   1          1        1    Node  oss_bank_12_.C 
+   2          3        1    Node  oss_bank_13_.D 
+   1          1        1    Node  oss_bank_13_.C 
+   1          1        1    Node  a_0_.D 
+   1          1        1    Node  a_0_.LH 
+   1          1        1    Node  a_1_.D 
+   1          1        1    Node  a_1_.LH 
+   1          1        1    Node  a_2_.D 
+   1          1        1    Node  a_2_.LH 
+   1          1        1    Node  a_3_.D 
+   1          1        1    Node  a_3_.LH 
+   1          1        1    Node  a_4_.D 
+   1          1        1    Node  a_4_.LH 
+   1          1        1    Node  a_5_.D 
+   1          1        1    Node  a_5_.LH 
+   1          1        1    Node  a_6_.D 
+   1          1        1    Node  a_6_.LH 
+   1          1        1    Node  a_7_.D 
+   1          1        1    Node  a_7_.LH 
+   1          1        1    Node  a_8_.D 
+   1          1        1    Node  a_8_.LH 
+   1          1        1    Node  a_9_.D 
+   1          1        1    Node  a_9_.LH 
+   1          1        1    Node  a_10_.D 
+   1          1        1    Node  a_10_.LH 
+   1          1        1    Node  a_11_.D 
+   1          1        1    Node  a_11_.LH 
+   1          1        1    Node  a_12_.D 
+   1          1        1    Node  a_12_.LH 
+   1          1        1    Node  a_13_.D 
+   1          1        1    Node  a_13_.LH 
+   1          1        1    Node  a_14_.D 
+   1          1        1    Node  a_14_.LH 
+   1          1        1    Node  a_15_.D 
+   1          1        1    Node  a_15_.LH 
+   1          1        1    Node  rw.D 
+   1          1        1    Node  rw.LH 
+   1          1        1    Node  activate_inputreg.D 
+   1          1        1    Node  activate_inputreg.C 
+   2          6        1    NodeX1  inst_cart_write_enable.D.X1 
+   1          1        1    NodeX2  inst_cart_write_enable.D.X2 
+   1          1        1    Node  inst_cart_write_enable.AR 
+   1          1        1    Node  inst_cart_write_enable.C 
+   2          3        1    Node  reset_cartemu 
+   2          3        1    Node  inst_sdx_enable.D 
+   1          1        1    Node  inst_sdx_enable.C 
+   1          2        1    Node  inst_flash_enable.AR 
+   1          2        1    Node  inst_flash_enable.AP 
+   4          8        1    Node  inst_flash_enable.T 
+   1          1        1    Node  inst_flash_enable.C 
+   1          1        1    Node  cart_bank_13_.AR 
+   3          4        1    Node  cart_bank_13_.D 
+   1          1        1    Node  cart_bank_13_.C 
+   3          4        1    Node  cart_bank_14_.D 
+   1          1        1    Node  cart_bank_14_.AP 
+   1          1        1    Node  cart_bank_14_.C 
+   3          4        1    Node  cart_bank_15_.D 
+   1          1        1    Node  cart_bank_15_.AP 
+   1          1        1    Node  cart_bank_15_.C 
+   2          3        1    Node  cart_bank_16_.D 
+   1          1        1    Node  cart_bank_16_.AP 
+   1          1        1    Node  cart_bank_16_.C 
+   2          3        1    Node  cart_bank_17_.D 
+   1          1        1    Node  cart_bank_17_.AP 
+   1          1        1    Node  cart_bank_17_.C 
+   2          3        1    Node  cart_bank_18_.D 
+   1          1        1    Node  cart_bank_18_.AP 
+   1          1        1    Node  cart_bank_18_.C 
+   1         10        1    Node  freezer_rom_bank_select_std_match_result_n 
+   1         10        1    Node  cart_bank_select_std_match_result_n 
+   1          3        1    Node  freezer_ram_bank_12_.AR 
+   2          3        1    Node  freezer_ram_bank_12_.D 
+   1          1        1    Node  freezer_ram_bank_12_.C 
+   1          3        1    Node  freezer_ram_bank_13_.AR 
+   2          3        1    Node  freezer_ram_bank_13_.D 
+   1          1        1    Node  freezer_ram_bank_13_.C 
+   1          3        1    Node  freezer_ram_bank_14_.AR 
+   2          3        1    Node  freezer_ram_bank_14_.D 
+   1          1        1    Node  freezer_ram_bank_14_.C 
+   1          3        1    Node  freezer_ram_bank_15_.AR 
+   2          3        1    Node  freezer_ram_bank_15_.D 
+   1          1        1    Node  freezer_ram_bank_15_.C 
+   1          3        1    Node  freezer_ram_bank_16_.AR 
+   2          3        1    Node  freezer_ram_bank_16_.D 
+   1          1        1    Node  freezer_ram_bank_16_.C 
+   1         11        1    Node  check_d700_d71f_access_std_match_result_n 
+   1         11        1    Node  freezer_ram_bank_select_std_match_result_n 
+   4          5        1    Node  inst_vector_a2.D 
+   1          1        1    Node  inst_vector_a2.C 
+   1         12        1    Node  check_oss_bank_std_match_result_n 
+   1         15        1    Node  check_vector_access_un1_activate_n 
+   2          4        1    Node  un1_result_2- 
+   1          3        1    Node  freezer_rom_bank_13_.AR 
+   2          3        1    Node  freezer_rom_bank_13_.D 
+   1          1        1    Node  freezer_rom_bank_13_.C 
+   1          3        1    Node  freezer_rom_bank_14_.AR 
+   2          3        1    Node  freezer_rom_bank_14_.D 
+   1          1        1    Node  freezer_rom_bank_14_.C 
+   2          3        1    Node  freezer_rom_bank_15_.D 
+   1          3        1    Node  freezer_rom_bank_15_.AP 
+   1          1        1    Node  freezer_rom_bank_15_.C 
+   2          3        1    Node  freezer_rom_bank_16_.D 
+   1          3        1    Node  freezer_rom_bank_16_.AP 
+   1          1        1    Node  freezer_rom_bank_16_.C 
+   2          3        1    Node  freezer_rom_bank_17_.D 
+   1          3        1    Node  freezer_rom_bank_17_.AP 
+   1          1        1    Node  freezer_rom_bank_17_.C 
+   2          3        1    Node  freezer_rom_bank_18_.D 
+   1          3        1    Node  freezer_rom_bank_18_.AP 
+   1          1        1    Node  freezer_rom_bank_18_.C 
+   4          9        1    Node  N_272- 
+   5          8        1    Node  N_275- 
+   1          1        1    Node  freezer_state_0_.AR 
+   4          6        1    Node  freezer_state_0_.D 
+   1          1        1    Node  freezer_state_0_.C 
+   1          1        1    Node  freezer_state_1_.AR 
+   3          6        1    Node  freezer_state_1_.D- 
+   1          1        1    Node  freezer_state_1_.C 
+   1         12        1    Node  flash_config_access 
+   2          4        1    Node  cart_access_un13_flash_enable_n 
+   1         12        1    Node  check_sdx_enable_std_match_result_n 
+=========
+ 268                 P-Term Total: 268
+                       Total Pins: 34
+                      Total Nodes: 61
+            Average P-Term/Output: 2
+
+
+Equations:
+
+ram_rom_a_18_ = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # inst_cart_mode_ram.Q & !N_275 & cart_access_un13_flash_enable_n
+     # cart_bank_18_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_18_.Q & freezer_state_0_.Q & freezer_state_1_.Q);
+
+!refresh = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # !inst_cart_mode_ram.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !cart_bank_14_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !cart_bank_15_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !cart_bank_16_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # N_272 & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & !a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_14_.Q & !a_15_.Q & rw.Q & freezer_state_0_.Q & freezer_state_1_.Q);
+
+ram_rom_a_17_ = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # inst_cart_mode_ram.Q & a_4_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !inst_cart_mode_ram.Q & cart_bank_17_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !inst_use_vector_bankno.Q & a_4_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # inst_use_vector_bankno.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & inst_vector_a2.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_17_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_4_.Q & !a_8_.Q & !a_9_.Q & !a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+!ram_ce = (inst_cart_mode_ram.Q & !cart_bank_14_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # inst_cart_mode_ram.Q & !cart_bank_15_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # inst_cart_mode_ram.Q & !cart_bank_16_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # inst_cart_mode_ram.Q & N_272 & !N_275 & cart_access_un13_flash_enable_n
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !rw.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+ram_rom_a_16_ = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # cart_bank_16_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !a_12_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_ram_bank_16_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_16_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+!rom_ce = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # !inst_cart_mode_ram.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_state_0_.Q & freezer_state_1_.Q);
+
+ram_rom_a_15_ = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # cart_bank_15_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !a_12_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_ram_bank_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+ram_rom_a_14_ = (cart_bank_14_.Q & !N_275 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & !check_vector_access_un1_activate_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & !freezer_state_0_.Q
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & freezer_state_1_.Q
+     # !a_12_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_ram_bank_14_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_14_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+ram_rom_a_13_ = (!N_272 & cart_access_un13_flash_enable_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & !check_vector_access_un1_activate_n
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & !freezer_state_0_.Q
+     # !os_select & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & freezer_state_1_.Q
+     # !a_12_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_ram_bank_13_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_rom_bank_13_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+ram_rom_a_12_ = (check_vector_access_un1_activate_n & freezer_state_0_.Q & !freezer_state_1_.Q
+     # !os_select & a_12_.Q & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q
+     # !a_12_.Q & !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_13_.Q & !a_14_.Q & !a_15_.Q & freezer_ram_bank_12_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # cart_mode_0_.Q & !cart_mode_1_.Q & a_12_.Q & !a_14_.Q & a_15_.Q & cart_access_un13_flash_enable_n
+     # !cart_mode_1_.Q & a_12_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & cart_access_un13_flash_enable_n
+     # a_12_.Q & a_13_.Q & !a_14_.Q & !a_15_.Q & rw.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q & !freezer_state_0_.Q & !freezer_state_1_.Q
+     # cart_mode_0_.Q & a_12_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & inst_sdx_enable.Q & cart_access_un13_flash_enable_n
+     # !cart_mode_0_.Q & cart_mode_1_.Q & oss_bank_12_.Q & !a_12_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & cart_access_un13_flash_enable_n);
+
+inst_use_vector_bankno.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+inst_use_vector_bankno.D = (inst_use_vector_bankno.Q & !a_4_.Q
+     # inst_use_vector_bankno.Q & !check_d700_d71f_access_std_match_result_n
+     # a_4_.Q & rw.Q & check_d700_d71f_access_std_match_result_n);
+
+inst_use_vector_bankno.C = (!phi2);
+
+inst_cart_keepsettings.D.X1 = (!inst_cart_keepsettings.Q & a_0_.Q & a_1_.Q & !a_2_.Q & !a_3_.Q & flash_config_access
+     # inst_cart_keepsettings.Q & !a_0_.Q & a_1_.Q & !a_2_.Q & !a_3_.Q & flash_config_access);
+
+inst_cart_keepsettings.D.X2 = (inst_cart_keepsettings.Q);
+
+inst_cart_keepsettings.AP = (poweron);
+
+inst_cart_keepsettings.C = (!phi2);
+
+inst_cart_mode_ram.D.X1 = (!inst_cart_mode_ram.Q & a_0_.Q & a_1_.Q & a_2_.Q & !a_3_.Q & flash_config_access
+     # inst_cart_mode_ram.Q & !a_0_.Q & a_1_.Q & a_2_.Q & !a_3_.Q & flash_config_access);
+
+inst_cart_mode_ram.D.X2 = (inst_cart_mode_ram.Q);
+
+inst_cart_mode_ram.AR = (reset_cartemu);
+
+inst_cart_mode_ram.C = (!phi2);
+
+cart_mode_0_.AR = (reset_cartemu);
+
+cart_mode_0_.D = (cart_mode_0_.Q & a_2_.Q
+     # cart_mode_0_.Q & !a_3_.Q
+     # cart_mode_0_.Q & !flash_config_access
+     # a_0_.Q & !a_2_.Q & a_3_.Q & flash_config_access);
+
+cart_mode_0_.C = (!phi2);
+
+cart_mode_1_.AR = (reset_cartemu);
+
+cart_mode_1_.D = (cart_mode_1_.Q & a_2_.Q
+     # cart_mode_1_.Q & !a_3_.Q
+     # cart_mode_1_.Q & !flash_config_access
+     # a_1_.Q & !a_2_.Q & a_3_.Q & flash_config_access);
+
+cart_mode_1_.C = (!phi2);
+
+oss_bank_12_.D = (!a_3_.Q & check_oss_bank_std_match_result_n
+     # oss_bank_12_.Q & !check_oss_bank_std_match_result_n);
+
+oss_bank_12_.C = (!phi2);
+
+oss_bank_13_.D = (a_0_.Q & check_oss_bank_std_match_result_n
+     # oss_bank_13_.Q & !check_oss_bank_std_match_result_n);
+
+oss_bank_13_.C = (!phi2);
+
+a_0_.D = (a_in_0_);
+
+a_0_.LH = (!phi2);
+
+a_1_.D = (a_in_1_);
+
+a_1_.LH = (!phi2);
+
+a_2_.D = (a_in_2_);
+
+a_2_.LH = (!phi2);
+
+a_3_.D = (a_in_3_);
+
+a_3_.LH = (!phi2);
+
+a_4_.D = (a_in_4_);
+
+a_4_.LH = (!phi2);
+
+a_5_.D = (a_in_5_);
+
+a_5_.LH = (!phi2);
+
+a_6_.D = (a_in_6_);
+
+a_6_.LH = (!phi2);
+
+a_7_.D = (a_in_7_);
+
+a_7_.LH = (!phi2);
+
+a_8_.D = (a_in_8_);
+
+a_8_.LH = (!phi2);
+
+a_9_.D = (a_in_9_);
+
+a_9_.LH = (!phi2);
+
+a_10_.D = (a_in_10_);
+
+a_10_.LH = (!phi2);
+
+a_11_.D = (a_in_11_);
+
+a_11_.LH = (!phi2);
+
+a_12_.D = (a_in_12_);
+
+a_12_.LH = (!phi2);
+
+a_13_.D = (a_in_13_);
+
+a_13_.LH = (!phi2);
+
+a_14_.D = (a_in_14_);
+
+a_14_.LH = (!phi2);
+
+a_15_.D = (a_in_15_);
+
+a_15_.LH = (!phi2);
+
+rw.D = (rw_in);
+
+rw.LH = (!phi2);
+
+activate_inputreg.D = (activate_in);
+
+activate_inputreg.C = (!phi2);
+
+inst_cart_write_enable.D.X1 = (!a_0_.Q & !a_1_.Q & a_2_.Q & !a_3_.Q & inst_cart_write_enable.Q & flash_config_access
+     # a_0_.Q & !a_1_.Q & a_2_.Q & !a_3_.Q & !inst_cart_write_enable.Q & flash_config_access);
+
+inst_cart_write_enable.D.X2 = (inst_cart_write_enable.Q);
+
+inst_cart_write_enable.AR = (!reset);
+
+inst_cart_write_enable.C = (!phi2);
+
+reset_cartemu = (poweron
+     # !reset & !inst_cart_keepsettings.Q);
+
+inst_sdx_enable.D = (!a_3_.Q & check_sdx_enable_std_match_result_n
+     # inst_sdx_enable.Q & !check_sdx_enable_std_match_result_n);
+
+inst_sdx_enable.C = (!phi2);
+
+inst_flash_enable.AR = (flash_enable_in & reset_cartemu);
+
+inst_flash_enable.AP = (!flash_enable_in & reset_cartemu);
+
+inst_flash_enable.T = (!flash_enable_in & !a_0_.Q & !a_1_.Q & !a_2_.Q & !a_3_.Q & inst_flash_enable.Q & flash_config_access
+     # !flash_writable_in & !a_0_.Q & !a_1_.Q & !a_2_.Q & !a_3_.Q & inst_flash_enable.Q & flash_config_access
+     # !flash_enable_in & a_0_.Q & !a_1_.Q & !a_2_.Q & !a_3_.Q & !inst_flash_enable.Q & flash_config_access
+     # !flash_writable_in & a_0_.Q & !a_1_.Q & !a_2_.Q & !a_3_.Q & !inst_flash_enable.Q & flash_config_access);
+
+inst_flash_enable.C = (!phi2);
+
+cart_bank_13_.AR = (reset_cartemu);
+
+cart_bank_13_.D = (cart_bank_13_.Q & un1_result_2
+     # !a_0_.Q & a_7_.Q & !un1_result_2
+     # a_0_.Q & !a_7_.Q & !un1_result_2);
+
+cart_bank_13_.C = (!phi2);
+
+cart_bank_14_.D = (cart_bank_14_.Q & un1_result_2
+     # !a_1_.Q & a_7_.Q & !un1_result_2
+     # a_1_.Q & !a_7_.Q & !un1_result_2);
+
+cart_bank_14_.AP = (reset_cartemu);
+
+cart_bank_14_.C = (!phi2);
+
+cart_bank_15_.D = (cart_bank_15_.Q & un1_result_2
+     # !a_2_.Q & a_7_.Q & !un1_result_2
+     # a_2_.Q & !a_7_.Q & !un1_result_2);
+
+cart_bank_15_.AP = (reset_cartemu);
+
+cart_bank_15_.C = (!phi2);
+
+cart_bank_16_.D = (a_3_.Q & cart_bank_select_std_match_result_n
+     # cart_bank_16_.Q & !cart_bank_select_std_match_result_n);
+
+cart_bank_16_.AP = (reset_cartemu);
+
+cart_bank_16_.C = (!phi2);
+
+cart_bank_17_.D = (a_4_.Q & cart_bank_select_std_match_result_n
+     # cart_bank_17_.Q & !cart_bank_select_std_match_result_n);
+
+cart_bank_17_.AP = (reset_cartemu);
+
+cart_bank_17_.C = (!phi2);
+
+cart_bank_18_.D = (a_5_.Q & cart_bank_select_std_match_result_n
+     # cart_bank_18_.Q & !cart_bank_select_std_match_result_n);
+
+cart_bank_18_.AP = (reset_cartemu);
+
+cart_bank_18_.C = (!phi2);
+
+freezer_rom_bank_select_std_match_result_n = (a_6_.Q & !a_7_.Q & a_8_.Q & a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+cart_bank_select_std_match_result_n = (a_6_.Q & !a_7_.Q & a_8_.Q & !a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+freezer_ram_bank_12_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_ram_bank_12_.D = (a_0_.Q & freezer_ram_bank_select_std_match_result_n
+     # freezer_ram_bank_12_.Q & !freezer_ram_bank_select_std_match_result_n);
+
+freezer_ram_bank_12_.C = (!phi2);
+
+freezer_ram_bank_13_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_ram_bank_13_.D = (a_1_.Q & freezer_ram_bank_select_std_match_result_n
+     # freezer_ram_bank_13_.Q & !freezer_ram_bank_select_std_match_result_n);
+
+freezer_ram_bank_13_.C = (!phi2);
+
+freezer_ram_bank_14_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_ram_bank_14_.D = (a_2_.Q & freezer_ram_bank_select_std_match_result_n
+     # freezer_ram_bank_14_.Q & !freezer_ram_bank_select_std_match_result_n);
+
+freezer_ram_bank_14_.C = (!phi2);
+
+freezer_ram_bank_15_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_ram_bank_15_.D = (a_3_.Q & freezer_ram_bank_select_std_match_result_n
+     # freezer_ram_bank_15_.Q & !freezer_ram_bank_select_std_match_result_n);
+
+freezer_ram_bank_15_.C = (!phi2);
+
+freezer_ram_bank_16_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_ram_bank_16_.D = (a_4_.Q & freezer_ram_bank_select_std_match_result_n
+     # freezer_ram_bank_16_.Q & !freezer_ram_bank_select_std_match_result_n);
+
+freezer_ram_bank_16_.C = (!phi2);
+
+check_d700_d71f_access_std_match_result_n = (!a_5_.Q & !a_6_.Q & !a_7_.Q & a_8_.Q & a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+freezer_ram_bank_select_std_match_result_n = (!a_5_.Q & !a_6_.Q & a_7_.Q & a_8_.Q & a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+inst_vector_a2.D = (inst_vector_a2.Q & !check_vector_access_un1_activate_n
+     # inst_vector_a2.Q & freezer_state_0_.Q
+     # inst_vector_a2.Q & freezer_state_1_.Q
+     # a_2_.Q & check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+inst_vector_a2.C = (!phi2);
+
+check_oss_bank_std_match_result_n = (!a_4_.Q & !a_5_.Q & !a_6_.Q & !a_7_.Q & a_8_.Q & !a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+check_vector_access_un1_activate_n = (a_3_.Q & a_4_.Q & a_5_.Q & a_6_.Q & a_7_.Q & a_8_.Q & a_9_.Q & a_10_.Q & a_11_.Q & a_12_.Q & a_13_.Q & a_14_.Q & a_15_.Q & rw.Q & !activate_inputreg.Q);
+
+!un1_result_2 = (cart_bank_select_std_match_result_n
+     # cart_mode_0_.Q & cart_mode_1_.Q & check_sdx_enable_std_match_result_n);
+
+freezer_rom_bank_13_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_13_.D = (a_0_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_13_.Q);
+
+freezer_rom_bank_13_.C = (!phi2);
+
+freezer_rom_bank_14_.AR = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_14_.D = (a_1_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_14_.Q);
+
+freezer_rom_bank_14_.C = (!phi2);
+
+freezer_rom_bank_15_.D = (a_2_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_15_.Q);
+
+freezer_rom_bank_15_.AP = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_15_.C = (!phi2);
+
+freezer_rom_bank_16_.D = (a_3_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_16_.Q);
+
+freezer_rom_bank_16_.AP = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_16_.C = (!phi2);
+
+freezer_rom_bank_17_.D = (a_4_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_17_.Q);
+
+freezer_rom_bank_17_.AP = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_17_.C = (!phi2);
+
+freezer_rom_bank_18_.D = (a_5_.Q & freezer_rom_bank_select_std_match_result_n
+     # !freezer_rom_bank_select_std_match_result_n & freezer_rom_bank_18_.Q);
+
+freezer_rom_bank_18_.AP = (check_vector_access_un1_activate_n & !freezer_state_0_.Q & !freezer_state_1_.Q);
+
+freezer_rom_bank_18_.C = (!phi2);
+
+!N_272 = (cart_mode_0_.Q & !cart_mode_1_.Q & a_13_.Q & !a_14_.Q & a_15_.Q
+     # !cart_mode_1_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & cart_bank_13_.Q
+     # cart_mode_0_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & inst_sdx_enable.Q & cart_bank_13_.Q
+     # !cart_mode_0_.Q & cart_mode_1_.Q & oss_bank_13_.Q & !a_12_.Q & a_13_.Q & !a_14_.Q & a_15_.Q);
+
+!N_275 = (cart_mode_0_.Q & !cart_mode_1_.Q & !a_14_.Q & a_15_.Q
+     # !cart_mode_1_.Q & a_13_.Q & !a_14_.Q & a_15_.Q
+     # !cart_mode_0_.Q & oss_bank_12_.Q & a_13_.Q & !a_14_.Q & a_15_.Q
+     # !cart_mode_0_.Q & oss_bank_13_.Q & a_13_.Q & !a_14_.Q & a_15_.Q
+     # cart_mode_0_.Q & a_13_.Q & !a_14_.Q & a_15_.Q & inst_sdx_enable.Q);
+
+freezer_state_0_.AR = (!reset);
+
+freezer_state_0_.D = (check_vector_access_un1_activate_n & !freezer_state_1_.Q
+     # a_4_.Q & freezer_state_0_.Q & freezer_state_1_.Q
+     # !check_d700_d71f_access_std_match_result_n & freezer_state_0_.Q & freezer_state_1_.Q
+     # !a_4_.Q & !rw.Q & check_d700_d71f_access_std_match_result_n & !freezer_state_0_.Q & freezer_state_1_.Q);
+
+freezer_state_0_.C = (!phi2);
+
+freezer_state_1_.AR = (!reset);
+
+!freezer_state_1_.D = (!check_vector_access_un1_activate_n & !freezer_state_1_.Q
+     # !freezer_state_0_.Q & !freezer_state_1_.Q
+     # !a_4_.Q & rw.Q & check_d700_d71f_access_std_match_result_n & freezer_state_1_.Q);
+
+freezer_state_1_.C = (!phi2);
+
+flash_config_access = (!a_4_.Q & !a_5_.Q & !a_6_.Q & a_7_.Q & a_8_.Q & !a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+cart_access_un13_flash_enable_n = (rw.Q & inst_flash_enable.Q
+     # !flash_writable_in & inst_cart_write_enable.Q & inst_flash_enable.Q);
+
+check_sdx_enable_std_match_result_n = (!a_4_.Q & a_5_.Q & a_6_.Q & a_7_.Q & a_8_.Q & !a_9_.Q & a_10_.Q & !a_11_.Q & a_12_.Q & !a_13_.Q & a_14_.Q & a_15_.Q);
+
+
+Reverse-Polarity Equations:
+

@@ -1,0 +1,61 @@
+      .TITLE "FREEZER V3.03"
+
+;-------------------------------
+;   A FREEZER FOR THE ATARI
+;COPYRIGHT 1987  BERNHARD ENGL
+;COPYRIGHT 2004-2006 Matthias Reichl
+;-------------------------------
+
+      .INCLUDE EQUATES.M65
+      .INCLUDE HWDEBUG.M65
+
+      *=  $2000
+
+      .INCLUDE STOPPER.M65
+      .INCLUDE MENU.M65
+      .INCLUDE RESTART.M65
+      .INCLUDE SAVER.M65
+      .INCLUDE SWAPPER.M65
+
+      .INCLUDE DISKIO.M65
+      .INCLUDE DISKDBO.M65
+      .INCLUDE CASS.M65
+      .INCLUDE INTHAND.M65
+      .INCLUDE LOADER.M65
+      .INCLUDE RAMDISK.M65
+      .INCLUDE RAMFRZ.M65
+      .INCLUDE OSRCLR.M65
+      .INCLUDE GETKEY.M65
+
+;      .INCLUDE HIASTEST.M65
+      .INCLUDE HWDEBSUP.M65
+
+; place highspeed SIO code at a fixed address, starting at a page
+; boundary, so that the read block loop doesn't cross a page
+
+      *= HISTART
+      .INCLUDE HISIO.M65
+
+ENDB1 = *
+
+      *= XDLADR
+      .INCLUDE XDLIST.M65
+
+      *= VERSADR
+      .INCLUDE VERSION.M65
+
+      .INCLUDE BANKSEL.M65
+
+      *= GO12ADR
+      .INCLUDE B12JMP.M65
+      .INCLUDE B12JSR.M65
+
+      *= GO13ADR
+      .INCLUDE B13JMP.M65
+      .INCLUDE B13JSR.M65
+
+      *=  $3FF8
+      .BYTE $8C,$6C,$18,$21,$AA,$21,$2C,$21
+      ENDB12 = *
+
+      .END 

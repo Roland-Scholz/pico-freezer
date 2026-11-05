@@ -1,0 +1,876 @@
+
+Timing Report for STAMP
+
+//  Project = turbofreezerxl
+//  Family  = mach4a
+//  Device  = M4A5-64/32
+//  Speed   = -10
+//  Voltage = 5.0
+//  Operating Condition = COM
+//  Data sheet version  = RevD-8/2000
+
+//  Pass Bidirection = OFF
+//  Pass S/R = OFF
+//  Pass Latch = OFF
+//  T_SU Endpoints D/T inputs = ON
+//  T_SU Endpoints CE inputs = OFF
+//  T_SU Endpoints S/R inputs = OFF
+//  T_SU Endpoints RAM gated = ON
+//  Fmax of CE = ON
+//  Fmax of RAM = ON
+
+//  Location(From => To)
+//    Pin number: numeric number preceded by "p", BGA number as is
+//    Macrocell number: Segment#,GLB#,Macrocell#
+//                      Segment#: starts from 0 (if applicable)
+//                      GLB#: starts from A..Z, AA..ZZ
+//                      Macrocell#: starts from 0 to 31
+
+
+Section IO
+  //DESTINATION NODES;
+  ram_ce [out]
+  ram_rom_a[12] [out]
+  ram_rom_a[13] [out]
+  ram_rom_a[14] [out]
+  ram_rom_a[15] [out]
+  ram_rom_a[16] [out]
+  ram_rom_a[17] [out]
+  ram_rom_a[18] [out]
+  refresh [out]
+  rom_ce [out]
+  cart_bank_13_.C [reg]
+  cart_bank_14_.C [reg]
+  cart_bank_15_.C [reg]
+  cart_bank_16_.C [reg]
+  cart_bank_17_.C [reg]
+  cart_bank_18_.C [reg]
+  cart_mode_0_.C [reg]
+  cart_mode_1_.C [reg]
+  freezer_ram_bank_12_.C [reg]
+  freezer_ram_bank_13_.C [reg]
+  freezer_ram_bank_14_.C [reg]
+  freezer_ram_bank_15_.C [reg]
+  freezer_ram_bank_16_.C [reg]
+  freezer_rom_bank_13_.C [reg]
+  freezer_rom_bank_14_.C [reg]
+  freezer_rom_bank_15_.C [reg]
+  freezer_rom_bank_16_.C [reg]
+  freezer_rom_bank_17_.C [reg]
+  freezer_rom_bank_18_.C [reg]
+  freezer_state_0_.C [reg]
+  freezer_state_1_.C [reg]
+  inst_activate.C [reg]
+  inst_cart_keepsettings.C [reg]
+  inst_cart_mode_ram.C [reg]
+  inst_cart_write_enable.C [reg]
+  inst_flash_enable.C [reg]
+  inst_sdx_enable.C [reg]
+  oss_bank_12_.C [reg]
+  oss_bank_13_.C [reg]
+  cart_bank_13_.D [reg]
+  cart_bank_14_.D [reg]
+  cart_bank_15_.D [reg]
+  cart_bank_16_.T [reg]
+  cart_bank_17_.T [reg]
+  cart_bank_18_.T [reg]
+  cart_mode_0_.D [reg]
+  cart_mode_1_.D [reg]
+  freezer_ram_bank_12_.T [reg]
+  freezer_ram_bank_13_.T [reg]
+  freezer_ram_bank_14_.T [reg]
+  freezer_ram_bank_15_.T [reg]
+  freezer_ram_bank_16_.T [reg]
+  freezer_rom_bank_13_.T [reg]
+  freezer_rom_bank_14_.T [reg]
+  freezer_rom_bank_15_.T [reg]
+  freezer_rom_bank_16_.T [reg]
+  freezer_rom_bank_17_.T [reg]
+  freezer_rom_bank_18_.T [reg]
+  freezer_state_0_.D [reg]
+  freezer_state_1_.D [reg]
+  inst_activate.D [reg]
+  inst_cart_keepsettings.D.X1 [reg]
+  inst_cart_keepsettings.D.X2 [reg]
+  inst_cart_mode_ram.D.X1 [reg]
+  inst_cart_mode_ram.D.X2 [reg]
+  inst_cart_write_enable.D.X1 [reg]
+  inst_cart_write_enable.D.X2 [reg]
+  inst_flash_enable.T [reg]
+  inst_sdx_enable.T [reg]
+  oss_bank_12_.D [reg]
+  oss_bank_13_.D [reg]
+
+  //SOURCE NODES;
+  a[0] [in]
+  a[1] [in]
+  a[2] [in]
+  a[3] [in]
+  a[4] [in]
+  a[5] [in]
+  a[6] [in]
+  a[7] [in]
+  a[8] [in]
+  a[9] [in]
+  a[10] [in]
+  a[11] [in]
+  a[12] [in]
+  a[13] [in]
+  a[14] [in]
+  a[15] [in]
+  activate_in [in]
+  flash_enable_in [in]
+  flash_writable_in [in]
+  os_select [in]
+  phi2 [in]
+  poweron [in]
+  reset [in]
+  rw [in]
+  cart_bank_13_.Q [reg]
+  cart_bank_14_.Q [reg]
+  cart_bank_15_.Q [reg]
+  cart_bank_16_.Q [reg]
+  cart_bank_17_.Q [reg]
+  cart_bank_18_.Q [reg]
+  cart_mode_0_.Q [reg]
+  cart_mode_1_.Q [reg]
+  freezer_ram_bank_12_.Q [reg]
+  freezer_ram_bank_13_.Q [reg]
+  freezer_ram_bank_14_.Q [reg]
+  freezer_ram_bank_15_.Q [reg]
+  freezer_ram_bank_16_.Q [reg]
+  freezer_rom_bank_13_.Q [reg]
+  freezer_rom_bank_14_.Q [reg]
+  freezer_rom_bank_15_.Q [reg]
+  freezer_rom_bank_16_.Q [reg]
+  freezer_rom_bank_17_.Q [reg]
+  freezer_rom_bank_18_.Q [reg]
+  freezer_state_0_.Q [reg]
+  freezer_state_1_.Q [reg]
+  inst_activate.Q [reg]
+  inst_cart_keepsettings.Q [reg]
+  inst_cart_mode_ram.Q [reg]
+  inst_cart_write_enable.Q [reg]
+  inst_flash_enable.Q [reg]
+  inst_sdx_enable.Q [reg]
+  oss_bank_12_.Q [reg]
+  oss_bank_13_.Q [reg]
+
+
+Section fMAX
+
+  Maximum Operating Frequency: 64.52 MHz
+  Clock Source From:           phi2
+  Logic Levels:                2
+  Path Delay:                  15.5 ns
+  Path Expansion                                Source                        Destination
+  ==============                                ======                        ===========
+    3.0  tCOSi                                  cart_mode_0_.C                cart_mode_0_.Q
+    0.0                                         cart_mode_0_.Q                un1_result_2
+    7.0  tPDi                                   un1_result_2                  un1_result_2
+    0.0                                         un1_result_2                  cart_bank_13_.D
+    5.5  tSS                                    cart_bank_13_.D               cart_bank_13_.C
+ 
+  Clock Source From: phi2
+  Delay         Level   Location(From => To)    Source                        Destination                   Destination_Clock
+  =====         =====   ====================    ======                        ===========                   =================
+   15.5           2      C1       =>  C2        cart_mode_0_.C                cart_bank_13_.D               phi2
+   15.5           2      C1       =>  D5        cart_mode_0_.C                cart_bank_14_.D               phi2
+   15.5           2      C1       =>  C9        cart_mode_0_.C                cart_bank_15_.D               phi2
+   15.5           2      C5       =>  C2        cart_mode_1_.C                cart_bank_13_.D               phi2
+   15.5           2      C5       =>  D5        cart_mode_1_.C                cart_bank_14_.D               phi2
+   15.5           2      C5       =>  C9        cart_mode_1_.C                cart_bank_15_.D               phi2
+    9.5           1      A13      =>  A13       cart_bank_16_.C               cart_bank_16_.T               phi2
+    9.5           1      D10      =>  D10       cart_bank_17_.C               cart_bank_17_.T               phi2
+    9.5           1      A14      =>  A14       cart_bank_18_.C               cart_bank_18_.T               phi2
+    9.5           1      B6       =>  B6        freezer_ram_bank_12_.C        freezer_ram_bank_12_.T        phi2
+    9.5           1      D6       =>  D6        freezer_ram_bank_13_.C        freezer_ram_bank_13_.T        phi2
+    9.5           1      A9       =>  A9        freezer_ram_bank_14_.C        freezer_ram_bank_14_.T        phi2
+    9.5           1      A10      =>  A10       freezer_ram_bank_15_.C        freezer_ram_bank_15_.T        phi2
+    9.5           1      B2       =>  B2        freezer_ram_bank_16_.C        freezer_ram_bank_16_.T        phi2
+    9.5           1      B12      =>  B12       freezer_rom_bank_13_.C        freezer_rom_bank_13_.T        phi2
+    9.5           1      D2       =>  D2        freezer_rom_bank_14_.C        freezer_rom_bank_14_.T        phi2
+    9.5           1      A6       =>  A6        freezer_rom_bank_15_.C        freezer_rom_bank_15_.T        phi2
+    9.5           1      B13      =>  B13       freezer_rom_bank_16_.C        freezer_rom_bank_16_.T        phi2
+    9.5           1      D13      =>  D13       freezer_rom_bank_17_.C        freezer_rom_bank_17_.T        phi2
+    9.5           1      A2       =>  A2        freezer_rom_bank_18_.C        freezer_rom_bank_18_.T        phi2
+    9.5           1      C13      =>  C13       inst_flash_enable.C           inst_flash_enable.T           phi2
+    9.5           1      B1       =>  B1        inst_sdx_enable.C             inst_sdx_enable.T             phi2
+    8.5           1      C2       =>  C2        cart_bank_13_.C               cart_bank_13_.D               phi2
+    8.5           1      D5       =>  D5        cart_bank_14_.C               cart_bank_14_.D               phi2
+    8.5           1      C9       =>  C9        cart_bank_15_.C               cart_bank_15_.D               phi2
+    8.5           1      C1       =>  C1        cart_mode_0_.C                cart_mode_0_.D                phi2
+    8.5           1      C5       =>  C5        cart_mode_1_.C                cart_mode_1_.D                phi2
+    8.5           1      A5       =>  A5        freezer_state_0_.C            freezer_state_0_.D            phi2
+    8.5           1      A5       =>  A8        freezer_state_0_.C            freezer_state_1_.D            phi2
+    8.5           1      A8       =>  A5        freezer_state_1_.C            freezer_state_0_.D            phi2
+    8.5           1      A8       =>  A8        freezer_state_1_.C            freezer_state_1_.D            phi2
+    8.5           1      D4       =>  A5        inst_activate.C               freezer_state_0_.D            phi2
+    8.5           1      D4       =>  A8        inst_activate.C               freezer_state_1_.D            phi2
+    8.5           1      C14      =>  C14       inst_cart_keepsettings.C      inst_cart_keepsettings.D.X1   phi2
+    8.5           1      C14      =>  C14       inst_cart_keepsettings.C      inst_cart_keepsettings.D.X2   phi2
+    8.5           1      C8       =>  C8        inst_cart_mode_ram.C          inst_cart_mode_ram.D.X1       phi2
+    8.5           1      C8       =>  C8        inst_cart_mode_ram.C          inst_cart_mode_ram.D.X2       phi2
+    8.5           1      C10      =>  C10       inst_cart_write_enable.C      inst_cart_write_enable.D.X1   phi2
+    8.5           1      C10      =>  C10       inst_cart_write_enable.C      inst_cart_write_enable.D.X2   phi2
+    8.5           1      B9       =>  B9        oss_bank_12_.C                oss_bank_12_.D                phi2
+    8.5           1      B5       =>  B5        oss_bank_13_.C                oss_bank_13_.D                phi2
+
+
+Section tSU
+
+   tSU,    tHD   Level   Location(From => To)    Source                        Destination                   Reference_Clock
+  ===========   =====   ====================    ======                        ===========                   ===============
+  13.5,-  7.0     1     p21       =>  C13       a[4]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p21       =>  B1        a[4]                          inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p24       =>  C13       a[5]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p40       =>  C13       a[6]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p38       =>  C13       a[7]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p38       =>  B1        a[7]                          inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p37       =>  C13       a[8]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p37       =>  B1        a[8]                          inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p36       =>  C13       a[9]                          inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p36       =>  B1        a[9]                          inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p30       =>  C13       a[10]                         inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p31       =>  C13       a[11]                         inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p31       =>  B1        a[11]                         inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p27       =>  C13       a[12]                         inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p28       =>  C13       a[13]                         inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p28       =>  B1        a[13]                         inst_sdx_enable.T             phi2
+  13.5,-  7.0     1     p26       =>  C13       a[14]                         inst_flash_enable.T           phi2
+  13.5,-  7.0     1     p25       =>  C13       a[15]                         inst_flash_enable.T           phi2
+  12.5,-  7.0     1     p21       =>  C2        a[4]                          cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p21       =>  D5        a[4]                          cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p21       =>  C9        a[4]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p21       =>  C1        a[4]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p21       =>  C5        a[4]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p21       =>  A5        a[4]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p21       =>  A8        a[4]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p21       =>  C14       a[4]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p21       =>  C8        a[4]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p21       =>  C10       a[4]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p21       =>  B9        a[4]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p21       =>  B5        a[4]                          oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p24       =>  C2        a[5]                          cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p24       =>  D5        a[5]                          cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p24       =>  C9        a[5]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p24       =>  C1        a[5]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p24       =>  C5        a[5]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p24       =>  A5        a[5]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p24       =>  A8        a[5]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p24       =>  C14       a[5]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p24       =>  C8        a[5]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p24       =>  C10       a[5]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p24       =>  B9        a[5]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p24       =>  B5        a[5]                          oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p40       =>  C2        a[6]                          cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p40       =>  D5        a[6]                          cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p40       =>  C9        a[6]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p40       =>  C1        a[6]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p40       =>  C5        a[6]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p40       =>  A5        a[6]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p40       =>  A8        a[6]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p40       =>  C14       a[6]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p40       =>  C8        a[6]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p40       =>  C10       a[6]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p40       =>  B9        a[6]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p40       =>  B5        a[6]                          oss_bank_13_.D                phi2
+  12.5,   0.0     1     p38       =>  C2        a[7]                          cart_bank_13_.D               phi2
+  12.5,   0.0     1     p38       =>  D5        a[7]                          cart_bank_14_.D               phi2
+  12.5,   0.0     1     p38       =>  C9        a[7]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p38       =>  C1        a[7]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p38       =>  C5        a[7]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p38       =>  A5        a[7]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p38       =>  A8        a[7]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p38       =>  C14       a[7]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p38       =>  C8        a[7]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p38       =>  C10       a[7]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p38       =>  B9        a[7]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p38       =>  B5        a[7]                          oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p37       =>  C2        a[8]                          cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p37       =>  D5        a[8]                          cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p37       =>  C9        a[8]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p37       =>  C1        a[8]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p37       =>  C5        a[8]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p37       =>  A5        a[8]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p37       =>  A8        a[8]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p37       =>  C14       a[8]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p37       =>  C8        a[8]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p37       =>  C10       a[8]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p37       =>  B9        a[8]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p37       =>  B5        a[8]                          oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p36       =>  C2        a[9]                          cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p36       =>  D5        a[9]                          cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p36       =>  C9        a[9]                          cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p36       =>  C1        a[9]                          cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p36       =>  C5        a[9]                          cart_mode_1_.D                phi2
+  12.5,   0.0     1     p36       =>  A5        a[9]                          freezer_state_0_.D            phi2
+  12.5,   0.0     1     p36       =>  A8        a[9]                          freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p36       =>  C14       a[9]                          inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p36       =>  C8        a[9]                          inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p36       =>  C10       a[9]                          inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p36       =>  B9        a[9]                          oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p36       =>  B5        a[9]                          oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p30       =>  C2        a[10]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p30       =>  D5        a[10]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p30       =>  C9        a[10]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p30       =>  C1        a[10]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p30       =>  C5        a[10]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p30       =>  A5        a[10]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p30       =>  A8        a[10]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p30       =>  C14       a[10]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p30       =>  C8        a[10]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p30       =>  C10       a[10]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p30       =>  B9        a[10]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p30       =>  B5        a[10]                         oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p31       =>  C2        a[11]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p31       =>  D5        a[11]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p31       =>  C9        a[11]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p31       =>  C1        a[11]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p31       =>  C5        a[11]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p31       =>  A5        a[11]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p31       =>  A8        a[11]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p31       =>  C14       a[11]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p31       =>  C8        a[11]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p31       =>  C10       a[11]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p31       =>  B9        a[11]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p31       =>  B5        a[11]                         oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p27       =>  C2        a[12]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p27       =>  D5        a[12]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p27       =>  C9        a[12]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p27       =>  C1        a[12]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p27       =>  C5        a[12]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p27       =>  A5        a[12]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p27       =>  A8        a[12]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p27       =>  C14       a[12]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p27       =>  C8        a[12]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p27       =>  C10       a[12]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p27       =>  B9        a[12]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p27       =>  B5        a[12]                         oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p28       =>  C2        a[13]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p28       =>  D5        a[13]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p28       =>  C9        a[13]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p28       =>  C1        a[13]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p28       =>  C5        a[13]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p28       =>  A5        a[13]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p28       =>  A8        a[13]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p28       =>  C14       a[13]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p28       =>  C8        a[13]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p28       =>  C10       a[13]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p28       =>  B9        a[13]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p28       =>  B5        a[13]                         oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p26       =>  C2        a[14]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p26       =>  D5        a[14]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p26       =>  C9        a[14]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p26       =>  C1        a[14]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p26       =>  C5        a[14]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p26       =>  A5        a[14]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p26       =>  A8        a[14]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p26       =>  C14       a[14]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p26       =>  C8        a[14]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p26       =>  C10       a[14]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p26       =>  B9        a[14]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p26       =>  B5        a[14]                         oss_bank_13_.D                phi2
+  12.5,-  7.0     1     p25       =>  C2        a[15]                         cart_bank_13_.D               phi2
+  12.5,-  7.0     1     p25       =>  D5        a[15]                         cart_bank_14_.D               phi2
+  12.5,-  7.0     1     p25       =>  C9        a[15]                         cart_bank_15_.D               phi2
+  12.5,-  7.0     1     p25       =>  C1        a[15]                         cart_mode_0_.D                phi2
+  12.5,-  7.0     1     p25       =>  C5        a[15]                         cart_mode_1_.D                phi2
+  12.5,   0.0     1     p25       =>  A5        a[15]                         freezer_state_0_.D            phi2
+  12.5,   0.0     1     p25       =>  A8        a[15]                         freezer_state_1_.D            phi2
+  12.5,-  7.0     1     p25       =>  C14       a[15]                         inst_cart_keepsettings.D.X1   phi2
+  12.5,-  7.0     1     p25       =>  C8        a[15]                         inst_cart_mode_ram.D.X1       phi2
+  12.5,-  7.0     1     p25       =>  C10       a[15]                         inst_cart_write_enable.D.X1   phi2
+  12.5,-  7.0     1     p25       =>  B9        a[15]                         oss_bank_12_.D                phi2
+  12.5,-  7.0     1     p25       =>  B5        a[15]                         oss_bank_13_.D                phi2
+   6.5,   0.0     1     p17       =>  B6        a[0]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p17       =>  B12       a[0]                          freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p17       =>  C13       a[0]                          inst_flash_enable.T           phi2
+   6.5,   0.0     1     p18       =>  D6        a[1]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p18       =>  D2        a[1]                          freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p18       =>  C13       a[1]                          inst_flash_enable.T           phi2
+   6.5,   0.0     1     p19       =>  A9        a[2]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p19       =>  A6        a[2]                          freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p19       =>  C13       a[2]                          inst_flash_enable.T           phi2
+   6.5,   0.0     1     p20       =>  A13       a[3]                          cart_bank_16_.T               phi2
+   6.5,   0.0     1     p20       =>  A10       a[3]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p20       =>  B13       a[3]                          freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p20       =>  C13       a[3]                          inst_flash_enable.T           phi2
+   6.5,   0.0     1     p20       =>  B1        a[3]                          inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p21       =>  D10       a[4]                          cart_bank_17_.T               phi2
+   6.5,   0.0     1     p21       =>  B2        a[4]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p21       =>  D13       a[4]                          freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p24       =>  A14       a[5]                          cart_bank_18_.T               phi2
+   6.5,   0.0     1     p24       =>  B6        a[5]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p24       =>  D6        a[5]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p24       =>  A9        a[5]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p24       =>  A10       a[5]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p24       =>  B2        a[5]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p24       =>  A2        a[5]                          freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p24       =>  B1        a[5]                          inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p40       =>  A13       a[6]                          cart_bank_16_.T               phi2
+   6.5,   0.0     1     p40       =>  D10       a[6]                          cart_bank_17_.T               phi2
+   6.5,   0.0     1     p40       =>  A14       a[6]                          cart_bank_18_.T               phi2
+   6.5,   0.0     1     p40       =>  B6        a[6]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p40       =>  D6        a[6]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p40       =>  A9        a[6]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p40       =>  A10       a[6]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p40       =>  B2        a[6]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p40       =>  B12       a[6]                          freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p40       =>  D2        a[6]                          freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p40       =>  A6        a[6]                          freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p40       =>  B13       a[6]                          freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p40       =>  D13       a[6]                          freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p40       =>  A2        a[6]                          freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p40       =>  B1        a[6]                          inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p38       =>  A13       a[7]                          cart_bank_16_.T               phi2
+   6.5,   0.0     1     p38       =>  D10       a[7]                          cart_bank_17_.T               phi2
+   6.5,   0.0     1     p38       =>  A14       a[7]                          cart_bank_18_.T               phi2
+   6.5,   0.0     1     p38       =>  B6        a[7]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p38       =>  D6        a[7]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p38       =>  A9        a[7]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p38       =>  A10       a[7]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p38       =>  B2        a[7]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p38       =>  B12       a[7]                          freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p38       =>  D2        a[7]                          freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p38       =>  A6        a[7]                          freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p38       =>  B13       a[7]                          freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p38       =>  D13       a[7]                          freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p38       =>  A2        a[7]                          freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p37       =>  A13       a[8]                          cart_bank_16_.T               phi2
+   6.5,   0.0     1     p37       =>  D10       a[8]                          cart_bank_17_.T               phi2
+   6.5,   0.0     1     p37       =>  A14       a[8]                          cart_bank_18_.T               phi2
+   6.5,   0.0     1     p37       =>  B6        a[8]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p37       =>  D6        a[8]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p37       =>  A9        a[8]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p37       =>  A10       a[8]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p37       =>  B2        a[8]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p37       =>  B12       a[8]                          freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p37       =>  D2        a[8]                          freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p37       =>  A6        a[8]                          freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p37       =>  B13       a[8]                          freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p37       =>  D13       a[8]                          freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p37       =>  A2        a[8]                          freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p36       =>  A13       a[9]                          cart_bank_16_.T               phi2
+   6.5,   0.0     1     p36       =>  D10       a[9]                          cart_bank_17_.T               phi2
+   6.5,   0.0     1     p36       =>  A14       a[9]                          cart_bank_18_.T               phi2
+   6.5,   0.0     1     p36       =>  B6        a[9]                          freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p36       =>  D6        a[9]                          freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p36       =>  A9        a[9]                          freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p36       =>  A10       a[9]                          freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p36       =>  B2        a[9]                          freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p36       =>  B12       a[9]                          freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p36       =>  D2        a[9]                          freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p36       =>  A6        a[9]                          freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p36       =>  B13       a[9]                          freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p36       =>  D13       a[9]                          freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p36       =>  A2        a[9]                          freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p30       =>  A13       a[10]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p30       =>  D10       a[10]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p30       =>  A14       a[10]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p30       =>  B6        a[10]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p30       =>  D6        a[10]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p30       =>  A9        a[10]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p30       =>  A10       a[10]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p30       =>  B2        a[10]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p30       =>  B12       a[10]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p30       =>  D2        a[10]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p30       =>  A6        a[10]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p30       =>  B13       a[10]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p30       =>  D13       a[10]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p30       =>  A2        a[10]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p30       =>  B1        a[10]                         inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p31       =>  A13       a[11]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p31       =>  D10       a[11]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p31       =>  A14       a[11]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p31       =>  B6        a[11]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p31       =>  D6        a[11]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p31       =>  A9        a[11]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p31       =>  A10       a[11]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p31       =>  B2        a[11]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p31       =>  B12       a[11]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p31       =>  D2        a[11]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p31       =>  A6        a[11]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p31       =>  B13       a[11]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p31       =>  D13       a[11]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p31       =>  A2        a[11]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p27       =>  A13       a[12]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p27       =>  D10       a[12]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p27       =>  A14       a[12]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p27       =>  B6        a[12]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p27       =>  D6        a[12]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p27       =>  A9        a[12]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p27       =>  A10       a[12]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p27       =>  B2        a[12]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p27       =>  B12       a[12]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p27       =>  D2        a[12]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p27       =>  A6        a[12]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p27       =>  B13       a[12]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p27       =>  D13       a[12]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p27       =>  A2        a[12]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p27       =>  B1        a[12]                         inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p28       =>  A13       a[13]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p28       =>  D10       a[13]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p28       =>  A14       a[13]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p28       =>  B6        a[13]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p28       =>  D6        a[13]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p28       =>  A9        a[13]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p28       =>  A10       a[13]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p28       =>  B2        a[13]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p28       =>  B12       a[13]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p28       =>  D2        a[13]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p28       =>  A6        a[13]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p28       =>  B13       a[13]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p28       =>  D13       a[13]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p28       =>  A2        a[13]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p26       =>  A13       a[14]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p26       =>  D10       a[14]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p26       =>  A14       a[14]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p26       =>  B6        a[14]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p26       =>  D6        a[14]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p26       =>  A9        a[14]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p26       =>  A10       a[14]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p26       =>  B2        a[14]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p26       =>  B12       a[14]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p26       =>  D2        a[14]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p26       =>  A6        a[14]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p26       =>  B13       a[14]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p26       =>  D13       a[14]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p26       =>  A2        a[14]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p26       =>  B1        a[14]                         inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p25       =>  A13       a[15]                         cart_bank_16_.T               phi2
+   6.5,   0.0     1     p25       =>  D10       a[15]                         cart_bank_17_.T               phi2
+   6.5,   0.0     1     p25       =>  A14       a[15]                         cart_bank_18_.T               phi2
+   6.5,   0.0     1     p25       =>  B6        a[15]                         freezer_ram_bank_12_.T        phi2
+   6.5,   0.0     1     p25       =>  D6        a[15]                         freezer_ram_bank_13_.T        phi2
+   6.5,   0.0     1     p25       =>  A9        a[15]                         freezer_ram_bank_14_.T        phi2
+   6.5,   0.0     1     p25       =>  A10       a[15]                         freezer_ram_bank_15_.T        phi2
+   6.5,   0.0     1     p25       =>  B2        a[15]                         freezer_ram_bank_16_.T        phi2
+   6.5,   0.0     1     p25       =>  B12       a[15]                         freezer_rom_bank_13_.T        phi2
+   6.5,   0.0     1     p25       =>  D2        a[15]                         freezer_rom_bank_14_.T        phi2
+   6.5,   0.0     1     p25       =>  A6        a[15]                         freezer_rom_bank_15_.T        phi2
+   6.5,   0.0     1     p25       =>  B13       a[15]                         freezer_rom_bank_16_.T        phi2
+   6.5,   0.0     1     p25       =>  D13       a[15]                         freezer_rom_bank_17_.T        phi2
+   6.5,   0.0     1     p25       =>  A2        a[15]                         freezer_rom_bank_18_.T        phi2
+   6.5,   0.0     1     p25       =>  B1        a[15]                         inst_sdx_enable.T             phi2
+   6.5,   0.0     1     p8        =>  C13       flash_enable_in               inst_flash_enable.T           phi2
+   6.5,   0.0     1     p7        =>  C13       flash_writable_in             inst_flash_enable.T           phi2
+   5.5,   0.0     1     p17       =>  C2        a[0]                          cart_bank_13_.D               phi2
+   5.5,   0.0     1     p17       =>  C1        a[0]                          cart_mode_0_.D                phi2
+   5.5,   0.0     1     p17       =>  C5        a[0]                          cart_mode_1_.D                phi2
+   5.5,   0.0     1     p17       =>  C14       a[0]                          inst_cart_keepsettings.D.X1   phi2
+   5.5,   0.0     1     p17       =>  C8        a[0]                          inst_cart_mode_ram.D.X1       phi2
+   5.5,   0.0     1     p17       =>  C10       a[0]                          inst_cart_write_enable.D.X1   phi2
+   5.5,   0.0     1     p17       =>  B5        a[0]                          oss_bank_13_.D                phi2
+   5.5,   0.0     1     p18       =>  D5        a[1]                          cart_bank_14_.D               phi2
+   5.5,   0.0     1     p18       =>  C1        a[1]                          cart_mode_0_.D                phi2
+   5.5,   0.0     1     p18       =>  C14       a[1]                          inst_cart_keepsettings.D.X1   phi2
+   5.5,   0.0     1     p18       =>  C8        a[1]                          inst_cart_mode_ram.D.X1       phi2
+   5.5,   0.0     1     p18       =>  C10       a[1]                          inst_cart_write_enable.D.X1   phi2
+   5.5,   0.0     1     p19       =>  C9        a[2]                          cart_bank_15_.D               phi2
+   5.5,   0.0     1     p19       =>  C1        a[2]                          cart_mode_0_.D                phi2
+   5.5,   0.0     1     p19       =>  C5        a[2]                          cart_mode_1_.D                phi2
+   5.5,   0.0     1     p19       =>  C14       a[2]                          inst_cart_keepsettings.D.X1   phi2
+   5.5,   0.0     1     p19       =>  C8        a[2]                          inst_cart_mode_ram.D.X1       phi2
+   5.5,   0.0     1     p19       =>  C10       a[2]                          inst_cart_write_enable.D.X1   phi2
+   5.5,   0.0     1     p20       =>  C1        a[3]                          cart_mode_0_.D                phi2
+   5.5,   0.0     1     p20       =>  C5        a[3]                          cart_mode_1_.D                phi2
+   5.5,   0.0     1     p20       =>  A5        a[3]                          freezer_state_0_.D            phi2
+   5.5,   0.0     1     p20       =>  A8        a[3]                          freezer_state_1_.D            phi2
+   5.5,   0.0     1     p20       =>  C14       a[3]                          inst_cart_keepsettings.D.X1   phi2
+   5.5,   0.0     1     p20       =>  C8        a[3]                          inst_cart_mode_ram.D.X1       phi2
+   5.5,   0.0     1     p20       =>  C10       a[3]                          inst_cart_write_enable.D.X1   phi2
+   5.5,   0.0     1     p20       =>  B9        a[3]                          oss_bank_12_.D                phi2
+   5.5,   0.0     1     p6        =>  D4        activate_in                   inst_activate.D               phi2
+   5.5,   0.0     1     p11       =>  A5        rw                            freezer_state_0_.D            phi2
+   5.5,   0.0     1     p11       =>  A8        rw                            freezer_state_1_.D            phi2
+
+
+Section tPD
+
+   Delay         Level   Location(From => To)    Source                        Destination
+  =====         =====   ====================    ======                        ===========
+   19.5           2     p20       => p39        a[3]                          ram_rom_a[13]
+   19.5           2     p20       => p41        a[3]                          ram_rom_a[14]
+   19.5           2     p21       => p39        a[4]                          ram_rom_a[13]
+   19.5           2     p21       => p41        a[4]                          ram_rom_a[14]
+   19.5           2     p24       => p39        a[5]                          ram_rom_a[13]
+   19.5           2     p24       => p41        a[5]                          ram_rom_a[14]
+   19.5           2     p40       => p39        a[6]                          ram_rom_a[13]
+   19.5           2     p40       => p41        a[6]                          ram_rom_a[14]
+   19.5           2     p38       => p39        a[7]                          ram_rom_a[13]
+   19.5           2     p38       => p41        a[7]                          ram_rom_a[14]
+   19.5           2     p37       => p39        a[8]                          ram_rom_a[13]
+   19.5           2     p37       => p41        a[8]                          ram_rom_a[14]
+   19.5           2     p36       => p39        a[9]                          ram_rom_a[13]
+   19.5           2     p36       => p41        a[9]                          ram_rom_a[14]
+   19.5           2     p30       => p39        a[10]                         ram_rom_a[13]
+   19.5           2     p30       => p41        a[10]                         ram_rom_a[14]
+   19.5           2     p31       => p39        a[11]                         ram_rom_a[13]
+   19.5           2     p31       => p41        a[11]                         ram_rom_a[14]
+   19.5           2     p27       => p3         a[12]                         ram_ce
+   19.5           2     p27       => p39        a[12]                         ram_rom_a[13]
+   19.5           2     p27       => p41        a[12]                         ram_rom_a[14]
+   19.5           2     p27       => p9         a[12]                         refresh
+   19.5           2     p28       => p3         a[13]                         ram_ce
+   19.5           2     p28       => p39        a[13]                         ram_rom_a[13]
+   19.5           2     p28       => p41        a[13]                         ram_rom_a[14]
+   19.5           2     p28       => p2         a[13]                         ram_rom_a[15]
+   19.5           2     p28       => p15        a[13]                         ram_rom_a[16]
+   19.5           2     p28       => p43        a[13]                         ram_rom_a[17]
+   19.5           2     p28       => p4         a[13]                         ram_rom_a[18]
+   19.5           2     p28       => p9         a[13]                         refresh
+   19.5           2     p28       => p42        a[13]                         rom_ce
+   19.5           2     p26       => p3         a[14]                         ram_ce
+   19.5           2     p26       => p39        a[14]                         ram_rom_a[13]
+   19.5           2     p26       => p41        a[14]                         ram_rom_a[14]
+   19.5           2     p26       => p2         a[14]                         ram_rom_a[15]
+   19.5           2     p26       => p15        a[14]                         ram_rom_a[16]
+   19.5           2     p26       => p43        a[14]                         ram_rom_a[17]
+   19.5           2     p26       => p4         a[14]                         ram_rom_a[18]
+   19.5           2     p26       => p9         a[14]                         refresh
+   19.5           2     p26       => p42        a[14]                         rom_ce
+   19.5           2     p25       => p3         a[15]                         ram_ce
+   19.5           2     p25       => p39        a[15]                         ram_rom_a[13]
+   19.5           2     p25       => p41        a[15]                         ram_rom_a[14]
+   19.5           2     p25       => p2         a[15]                         ram_rom_a[15]
+   19.5           2     p25       => p15        a[15]                         ram_rom_a[16]
+   19.5           2     p25       => p43        a[15]                         ram_rom_a[17]
+   19.5           2     p25       => p4         a[15]                         ram_rom_a[18]
+   19.5           2     p25       => p9         a[15]                         refresh
+   19.5           2     p25       => p42        a[15]                         rom_ce
+   19.5           2     p7        => p3         flash_writable_in             ram_ce
+   19.5           2     p7        => p16        flash_writable_in             ram_rom_a[12]
+   19.5           2     p7        => p39        flash_writable_in             ram_rom_a[13]
+   19.5           2     p7        => p41        flash_writable_in             ram_rom_a[14]
+   19.5           2     p7        => p2         flash_writable_in             ram_rom_a[15]
+   19.5           2     p7        => p15        flash_writable_in             ram_rom_a[16]
+   19.5           2     p7        => p43        flash_writable_in             ram_rom_a[17]
+   19.5           2     p7        => p4         flash_writable_in             ram_rom_a[18]
+   19.5           2     p7        => p9         flash_writable_in             refresh
+   19.5           2     p7        => p42        flash_writable_in             rom_ce
+   19.5           2     p29       => p39        os_select                     ram_rom_a[13]
+   19.5           2     p29       => p41        os_select                     ram_rom_a[14]
+   19.5           2     p11       => p3         rw                            ram_ce
+   19.5           2     p11       => p16        rw                            ram_rom_a[12]
+   19.5           2     p11       => p39        rw                            ram_rom_a[13]
+   19.5           2     p11       => p41        rw                            ram_rom_a[14]
+   19.5           2     p11       => p2         rw                            ram_rom_a[15]
+   19.5           2     p11       => p15        rw                            ram_rom_a[16]
+   19.5           2     p11       => p43        rw                            ram_rom_a[17]
+   19.5           2     p11       => p4         rw                            ram_rom_a[18]
+   19.5           2     p11       => p9         rw                            refresh
+   19.5           2     p11       => p42        rw                            rom_ce
+   12.5           1     p20       => p16        a[3]                          ram_rom_a[12]
+   12.5           1     p20       => p2         a[3]                          ram_rom_a[15]
+   12.5           1     p20       => p15        a[3]                          ram_rom_a[16]
+   12.5           1     p20       => p43        a[3]                          ram_rom_a[17]
+   12.5           1     p20       => p4         a[3]                          ram_rom_a[18]
+   12.5           1     p20       => p9         a[3]                          refresh
+   12.5           1     p20       => p42        a[3]                          rom_ce
+   12.5           1     p21       => p16        a[4]                          ram_rom_a[12]
+   12.5           1     p21       => p2         a[4]                          ram_rom_a[15]
+   12.5           1     p21       => p15        a[4]                          ram_rom_a[16]
+   12.5           1     p21       => p43        a[4]                          ram_rom_a[17]
+   12.5           1     p21       => p4         a[4]                          ram_rom_a[18]
+   12.5           1     p21       => p9         a[4]                          refresh
+   12.5           1     p21       => p42        a[4]                          rom_ce
+   12.5           1     p24       => p16        a[5]                          ram_rom_a[12]
+   12.5           1     p24       => p2         a[5]                          ram_rom_a[15]
+   12.5           1     p24       => p15        a[5]                          ram_rom_a[16]
+   12.5           1     p24       => p43        a[5]                          ram_rom_a[17]
+   12.5           1     p24       => p4         a[5]                          ram_rom_a[18]
+   12.5           1     p24       => p9         a[5]                          refresh
+   12.5           1     p24       => p42        a[5]                          rom_ce
+   12.5           1     p40       => p16        a[6]                          ram_rom_a[12]
+   12.5           1     p40       => p2         a[6]                          ram_rom_a[15]
+   12.5           1     p40       => p15        a[6]                          ram_rom_a[16]
+   12.5           1     p40       => p43        a[6]                          ram_rom_a[17]
+   12.5           1     p40       => p4         a[6]                          ram_rom_a[18]
+   12.5           1     p40       => p9         a[6]                          refresh
+   12.5           1     p40       => p42        a[6]                          rom_ce
+   12.5           1     p38       => p16        a[7]                          ram_rom_a[12]
+   12.5           1     p38       => p2         a[7]                          ram_rom_a[15]
+   12.5           1     p38       => p15        a[7]                          ram_rom_a[16]
+   12.5           1     p38       => p43        a[7]                          ram_rom_a[17]
+   12.5           1     p38       => p4         a[7]                          ram_rom_a[18]
+   12.5           1     p38       => p9         a[7]                          refresh
+   12.5           1     p38       => p42        a[7]                          rom_ce
+   12.5           1     p37       => p16        a[8]                          ram_rom_a[12]
+   12.5           1     p37       => p2         a[8]                          ram_rom_a[15]
+   12.5           1     p37       => p15        a[8]                          ram_rom_a[16]
+   12.5           1     p37       => p43        a[8]                          ram_rom_a[17]
+   12.5           1     p37       => p4         a[8]                          ram_rom_a[18]
+   12.5           1     p37       => p9         a[8]                          refresh
+   12.5           1     p37       => p42        a[8]                          rom_ce
+   12.5           1     p36       => p16        a[9]                          ram_rom_a[12]
+   12.5           1     p36       => p2         a[9]                          ram_rom_a[15]
+   12.5           1     p36       => p15        a[9]                          ram_rom_a[16]
+   12.5           1     p36       => p43        a[9]                          ram_rom_a[17]
+   12.5           1     p36       => p4         a[9]                          ram_rom_a[18]
+   12.5           1     p36       => p9         a[9]                          refresh
+   12.5           1     p36       => p42        a[9]                          rom_ce
+   12.5           1     p30       => p16        a[10]                         ram_rom_a[12]
+   12.5           1     p30       => p2         a[10]                         ram_rom_a[15]
+   12.5           1     p30       => p15        a[10]                         ram_rom_a[16]
+   12.5           1     p30       => p43        a[10]                         ram_rom_a[17]
+   12.5           1     p30       => p4         a[10]                         ram_rom_a[18]
+   12.5           1     p30       => p9         a[10]                         refresh
+   12.5           1     p30       => p42        a[10]                         rom_ce
+   12.5           1     p31       => p3         a[11]                         ram_ce
+   12.5           1     p31       => p16        a[11]                         ram_rom_a[12]
+   12.5           1     p31       => p2         a[11]                         ram_rom_a[15]
+   12.5           1     p31       => p15        a[11]                         ram_rom_a[16]
+   12.5           1     p31       => p43        a[11]                         ram_rom_a[17]
+   12.5           1     p31       => p4         a[11]                         ram_rom_a[18]
+   12.5           1     p31       => p9         a[11]                         refresh
+   12.5           1     p31       => p42        a[11]                         rom_ce
+   12.5           1     p27       => p16        a[12]                         ram_rom_a[12]
+   12.5           1     p27       => p2         a[12]                         ram_rom_a[15]
+   12.5           1     p27       => p15        a[12]                         ram_rom_a[16]
+   12.5           1     p27       => p43        a[12]                         ram_rom_a[17]
+   12.5           1     p27       => p4         a[12]                         ram_rom_a[18]
+   12.5           1     p27       => p42        a[12]                         rom_ce
+   12.5           1     p28       => p16        a[13]                         ram_rom_a[12]
+   12.5           1     p26       => p16        a[14]                         ram_rom_a[12]
+   12.5           1     p25       => p16        a[15]                         ram_rom_a[12]
+   12.5           1     p29       => p16        os_select                     ram_rom_a[12]
+   12.5           1     p29       => p2         os_select                     ram_rom_a[15]
+   12.5           1     p29       => p15        os_select                     ram_rom_a[16]
+   12.5           1     p29       => p43        os_select                     ram_rom_a[17]
+   12.5           1     p29       => p4         os_select                     ram_rom_a[18]
+   12.5           1     p29       => p9         os_select                     refresh
+   12.5           1     p29       => p42        os_select                     rom_ce
+
+
+Section tCO
+
+     tCO         Level   Location(From => To)    Source                        Destination                   Register_Clock
+    ===         =====   ====================    ======                        ===========                   ==============
+   22.5           3     p33       => p3         phi2                          ram_ce                        oss_bank_12_.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        cart_bank_13_.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        cart_mode_0_.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        oss_bank_13_.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        inst_flash_enable.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        inst_cart_write_enable.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        inst_sdx_enable.C
+   22.5           3     p33       => p3         phi2                          ram_ce                        cart_mode_1_.C
+   22.5           3     p33       => p16        phi2                          ram_rom_a[12]                 inst_flash_enable.C
+   22.5           3     p33       => p16        phi2                          ram_rom_a[12]                 inst_cart_write_enable.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 cart_bank_13_.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 inst_cart_write_enable.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 inst_sdx_enable.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 inst_activate.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 oss_bank_13_.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 inst_flash_enable.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 freezer_state_1_.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 freezer_state_0_.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 cart_mode_0_.C
+   22.5           3     p33       => p39        phi2                          ram_rom_a[13]                 cart_mode_1_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 freezer_state_1_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 oss_bank_13_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 cart_mode_0_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 inst_activate.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 inst_sdx_enable.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 inst_cart_write_enable.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 freezer_state_0_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 inst_flash_enable.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 oss_bank_12_.C
+   22.5           3     p33       => p41        phi2                          ram_rom_a[14]                 cart_mode_1_.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 inst_sdx_enable.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 inst_cart_write_enable.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 cart_mode_0_.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 inst_flash_enable.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 cart_mode_1_.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 oss_bank_13_.C
+   22.5           3     p33       => p2         phi2                          ram_rom_a[15]                 oss_bank_12_.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 cart_mode_1_.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 oss_bank_12_.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 inst_flash_enable.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 oss_bank_13_.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 cart_mode_0_.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 inst_cart_write_enable.C
+   22.5           3     p33       => p15        phi2                          ram_rom_a[16]                 inst_sdx_enable.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 inst_cart_write_enable.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 inst_sdx_enable.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 inst_flash_enable.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 oss_bank_13_.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 oss_bank_12_.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 cart_mode_0_.C
+   22.5           3     p33       => p43        phi2                          ram_rom_a[17]                 cart_mode_1_.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 inst_sdx_enable.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 oss_bank_12_.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 inst_cart_write_enable.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 oss_bank_13_.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 cart_mode_0_.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 cart_mode_1_.C
+   22.5           3     p33       => p4         phi2                          ram_rom_a[18]                 inst_flash_enable.C
+   22.5           3     p33       => p9         phi2                          refresh                       cart_bank_13_.C
+   22.5           3     p33       => p9         phi2                          refresh                       inst_flash_enable.C
+   22.5           3     p33       => p9         phi2                          refresh                       inst_sdx_enable.C
+   22.5           3     p33       => p9         phi2                          refresh                       cart_mode_1_.C
+   22.5           3     p33       => p9         phi2                          refresh                       oss_bank_12_.C
+   22.5           3     p33       => p9         phi2                          refresh                       oss_bank_13_.C
+   22.5           3     p33       => p9         phi2                          refresh                       cart_mode_0_.C
+   22.5           3     p33       => p9         phi2                          refresh                       inst_cart_write_enable.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        oss_bank_13_.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        inst_flash_enable.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        cart_mode_1_.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        oss_bank_12_.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        cart_mode_0_.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        inst_sdx_enable.C
+   22.5           3     p33       => p42        phi2                          rom_ce                        inst_cart_write_enable.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        freezer_state_0_.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        freezer_state_1_.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        inst_cart_mode_ram.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        cart_bank_14_.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        cart_bank_16_.C
+   15.5           2     p33       => p3         phi2                          ram_ce                        cart_bank_15_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 inst_sdx_enable.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 cart_mode_1_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 cart_mode_0_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 freezer_state_1_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 inst_activate.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 oss_bank_12_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 freezer_ram_bank_12_.C
+   15.5           2     p33       => p16        phi2                          ram_rom_a[12]                 freezer_state_0_.C
+   15.5           2     p33       => p39        phi2                          ram_rom_a[13]                 freezer_rom_bank_13_.C
+   15.5           2     p33       => p39        phi2                          ram_rom_a[13]                 freezer_ram_bank_13_.C
+   15.5           2     p33       => p41        phi2                          ram_rom_a[14]                 cart_bank_14_.C
+   15.5           2     p33       => p41        phi2                          ram_rom_a[14]                 freezer_ram_bank_14_.C
+   15.5           2     p33       => p41        phi2                          ram_rom_a[14]                 freezer_rom_bank_14_.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 freezer_rom_bank_15_.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 inst_activate.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 freezer_ram_bank_15_.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 freezer_state_0_.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 cart_bank_15_.C
+   15.5           2     p33       => p2         phi2                          ram_rom_a[15]                 freezer_state_1_.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 cart_bank_16_.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 freezer_ram_bank_16_.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 freezer_rom_bank_16_.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 inst_activate.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 freezer_state_1_.C
+   15.5           2     p33       => p15        phi2                          ram_rom_a[16]                 freezer_state_0_.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 inst_activate.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 cart_bank_17_.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 freezer_state_1_.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 inst_cart_mode_ram.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 freezer_rom_bank_17_.C
+   15.5           2     p33       => p43        phi2                          ram_rom_a[17]                 freezer_state_0_.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 freezer_rom_bank_18_.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 inst_cart_mode_ram.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 cart_bank_18_.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 freezer_state_0_.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 freezer_state_1_.C
+   15.5           2     p33       => p4         phi2                          ram_rom_a[18]                 inst_activate.C
+   15.5           2     p33       => p9         phi2                          refresh                       freezer_state_1_.C
+   15.5           2     p33       => p9         phi2                          refresh                       freezer_state_0_.C
+   15.5           2     p33       => p9         phi2                          refresh                       cart_bank_14_.C
+   15.5           2     p33       => p9         phi2                          refresh                       cart_bank_15_.C
+   15.5           2     p33       => p9         phi2                          refresh                       cart_bank_16_.C
+   15.5           2     p33       => p9         phi2                          refresh                       inst_activate.C
+   15.5           2     p33       => p9         phi2                          refresh                       inst_cart_mode_ram.C
+   15.5           2     p33       => p42        phi2                          rom_ce                        inst_cart_mode_ram.C
+   15.5           2     p33       => p42        phi2                          rom_ce                        freezer_state_0_.C
+   15.5           2     p33       => p42        phi2                          rom_ce                        inst_activate.C
+   15.5           2     p33       => p42        phi2                          rom_ce                        freezer_state_1_.C

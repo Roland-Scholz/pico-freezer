@@ -1,0 +1,9 @@
+JDF B
+// Created by Version 4.1 
+PROJECT TurboFreezerXL
+DESIGN turbofreezerxl Normal
+DEVKIT M4A5-64/32-10JC
+ENTRY Schematic/VHDL
+MODULE TurboFreezerXL.vhd
+MODSTYLE TurboFreezerXL Normal
+SYNTHESIS_TOOL Synplify

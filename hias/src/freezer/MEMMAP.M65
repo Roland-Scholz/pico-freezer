@@ -1,0 +1,145 @@
+;-------------------------------
+;MEMMAP: print a map of used/unused memory
+;-------------------------------
+
+MEMMAP LDA #0
+      STA DMACTL
+      STA TPNT
+      STA TPNT+1
+
+      JSR SCROLL
+
+; print header line
+      LDX #3
+MEMLP01 LDA #32
+      JSR PUTBYT
+      DEX
+      BNE MEMLP01
+
+      LDX #0
+MEMLP02 TXA
+      AND #7
+      BNE MEMLP03
+      LDA #32
+      JSR PUTBYT
+MEMLP03 LDA #'0
+      CPX #$10
+      BCC MEMLP04
+      LDA #'1
+MEMLP04 JSR PUTBYT
+      INX
+      CPX #$20
+      BNE MEMLP02
+
+      JSR SCROLL
+
+      LDX #3
+MEMLP05 LDA #32
+      JSR PUTBYT
+      DEX
+      BNE MEMLP05
+
+      LDX #0
+MEMLP06 TXA
+      AND #7
+      BNE MEMLP07
+      LDA #32
+      JSR PUTBYT
+MEMLP07 TXA
+      AND #$0F
+      CLC
+      ADC #'0
+      CMP #$3A
+      BCC MEMLP08
+      ADC #6
+MEMLP08 JSR PUTBYT
+      INX
+      CPX #$20
+      BNE MEMLP06
+
+MEMLP1 LDA TPNT+1
+      AND #$1F
+      BNE MEMLP2
+      JSR SCROLL
+      LDA #32
+      JSR PUTBYT
+      LDA TPNT+1
+      JSR PRTBYT
+MEMLP2 LDA TPNT+1
+      AND #7
+      BNE MEMLP21
+      LDA #32
+      JSR PUTBYT
+MEMLP21 LDA TPNT+1
+      CMP #$D0
+      BCC MEMLP3
+      CMP #$D8
+      BCS MEMLP3
+      LDA #'X
+      JSR PUTBYT
+      JMP MEMLP5
+MEMLP3 JSR MEMST ; check if page is empty
+      LDA #'.
+      BCC MEMLP4
+      LDA #'*
+MEMLP4 JSR PUTBYT
+MEMLP5 INC TPNT+1
+      BNE MEMLP1
+
+MEMLP6 LDA VCOUNT
+      CMP #124
+      BCC MEMLP6
+      LDA #$22
+      STA DMACTL
+      JMP DEBU3
+
+; check if a page is empty
+
+MEMST LDA TPNT+1
+      CMP #$40
+      BCS MEMST4
+
+      LDX #MEMSTLN-1
+MEMST1 LDA CPAGE,X
+      STA USEMAP,X
+      LDA MEMSTC,X
+      STA CPAGE,X
+      DEX
+      BPL MEMST1
+      LDA TPNT+1
+      STA CPAGE+5
+      LDY #0
+      CLC
+      JMP CPAGE
+
+MEMSTC STA BRKCTL
+MEMSTC1 LDA $1000,Y
+      BNE MEMSTC2
+      INY
+      BNE MEMSTC1
+      BEQ MEMSTC3
+MEMSTC2 SEC
+MEMSTC3 STA BRKCTL
+      JMP MEMST2
+MEMSTLN = * - MEMSTC
+
+MEMST2 LDX #MEMSTLN-1
+MEMST3 LDA USEMAP,X
+      STA CPAGE,X
+      DEX
+      BPL MEMST3
+      RTS
+
+MEMST4 LDA #$FE
+      STA PORTB
+      LDY #0
+      CLC
+MEMST5 LDA (TPNT),Y
+      BNE MEMST6
+      INY
+      BNE MEMST5
+      BEQ MEMST7
+MEMST6 SEC
+MEMST7 LDA #$FF
+      STA PORTB
+      RTS

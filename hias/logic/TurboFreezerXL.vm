@@ -1,0 +1,3511 @@
+//
+// Written by Synplify
+// Synplify 7.6.0, Build 117R.
+// Wed May 04 18:06:53 2005
+//
+// Source file index table:
+// Object locations will have the form <file>:<line>
+// file 0 "noname"
+// file 1 "\d:\isptools4_1\synpbase\lib\vhd\std.vhd "
+// file 2 "\u:\private\xl\turbo~m%\isple~cn\128k-~by\turbofreezerxl.vhd "
+// file 3 "\d:\isptools4_1\synpbase\lib\vhd\std1164.vhd "
+// file 4 "\d:\isptools4_1\synpbase\lib\vhd\numeric.vhd "
+
+`timescale 100 ps/100 ps
+module MACH_DFF (
+  Q,
+  D,
+  CLK,
+  R,
+  S,
+  NOTIFIER
+);
+output Q ;
+input D ;
+input CLK ;
+input R ;
+input S ;
+input NOTIFIER ;
+wire Q ;
+wire D ;
+wire CLK ;
+wire R ;
+wire S ;
+wire NOTIFIER ;
+wire un0 ;
+wire un1 ;
+wire VCC ;
+wire GND ;
+  assign #(1)  un0 = ~ S;
+  assign #(1)  un1 = ~ R;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+  reg Q_r_e_g; // dffrs
+  always @(posedge CLK or posedge un1 or posedge un0 )
+    Q_r_e_g = #1 un1 ? 1'b0 : (un0 ? 1'b1 : D );
+  assign Q = Q_r_e_g;
+endmodule /* MACH_DFF */
+
+module DFFRH (
+  Q,
+  D,
+  CLK,
+  R
+);
+output Q ;
+input D ;
+input CLK ;
+input R ;
+wire Q ;
+wire D ;
+wire CLK ;
+wire R ;
+wire un1 ;
+wire VCC ;
+wire GND ;
+  MACH_DFF INS1 (
+	.Q(Q),
+	.D(D),
+	.CLK(CLK),
+	.R(un1),
+	.S(VCC),
+	.NOTIFIER(GND)
+);
+  assign #(1)  un1 = ~ R;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* DFFRH */
+
+module DFF (
+  Q,
+  D,
+  CLK
+);
+output Q ;
+input D ;
+input CLK ;
+wire Q ;
+wire D ;
+wire CLK ;
+wire VCC ;
+wire GND ;
+  MACH_DFF INS4 (
+	.Q(Q),
+	.D(D),
+	.CLK(CLK),
+	.R(VCC),
+	.S(VCC),
+	.NOTIFIER(GND)
+);
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* DFF */
+
+module DFFSH (
+  Q,
+  D,
+  CLK,
+  S
+);
+output Q ;
+input D ;
+input CLK ;
+input S ;
+wire Q ;
+wire D ;
+wire CLK ;
+wire S ;
+wire VCC ;
+wire un1 ;
+wire GND ;
+  MACH_DFF INS5 (
+	.Q(Q),
+	.D(D),
+	.CLK(CLK),
+	.R(VCC),
+	.S(un1),
+	.NOTIFIER(GND)
+);
+  assign #(1)  un1 = ~ S;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* DFFSH */
+
+module DFFRSH (
+  Q,
+  D,
+  CLK,
+  R,
+  S
+);
+output Q ;
+input D ;
+input CLK ;
+input R ;
+input S ;
+wire Q ;
+wire D ;
+wire CLK ;
+wire R ;
+wire S ;
+wire un2 ;
+wire un1 ;
+wire VCC ;
+wire GND ;
+  MACH_DFF INS7 (
+	.Q(Q),
+	.D(D),
+	.CLK(CLK),
+	.R(un2),
+	.S(un1),
+	.NOTIFIER(GND)
+);
+  assign #(1)  un1 = ~ S;
+  assign #(1)  un2 = ~ R;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* DFFRSH */
+
+module IBUF (
+  O,
+  I0
+);
+output O ;
+input I0 ;
+wire O ;
+wire I0 ;
+wire VCC ;
+wire GND ;
+  assign #(1)  O = I0;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* IBUF */
+
+module OBUF (
+  O,
+  I0
+);
+output O ;
+input I0 ;
+wire O ;
+wire I0 ;
+wire VCC ;
+wire GND ;
+  assign #(1)  O = I0;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* OBUF */
+
+module AND2 (
+  O,
+  I0,
+  I1
+);
+output O ;
+input I0 ;
+input I1 ;
+wire O ;
+wire I0 ;
+wire I1 ;
+wire VCC ;
+wire GND ;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+  assign #(1)  O = I0  & I1 ;
+endmodule /* AND2 */
+
+module INV (
+  O,
+  I0
+);
+output O ;
+input I0 ;
+wire O ;
+wire I0 ;
+wire VCC ;
+wire GND ;
+  assign #(1)  O = ~ I0;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* INV */
+
+module OR2 (
+  O,
+  I0,
+  I1
+);
+output O ;
+input I0 ;
+input I1 ;
+wire O ;
+wire I0 ;
+wire I1 ;
+wire VCC ;
+wire GND ;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+  assign #(1)  O = I0  | I1 ;
+endmodule /* OR2 */
+
+module XOR2 (
+  O,
+  I0,
+  I1
+);
+output O ;
+input I0 ;
+input I1 ;
+wire O ;
+wire I0 ;
+wire I1 ;
+wire VCC ;
+wire GND ;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+  assign #(1)  O = I0  ^ I1 ;
+endmodule /* XOR2 */
+
+module MACH_LATCH (
+  Q,
+  D,
+  LAT,
+  R,
+  S,
+  NOTIFIER
+);
+output Q ;
+input D ;
+input LAT ;
+input R ;
+input S ;
+input NOTIFIER ;
+wire Q ;
+wire D ;
+wire LAT ;
+wire R ;
+wire S ;
+wire NOTIFIER ;
+wire un0 ;
+wire un1 ;
+wire VCC ;
+wire GND ;
+  assign #(1)  un0 = ~ S;
+  assign #(1)  un1 = ~ R;
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+  assign #(1) Q = un1 ? 1'b0 : (un0 ? 1'b1 : (LAT ? D : Q )); // latrs
+endmodule /* MACH_LATCH */
+
+module DLAT (
+  Q,
+  D,
+  LAT
+);
+output Q ;
+input D ;
+input LAT ;
+wire Q ;
+wire D ;
+wire LAT ;
+wire VCC ;
+wire GND ;
+  MACH_LATCH INS4 (
+	.Q(Q),
+	.D(D),
+	.LAT(LAT),
+	.R(VCC),
+	.S(VCC),
+	.NOTIFIER(GND)
+);
+  assign VCC = 1'b1;
+  assign GND = 1'b0;
+endmodule /* DLAT */
+
+module TurboFreezerXL (
+  phi2,
+  reset,
+  rw_in,
+  os_select,
+  a_in,
+  activate_in,
+  poweron,
+  flash_enable_in,
+  flash_writable_in,
+  ram_rom_a,
+  refresh,
+  ram_ce,
+  rom_ce
+);
+input phi2 ;
+input reset ;
+input rw_in ;
+input os_select ;
+input [15:0] a_in ;
+input activate_in ;
+input poweron ;
+input flash_enable_in ;
+input flash_writable_in ;
+output [18:12] ram_rom_a ;
+output refresh ;
+output ram_ce ;
+output rom_ce ;
+wire phi2 ;
+wire reset ;
+wire rw_in ;
+wire os_select ;
+wire activate_in ;
+wire poweron ;
+wire flash_enable_in ;
+wire flash_writable_in ;
+wire refresh ;
+wire ram_ce ;
+wire rom_ce ;
+wire [1:0] cart_mode;
+wire [13:12] oss_bank;
+wire [15:0] a_1;
+wire [15:13] cart_bank_5;
+wire [18:13] cart_bank;
+wire [16:13] cart_a_4;
+wire [16:12] freezer_ram_bank;
+wire [18:13] freezer_rom_bank;
+wire [1:0] freezer_state;
+wire [3:3] freezer_state_d;
+wire [1:0] freezer_state_ns;
+wire [12:4] a_1_m;
+wire [18:15] freezer_rom_bank_m;
+wire [17:17] cart_a_4_m;
+wire [12:4] a_1_m_0;
+wire [16:12] freezer_ram_bank_m;
+wire [12:12] \cart_access.tmp_cart_a_10_m ;
+wire [18:18] cart_a_4_i_m;
+wire [18:18] cart_a_iv;
+wire [15:0] a_1_i;
+wire [18:18] cart_bank_i;
+wire [1:0] freezer_state_i_0;
+wire [1:0] cart_mode_i;
+wire [15:0] a_in_c;
+wire [18:12] ram_rom_a_1_c;
+wire [16:13] cart_a_4_i;
+wire [18:15] freezer_rom_bank_m_i;
+wire [18:18] cart_a_4_i_m_i;
+wire [18:18] cart_a_iv_i;
+wire [13:12] oss_bank_i;
+wire [12:4] a_1_m_0_i;
+wire [17:17] cart_a_4_m_i;
+wire [12:4] a_1_m_i;
+wire [16:12] freezer_ram_bank_m_i;
+wire [12:12] \cart_access.tmp_cart_a_10_m_i ;
+wire [12:12] \cart_access.tmp_cart_a_10_m_1 ;
+wire [12:12] \cart_access.tmp_cart_a_10_m_2 ;
+wire [12:12] \cart_access.tmp_cart_a_10_m_3 ;
+wire [12:12] \cart_access.tmp_cart_a_10_m_4 ;
+wire use_vector_bankno ;
+wire cart_keepsettings ;
+wire cart_mode_ram ;
+wire rw_1 ;
+wire activate_inputreg_1 ;
+wire \cart_bank_select.un63_cart_mode  ;
+wire \check_reset_cartemu.un1_reset_cartemu  ;
+wire cart_write_enable ;
+wire reset_cartemu ;
+wire \freezer_rom_bank_select.std_match.8.result_3  ;
+wire un1_un63_cart_mode ;
+wire sdx_enable ;
+wire un1_cart_mode_2 ;
+wire un2_reset_cartemu ;
+wire un2_reset_cartemu_1 ;
+wire flash_enable ;
+wire un1_cart_mode_4 ;
+wire tmp_cart_access_5 ;
+wire un1_freezer_state_4 ;
+wire tmp_cart_access_1 ;
+wire un1_freezer_state_7 ;
+wire cart_rom_access ;
+wire un1_tmp_cart_access_1 ;
+wire un1_freezer_state_10 ;
+wire \freezer_rom_bank_select.std_match.result  ;
+wire \cart_bank_select.std_match.result  ;
+wire \cart_access.un17_tmp_cart_access  ;
+wire \check_d700_d71f_access.std_match.result  ;
+wire \freezer_ram_bank_select.std_match.result  ;
+wire vector_a2 ;
+wire cart_ram_access ;
+wire \check_oss_bank.std_match.result  ;
+wire \freezer_activation.un5_d700_d71f_access  ;
+wire \freezer_ram_mode_select.un17_d700_d71f_access  ;
+wire \check_cartemu_reset_mode.un69_flash_config_access  ;
+wire \check_vector_access.un1_activate  ;
+wire un1_result_2 ;
+wire un1_os_select_1 ;
+wire N_1 ;
+wire N_2 ;
+wire N_3 ;
+wire N_4 ;
+wire N_5 ;
+wire N_6 ;
+wire N_7 ;
+wire N_8 ;
+wire N_9 ;
+wire N_10 ;
+wire N_11 ;
+wire N_12 ;
+wire N_13 ;
+wire N_14 ;
+wire N_15 ;
+wire N_16 ;
+wire N_17 ;
+wire N_18 ;
+wire N_19 ;
+wire N_20 ;
+wire N_21 ;
+wire N_22 ;
+wire N_23 ;
+wire N_24 ;
+wire N_25 ;
+wire N_26 ;
+wire N_27 ;
+wire N_28 ;
+wire N_29 ;
+wire N_30 ;
+wire N_31 ;
+wire N_32 ;
+wire reset_freezer_banks ;
+wire N_75 ;
+wire N_83 ;
+wire vector_a2_m ;
+wire N_90 ;
+wire \check_vector_access.un1_activate_9  ;
+wire \ram_access.std_match.result_2_1  ;
+wire \check_vector_access.un1_activate_2  ;
+wire \check_vector_access.un1_activate_4  ;
+wire un1_os_select_1_1 ;
+wire un1_os_select_1_2 ;
+wire vector_a2_m_1 ;
+wire un1_freezer_state_7_1 ;
+wire N_153 ;
+wire N_154 ;
+wire flash_config_access_5 ;
+wire flash_config_access_3 ;
+wire flash_config_access_2 ;
+wire N_159 ;
+wire \check_flash_config_access.std_match.6.result_3  ;
+wire flash_config_access ;
+wire N_191 ;
+wire N_192 ;
+wire N_193 ;
+wire N_206 ;
+wire N_207 ;
+wire N_209 ;
+wire N_210 ;
+wire \ram_access.std_match.result  ;
+wire N_214 ;
+wire N_215 ;
+wire N_216 ;
+wire N_218 ;
+wire N_219 ;
+wire N_220 ;
+wire N_222 ;
+wire N_223 ;
+wire N_224 ;
+wire N_226 ;
+wire N_227 ;
+wire N_228 ;
+wire \cart_access.un13_flash_enable  ;
+wire \cart_access.un22_flash_enable  ;
+wire N_231 ;
+wire N_234 ;
+wire N_235 ;
+wire N_154_1 ;
+wire \ram_access.std_match.13.result_3  ;
+wire N_33_d ;
+wire \ram_access.std_match.result_1  ;
+wire \ram_access.freezer_ram_mask_a5a73  ;
+wire N_82 ;
+wire \disable_atari.un36_freezer_rom_access  ;
+wire N_78 ;
+wire N_76 ;
+wire N_74 ;
+wire N_48_m ;
+wire N_73 ;
+wire N_77 ;
+wire N_152 ;
+wire N_208 ;
+wire N_190 ;
+wire N_221 ;
+wire N_150 ;
+wire N_151 ;
+wire flash_config_access_1 ;
+wire \check_flash_enable.un3_flash_enable_in  ;
+wire \check_flash_enable.un30_flash_enable_in  ;
+wire \cart_bank_select.std_match.result_5  ;
+wire \check_sdx_enable.std_match.result  ;
+wire flash_enable_4 ;
+wire flash_enable_4_f1 ;
+wire \check_flash_enable.un1_flash_enable_in  ;
+wire \cart_bank_select.un62_cart_mode  ;
+wire flash_enable_in_i ;
+wire flash_writable_in_i ;
+wire cart_mode_ram_i ;
+wire \cart_bank_select.std_match.result_i  ;
+wire \cart_bank_select.un62_cart_mode_i  ;
+wire \check_flash_enable.un30_flash_enable_in_i  ;
+wire rw_1_i ;
+wire \freezer_activation.un5_d700_d71f_access_i_0  ;
+wire N_75_i ;
+wire os_select_i ;
+wire un1_freezer_state_7_1_i ;
+wire un1_os_select_1_i ;
+wire use_vector_bankno_i ;
+wire activate_inputreg_1_i ;
+wire phi2_i ;
+wire reset_i ;
+wire \cart_access.un17_tmp_cart_access_i  ;
+wire cart_keepsettings_i ;
+wire phi2_c ;
+wire reset_c ;
+wire rw_in_c ;
+wire os_select_c ;
+wire activate_in_c ;
+wire poweron_c ;
+wire flash_enable_in_c ;
+wire flash_writable_in_c ;
+wire N_206_i_0_c ;
+wire N_241 ;
+wire N_235_i ;
+wire N_83_i ;
+wire flash_enable_i ;
+wire \check_flash_enable.un3_flash_enable_in_i  ;
+wire N_243 ;
+wire N_244 ;
+wire N_150_i ;
+wire N_151_i ;
+wire N_245 ;
+wire N_221_i ;
+wire N_246 ;
+wire N_207_i ;
+wire N_208_i ;
+wire N_250 ;
+wire vector_a2_m_1_i ;
+wire N_254 ;
+wire \ram_access.std_match.result_1_i  ;
+wire \ram_access.std_match.result_i  ;
+wire N_256 ;
+wire cart_rom_access_i ;
+wire \activate_freezer_chips.un10_freezer_rom_access_i_c  ;
+wire N_77_i ;
+wire N_258 ;
+wire N_73_i ;
+wire N_74_i ;
+wire cart_ram_access_i ;
+wire N_48_m_i ;
+wire \activate_freezer_chips.un10_freezer_ram_access_i_c  ;
+wire N_76_i ;
+wire N_78_i ;
+wire N_264 ;
+wire \disable_atari.un36_freezer_rom_access_i  ;
+wire \disable_atari.un38_freezer_rom_access_i_c  ;
+wire N_219_i ;
+wire N_220_i ;
+wire N_218_i ;
+wire N_200_i ;
+wire N_223_i ;
+wire N_224_i ;
+wire N_272 ;
+wire N_222_i ;
+wire N_231_i ;
+wire N_273 ;
+wire N_274 ;
+wire N_275 ;
+wire N_209_i ;
+wire N_210_i ;
+wire N_277 ;
+wire vector_a2_m_i ;
+wire N_283 ;
+wire N_294 ;
+wire N_295 ;
+wire N_214_i ;
+wire N_216_i ;
+wire N_296 ;
+wire un1_freezer_state_4_i ;
+wire un1_freezer_state_7_i ;
+wire N_297 ;
+wire un1_cart_mode_2_i ;
+wire un1_un63_cart_mode_i ;
+wire un1_cart_mode_4_i ;
+wire \check_reset_cartemu.un1_reset_cartemu_i  ;
+wire poweron_c_i ;
+wire N_299 ;
+wire N_295_1 ;
+wire N_295_2 ;
+wire N_295_3 ;
+wire N_294_1 ;
+wire N_294_2 ;
+wire N_294_3 ;
+wire \check_oss_bank.std_match.result_1  ;
+wire \check_oss_bank.std_match.result_2  ;
+wire \check_oss_bank.std_match.result_3  ;
+wire \check_oss_bank.std_match.result_4  ;
+wire \check_oss_bank.std_match.result_5  ;
+wire \check_oss_bank.std_match.result_6  ;
+wire \freezer_rom_bank_select.std_match.result_1  ;
+wire \freezer_rom_bank_select.std_match.result_2  ;
+wire \freezer_rom_bank_select.std_match.result_3  ;
+wire N_283_1 ;
+wire N_283_2 ;
+wire N_283_3 ;
+wire N_283_4 ;
+wire un1_os_select_1_1_0 ;
+wire un1_os_select_1_2_0 ;
+wire \check_vector_access.un1_activate_1  ;
+wire \check_vector_access.un1_activate_2_0  ;
+wire \check_vector_access.un1_activate_3  ;
+wire \check_vector_access.un1_activate_4_0  ;
+wire \check_vector_access.un1_activate_5  ;
+wire \check_vector_access.un1_activate_6  ;
+wire \check_vector_access.un1_activate_7  ;
+wire \check_cartemu_reset_mode.un69_flash_config_access_1  ;
+wire \check_cartemu_reset_mode.un69_flash_config_access_2  ;
+wire vector_a2_m_1_0 ;
+wire N_277_1 ;
+wire N_277_2 ;
+wire N_277_3 ;
+wire N_277_4 ;
+wire N_277_5 ;
+wire \cart_access.un17_tmp_cart_access_1  ;
+wire \cart_access.un17_tmp_cart_access_2  ;
+wire N_275_1 ;
+wire un1_freezer_state_7_1_1 ;
+wire un1_freezer_state_7_1_2 ;
+wire un1_freezer_state_7_1_3 ;
+wire un1_freezer_state_7_1_0 ;
+wire un1_freezer_state_7_2 ;
+wire un1_un63_cart_mode_1 ;
+wire un1_cart_mode_2_1 ;
+wire N_206_1 ;
+wire N_206_2 ;
+wire N_206_3 ;
+wire N_206_4 ;
+wire N_235_1 ;
+wire N_154_1_0 ;
+wire \disable_atari.un38_freezer_rom_access_i_c_1  ;
+wire \disable_atari.un38_freezer_rom_access_i_c_2  ;
+wire \disable_atari.un38_freezer_rom_access_i_c_3  ;
+wire N_264_1 ;
+wire N_74_1 ;
+wire \disable_atari.un36_freezer_rom_access_1  ;
+wire \activate_freezer_chips.un10_freezer_ram_access_i_c_1  ;
+wire N_258_1 ;
+wire N_254_1 ;
+wire N_254_2 ;
+wire N_254_3 ;
+wire N_152_1 ;
+wire N_250_1 ;
+wire N_250_2 ;
+wire N_250_3 ;
+wire flash_config_access_1_0 ;
+wire flash_config_access_2_0 ;
+wire flash_config_access_3_0 ;
+wire flash_config_access_4 ;
+wire \check_flash_enable.un3_flash_enable_in_1  ;
+wire \check_flash_enable.un3_flash_enable_in_2  ;
+wire \check_flash_enable.un3_flash_enable_in_3  ;
+wire \check_flash_enable.un30_flash_enable_in_1  ;
+wire \check_flash_enable.un30_flash_enable_in_2  ;
+wire \check_flash_enable.un30_flash_enable_in_3  ;
+wire \freezer_rom_bank_select.std_match.8.result_3_1  ;
+wire \cart_bank_select.std_match.result_1  ;
+wire \cart_bank_select.std_match.result_2  ;
+wire \check_d700_d71f_access.std_match.result_1  ;
+wire \check_d700_d71f_access.std_match.result_2  ;
+wire \check_d700_d71f_access.std_match.result_3  ;
+wire \check_d700_d71f_access.std_match.result_4  ;
+wire \check_d700_d71f_access.std_match.result_5  ;
+wire \freezer_ram_bank_select.std_match.result_1  ;
+wire \freezer_ram_bank_select.std_match.result_2  ;
+wire \freezer_ram_bank_select.std_match.result_3  ;
+wire \check_sdx_enable.std_match.result_1  ;
+wire \check_sdx_enable.std_match.result_2  ;
+wire \check_sdx_enable.std_match.result_3  ;
+wire \check_sdx_enable.std_match.result_4  ;
+wire N_222_1 ;
+wire N_219_1 ;
+wire N_215_1 ;
+wire N_214_1 ;
+wire \ram_access.std_match.result_1_0  ;
+wire N_210_1 ;
+wire N_207_1 ;
+wire N_153_1 ;
+wire \sdx_enable_0.un3  ;
+wire \sdx_enable_0.un1  ;
+wire \sdx_enable_0.un0  ;
+wire \cart_write_enable_0.un3  ;
+wire \cart_write_enable_0.un1  ;
+wire \cart_write_enable_0.un0  ;
+wire \cart_bank_0_13_.un3  ;
+wire \cart_bank_0_13_.un1  ;
+wire \cart_bank_0_13_.un0  ;
+wire \cart_bank_0_15_.un3  ;
+wire \cart_bank_0_15_.un1  ;
+wire \cart_bank_0_15_.un0  ;
+wire \flash_enable_0.un3  ;
+wire \flash_enable_0.un1  ;
+wire \flash_enable_0.un0  ;
+wire \freezer_ram_bank_0_15_.un3  ;
+wire \freezer_ram_bank_0_15_.un1  ;
+wire \freezer_ram_bank_0_15_.un0  ;
+wire \freezer_rom_bank_0_18_.un3  ;
+wire \freezer_rom_bank_0_18_.un1  ;
+wire \freezer_rom_bank_0_18_.un0  ;
+wire \freezer_rom_bank_0_16_.un3  ;
+wire \freezer_rom_bank_0_16_.un1  ;
+wire \freezer_rom_bank_0_16_.un0  ;
+wire \cart_bank_0_16_.un3  ;
+wire \cart_bank_0_16_.un1  ;
+wire \cart_bank_0_16_.un0  ;
+wire \cart_bank_0_18_.un3  ;
+wire \cart_bank_0_18_.un1  ;
+wire \cart_bank_0_18_.un0  ;
+wire \freezer_ram_bank_0_14_.un3  ;
+wire \freezer_ram_bank_0_14_.un1  ;
+wire \freezer_ram_bank_0_14_.un0  ;
+wire \freezer_ram_bank_0_16_.un3  ;
+wire \freezer_ram_bank_0_16_.un1  ;
+wire \freezer_ram_bank_0_16_.un0  ;
+wire \oss_bank_0_12_.un3  ;
+wire \oss_bank_0_12_.un1  ;
+wire \oss_bank_0_12_.un0  ;
+wire \oss_bank_0_13_.un3  ;
+wire \oss_bank_0_13_.un1  ;
+wire \oss_bank_0_13_.un0  ;
+wire \cart_mode_0_0_.un3  ;
+wire \cart_mode_0_0_.un1  ;
+wire \cart_mode_0_0_.un0  ;
+wire \cart_mode_0_1_.un3  ;
+wire \cart_mode_0_1_.un1  ;
+wire \cart_mode_0_1_.un0  ;
+wire \freezer_rom_bank_0_13_.un3  ;
+wire \freezer_rom_bank_0_13_.un1  ;
+wire \freezer_rom_bank_0_13_.un0  ;
+wire \freezer_rom_bank_0_14_.un3  ;
+wire \freezer_rom_bank_0_14_.un1  ;
+wire \freezer_rom_bank_0_14_.un0  ;
+wire \freezer_rom_bank_0_15_.un3  ;
+wire \freezer_rom_bank_0_15_.un1  ;
+wire \freezer_rom_bank_0_15_.un0  ;
+wire \freezer_rom_bank_0_17_.un3  ;
+wire \freezer_rom_bank_0_17_.un1  ;
+wire \freezer_rom_bank_0_17_.un0  ;
+wire \freezer_ram_bank_0_12_.un3  ;
+wire \freezer_ram_bank_0_12_.un1  ;
+wire \freezer_ram_bank_0_12_.un0  ;
+wire \freezer_ram_bank_0_13_.un3  ;
+wire \freezer_ram_bank_0_13_.un1  ;
+wire \freezer_ram_bank_0_13_.un0  ;
+wire \vector_a2_0.un3  ;
+wire \vector_a2_0.un1  ;
+wire \vector_a2_0.un0  ;
+wire \cart_bank_0_14_.un3  ;
+wire \cart_bank_0_14_.un1  ;
+wire \cart_bank_0_14_.un0  ;
+wire \cart_mode_ram_0.un3  ;
+wire \cart_mode_ram_0.un1  ;
+wire \cart_mode_ram_0.un0  ;
+wire \cart_keepsettings_0.un3  ;
+wire \cart_keepsettings_0.un1  ;
+wire \cart_keepsettings_0.un0  ;
+wire \cart_bank_0_17_.un3  ;
+wire \cart_bank_0_17_.un1  ;
+wire \cart_bank_0_17_.un0  ;
+wire \use_vector_bankno_0.un3  ;
+wire \use_vector_bankno_0.un1  ;
+wire \use_vector_bankno_0.un0  ;
+wire GND ;
+wire VCC ;
+//@2:145
+//@2:155
+//@2:327
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+//@2:144
+// @2:327
+  DFFRH \freezer_state_cZ[1]  (
+	.Q(freezer_state[1]),
+	.D(freezer_state_ns[1]),
+	.CLK(phi2_i),
+	.R(reset_i)
+);
+// @2:327
+  DFFRH \freezer_state_cZ[0]  (
+	.Q(freezer_state[0]),
+	.D(freezer_state_ns[0]),
+	.CLK(phi2_i),
+	.R(reset_i)
+);
+// @2:389
+  DFFRH \freezer_ram_bank_cZ[13]  (
+	.Q(freezer_ram_bank[13]),
+	.D(N_12),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:389
+  DFFRH \freezer_ram_bank_cZ[14]  (
+	.Q(freezer_ram_bank[14]),
+	.D(N_13),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:389
+  DFFRH \freezer_ram_bank_cZ[15]  (
+	.Q(freezer_ram_bank[15]),
+	.D(N_14),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:389
+  DFFRH \freezer_ram_bank_cZ[16]  (
+	.Q(freezer_ram_bank[16]),
+	.D(N_15),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:597
+  DFF \oss_bank_cZ[12]  (
+	.Q(oss_bank[12]),
+	.D(N_24),
+	.CLK(phi2_i)
+);
+// @2:597
+  DFF \oss_bank_cZ[13]  (
+	.Q(oss_bank[13]),
+	.D(N_25),
+	.CLK(phi2_i)
+);
+// @2:458
+  DFFRH \freezer_rom_bank_cZ[13]  (
+	.Q(freezer_rom_bank[13]),
+	.D(N_4),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:458
+  DFFRH \freezer_rom_bank_cZ[14]  (
+	.Q(freezer_rom_bank[14]),
+	.D(N_5),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:458
+  DFFSH \freezer_rom_bank_cZ[15]  (
+	.Q(freezer_rom_bank[15]),
+	.D(N_6),
+	.CLK(phi2_i),
+	.S(reset_freezer_banks)
+);
+// @2:458
+  DFFSH \freezer_rom_bank_cZ[16]  (
+	.Q(freezer_rom_bank[16]),
+	.D(N_7),
+	.CLK(phi2_i),
+	.S(reset_freezer_banks)
+);
+// @2:458
+  DFFSH \freezer_rom_bank_cZ[17]  (
+	.Q(freezer_rom_bank[17]),
+	.D(N_8),
+	.CLK(phi2_i),
+	.S(reset_freezer_banks)
+);
+// @2:458
+  DFFSH \freezer_rom_bank_cZ[18]  (
+	.Q(freezer_rom_bank[18]),
+	.D(N_9),
+	.CLK(phi2_i),
+	.S(reset_freezer_banks)
+);
+// @2:389
+  DFFRH \freezer_ram_bank_cZ[12]  (
+	.Q(freezer_ram_bank[12]),
+	.D(N_11),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:574
+  DFFRH \cart_mode_cZ[0]  (
+	.Q(cart_mode[0]),
+	.D(N_2),
+	.CLK(phi2_i),
+	.R(reset_cartemu)
+);
+// @2:574
+  DFFRH \cart_mode_cZ[1]  (
+	.Q(cart_mode[1]),
+	.D(N_3),
+	.CLK(phi2_i),
+	.R(reset_cartemu)
+);
+// @2:517
+  DFFSH cart_keepsettings_cZ (
+	.Q(cart_keepsettings),
+	.D(N_22),
+	.CLK(phi2_i),
+	.S(poweron_c)
+);
+// @2:609
+  DFF sdx_enable_cZ (
+	.Q(sdx_enable),
+	.D(N_23),
+	.CLK(phi2_i)
+);
+// @2:620
+  DFFSH \cart_bank_cZ[18]  (
+	.Q(cart_bank[18]),
+	.D(N_26),
+	.CLK(phi2_i),
+	.S(reset_cartemu)
+);
+// @2:620
+  DFFSH \cart_bank_cZ[17]  (
+	.Q(cart_bank[17]),
+	.D(N_27),
+	.CLK(phi2_i),
+	.S(reset_cartemu)
+);
+// @2:620
+  DFFSH \cart_bank_cZ[16]  (
+	.Q(cart_bank[16]),
+	.D(N_28),
+	.CLK(phi2_i),
+	.S(reset_cartemu)
+);
+// @2:636
+  DFFRSH flash_enable_cZ (
+	.Q(flash_enable),
+	.D(N_1),
+	.CLK(phi2_i),
+	.R(un2_reset_cartemu_1),
+	.S(un2_reset_cartemu)
+);
+// @2:402
+  DFFRH use_vector_bankno_cZ (
+	.Q(use_vector_bankno),
+	.D(N_10),
+	.CLK(phi2_i),
+	.R(reset_freezer_banks)
+);
+// @2:373
+  DFF vector_a2_cZ (
+	.Q(vector_a2),
+	.D(N_16),
+	.CLK(phi2_i)
+);
+// @2:620
+  DFFSH \cart_bank_cZ[15]  (
+	.Q(cart_bank[15]),
+	.D(N_17),
+	.CLK(phi2_i),
+	.S(reset_cartemu)
+);
+// @2:620
+  DFFSH \cart_bank_cZ[14]  (
+	.Q(cart_bank[14]),
+	.D(N_18),
+	.CLK(phi2_i),
+	.S(reset_cartemu)
+);
+// @2:620
+  DFFRH \cart_bank_cZ[13]  (
+	.Q(cart_bank[13]),
+	.D(N_19),
+	.CLK(phi2_i),
+	.R(reset_cartemu)
+);
+// @2:556
+  DFFRH cart_write_enable_cZ (
+	.Q(cart_write_enable),
+	.D(N_20),
+	.CLK(phi2_i),
+	.R(reset_i)
+);
+// @2:539
+  DFFRH cart_mode_ram_cZ (
+	.Q(cart_mode_ram),
+	.D(N_21),
+	.CLK(phi2_i),
+	.R(reset_cartemu)
+);
+// @2:263
+  DFF activate_inputreg_cZ (
+	.Q(activate_inputreg_1),
+	.D(activate_in_c),
+	.CLK(phi2_i)
+);
+  IBUF phi2_cZ (
+	.O(phi2_c),
+	.I0(phi2)
+);
+  IBUF reset_cZ (
+	.O(reset_c),
+	.I0(reset)
+);
+  IBUF rw_in_cZ (
+	.O(rw_in_c),
+	.I0(rw_in)
+);
+  IBUF os_select_cZ (
+	.O(os_select_c),
+	.I0(os_select)
+);
+  IBUF \a_in_cZ[0]  (
+	.O(a_in_c[0]),
+	.I0(a_in[0])
+);
+  IBUF \a_in_cZ[1]  (
+	.O(a_in_c[1]),
+	.I0(a_in[1])
+);
+  IBUF \a_in_cZ[2]  (
+	.O(a_in_c[2]),
+	.I0(a_in[2])
+);
+  IBUF \a_in_cZ[3]  (
+	.O(a_in_c[3]),
+	.I0(a_in[3])
+);
+  IBUF \a_in_cZ[4]  (
+	.O(a_in_c[4]),
+	.I0(a_in[4])
+);
+  IBUF \a_in_cZ[5]  (
+	.O(a_in_c[5]),
+	.I0(a_in[5])
+);
+  IBUF \a_in_cZ[6]  (
+	.O(a_in_c[6]),
+	.I0(a_in[6])
+);
+  IBUF \a_in_cZ[7]  (
+	.O(a_in_c[7]),
+	.I0(a_in[7])
+);
+  IBUF \a_in_cZ[8]  (
+	.O(a_in_c[8]),
+	.I0(a_in[8])
+);
+  IBUF \a_in_cZ[9]  (
+	.O(a_in_c[9]),
+	.I0(a_in[9])
+);
+  IBUF \a_in_cZ[10]  (
+	.O(a_in_c[10]),
+	.I0(a_in[10])
+);
+  IBUF \a_in_cZ[11]  (
+	.O(a_in_c[11]),
+	.I0(a_in[11])
+);
+  IBUF \a_in_cZ[12]  (
+	.O(a_in_c[12]),
+	.I0(a_in[12])
+);
+  IBUF \a_in_cZ[13]  (
+	.O(a_in_c[13]),
+	.I0(a_in[13])
+);
+  IBUF \a_in_cZ[14]  (
+	.O(a_in_c[14]),
+	.I0(a_in[14])
+);
+  IBUF \a_in_cZ[15]  (
+	.O(a_in_c[15]),
+	.I0(a_in[15])
+);
+  IBUF activate_in_cZ (
+	.O(activate_in_c),
+	.I0(activate_in)
+);
+  IBUF poweron_cZ (
+	.O(poweron_c),
+	.I0(poweron)
+);
+  IBUF flash_enable_in_cZ (
+	.O(flash_enable_in_c),
+	.I0(flash_enable_in)
+);
+  IBUF flash_writable_in_cZ (
+	.O(flash_writable_in_c),
+	.I0(flash_writable_in)
+);
+  OBUF \ram_rom_a_cZ[12]  (
+	.O(ram_rom_a[12]),
+	.I0(ram_rom_a_1_c[12])
+);
+  OBUF \ram_rom_a_cZ[13]  (
+	.O(ram_rom_a[13]),
+	.I0(N_206_i_0_c)
+);
+  OBUF \ram_rom_a_cZ[14]  (
+	.O(ram_rom_a[14]),
+	.I0(ram_rom_a_1_c[14])
+);
+  OBUF \ram_rom_a_cZ[15]  (
+	.O(ram_rom_a[15]),
+	.I0(ram_rom_a_1_c[15])
+);
+  OBUF \ram_rom_a_cZ[16]  (
+	.O(ram_rom_a[16]),
+	.I0(ram_rom_a_1_c[16])
+);
+  OBUF \ram_rom_a_cZ[17]  (
+	.O(ram_rom_a[17]),
+	.I0(ram_rom_a_1_c[17])
+);
+  OBUF \ram_rom_a_cZ[18]  (
+	.O(ram_rom_a[18]),
+	.I0(ram_rom_a_1_c[18])
+);
+  OBUF refresh_cZ (
+	.O(refresh),
+	.I0(\disable_atari.un38_freezer_rom_access_i_c )
+);
+  OBUF ram_ce_cZ (
+	.O(ram_ce),
+	.I0(\activate_freezer_chips.un10_freezer_ram_access_i_c )
+);
+  OBUF rom_ce_cZ (
+	.O(rom_ce),
+	.I0(\activate_freezer_chips.un10_freezer_rom_access_i_c )
+);
+  AND2 \ram_rom_a_1_i_a2_0[13]  (
+	.O(N_219),
+	.I0(N_219_1),
+	.I1(freezer_ram_bank[13])
+);
+  AND2 un1_freezer_state_2_0_a2_1 (
+	.O(N_215_1),
+	.I0(N_227),
+	.I1(a_1[12])
+);
+  AND2 un1_freezer_state_2_0_a2 (
+	.O(N_215),
+	.I0(N_215_1),
+	.I1(a_1_i[13])
+);
+  AND2 un1_un13_flash_enable_2_0_a2_1 (
+	.O(N_214_1),
+	.I0(N_228),
+	.I1(N_231)
+);
+  AND2 un1_un13_flash_enable_2_0_a2 (
+	.O(N_214),
+	.I0(N_214_1),
+	.I1(\cart_access.un13_flash_enable )
+);
+  AND2 \ram_access.std_match.result_0_a2_1  (
+	.O(\ram_access.std_match.result_1_0 ),
+	.I0(a_1_i[13]),
+	.I1(N_226)
+);
+  AND2 \ram_access.std_match.result_0_a2  (
+	.O(\ram_access.std_match.result ),
+	.I0(\ram_access.std_match.result_1_0 ),
+	.I1(a_1[12])
+);
+  AND2 un1_cart_mode_3_0_a2_1 (
+	.O(N_210_1),
+	.I0(N_191),
+	.I1(N_234)
+);
+  AND2 un1_cart_mode_3_0_a2 (
+	.O(N_210),
+	.I0(N_210_1),
+	.I1(\cart_access.un22_flash_enable )
+);
+  AND2 \ram_rom_a_1_0_a2_1_0[14]  (
+	.O(N_207_1),
+	.I0(N_227),
+	.I1(a_1_i[13])
+);
+  AND2 \ram_rom_a_1_0_a2[14]  (
+	.O(N_207),
+	.I0(N_207_1),
+	.I1(freezer_ram_bank[14])
+);
+  AND2 un1_un277_flash_config_access_1_i_a2_1 (
+	.O(N_153_1),
+	.I0(a_1[3]),
+	.I1(a_1_i[2])
+);
+  AND2 un1_un277_flash_config_access_1_i_a2 (
+	.O(N_153),
+	.I0(N_153_1),
+	.I1(flash_config_access)
+);
+  AND2 \check_d700_d71f_access.std_match.result_4_cZ  (
+	.O(\check_d700_d71f_access.std_match.result_4 ),
+	.I0(\check_d700_d71f_access.std_match.result_1 ),
+	.I1(\check_d700_d71f_access.std_match.result_2 )
+);
+  AND2 \check_d700_d71f_access.std_match.result_5_cZ  (
+	.O(\check_d700_d71f_access.std_match.result_5 ),
+	.I0(\check_d700_d71f_access.std_match.result_3 ),
+	.I1(flash_config_access_5)
+);
+  AND2 \check_d700_d71f_access.std_match.result_cZ  (
+	.O(\check_d700_d71f_access.std_match.result ),
+	.I0(\check_d700_d71f_access.std_match.result_4 ),
+	.I1(\check_d700_d71f_access.std_match.result_5 )
+);
+  AND2 \freezer_ram_bank_select.std_match.result_1_cZ  (
+	.O(\freezer_ram_bank_select.std_match.result_1 ),
+	.I0(N_159),
+	.I1(a_1[15])
+);
+  AND2 \freezer_ram_bank_select.std_match.result_2_cZ  (
+	.O(\freezer_ram_bank_select.std_match.result_2 ),
+	.I0(\check_vector_access.un1_activate_9 ),
+	.I1(flash_config_access_5)
+);
+  AND2 \freezer_ram_bank_select.std_match.result_3_cZ  (
+	.O(\freezer_ram_bank_select.std_match.result_3 ),
+	.I0(\freezer_ram_bank_select.std_match.result_1 ),
+	.I1(\freezer_ram_bank_select.std_match.result_2 )
+);
+  AND2 \freezer_ram_bank_select.std_match.result_cZ  (
+	.O(\freezer_ram_bank_select.std_match.result ),
+	.I0(\freezer_ram_bank_select.std_match.result_3 ),
+	.I1(\ram_access.std_match.result_2_1 )
+);
+  AND2 \check_sdx_enable.std_match.result_1_cZ  (
+	.O(\check_sdx_enable.std_match.result_1 ),
+	.I0(flash_config_access_1),
+	.I1(flash_config_access_5)
+);
+  AND2 \check_sdx_enable.std_match.result_2_cZ  (
+	.O(\check_sdx_enable.std_match.result_2 ),
+	.I0(a_1_i[4]),
+	.I1(a_1_i[9])
+);
+  AND2 \check_sdx_enable.std_match.result_3_cZ  (
+	.O(\check_sdx_enable.std_match.result_3 ),
+	.I0(\cart_bank_select.std_match.result_5 ),
+	.I1(\check_vector_access.un1_activate_2 )
+);
+  AND2 \check_sdx_enable.std_match.result_4_cZ  (
+	.O(\check_sdx_enable.std_match.result_4 ),
+	.I0(\check_sdx_enable.std_match.result_1 ),
+	.I1(\check_sdx_enable.std_match.result_2 )
+);
+  AND2 \check_sdx_enable.std_match.result_cZ  (
+	.O(\check_sdx_enable.std_match.result ),
+	.I0(\check_sdx_enable.std_match.result_4 ),
+	.I1(\check_sdx_enable.std_match.result_3 )
+);
+  AND2 \cart_a_4_iv_0_a2_2_1[13]  (
+	.O(N_222_1),
+	.I0(N_234),
+	.I1(a_1_i[12])
+);
+  AND2 \cart_a_4_iv_0_a2_2[13]  (
+	.O(N_222),
+	.I0(N_222_1),
+	.I1(oss_bank[13])
+);
+  AND2 \ram_rom_a_1_i_a2_0_1[13]  (
+	.O(N_219_1),
+	.I0(N_227),
+	.I1(a_1_i[13])
+);
+  AND2 \check_flash_enable.un3_flash_enable_in_2_cZ  (
+	.O(\check_flash_enable.un3_flash_enable_in_2 ),
+	.I0(a_1_i[2]),
+	.I1(a_1_i[3])
+);
+  AND2 \check_flash_enable.un3_flash_enable_in_3_cZ  (
+	.O(\check_flash_enable.un3_flash_enable_in_3 ),
+	.I0(\check_flash_enable.un3_flash_enable_in_1 ),
+	.I1(\check_flash_enable.un3_flash_enable_in_2 )
+);
+  AND2 \check_flash_enable.un3_flash_enable_in_cZ  (
+	.O(\check_flash_enable.un3_flash_enable_in ),
+	.I0(\check_flash_enable.un3_flash_enable_in_3 ),
+	.I1(flash_config_access)
+);
+  AND2 \check_flash_enable.un30_flash_enable_in_1_cZ  (
+	.O(\check_flash_enable.un30_flash_enable_in_1 ),
+	.I0(a_1_i[0]),
+	.I1(a_1_i[1])
+);
+  AND2 \check_flash_enable.un30_flash_enable_in_2_cZ  (
+	.O(\check_flash_enable.un30_flash_enable_in_2 ),
+	.I0(a_1_i[2]),
+	.I1(a_1_i[3])
+);
+  AND2 \check_flash_enable.un30_flash_enable_in_3_cZ  (
+	.O(\check_flash_enable.un30_flash_enable_in_3 ),
+	.I0(\check_flash_enable.un30_flash_enable_in_1 ),
+	.I1(\check_flash_enable.un30_flash_enable_in_2 )
+);
+  AND2 \check_flash_enable.un30_flash_enable_in_cZ  (
+	.O(\check_flash_enable.un30_flash_enable_in ),
+	.I0(\check_flash_enable.un30_flash_enable_in_3 ),
+	.I1(flash_config_access)
+);
+  AND2 \freezer_rom_bank_select.std_match.8.result_3_1_cZ  (
+	.O(\freezer_rom_bank_select.std_match.8.result_3_1 ),
+	.I0(a_1_i[7]),
+	.I1(a_1[6])
+);
+  AND2 \freezer_rom_bank_select.std_match.8.result_3_cZ  (
+	.O(\freezer_rom_bank_select.std_match.8.result_3 ),
+	.I0(\freezer_rom_bank_select.std_match.8.result_3_1 ),
+	.I1(a_1[8])
+);
+  AND2 \cart_bank_select.std_match.result_1_cZ  (
+	.O(\cart_bank_select.std_match.result_1 ),
+	.I0(a_1_i[9]),
+	.I1(\cart_bank_select.std_match.result_5 )
+);
+  AND2 \cart_bank_select.std_match.result_2_cZ  (
+	.O(\cart_bank_select.std_match.result_2 ),
+	.I0(flash_config_access_5),
+	.I1(\freezer_rom_bank_select.std_match.8.result_3 )
+);
+  AND2 \cart_bank_select.std_match.result_cZ  (
+	.O(\cart_bank_select.std_match.result ),
+	.I0(\cart_bank_select.std_match.result_1 ),
+	.I1(\cart_bank_select.std_match.result_2 )
+);
+  AND2 \check_d700_d71f_access.std_match.result_1_cZ  (
+	.O(\check_d700_d71f_access.std_match.result_1 ),
+	.I0(N_159),
+	.I1(a_1[8])
+);
+  AND2 \check_d700_d71f_access.std_match.result_2_cZ  (
+	.O(\check_d700_d71f_access.std_match.result_2 ),
+	.I0(a_1[9]),
+	.I1(a_1_i[7])
+);
+  AND2 \check_d700_d71f_access.std_match.result_3_cZ  (
+	.O(\check_d700_d71f_access.std_match.result_3 ),
+	.I0(flash_config_access_2),
+	.I1(flash_config_access_3)
+);
+  AND2 \ram_rom_a_1_2[18]  (
+	.O(N_254_2),
+	.I0(freezer_rom_bank_m_i[18]),
+	.I1(un1_os_select_1_i)
+);
+  AND2 \ram_rom_a_1_3[18]  (
+	.O(N_254_3),
+	.I0(N_254_1),
+	.I1(N_254_2)
+);
+  AND2 \ram_rom_a_1[18]  (
+	.O(N_254),
+	.I0(N_254_3),
+	.I1(vector_a2_m_1_i)
+);
+  AND2 un1_un147_flash_config_access_1_i_a2_1_0 (
+	.O(N_152_1),
+	.I0(N_154_1),
+	.I1(a_1_i[1])
+);
+  AND2 un1_un147_flash_config_access_1_i_a2 (
+	.O(N_152),
+	.I0(N_152_1),
+	.I1(flash_config_access)
+);
+  AND2 \ram_rom_a_1_0_1[14]  (
+	.O(N_250_1),
+	.I0(N_200_i),
+	.I1(N_207_i)
+);
+  AND2 \ram_rom_a_1_0_2[14]  (
+	.O(N_250_2),
+	.I0(N_208_i),
+	.I1(cart_a_4_i[14])
+);
+  AND2 \ram_rom_a_1_0_3[14]  (
+	.O(N_250_3),
+	.I0(N_250_1),
+	.I1(N_250_2)
+);
+  AND2 \ram_rom_a_1_0[14]  (
+	.O(N_250),
+	.I0(N_250_3),
+	.I1(un1_os_select_1_i)
+);
+  AND2 flash_config_access_0_a2_1 (
+	.O(flash_config_access_1_0),
+	.I0(flash_config_access_3),
+	.I1(flash_config_access_5)
+);
+  AND2 flash_config_access_0_a2_2 (
+	.O(flash_config_access_2_0),
+	.I0(a_1_i[9]),
+	.I1(\check_flash_config_access.std_match.6.result_3 )
+);
+  AND2 flash_config_access_0_a2_3 (
+	.O(flash_config_access_3_0),
+	.I0(flash_config_access_1),
+	.I1(flash_config_access_2)
+);
+  AND2 flash_config_access_0_a2_4 (
+	.O(flash_config_access_4),
+	.I0(flash_config_access_1_0),
+	.I1(flash_config_access_2_0)
+);
+  AND2 flash_config_access_0_a2 (
+	.O(flash_config_access),
+	.I0(flash_config_access_4),
+	.I1(flash_config_access_3_0)
+);
+  AND2 \check_flash_enable.un3_flash_enable_in_1_cZ  (
+	.O(\check_flash_enable.un3_flash_enable_in_1 ),
+	.I0(a_1[0]),
+	.I1(a_1_i[1])
+);
+  AND2 \disable_atari.un38_freezer_rom_access_1  (
+	.O(\disable_atari.un38_freezer_rom_access_i_c_1 ),
+	.I0(N_82),
+	.I1(cart_ram_access_i)
+);
+  AND2 \disable_atari.un38_freezer_rom_access_2  (
+	.O(\disable_atari.un38_freezer_rom_access_i_c_2 ),
+	.I0(cart_rom_access_i),
+	.I1(\disable_atari.un36_freezer_rom_access_i )
+);
+  AND2 \disable_atari.un38_freezer_rom_access_3  (
+	.O(\disable_atari.un38_freezer_rom_access_i_c_3 ),
+	.I0(\disable_atari.un38_freezer_rom_access_i_c_1 ),
+	.I1(\disable_atari.un38_freezer_rom_access_i_c_2 )
+);
+  AND2 \disable_atari.un38_freezer_rom_access  (
+	.O(\disable_atari.un38_freezer_rom_access_i_c ),
+	.I0(\disable_atari.un38_freezer_rom_access_i_c_3 ),
+	.I1(vector_a2_m_1_i)
+);
+  AND2 \freezer_state_ns_0_1[1]  (
+	.O(N_264_1),
+	.I0(N_78_i),
+	.I1(N_75_i)
+);
+  AND2 \freezer_state_ns_0[1]  (
+	.O(N_264),
+	.I0(N_264_1),
+	.I1(N_76_i)
+);
+  AND2 \freezer_state_ns_0_a4_0_1[0]  (
+	.O(N_74_1),
+	.I0(N_76),
+	.I1(\freezer_activation.un5_d700_d71f_access )
+);
+  AND2 \freezer_state_ns_0_a4_0[0]  (
+	.O(N_74),
+	.I0(N_74_1),
+	.I1(freezer_state_i_0[0])
+);
+  AND2 \disable_atari.un36_freezer_rom_access_1_cZ  (
+	.O(\disable_atari.un36_freezer_rom_access_1 ),
+	.I0(flash_config_access_3),
+	.I1(os_select_i)
+);
+  AND2 \disable_atari.un36_freezer_rom_access_cZ  (
+	.O(\disable_atari.un36_freezer_rom_access ),
+	.I0(\disable_atari.un36_freezer_rom_access_1 ),
+	.I1(\ram_access.std_match.13.result_3 )
+);
+  AND2 \activate_freezer_chips.un10_freezer_ram_access_1  (
+	.O(\activate_freezer_chips.un10_freezer_ram_access_i_c_1 ),
+	.I0(N_48_m_i),
+	.I1(cart_ram_access_i)
+);
+  AND2 \activate_freezer_chips.un10_freezer_ram_access  (
+	.O(\activate_freezer_chips.un10_freezer_ram_access_i_c ),
+	.I0(\activate_freezer_chips.un10_freezer_ram_access_i_c_1 ),
+	.I1(vector_a2_m_1_i)
+);
+  AND2 \freezer_state_ns_0_1[0]  (
+	.O(N_258_1),
+	.I0(N_77_i),
+	.I1(N_73_i)
+);
+  AND2 \freezer_state_ns_0[0]  (
+	.O(N_258),
+	.I0(N_258_1),
+	.I1(N_74_i)
+);
+  AND2 \ram_rom_a_1_1[18]  (
+	.O(N_254_1),
+	.I0(N_75_i),
+	.I1(cart_a_iv[18])
+);
+  AND2 un1_freezer_state_7_2_cZ (
+	.O(un1_freezer_state_7_2),
+	.I0(a_1_i[10]),
+	.I1(un1_freezer_state_7_1)
+);
+  AND2 un1_freezer_state_7_cZ (
+	.O(un1_freezer_state_7),
+	.I0(un1_freezer_state_7_1_0),
+	.I1(un1_freezer_state_7_2)
+);
+  AND2 un1_un63_cart_mode_1_cZ (
+	.O(un1_un63_cart_mode_1),
+	.I0(sdx_enable),
+	.I1(\cart_access.un22_flash_enable )
+);
+  AND2 un1_un63_cart_mode_cZ (
+	.O(un1_un63_cart_mode),
+	.I0(un1_un63_cart_mode_1),
+	.I1(\cart_bank_select.un63_cart_mode )
+);
+  AND2 un1_cart_mode_2_1_cZ (
+	.O(un1_cart_mode_2_1),
+	.I0(cart_mode_i[1]),
+	.I1(\cart_access.un22_flash_enable )
+);
+  AND2 un1_cart_mode_2_cZ (
+	.O(un1_cart_mode_2),
+	.I0(un1_cart_mode_2_1),
+	.I1(cart_mode_i[0])
+);
+  AND2 \ram_rom_a_1_i_a2_1_0[13]  (
+	.O(N_206_1),
+	.I0(un1_freezer_state_7_1_i),
+	.I1(un1_os_select_1_i)
+);
+  AND2 \ram_rom_a_1_i_a2_2[13]  (
+	.O(N_206_2),
+	.I0(N_218_i),
+	.I1(N_219_i)
+);
+  AND2 \ram_rom_a_1_i_a2_3[13]  (
+	.O(N_206_3),
+	.I0(N_220_i),
+	.I1(cart_a_4_i[13])
+);
+  AND2 \ram_rom_a_1_i_a2_4[13]  (
+	.O(N_206_4),
+	.I0(N_206_1),
+	.I1(N_206_2)
+);
+  AND2 \ram_rom_a_1_i_a2[13]  (
+	.O(N_206),
+	.I0(N_206_4),
+	.I1(N_206_3)
+);
+  AND2 un1_freezer_rom_a36_1_0_a2_1 (
+	.O(N_235_1),
+	.I0(N_227),
+	.I1(a_1[13])
+);
+  AND2 un1_freezer_rom_a36_1_0_a2 (
+	.O(N_235),
+	.I0(N_235_1),
+	.I1(rw_1)
+);
+  AND2 \check_cartemu_ram_rom.un121_flash_config_access_i_i_a2_1  (
+	.O(N_154_1_0),
+	.I0(N_154_1),
+	.I1(a_1[1])
+);
+  AND2 \check_cartemu_ram_rom.un121_flash_config_access_i_i_a2  (
+	.O(N_154),
+	.I0(N_154_1_0),
+	.I1(flash_config_access)
+);
+  AND2 \ram_rom_a_1_2[17]  (
+	.O(N_277_2),
+	.I0(a_1_m_i[4]),
+	.I1(cart_a_4_m_i[17])
+);
+  AND2 \ram_rom_a_1_3[17]  (
+	.O(N_277_3),
+	.I0(freezer_rom_bank_m_i[17]),
+	.I1(un1_os_select_1_i)
+);
+  AND2 \ram_rom_a_1_4[17]  (
+	.O(N_277_4),
+	.I0(N_277_1),
+	.I1(N_277_2)
+);
+  AND2 \ram_rom_a_1_5[17]  (
+	.O(N_277_5),
+	.I0(N_277_3),
+	.I1(vector_a2_m_i)
+);
+  AND2 \ram_rom_a_1[17]  (
+	.O(N_277),
+	.I0(N_277_4),
+	.I1(N_277_5)
+);
+  AND2 \cart_access.un17_tmp_cart_access_1_cZ  (
+	.O(\cart_access.un17_tmp_cart_access_1 ),
+	.I0(cart_a_4[13]),
+	.I1(cart_a_4[14])
+);
+  AND2 \cart_access.un17_tmp_cart_access_2_cZ  (
+	.O(\cart_access.un17_tmp_cart_access_2 ),
+	.I0(cart_a_4[15]),
+	.I1(cart_a_4[16])
+);
+  AND2 \cart_access.un17_tmp_cart_access_cZ  (
+	.O(\cart_access.un17_tmp_cart_access ),
+	.I0(\cart_access.un17_tmp_cart_access_1 ),
+	.I1(\cart_access.un17_tmp_cart_access_2 )
+);
+  AND2 tmp_cart_access_5_1 (
+	.O(N_275_1),
+	.I0(N_209_i),
+	.I1(N_210_i)
+);
+  AND2 tmp_cart_access_5_cZ (
+	.O(N_275),
+	.I0(N_275_1),
+	.I1(un1_cart_mode_4_i)
+);
+  AND2 un1_freezer_state_7_1_1_cZ (
+	.O(un1_freezer_state_7_1_1),
+	.I0(\ram_access.std_match.result_2_1 ),
+	.I1(a_1[15])
+);
+  AND2 un1_freezer_state_7_1_2_cZ (
+	.O(un1_freezer_state_7_1_2),
+	.I0(a_1_i[11]),
+	.I1(a_1_i[13])
+);
+  AND2 un1_freezer_state_7_1_3_cZ (
+	.O(un1_freezer_state_7_1_3),
+	.I0(un1_freezer_state_7_1_1),
+	.I1(un1_freezer_state_7_1_2)
+);
+  AND2 un1_freezer_state_7_1_cZ (
+	.O(un1_freezer_state_7_1),
+	.I0(un1_freezer_state_7_1_3),
+	.I1(freezer_state_d[3])
+);
+  AND2 un1_freezer_state_7_1_0_cZ (
+	.O(un1_freezer_state_7_1_0),
+	.I0(a_1_i[8]),
+	.I1(a_1_i[9])
+);
+  AND2 \check_vector_access.un1_activate_5_cZ  (
+	.O(\check_vector_access.un1_activate_5 ),
+	.I0(\check_vector_access.un1_activate_1 ),
+	.I1(\check_vector_access.un1_activate_2_0 )
+);
+  AND2 \check_vector_access.un1_activate_6_0  (
+	.O(\check_vector_access.un1_activate_6 ),
+	.I0(\check_vector_access.un1_activate_3 ),
+	.I1(\check_vector_access.un1_activate_4_0 )
+);
+  AND2 \check_vector_access.un1_activate_7_0  (
+	.O(\check_vector_access.un1_activate_7 ),
+	.I0(\check_vector_access.un1_activate_5 ),
+	.I1(\check_vector_access.un1_activate_6 )
+);
+  AND2 \check_vector_access.un1_activate_cZ  (
+	.O(\check_vector_access.un1_activate ),
+	.I0(\check_vector_access.un1_activate_7 ),
+	.I1(un1_os_select_1_2)
+);
+  AND2 \check_cartemu_reset_mode.un69_flash_config_access_1_cZ  (
+	.O(\check_cartemu_reset_mode.un69_flash_config_access_1 ),
+	.I0(a_1[1]),
+	.I1(a_1_i[2])
+);
+  AND2 \check_cartemu_reset_mode.un69_flash_config_access_2_cZ  (
+	.O(\check_cartemu_reset_mode.un69_flash_config_access_2 ),
+	.I0(a_1_i[3]),
+	.I1(flash_config_access)
+);
+  AND2 \check_cartemu_reset_mode.un69_flash_config_access_cZ  (
+	.O(\check_cartemu_reset_mode.un69_flash_config_access ),
+	.I0(\check_cartemu_reset_mode.un69_flash_config_access_1 ),
+	.I1(\check_cartemu_reset_mode.un69_flash_config_access_2 )
+);
+  AND2 \cart_access.tmp_cart_a_10_m_1_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m_1 [12]),
+	.I0(\cart_access.un22_flash_enable ),
+	.I1(oss_bank[12])
+);
+  AND2 \cart_access.tmp_cart_a_10_m_2_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m_2 [12]),
+	.I0(N_191),
+	.I1(N_234)
+);
+  AND2 \cart_access.tmp_cart_a_10_m_3_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m_3 [12]),
+	.I0(a_1_i[12]),
+	.I1(\cart_access.un13_flash_enable )
+);
+  AND2 \cart_access.tmp_cart_a_10_m_4_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m_4 [12]),
+	.I0(\cart_access.tmp_cart_a_10_m_1 [12]),
+	.I1(\cart_access.tmp_cart_a_10_m_2 [12])
+);
+  AND2 \cart_access.tmp_cart_a_10_m_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m [12]),
+	.I0(\cart_access.tmp_cart_a_10_m_4 [12]),
+	.I1(\cart_access.tmp_cart_a_10_m_3 [12])
+);
+  AND2 vector_a2_m_1_cZ (
+	.O(vector_a2_m_1_0),
+	.I0(vector_a2_m_1),
+	.I1(use_vector_bankno)
+);
+  AND2 vector_a2_m_cZ (
+	.O(vector_a2_m),
+	.I0(vector_a2_m_1_0),
+	.I1(vector_a2)
+);
+  AND2 \ram_rom_a_1_1[17]  (
+	.O(N_277_1),
+	.I0(N_75_i),
+	.I1(a_1_m_0_i[4])
+);
+  AND2 \freezer_rom_bank_select.std_match.result_2_cZ  (
+	.O(\freezer_rom_bank_select.std_match.result_2 ),
+	.I0(flash_config_access_5),
+	.I1(\freezer_rom_bank_select.std_match.8.result_3 )
+);
+  AND2 \freezer_rom_bank_select.std_match.result_3_cZ  (
+	.O(\freezer_rom_bank_select.std_match.result_3 ),
+	.I0(\freezer_rom_bank_select.std_match.result_1 ),
+	.I1(\freezer_rom_bank_select.std_match.result_2 )
+);
+  AND2 \freezer_rom_bank_select.std_match.result_cZ  (
+	.O(\freezer_rom_bank_select.std_match.result ),
+	.I0(\freezer_rom_bank_select.std_match.result_3 ),
+	.I1(\ram_access.std_match.result_2_1 )
+);
+  AND2 \ram_rom_a_1_1[12]  (
+	.O(N_283_1),
+	.I0(\cart_access.tmp_cart_a_10_m_i [12]),
+	.I1(freezer_ram_bank_m_i[12])
+);
+  AND2 \ram_rom_a_1_2[12]  (
+	.O(N_283_2),
+	.I0(N_75_i),
+	.I1(N_200_i)
+);
+  AND2 \ram_rom_a_1_3[12]  (
+	.O(N_283_3),
+	.I0(a_1_m_0_i[12]),
+	.I1(a_1_m_i[12])
+);
+  AND2 \ram_rom_a_1_4[12]  (
+	.O(N_283_4),
+	.I0(N_283_1),
+	.I1(N_283_2)
+);
+  AND2 \ram_rom_a_1[12]  (
+	.O(N_283),
+	.I0(N_283_4),
+	.I1(N_283_3)
+);
+  AND2 un1_os_select_1_1_cZ (
+	.O(un1_os_select_1_1_0),
+	.I0(N_75_i),
+	.I1(os_select_i)
+);
+  AND2 un1_os_select_1_2_cZ (
+	.O(un1_os_select_1_2_0),
+	.I0(un1_os_select_1_1),
+	.I1(un1_os_select_1_2)
+);
+  AND2 un1_os_select_1_cZ (
+	.O(un1_os_select_1),
+	.I0(un1_os_select_1_1_0),
+	.I1(un1_os_select_1_2_0)
+);
+  AND2 \check_vector_access.un1_activate_1_cZ  (
+	.O(\check_vector_access.un1_activate_1 ),
+	.I0(a_1[3]),
+	.I1(a_1[4])
+);
+  AND2 \check_vector_access.un1_activate_2_0_cZ  (
+	.O(\check_vector_access.un1_activate_2_0 ),
+	.I0(a_1[11]),
+	.I1(a_1[12])
+);
+  AND2 \check_vector_access.un1_activate_3_cZ  (
+	.O(\check_vector_access.un1_activate_3 ),
+	.I0(activate_inputreg_1_i),
+	.I1(\check_vector_access.un1_activate_2 )
+);
+  AND2 \check_vector_access.un1_activate_4_0_cZ  (
+	.O(\check_vector_access.un1_activate_4_0 ),
+	.I0(\check_vector_access.un1_activate_9 ),
+	.I1(un1_os_select_1_1)
+);
+  AND2 \ram_rom_a_1_2[16]  (
+	.O(N_295_2),
+	.I0(cart_a_4_i[16]),
+	.I1(freezer_ram_bank_m_i[16])
+);
+  AND2 \ram_rom_a_1_3[16]  (
+	.O(N_295_3),
+	.I0(N_295_1),
+	.I1(N_295_2)
+);
+  AND2 \ram_rom_a_1[16]  (
+	.O(N_295),
+	.I0(N_295_3),
+	.I1(freezer_rom_bank_m_i[16])
+);
+  AND2 \ram_rom_a_1_1[15]  (
+	.O(N_294_1),
+	.I0(N_200_i),
+	.I1(N_244)
+);
+  AND2 \ram_rom_a_1_2[15]  (
+	.O(N_294_2),
+	.I0(cart_a_4_i[15]),
+	.I1(freezer_ram_bank_m_i[15])
+);
+  AND2 \ram_rom_a_1_3[15]  (
+	.O(N_294_3),
+	.I0(N_294_1),
+	.I1(N_294_2)
+);
+  AND2 \ram_rom_a_1[15]  (
+	.O(N_294),
+	.I0(N_294_3),
+	.I1(freezer_rom_bank_m_i[15])
+);
+  AND2 \check_oss_bank.std_match.result_1_cZ  (
+	.O(\check_oss_bank.std_match.result_1 ),
+	.I0(a_1[8]),
+	.I1(a_1[10])
+);
+  AND2 \check_oss_bank.std_match.result_2_cZ  (
+	.O(\check_oss_bank.std_match.result_2 ),
+	.I0(a_1[15]),
+	.I1(a_1_i[7])
+);
+  AND2 \check_oss_bank.std_match.result_3_cZ  (
+	.O(\check_oss_bank.std_match.result_3 ),
+	.I0(a_1_i[9]),
+	.I1(\check_flash_config_access.std_match.6.result_3 )
+);
+  AND2 \check_oss_bank.std_match.result_4_cZ  (
+	.O(\check_oss_bank.std_match.result_4 ),
+	.I0(flash_config_access_5),
+	.I1(\ram_access.std_match.result_2_1 )
+);
+  AND2 \check_oss_bank.std_match.result_5_cZ  (
+	.O(\check_oss_bank.std_match.result_5 ),
+	.I0(\check_oss_bank.std_match.result_1 ),
+	.I1(\check_oss_bank.std_match.result_2 )
+);
+  AND2 \check_oss_bank.std_match.result_6_cZ  (
+	.O(\check_oss_bank.std_match.result_6 ),
+	.I0(\check_oss_bank.std_match.result_3 ),
+	.I1(\check_oss_bank.std_match.result_4 )
+);
+  AND2 \check_oss_bank.std_match.result_cZ  (
+	.O(\check_oss_bank.std_match.result ),
+	.I0(\check_oss_bank.std_match.result_5 ),
+	.I1(\check_oss_bank.std_match.result_6 )
+);
+  AND2 \freezer_rom_bank_select.std_match.result_1_cZ  (
+	.O(\freezer_rom_bank_select.std_match.result_1 ),
+	.I0(a_1[15]),
+	.I1(\check_vector_access.un1_activate_4 )
+);
+  INV \cart_a_4_i_cZ[16]  (
+	.O(cart_a_4_i[16]),
+	.I0(cart_a_4[16])
+);
+  INV \ram_rom_a_1_i[16]  (
+	.O(ram_rom_a_1_c[16]),
+	.I0(N_295)
+);
+  INV N_214_i_cZ (
+	.O(N_214_i),
+	.I0(N_214)
+);
+  INV N_216_i_cZ (
+	.O(N_216_i),
+	.I0(N_216)
+);
+  INV \cart_a_4_i[12]  (
+	.O(N_90),
+	.I0(N_296)
+);
+  INV un1_freezer_state_4_i_cZ (
+	.O(un1_freezer_state_4_i),
+	.I0(un1_freezer_state_4)
+);
+  INV un1_freezer_state_7_i_cZ (
+	.O(un1_freezer_state_7_i),
+	.I0(un1_freezer_state_7)
+);
+  INV un1_freezer_state_10_i (
+	.O(un1_freezer_state_10),
+	.I0(N_297)
+);
+  INV un1_cart_mode_2_i_cZ (
+	.O(un1_cart_mode_2_i),
+	.I0(un1_cart_mode_2)
+);
+  INV un1_un63_cart_mode_i_cZ (
+	.O(un1_un63_cart_mode_i),
+	.I0(un1_un63_cart_mode)
+);
+  INV un1_cart_mode_4_i_0 (
+	.O(un1_cart_mode_4),
+	.I0(un1_cart_mode_4_i)
+);
+  INV \check_reset_cartemu.un1_reset_cartemu_i_cZ  (
+	.O(\check_reset_cartemu.un1_reset_cartemu_i ),
+	.I0(\check_reset_cartemu.un1_reset_cartemu )
+);
+  INV poweron_c_i_cZ (
+	.O(poweron_c_i),
+	.I0(poweron_c)
+);
+  INV reset_cartemu_i (
+	.O(reset_cartemu),
+	.I0(N_299)
+);
+  AND2 \ram_rom_a_1_1[16]  (
+	.O(N_295_1),
+	.I0(N_200_i),
+	.I1(N_244)
+);
+  INV \freezer_rom_bank_m_i_cZ[17]  (
+	.O(freezer_rom_bank_m_i[17]),
+	.I0(freezer_rom_bank_m[17])
+);
+  INV \a_1_m_0_i_cZ[4]  (
+	.O(a_1_m_0_i[4]),
+	.I0(a_1_m_0[4])
+);
+  INV \cart_a_4_m_i_cZ[17]  (
+	.O(cart_a_4_m_i[17]),
+	.I0(cart_a_4_m[17])
+);
+  INV \a_1_m_i_cZ[4]  (
+	.O(a_1_m_i[4]),
+	.I0(a_1_m[4])
+);
+  INV \ram_rom_a_1_i[12]  (
+	.O(ram_rom_a_1_c[12]),
+	.I0(N_283)
+);
+  INV \freezer_ram_bank_m_i_cZ[12]  (
+	.O(freezer_ram_bank_m_i[12]),
+	.I0(freezer_ram_bank_m[12])
+);
+  INV \a_1_m_0_i_cZ[12]  (
+	.O(a_1_m_0_i[12]),
+	.I0(a_1_m_0[12])
+);
+  INV \cart_access.tmp_cart_a_10_m_i_cZ[12]  (
+	.O(\cart_access.tmp_cart_a_10_m_i [12]),
+	.I0(\cart_access.tmp_cart_a_10_m [12])
+);
+  INV \a_1_m_i_cZ[12]  (
+	.O(a_1_m_i[12]),
+	.I0(a_1_m[12])
+);
+  INV \freezer_rom_bank_m_i_cZ[16]  (
+	.O(freezer_rom_bank_m_i[16]),
+	.I0(freezer_rom_bank_m[16])
+);
+  INV \freezer_ram_bank_m_i_cZ[16]  (
+	.O(freezer_ram_bank_m_i[16]),
+	.I0(freezer_ram_bank_m[16])
+);
+  INV \freezer_rom_bank_m_i_cZ[15]  (
+	.O(freezer_rom_bank_m_i[15]),
+	.I0(freezer_rom_bank_m[15])
+);
+  INV \freezer_ram_bank_m_i_cZ[15]  (
+	.O(freezer_ram_bank_m_i[15]),
+	.I0(freezer_ram_bank_m[15])
+);
+  INV \cart_a_4_i_cZ[15]  (
+	.O(cart_a_4_i[15]),
+	.I0(cart_a_4[15])
+);
+  INV \ram_rom_a_1_i[15]  (
+	.O(ram_rom_a_1_c[15]),
+	.I0(N_294)
+);
+  INV \cart_a_4_i_cZ[13]  (
+	.O(cart_a_4_i[13]),
+	.I0(cart_a_4[13])
+);
+  INV N_223_i_cZ (
+	.O(N_223_i),
+	.I0(N_223)
+);
+  INV N_224_i_cZ (
+	.O(N_224_i),
+	.I0(N_224)
+);
+  INV \cart_a_4_iv_0_o2_i[13]  (
+	.O(N_193),
+	.I0(N_272)
+);
+  INV N_222_i_cZ (
+	.O(N_222_i),
+	.I0(N_222)
+);
+  INV N_231_i_cZ (
+	.O(N_231_i),
+	.I0(N_231)
+);
+  INV \cart_a_4_iv_0_o2_0_i[13]  (
+	.O(N_192),
+	.I0(N_273)
+);
+  INV \oss_bank_i_cZ[12]  (
+	.O(oss_bank_i[12]),
+	.I0(oss_bank[12])
+);
+  INV \oss_bank_i_cZ[13]  (
+	.O(oss_bank_i[13]),
+	.I0(oss_bank[13])
+);
+  INV un1_cart_mode_3_0_o2_i (
+	.O(N_191),
+	.I0(N_274)
+);
+  INV tmp_cart_access_5_i (
+	.O(tmp_cart_access_5),
+	.I0(N_275)
+);
+  INV N_209_i_cZ (
+	.O(N_209_i),
+	.I0(N_209)
+);
+  INV N_210_i_cZ (
+	.O(N_210_i),
+	.I0(N_210)
+);
+  INV \ram_rom_a_1_i[17]  (
+	.O(ram_rom_a_1_c[17]),
+	.I0(N_277)
+);
+  INV vector_a2_m_i_cZ (
+	.O(vector_a2_m_i),
+	.I0(vector_a2_m)
+);
+  INV \ram_access.freezer_ram_mask_a5a73_i  (
+	.O(\ram_access.freezer_ram_mask_a5a73 ),
+	.I0(N_256)
+);
+  INV cart_rom_access_i_cZ (
+	.O(cart_rom_access_i),
+	.I0(cart_rom_access)
+);
+  INV N_77_i_cZ (
+	.O(N_77_i),
+	.I0(N_77)
+);
+  INV \freezer_state_ns_0_i[0]  (
+	.O(freezer_state_ns[0]),
+	.I0(N_258)
+);
+  INV N_73_i_cZ (
+	.O(N_73_i),
+	.I0(N_73)
+);
+  INV N_74_i_cZ (
+	.O(N_74_i),
+	.I0(N_74)
+);
+  INV cart_ram_access_i_cZ (
+	.O(cart_ram_access_i),
+	.I0(cart_ram_access)
+);
+  INV N_48_m_i_cZ (
+	.O(N_48_m_i),
+	.I0(N_48_m)
+);
+  INV N_76_i_cZ (
+	.O(N_76_i),
+	.I0(N_76)
+);
+  INV N_78_i_cZ (
+	.O(N_78_i),
+	.I0(N_78)
+);
+  INV \freezer_state_ns_0_i[1]  (
+	.O(freezer_state_ns[1]),
+	.I0(N_264)
+);
+  INV \disable_atari.un36_freezer_rom_access_i_cZ  (
+	.O(\disable_atari.un36_freezer_rom_access_i ),
+	.I0(\disable_atari.un36_freezer_rom_access )
+);
+  INV N_219_i_cZ (
+	.O(N_219_i),
+	.I0(N_219)
+);
+  INV N_220_i_cZ (
+	.O(N_220_i),
+	.I0(N_220)
+);
+  INV N_218_i_cZ (
+	.O(N_218_i),
+	.I0(N_218)
+);
+  INV N_151_i_cZ (
+	.O(N_151_i),
+	.I0(N_151)
+);
+  INV \cart_bank_5_0_i[15]  (
+	.O(cart_bank_5[15]),
+	.I0(N_245)
+);
+  INV \cart_access.N_221_i  (
+	.O(N_221_i),
+	.I0(N_221)
+);
+  INV \cart_access.un13_flash_enable_0_o2_i  (
+	.O(N_190),
+	.I0(N_246)
+);
+  INV \cart_a_4_i_cZ[14]  (
+	.O(cart_a_4_i[14]),
+	.I0(cart_a_4[14])
+);
+  INV N_207_i_cZ (
+	.O(N_207_i),
+	.I0(N_207)
+);
+  INV N_208_i_cZ (
+	.O(N_208_i),
+	.I0(N_208)
+);
+  INV \ram_rom_a_1_0_i[14]  (
+	.O(ram_rom_a_1_c[14]),
+	.I0(N_250)
+);
+  INV \freezer_rom_bank_m_i_cZ[18]  (
+	.O(freezer_rom_bank_m_i[18]),
+	.I0(freezer_rom_bank_m[18])
+);
+  INV vector_a2_m_1_i_cZ (
+	.O(vector_a2_m_1_i),
+	.I0(vector_a2_m_1)
+);
+  INV \ram_rom_a_1_i[18]  (
+	.O(ram_rom_a_1_c[18]),
+	.I0(N_254)
+);
+  INV \cart_a_4_i_m_i_cZ[18]  (
+	.O(cart_a_4_i_m_i[18]),
+	.I0(cart_a_4_i_m[18])
+);
+  INV \cart_a_iv_i_0[18]  (
+	.O(cart_a_iv[18]),
+	.I0(cart_a_iv_i[18])
+);
+  INV \ram_access.std_match.result_1_i_cZ  (
+	.O(\ram_access.std_match.result_1_i ),
+	.I0(\ram_access.std_match.result_1 )
+);
+  INV \ram_access.std_match.result_i_cZ  (
+	.O(\ram_access.std_match.result_i ),
+	.I0(\ram_access.std_match.result )
+);
+  INV \check_flash_enable.un1_flash_enable_in_i  (
+	.O(\check_flash_enable.un1_flash_enable_in ),
+	.I0(N_241)
+);
+  INV N_235_i_cZ (
+	.O(N_235_i),
+	.I0(N_235)
+);
+  INV \freezer_rom_a_i[12]  (
+	.O(N_83),
+	.I0(N_83_i)
+);
+  INV flash_enable_i_cZ (
+	.O(flash_enable_i),
+	.I0(flash_enable)
+);
+  INV \check_flash_enable.un3_flash_enable_in_i_cZ  (
+	.O(\check_flash_enable.un3_flash_enable_in_i ),
+	.I0(\check_flash_enable.un3_flash_enable_in )
+);
+  INV flash_enable_4_f1_i (
+	.O(flash_enable_4_f1),
+	.I0(N_243)
+);
+  INV N_150_i_cZ (
+	.O(N_150_i),
+	.I0(N_150)
+);
+  INV flash_enable_in_i_cZ (
+	.O(flash_enable_in_i),
+	.I0(flash_enable_in_c)
+);
+  INV flash_writable_in_i_cZ (
+	.O(flash_writable_in_i),
+	.I0(flash_writable_in_c)
+);
+  AND2 \check_flash_enable.un1_flash_enable_in_cZ  (
+	.O(N_241),
+	.I0(flash_enable_in_c),
+	.I1(flash_writable_in_c)
+);
+  INV N_206_i (
+	.O(N_206_i_0_c),
+	.I0(N_206)
+);
+  INV \sdx_enable_0.r  (
+	.O(\sdx_enable_0.un3 ),
+	.I0(\check_sdx_enable.std_match.result )
+);
+  AND2 \sdx_enable_0.m  (
+	.O(\sdx_enable_0.un1 ),
+	.I0(a_1_i[3]),
+	.I1(\check_sdx_enable.std_match.result )
+);
+  AND2 \sdx_enable_0.n  (
+	.O(\sdx_enable_0.un0 ),
+	.I0(sdx_enable),
+	.I1(\sdx_enable_0.un3 )
+);
+  OR2 \sdx_enable_0.p  (
+	.O(N_23),
+	.I0(\sdx_enable_0.un1 ),
+	.I1(\sdx_enable_0.un0 )
+);
+  INV \cart_write_enable_0.r  (
+	.O(\cart_write_enable_0.un3 ),
+	.I0(N_152)
+);
+  AND2 \cart_write_enable_0.m  (
+	.O(\cart_write_enable_0.un1 ),
+	.I0(a_1[0]),
+	.I1(N_152)
+);
+  AND2 \cart_write_enable_0.n  (
+	.O(\cart_write_enable_0.un0 ),
+	.I0(cart_write_enable),
+	.I1(\cart_write_enable_0.un3 )
+);
+  OR2 \cart_write_enable_0.p  (
+	.O(N_20),
+	.I0(\cart_write_enable_0.un1 ),
+	.I1(\cart_write_enable_0.un0 )
+);
+  INV \cart_bank_0_13_.r  (
+	.O(\cart_bank_0_13_.un3 ),
+	.I0(un1_result_2)
+);
+  AND2 \cart_bank_0_13_.m  (
+	.O(\cart_bank_0_13_.un1 ),
+	.I0(cart_bank[13]),
+	.I1(un1_result_2)
+);
+  AND2 \cart_bank_0_13_.n  (
+	.O(\cart_bank_0_13_.un0 ),
+	.I0(cart_bank_5[13]),
+	.I1(\cart_bank_0_13_.un3 )
+);
+  OR2 \cart_bank_0_13_.p  (
+	.O(N_19),
+	.I0(\cart_bank_0_13_.un1 ),
+	.I1(\cart_bank_0_13_.un0 )
+);
+  INV \cart_bank_0_15_.r  (
+	.O(\cart_bank_0_15_.un3 ),
+	.I0(un1_result_2)
+);
+  AND2 \cart_bank_0_15_.m  (
+	.O(\cart_bank_0_15_.un1 ),
+	.I0(cart_bank[15]),
+	.I1(un1_result_2)
+);
+  AND2 \cart_bank_0_15_.n  (
+	.O(\cart_bank_0_15_.un0 ),
+	.I0(cart_bank_5[15]),
+	.I1(\cart_bank_0_15_.un3 )
+);
+  OR2 \cart_bank_0_15_.p  (
+	.O(N_17),
+	.I0(\cart_bank_0_15_.un1 ),
+	.I1(\cart_bank_0_15_.un0 )
+);
+  INV \flash_enable_0.r  (
+	.O(\flash_enable_0.un3 ),
+	.I0(\check_flash_enable.un1_flash_enable_in )
+);
+  AND2 \flash_enable_0.m  (
+	.O(\flash_enable_0.un1 ),
+	.I0(flash_enable_4),
+	.I1(\check_flash_enable.un1_flash_enable_in )
+);
+  AND2 \flash_enable_0.n  (
+	.O(\flash_enable_0.un0 ),
+	.I0(flash_enable),
+	.I1(\flash_enable_0.un3 )
+);
+  OR2 \flash_enable_0.p  (
+	.O(N_1),
+	.I0(\flash_enable_0.un1 ),
+	.I1(\flash_enable_0.un0 )
+);
+  INV \cart_bank_select.std_match.result_i_cZ  (
+	.O(\cart_bank_select.std_match.result_i ),
+	.I0(\cart_bank_select.std_match.result )
+);
+  INV \cart_bank_select.un62_cart_mode_i_cZ  (
+	.O(\cart_bank_select.un62_cart_mode_i ),
+	.I0(\cart_bank_select.un62_cart_mode )
+);
+  AND2 un1_result_2_cZ (
+	.O(un1_result_2),
+	.I0(\cart_bank_select.std_match.result_i ),
+	.I1(\cart_bank_select.un62_cart_mode_i )
+);
+  AND2 \cart_bank_select.un62_cart_mode_cZ  (
+	.O(\cart_bank_select.un62_cart_mode ),
+	.I0(\cart_bank_select.un63_cart_mode ),
+	.I1(\check_sdx_enable.std_match.result )
+);
+  AND2 un1_tmp_cart_access_1_cZ (
+	.O(un1_tmp_cart_access_1),
+	.I0(cart_mode_ram),
+	.I1(tmp_cart_access_1)
+);
+  INV cart_mode_ram_i_cZ (
+	.O(cart_mode_ram_i),
+	.I0(cart_mode_ram)
+);
+  AND2 cart_rom_access_cZ (
+	.O(cart_rom_access),
+	.I0(cart_mode_ram_i),
+	.I1(tmp_cart_access_1)
+);
+  AND2 un2_reset_cartemu_1_cZ (
+	.O(un2_reset_cartemu_1),
+	.I0(flash_enable_in_c),
+	.I1(reset_cartemu)
+);
+  AND2 un2_reset_cartemu_cZ (
+	.O(un2_reset_cartemu),
+	.I0(flash_enable_in_i),
+	.I1(reset_cartemu)
+);
+  XOR2 \cart_bank_5_cZ[13]  (
+	.O(cart_bank_5[13]),
+	.I0(a_1[0]),
+	.I1(a_1[7])
+);
+  INV \a_1_i_cZ[4]  (
+	.O(a_1_i[4]),
+	.I0(a_1[4])
+);
+  AND2 ram_rom_a_1_16_34 (
+	.O(N_244),
+	.I0(N_75_i),
+	.I1(un1_os_select_1_i)
+);
+  INV \check_flash_enable.un30_flash_enable_in_i_cZ  (
+	.O(\check_flash_enable.un30_flash_enable_in_i ),
+	.I0(\check_flash_enable.un30_flash_enable_in )
+);
+  AND2 flash_enable_4_f0 (
+	.O(flash_enable_4),
+	.I0(\check_flash_enable.un30_flash_enable_in_i ),
+	.I1(flash_enable_4_f1)
+);
+  AND2 flash_enable_4_f1_cZ (
+	.O(N_243),
+	.I0(\check_flash_enable.un3_flash_enable_in_i ),
+	.I1(flash_enable_i)
+);
+  AND2 \freezer_rom_a[12]  (
+	.O(N_83_i),
+	.I0(N_235_i),
+	.I1(un1_os_select_1_i)
+);
+  AND2 \cart_a_4_cZ[14]  (
+	.O(cart_a_4[14]),
+	.I0(cart_bank[14]),
+	.I1(tmp_cart_access_1)
+);
+  AND2 \cart_a_4_cZ[15]  (
+	.O(cart_a_4[15]),
+	.I0(cart_bank[15]),
+	.I1(tmp_cart_access_1)
+);
+  AND2 \cart_a_4_cZ[16]  (
+	.O(cart_a_4[16]),
+	.I0(cart_bank[16]),
+	.I1(tmp_cart_access_1)
+);
+  INV \freezer_ram_bank_0_15_.r  (
+	.O(\freezer_ram_bank_0_15_.un3 ),
+	.I0(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_15_.m  (
+	.O(\freezer_ram_bank_0_15_.un1 ),
+	.I0(a_1[3]),
+	.I1(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_15_.n  (
+	.O(\freezer_ram_bank_0_15_.un0 ),
+	.I0(freezer_ram_bank[15]),
+	.I1(\freezer_ram_bank_0_15_.un3 )
+);
+  OR2 \freezer_ram_bank_0_15_.p  (
+	.O(N_14),
+	.I0(\freezer_ram_bank_0_15_.un1 ),
+	.I1(\freezer_ram_bank_0_15_.un0 )
+);
+  INV \freezer_rom_bank_0_18_.r  (
+	.O(\freezer_rom_bank_0_18_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_18_.m  (
+	.O(\freezer_rom_bank_0_18_.un1 ),
+	.I0(a_1[5]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_18_.n  (
+	.O(\freezer_rom_bank_0_18_.un0 ),
+	.I0(freezer_rom_bank[18]),
+	.I1(\freezer_rom_bank_0_18_.un3 )
+);
+  OR2 \freezer_rom_bank_0_18_.p  (
+	.O(N_9),
+	.I0(\freezer_rom_bank_0_18_.un1 ),
+	.I1(\freezer_rom_bank_0_18_.un0 )
+);
+  INV \freezer_rom_bank_0_16_.r  (
+	.O(\freezer_rom_bank_0_16_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_16_.m  (
+	.O(\freezer_rom_bank_0_16_.un1 ),
+	.I0(a_1[3]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_16_.n  (
+	.O(\freezer_rom_bank_0_16_.un0 ),
+	.I0(freezer_rom_bank[16]),
+	.I1(\freezer_rom_bank_0_16_.un3 )
+);
+  OR2 \freezer_rom_bank_0_16_.p  (
+	.O(N_7),
+	.I0(\freezer_rom_bank_0_16_.un1 ),
+	.I1(\freezer_rom_bank_0_16_.un0 )
+);
+  INV \cart_bank_0_16_.r  (
+	.O(\cart_bank_0_16_.un3 ),
+	.I0(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_16_.m  (
+	.O(\cart_bank_0_16_.un1 ),
+	.I0(a_1[3]),
+	.I1(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_16_.n  (
+	.O(\cart_bank_0_16_.un0 ),
+	.I0(cart_bank[16]),
+	.I1(\cart_bank_0_16_.un3 )
+);
+  OR2 \cart_bank_0_16_.p  (
+	.O(N_28),
+	.I0(\cart_bank_0_16_.un1 ),
+	.I1(\cart_bank_0_16_.un0 )
+);
+  INV \cart_bank_0_18_.r  (
+	.O(\cart_bank_0_18_.un3 ),
+	.I0(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_18_.m  (
+	.O(\cart_bank_0_18_.un1 ),
+	.I0(a_1[5]),
+	.I1(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_18_.n  (
+	.O(\cart_bank_0_18_.un0 ),
+	.I0(cart_bank[18]),
+	.I1(\cart_bank_0_18_.un3 )
+);
+  OR2 \cart_bank_0_18_.p  (
+	.O(N_26),
+	.I0(\cart_bank_0_18_.un1 ),
+	.I1(\cart_bank_0_18_.un0 )
+);
+  INV \a_1_i_cZ[3]  (
+	.O(a_1_i[3]),
+	.I0(a_1[3])
+);
+  AND2 \ram_rom_a_1_0_a2_0[14]  (
+	.O(N_208),
+	.I0(N_235),
+	.I1(freezer_rom_bank[14])
+);
+  AND2 \cart_bank_5_0[15]  (
+	.O(N_245),
+	.I0(N_150_i),
+	.I1(N_151_i)
+);
+  INV \a_1_i_cZ[5]  (
+	.O(a_1_i[5]),
+	.I0(a_1[5])
+);
+  INV \a_1_i_cZ[6]  (
+	.O(a_1_i[6]),
+	.I0(a_1[6])
+);
+  AND2 \check_flash_config_access.std_match.6.result_3_0_a2_0  (
+	.O(N_159),
+	.I0(a_1_i[5]),
+	.I1(a_1_i[6])
+);
+  AND2 \check_vector_access.un1_activate_3_0_a2  (
+	.O(flash_config_access_1),
+	.I0(a_1[7]),
+	.I1(a_1[8])
+);
+  INV \a_1_i_cZ[2]  (
+	.O(a_1_i[2]),
+	.I0(a_1[2])
+);
+  AND2 \cart_bank_5_0_a2_0[15]  (
+	.O(N_151),
+	.I0(a_1[7]),
+	.I1(a_1_i[2])
+);
+  AND2 \cart_bank_5_0_a2[15]  (
+	.O(N_150),
+	.I0(a_1[2]),
+	.I1(a_1_i[7])
+);
+  AND2 \check_vector_access.un1_activate_4_cZ  (
+	.O(\check_vector_access.un1_activate_4 ),
+	.I0(a_1[9]),
+	.I1(a_1[10])
+);
+  AND2 \check_vector_access.un1_activate_2_cZ  (
+	.O(\check_vector_access.un1_activate_2 ),
+	.I0(a_1[5]),
+	.I1(a_1[6])
+);
+  INV \a_1_i_cZ[7]  (
+	.O(a_1_i[7]),
+	.I0(a_1[7])
+);
+  AND2 \freezer_ram_bank_select.std_match.result_6  (
+	.O(\check_vector_access.un1_activate_9 ),
+	.I0(\check_vector_access.un1_activate_4 ),
+	.I1(flash_config_access_1)
+);
+  AND2 \check_sdx_enable.std_match.result_8  (
+	.O(\cart_bank_select.std_match.result_5 ),
+	.I0(flash_config_access_2),
+	.I1(flash_config_access_3)
+);
+  INV \a_1_i_cZ[9]  (
+	.O(a_1_i[9]),
+	.I0(a_1[9])
+);
+  AND2 \freezer_rom_bank_m_cZ[18]  (
+	.O(freezer_rom_bank_m[18]),
+	.I0(N_235),
+	.I1(freezer_rom_bank[18])
+);
+  INV \cart_bank_i_cZ[18]  (
+	.O(cart_bank_i[18]),
+	.I0(cart_bank[18])
+);
+  AND2 \cart_a_4_i_m_cZ[18]  (
+	.O(cart_a_4_i_m[18]),
+	.I0(cart_bank_i[18]),
+	.I1(cart_mode_ram_i)
+);
+  AND2 \cart_a_iv_cZ[18]  (
+	.O(cart_a_iv_i[18]),
+	.I0(cart_a_4_i_m_i[18]),
+	.I1(tmp_cart_access_1)
+);
+  AND2 \check_vector_access.un1_activate_6_cZ  (
+	.O(un1_os_select_1_1),
+	.I0(a_1[13]),
+	.I1(a_1[14])
+);
+  AND2 \disable_atari.un36_freezer_rom_access_1_0_a2  (
+	.O(flash_config_access_3),
+	.I0(a_1[14]),
+	.I1(a_1[15])
+);
+  INV \a_1_i_cZ[15]  (
+	.O(a_1_i[15]),
+	.I0(a_1[15])
+);
+  AND2 \ram_access.std_match.result_0_a2_0  (
+	.O(N_226),
+	.I0(a_1_i[14]),
+	.I1(a_1_i[15])
+);
+  INV \a_1_i_cZ[14]  (
+	.O(a_1_i[14]),
+	.I0(a_1[14])
+);
+  AND2 un1_cart_mode_1_0_a2_0 (
+	.O(N_228),
+	.I0(a_1[15]),
+	.I1(a_1_i[14])
+);
+  INV \a_1_i_cZ[1]  (
+	.O(a_1_i[1]),
+	.I0(a_1[1])
+);
+  AND2 un1_un147_flash_config_access_1_i_a2_1 (
+	.O(N_154_1),
+	.I0(a_1[2]),
+	.I1(a_1_i[3])
+);
+  AND2 \cart_access.un13_flash_enable_0_o2  (
+	.O(N_246),
+	.I0(N_221_i),
+	.I1(rw_1_i)
+);
+  AND2 \cart_access.un13_flash_enable_0_a2  (
+	.O(\cart_access.un13_flash_enable ),
+	.I0(N_190),
+	.I1(flash_enable)
+);
+  AND2 \cart_access.un13_flash_enable_0_a2_0  (
+	.O(N_221),
+	.I0(cart_write_enable),
+	.I1(flash_writable_in_i)
+);
+  AND2 N_48_m_cZ (
+	.O(N_48_m),
+	.I0(rw_1_i),
+	.I1(un1_freezer_state_7_1)
+);
+  INV N_75_i_cZ (
+	.O(N_75_i),
+	.I0(N_75)
+);
+  AND2 freezer_rom_access_i_a2 (
+	.O(N_82),
+	.I0(N_75_i),
+	.I1(N_83_i)
+);
+  INV \freezer_activation.un5_d700_d71f_access_i  (
+	.O(\freezer_activation.un5_d700_d71f_access_i_0 ),
+	.I0(\freezer_activation.un5_d700_d71f_access )
+);
+  AND2 \freezer_state_ns_0_a2_0[1]  (
+	.O(N_78),
+	.I0(\freezer_activation.un5_d700_d71f_access_i_0 ),
+	.I1(freezer_state[1])
+);
+  AND2 \freezer_state_ns_0_a2[0]  (
+	.O(N_77),
+	.I0(\check_vector_access.un1_activate ),
+	.I1(freezer_state_i_0[1])
+);
+  INV rw_1_i_cZ (
+	.O(rw_1_i),
+	.I0(rw_1)
+);
+  AND2 \freezer_state_ns_0_a2[1]  (
+	.O(N_76),
+	.I0(freezer_state[1]),
+	.I1(rw_1_i)
+);
+  AND2 \freezer_state_ns_0_a4[1]  (
+	.O(N_75),
+	.I0(N_77),
+	.I1(freezer_state[0])
+);
+  AND2 \freezer_state_ns_0_a4[0]  (
+	.O(N_73),
+	.I0(N_78),
+	.I1(freezer_state[0])
+);
+  INV \freezer_state_i[0]  (
+	.O(freezer_state_i_0[0]),
+	.I0(freezer_state[0])
+);
+  INV \freezer_state_i[1]  (
+	.O(freezer_state_i_0[1]),
+	.I0(freezer_state[1])
+);
+  AND2 freezer_state_s0_0_a2 (
+	.O(freezer_state_d[3]),
+	.I0(freezer_state_i_0[0]),
+	.I1(freezer_state_i_0[1])
+);
+  AND2 \activate_freezer_chips.un10_freezer_rom_access  (
+	.O(\activate_freezer_chips.un10_freezer_rom_access_i_c ),
+	.I0(N_82),
+	.I1(cart_rom_access_i)
+);
+  AND2 \ram_access.freezer_ram_mask_a5a73_cZ  (
+	.O(N_256),
+	.I0(\ram_access.std_match.result_1_i ),
+	.I1(\ram_access.std_match.result_i )
+);
+  AND2 un1_cart_mode_3_0_o2 (
+	.O(N_274),
+	.I0(oss_bank_i[12]),
+	.I1(oss_bank_i[13])
+);
+  AND2 \cart_a_4_iv_0_o2_0[13]  (
+	.O(N_273),
+	.I0(N_222_i),
+	.I1(N_231_i)
+);
+  AND2 \cart_a_4_iv_0_o2[13]  (
+	.O(N_272),
+	.I0(N_223_i),
+	.I1(N_224_i)
+);
+  AND2 \ram_rom_a_1_0_o2[14]  (
+	.O(N_200_i),
+	.I0(N_218_i),
+	.I1(un1_freezer_state_7_1_i)
+);
+  INV \a_1_i_cZ[12]  (
+	.O(a_1_i[12]),
+	.I0(a_1[12])
+);
+  INV \a_1_i_cZ[13]  (
+	.O(a_1_i[13]),
+	.I0(a_1[13])
+);
+  AND2 \ram_access.std_match.13.result_3_0_a2  (
+	.O(\ram_access.std_match.13.result_3 ),
+	.I0(a_1_i[12]),
+	.I1(a_1_i[13])
+);
+  AND2 \ram_rom_a_1_0_a2_2[14]  (
+	.O(N_227),
+	.I0(N_33_d),
+	.I1(N_226)
+);
+  AND2 freezer_state_s3_0_a2_0_a2 (
+	.O(N_33_d),
+	.I0(freezer_state[0]),
+	.I1(freezer_state[1])
+);
+  AND2 \ram_rom_a_1_0_a2_1[14]  (
+	.O(N_218),
+	.I0(N_227),
+	.I1(\ram_access.std_match.13.result_3 )
+);
+  AND2 \ram_access.std_match.result_1_2_a2  (
+	.O(\ram_access.std_match.result_1 ),
+	.I0(N_226),
+	.I1(\ram_access.std_match.13.result_3 )
+);
+  AND2 un1_freezer_state_4_1 (
+	.O(vector_a2_m_1),
+	.I0(N_33_d),
+	.I1(\ram_access.freezer_ram_mask_a5a73 )
+);
+  AND2 \check_vector_access.un1_activate_7_cZ  (
+	.O(un1_os_select_1_2),
+	.I0(a_1[15]),
+	.I1(rw_1)
+);
+  AND2 \ram_access.std_match.result_2_1_cZ  (
+	.O(\ram_access.std_match.result_2_1 ),
+	.I0(a_1[12]),
+	.I1(a_1[14])
+);
+  INV os_select_i_cZ (
+	.O(os_select_i),
+	.I0(os_select_c)
+);
+  AND2 \cart_bank_select.std_match.result_1_0_a2  (
+	.O(flash_config_access_2),
+	.I0(a_1[10]),
+	.I1(a_1[12])
+);
+  AND2 \check_flash_config_access.std_match.6.result_3_0_a2  (
+	.O(\check_flash_config_access.std_match.6.result_3 ),
+	.I0(N_159),
+	.I1(a_1_i[4])
+);
+  INV un1_freezer_state_7_1_i_cZ (
+	.O(un1_freezer_state_7_1_i),
+	.I0(un1_freezer_state_7_1)
+);
+  INV un1_os_select_1_i_cZ (
+	.O(un1_os_select_1_i),
+	.I0(un1_os_select_1)
+);
+  AND2 un1_cart_mode_1_0_a2 (
+	.O(N_209),
+	.I0(N_228),
+	.I1(N_231)
+);
+  AND2 un1_un13_flash_enable_3_0_a2 (
+	.O(N_216),
+	.I0(\cart_access.un13_flash_enable ),
+	.I1(un1_cart_mode_4)
+);
+  AND2 \cart_a_4_iv_0_a2[13]  (
+	.O(cart_a_4[13]),
+	.I0(N_193),
+	.I1(\cart_access.un13_flash_enable )
+);
+  AND2 \ram_rom_a_1_i_a2_1[13]  (
+	.O(N_220),
+	.I0(N_235),
+	.I1(freezer_rom_bank[13])
+);
+  AND2 \cart_a_4_iv_0_a2_0[13]  (
+	.O(N_223),
+	.I0(N_192),
+	.I1(\cart_access.un22_flash_enable )
+);
+  AND2 \cart_a_4_iv_0_a2_1[13]  (
+	.O(N_224),
+	.I0(cart_bank[13]),
+	.I1(un1_cart_mode_4)
+);
+  AND2 \cart_access.un22_flash_enable_0_a2  (
+	.O(\cart_access.un22_flash_enable ),
+	.I0(N_228),
+	.I1(a_1[13])
+);
+  INV \cart_mode_i_cZ[1]  (
+	.O(cart_mode_i[1]),
+	.I0(cart_mode[1])
+);
+  AND2 un1_cart_mode_1_0_a2_1 (
+	.O(N_231),
+	.I0(cart_mode[0]),
+	.I1(cart_mode_i[1])
+);
+  INV \cart_mode_i_cZ[0]  (
+	.O(cart_mode_i[0]),
+	.I0(cart_mode[0])
+);
+  AND2 un1_cart_mode_3_0_a2_0 (
+	.O(N_234),
+	.I0(cart_mode[1]),
+	.I1(cart_mode_i[0])
+);
+  AND2 \a_1_m_0_cZ[4]  (
+	.O(a_1_m_0[4]),
+	.I0(a_1[4]),
+	.I1(un1_freezer_state_10)
+);
+  AND2 \freezer_ram_bank_m_cZ[12]  (
+	.O(freezer_ram_bank_m[12]),
+	.I0(N_215),
+	.I1(freezer_ram_bank[12])
+);
+  AND2 \freezer_ram_bank_m_cZ[15]  (
+	.O(freezer_ram_bank_m[15]),
+	.I0(N_215),
+	.I1(freezer_ram_bank[15])
+);
+  AND2 \freezer_ram_bank_m_cZ[16]  (
+	.O(freezer_ram_bank_m[16]),
+	.I0(N_215),
+	.I1(freezer_ram_bank[16])
+);
+  AND2 \cart_a_4[12]  (
+	.O(N_296),
+	.I0(N_214_i),
+	.I1(N_216_i)
+);
+  AND2 \a_1_m_0_cZ[12]  (
+	.O(a_1_m_0[12]),
+	.I0(N_90),
+	.I1(a_1[12])
+);
+  AND2 \cart_a_4_m_cZ[17]  (
+	.O(cart_a_4_m[17]),
+	.I0(cart_bank[17]),
+	.I1(cart_rom_access)
+);
+  INV activate_inputreg_1_i_cZ (
+	.O(activate_inputreg_1_i),
+	.I0(activate_inputreg_1)
+);
+  INV use_vector_bankno_i_cZ (
+	.O(use_vector_bankno_i),
+	.I0(use_vector_bankno)
+);
+  AND2 un1_freezer_state_4_cZ (
+	.O(un1_freezer_state_4),
+	.I0(use_vector_bankno_i),
+	.I1(vector_a2_m_1)
+);
+  INV \a_1_i_cZ[8]  (
+	.O(a_1_i[8]),
+	.I0(a_1[8])
+);
+  INV \a_1_i_cZ[10]  (
+	.O(a_1_i[10]),
+	.I0(a_1[10])
+);
+  INV \a_1_i_cZ[0]  (
+	.O(a_1_i[0]),
+	.I0(a_1[0])
+);
+  INV \a_1_i_cZ[11]  (
+	.O(a_1_i[11]),
+	.I0(a_1[11])
+);
+  AND2 \freezer_rom_bank_select.std_match.result_4_0_a2  (
+	.O(flash_config_access_5),
+	.I0(a_1_i[11]),
+	.I1(a_1_i[13])
+);
+  INV reset_i_cZ (
+	.O(reset_i),
+	.I0(reset_c)
+);
+  INV phi2_i_cZ (
+	.O(phi2_i),
+	.I0(phi2_c)
+);
+  AND2 \a_1_m_cZ[12]  (
+	.O(a_1_m[12]),
+	.I0(N_83),
+	.I1(a_1[12])
+);
+  AND2 \freezer_rom_bank_m_cZ[15]  (
+	.O(freezer_rom_bank_m[15]),
+	.I0(N_235),
+	.I1(freezer_rom_bank[15])
+);
+  AND2 \freezer_rom_bank_m_cZ[16]  (
+	.O(freezer_rom_bank_m[16]),
+	.I0(N_235),
+	.I1(freezer_rom_bank[16])
+);
+  AND2 \freezer_rom_bank_m_cZ[17]  (
+	.O(freezer_rom_bank_m[17]),
+	.I0(N_235),
+	.I1(freezer_rom_bank[17])
+);
+  AND2 \a_1_m_cZ[4]  (
+	.O(a_1_m[4]),
+	.I0(a_1[4]),
+	.I1(un1_tmp_cart_access_1)
+);
+  INV \freezer_ram_bank_0_14_.r  (
+	.O(\freezer_ram_bank_0_14_.un3 ),
+	.I0(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_14_.m  (
+	.O(\freezer_ram_bank_0_14_.un1 ),
+	.I0(a_1[2]),
+	.I1(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_14_.n  (
+	.O(\freezer_ram_bank_0_14_.un0 ),
+	.I0(freezer_ram_bank[14]),
+	.I1(\freezer_ram_bank_0_14_.un3 )
+);
+  OR2 \freezer_ram_bank_0_14_.p  (
+	.O(N_13),
+	.I0(\freezer_ram_bank_0_14_.un1 ),
+	.I1(\freezer_ram_bank_0_14_.un0 )
+);
+  INV \freezer_ram_bank_0_16_.r  (
+	.O(\freezer_ram_bank_0_16_.un3 ),
+	.I0(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_16_.m  (
+	.O(\freezer_ram_bank_0_16_.un1 ),
+	.I0(a_1[4]),
+	.I1(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_16_.n  (
+	.O(\freezer_ram_bank_0_16_.un0 ),
+	.I0(freezer_ram_bank[16]),
+	.I1(\freezer_ram_bank_0_16_.un3 )
+);
+  OR2 \freezer_ram_bank_0_16_.p  (
+	.O(N_15),
+	.I0(\freezer_ram_bank_0_16_.un1 ),
+	.I1(\freezer_ram_bank_0_16_.un0 )
+);
+  INV \oss_bank_0_12_.r  (
+	.O(\oss_bank_0_12_.un3 ),
+	.I0(\check_oss_bank.std_match.result )
+);
+  AND2 \oss_bank_0_12_.m  (
+	.O(\oss_bank_0_12_.un1 ),
+	.I0(a_1_i[3]),
+	.I1(\check_oss_bank.std_match.result )
+);
+  AND2 \oss_bank_0_12_.n  (
+	.O(\oss_bank_0_12_.un0 ),
+	.I0(oss_bank[12]),
+	.I1(\oss_bank_0_12_.un3 )
+);
+  OR2 \oss_bank_0_12_.p  (
+	.O(N_24),
+	.I0(\oss_bank_0_12_.un1 ),
+	.I1(\oss_bank_0_12_.un0 )
+);
+  INV \oss_bank_0_13_.r  (
+	.O(\oss_bank_0_13_.un3 ),
+	.I0(\check_oss_bank.std_match.result )
+);
+  AND2 \oss_bank_0_13_.m  (
+	.O(\oss_bank_0_13_.un1 ),
+	.I0(a_1[0]),
+	.I1(\check_oss_bank.std_match.result )
+);
+  AND2 \oss_bank_0_13_.n  (
+	.O(\oss_bank_0_13_.un0 ),
+	.I0(oss_bank[13]),
+	.I1(\oss_bank_0_13_.un3 )
+);
+  OR2 \oss_bank_0_13_.p  (
+	.O(N_25),
+	.I0(\oss_bank_0_13_.un1 ),
+	.I1(\oss_bank_0_13_.un0 )
+);
+  AND2 reset_freezer_banks_0_a2 (
+	.O(reset_freezer_banks),
+	.I0(\check_vector_access.un1_activate ),
+	.I1(freezer_state_d[3])
+);
+  DLAT \a_cZ[9]  (
+	.Q(a_1[9]),
+	.D(a_in_c[9]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[10]  (
+	.Q(a_1[10]),
+	.D(a_in_c[10]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[11]  (
+	.Q(a_1[11]),
+	.D(a_in_c[11]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[12]  (
+	.Q(a_1[12]),
+	.D(a_in_c[12]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[13]  (
+	.Q(a_1[13]),
+	.D(a_in_c[13]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[14]  (
+	.Q(a_1[14]),
+	.D(a_in_c[14]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[15]  (
+	.Q(a_1[15]),
+	.D(a_in_c[15]),
+	.LAT(phi2_i)
+);
+  INV \cart_mode_0_0_.r  (
+	.O(\cart_mode_0_0_.un3 ),
+	.I0(N_153)
+);
+  AND2 \cart_mode_0_0_.m  (
+	.O(\cart_mode_0_0_.un1 ),
+	.I0(a_1[0]),
+	.I1(N_153)
+);
+  AND2 \cart_mode_0_0_.n  (
+	.O(\cart_mode_0_0_.un0 ),
+	.I0(cart_mode[0]),
+	.I1(\cart_mode_0_0_.un3 )
+);
+  OR2 \cart_mode_0_0_.p  (
+	.O(N_2),
+	.I0(\cart_mode_0_0_.un1 ),
+	.I1(\cart_mode_0_0_.un0 )
+);
+  INV \cart_mode_0_1_.r  (
+	.O(\cart_mode_0_1_.un3 ),
+	.I0(N_153)
+);
+  AND2 \cart_mode_0_1_.m  (
+	.O(\cart_mode_0_1_.un1 ),
+	.I0(a_1[1]),
+	.I1(N_153)
+);
+  AND2 \cart_mode_0_1_.n  (
+	.O(\cart_mode_0_1_.un0 ),
+	.I0(cart_mode[1]),
+	.I1(\cart_mode_0_1_.un3 )
+);
+  OR2 \cart_mode_0_1_.p  (
+	.O(N_3),
+	.I0(\cart_mode_0_1_.un1 ),
+	.I1(\cart_mode_0_1_.un0 )
+);
+  INV \freezer_rom_bank_0_13_.r  (
+	.O(\freezer_rom_bank_0_13_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_13_.m  (
+	.O(\freezer_rom_bank_0_13_.un1 ),
+	.I0(a_1[0]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_13_.n  (
+	.O(\freezer_rom_bank_0_13_.un0 ),
+	.I0(freezer_rom_bank[13]),
+	.I1(\freezer_rom_bank_0_13_.un3 )
+);
+  OR2 \freezer_rom_bank_0_13_.p  (
+	.O(N_4),
+	.I0(\freezer_rom_bank_0_13_.un1 ),
+	.I1(\freezer_rom_bank_0_13_.un0 )
+);
+  INV \freezer_rom_bank_0_14_.r  (
+	.O(\freezer_rom_bank_0_14_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_14_.m  (
+	.O(\freezer_rom_bank_0_14_.un1 ),
+	.I0(a_1[1]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_14_.n  (
+	.O(\freezer_rom_bank_0_14_.un0 ),
+	.I0(freezer_rom_bank[14]),
+	.I1(\freezer_rom_bank_0_14_.un3 )
+);
+  OR2 \freezer_rom_bank_0_14_.p  (
+	.O(N_5),
+	.I0(\freezer_rom_bank_0_14_.un1 ),
+	.I1(\freezer_rom_bank_0_14_.un0 )
+);
+  INV \freezer_rom_bank_0_15_.r  (
+	.O(\freezer_rom_bank_0_15_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_15_.m  (
+	.O(\freezer_rom_bank_0_15_.un1 ),
+	.I0(a_1[2]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_15_.n  (
+	.O(\freezer_rom_bank_0_15_.un0 ),
+	.I0(freezer_rom_bank[15]),
+	.I1(\freezer_rom_bank_0_15_.un3 )
+);
+  OR2 \freezer_rom_bank_0_15_.p  (
+	.O(N_6),
+	.I0(\freezer_rom_bank_0_15_.un1 ),
+	.I1(\freezer_rom_bank_0_15_.un0 )
+);
+  INV \freezer_rom_bank_0_17_.r  (
+	.O(\freezer_rom_bank_0_17_.un3 ),
+	.I0(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_17_.m  (
+	.O(\freezer_rom_bank_0_17_.un1 ),
+	.I0(a_1[4]),
+	.I1(\freezer_rom_bank_select.std_match.result )
+);
+  AND2 \freezer_rom_bank_0_17_.n  (
+	.O(\freezer_rom_bank_0_17_.un0 ),
+	.I0(freezer_rom_bank[17]),
+	.I1(\freezer_rom_bank_0_17_.un3 )
+);
+  OR2 \freezer_rom_bank_0_17_.p  (
+	.O(N_8),
+	.I0(\freezer_rom_bank_0_17_.un1 ),
+	.I1(\freezer_rom_bank_0_17_.un0 )
+);
+  INV \freezer_ram_bank_0_12_.r  (
+	.O(\freezer_ram_bank_0_12_.un3 ),
+	.I0(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_12_.m  (
+	.O(\freezer_ram_bank_0_12_.un1 ),
+	.I0(a_1[0]),
+	.I1(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_12_.n  (
+	.O(\freezer_ram_bank_0_12_.un0 ),
+	.I0(freezer_ram_bank[12]),
+	.I1(\freezer_ram_bank_0_12_.un3 )
+);
+  OR2 \freezer_ram_bank_0_12_.p  (
+	.O(N_11),
+	.I0(\freezer_ram_bank_0_12_.un1 ),
+	.I1(\freezer_ram_bank_0_12_.un0 )
+);
+  INV \freezer_ram_bank_0_13_.r  (
+	.O(\freezer_ram_bank_0_13_.un3 ),
+	.I0(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_13_.m  (
+	.O(\freezer_ram_bank_0_13_.un1 ),
+	.I0(a_1[1]),
+	.I1(\freezer_ram_bank_select.std_match.result )
+);
+  AND2 \freezer_ram_bank_0_13_.n  (
+	.O(\freezer_ram_bank_0_13_.un0 ),
+	.I0(freezer_ram_bank[13]),
+	.I1(\freezer_ram_bank_0_13_.un3 )
+);
+  OR2 \freezer_ram_bank_0_13_.p  (
+	.O(N_12),
+	.I0(\freezer_ram_bank_0_13_.un1 ),
+	.I1(\freezer_ram_bank_0_13_.un0 )
+);
+  INV \vector_a2_0.r  (
+	.O(\vector_a2_0.un3 ),
+	.I0(reset_freezer_banks)
+);
+  AND2 \vector_a2_0.m  (
+	.O(\vector_a2_0.un1 ),
+	.I0(a_1[2]),
+	.I1(reset_freezer_banks)
+);
+  AND2 \vector_a2_0.n  (
+	.O(\vector_a2_0.un0 ),
+	.I0(vector_a2),
+	.I1(\vector_a2_0.un3 )
+);
+  OR2 \vector_a2_0.p  (
+	.O(N_16),
+	.I0(\vector_a2_0.un1 ),
+	.I1(\vector_a2_0.un0 )
+);
+  INV \cart_bank_0_14_.r  (
+	.O(\cart_bank_0_14_.un3 ),
+	.I0(un1_result_2)
+);
+  AND2 \cart_bank_0_14_.m  (
+	.O(\cart_bank_0_14_.un1 ),
+	.I0(cart_bank[14]),
+	.I1(un1_result_2)
+);
+  AND2 \cart_bank_0_14_.n  (
+	.O(\cart_bank_0_14_.un0 ),
+	.I0(cart_bank_5[14]),
+	.I1(\cart_bank_0_14_.un3 )
+);
+  OR2 \cart_bank_0_14_.p  (
+	.O(N_18),
+	.I0(\cart_bank_0_14_.un1 ),
+	.I1(\cart_bank_0_14_.un0 )
+);
+  INV \cart_mode_ram_0.r  (
+	.O(\cart_mode_ram_0.un3 ),
+	.I0(N_154)
+);
+  AND2 \cart_mode_ram_0.m  (
+	.O(\cart_mode_ram_0.un1 ),
+	.I0(a_1[0]),
+	.I1(N_154)
+);
+  AND2 \cart_mode_ram_0.n  (
+	.O(\cart_mode_ram_0.un0 ),
+	.I0(cart_mode_ram),
+	.I1(\cart_mode_ram_0.un3 )
+);
+  OR2 \cart_mode_ram_0.p  (
+	.O(N_21),
+	.I0(\cart_mode_ram_0.un1 ),
+	.I1(\cart_mode_ram_0.un0 )
+);
+  INV \cart_keepsettings_0.r  (
+	.O(\cart_keepsettings_0.un3 ),
+	.I0(\check_cartemu_reset_mode.un69_flash_config_access )
+);
+  AND2 \cart_keepsettings_0.m  (
+	.O(\cart_keepsettings_0.un1 ),
+	.I0(a_1[0]),
+	.I1(\check_cartemu_reset_mode.un69_flash_config_access )
+);
+  AND2 \cart_keepsettings_0.n  (
+	.O(\cart_keepsettings_0.un0 ),
+	.I0(cart_keepsettings),
+	.I1(\cart_keepsettings_0.un3 )
+);
+  OR2 \cart_keepsettings_0.p  (
+	.O(N_22),
+	.I0(\cart_keepsettings_0.un1 ),
+	.I1(\cart_keepsettings_0.un0 )
+);
+  INV \cart_bank_0_17_.r  (
+	.O(\cart_bank_0_17_.un3 ),
+	.I0(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_17_.m  (
+	.O(\cart_bank_0_17_.un1 ),
+	.I0(a_1[4]),
+	.I1(\cart_bank_select.std_match.result )
+);
+  AND2 \cart_bank_0_17_.n  (
+	.O(\cart_bank_0_17_.un0 ),
+	.I0(cart_bank[17]),
+	.I1(\cart_bank_0_17_.un3 )
+);
+  OR2 \cart_bank_0_17_.p  (
+	.O(N_27),
+	.I0(\cart_bank_0_17_.un1 ),
+	.I1(\cart_bank_0_17_.un0 )
+);
+  AND2 tmp_cart_access_1_cZ (
+	.O(tmp_cart_access_1),
+	.I0(\cart_access.un13_flash_enable ),
+	.I1(tmp_cart_access_5)
+);
+  DLAT \a_cZ[0]  (
+	.Q(a_1[0]),
+	.D(a_in_c[0]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[1]  (
+	.Q(a_1[1]),
+	.D(a_in_c[1]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[2]  (
+	.Q(a_1[2]),
+	.D(a_in_c[2]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[3]  (
+	.Q(a_1[3]),
+	.D(a_in_c[3]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[4]  (
+	.Q(a_1[4]),
+	.D(a_in_c[4]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[5]  (
+	.Q(a_1[5]),
+	.D(a_in_c[5]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[6]  (
+	.Q(a_1[6]),
+	.D(a_in_c[6]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[7]  (
+	.Q(a_1[7]),
+	.D(a_in_c[7]),
+	.LAT(phi2_i)
+);
+  DLAT \a_cZ[8]  (
+	.Q(a_1[8]),
+	.D(a_in_c[8]),
+	.LAT(phi2_i)
+);
+  DLAT rw_cZ (
+	.Q(rw_1),
+	.D(rw_in_c),
+	.LAT(phi2_i)
+);
+  AND2 \cart_bank_select.un63_cart_mode_cZ  (
+	.O(\cart_bank_select.un63_cart_mode ),
+	.I0(cart_mode[0]),
+	.I1(cart_mode[1])
+);
+  INV cart_keepsettings_i_cZ (
+	.O(cart_keepsettings_i),
+	.I0(cart_keepsettings)
+);
+  AND2 \check_reset_cartemu.un1_reset_cartemu_cZ  (
+	.O(\check_reset_cartemu.un1_reset_cartemu ),
+	.I0(cart_keepsettings_i),
+	.I1(reset_i)
+);
+  AND2 reset_cartemu_cZ (
+	.O(N_299),
+	.I0(\check_reset_cartemu.un1_reset_cartemu_i ),
+	.I1(poweron_c_i)
+);
+  XOR2 \cart_bank_5_cZ[14]  (
+	.O(cart_bank_5[14]),
+	.I0(a_1[1]),
+	.I1(a_1[7])
+);
+  AND2 un1_cart_mode_4_cZ (
+	.O(un1_cart_mode_4_i),
+	.I0(un1_cart_mode_2_i),
+	.I1(un1_un63_cart_mode_i)
+);
+  AND2 un1_freezer_state_10_cZ (
+	.O(N_297),
+	.I0(un1_freezer_state_4_i),
+	.I1(un1_freezer_state_7_i)
+);
+  INV \cart_access.un17_tmp_cart_access_i_cZ  (
+	.O(\cart_access.un17_tmp_cart_access_i ),
+	.I0(\cart_access.un17_tmp_cart_access )
+);
+  AND2 cart_ram_access_cZ (
+	.O(cart_ram_access),
+	.I0(\cart_access.un17_tmp_cart_access_i ),
+	.I1(un1_tmp_cart_access_1)
+);
+  AND2 \freezer_activation.un5_d700_d71f_access_cZ  (
+	.O(\freezer_activation.un5_d700_d71f_access ),
+	.I0(a_1_i[4]),
+	.I1(\check_d700_d71f_access.std_match.result )
+);
+  AND2 \freezer_ram_mode_select.un17_d700_d71f_access_cZ  (
+	.O(\freezer_ram_mode_select.un17_d700_d71f_access ),
+	.I0(a_1[4]),
+	.I1(\check_d700_d71f_access.std_match.result )
+);
+  INV \use_vector_bankno_0.r  (
+	.O(\use_vector_bankno_0.un3 ),
+	.I0(\freezer_ram_mode_select.un17_d700_d71f_access )
+);
+  AND2 \use_vector_bankno_0.m  (
+	.O(\use_vector_bankno_0.un1 ),
+	.I0(rw_1),
+	.I1(\freezer_ram_mode_select.un17_d700_d71f_access )
+);
+  AND2 \use_vector_bankno_0.n  (
+	.O(\use_vector_bankno_0.un0 ),
+	.I0(use_vector_bankno),
+	.I1(\use_vector_bankno_0.un3 )
+);
+  OR2 \use_vector_bankno_0.p  (
+	.O(N_10),
+	.I0(\use_vector_bankno_0.un1 ),
+	.I1(\use_vector_bankno_0.un0 )
+);
+  assign GND = 1'b0;
+  assign VCC = 1'b1;
+endmodule /* TurboFreezerXL */
+

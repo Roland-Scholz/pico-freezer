@@ -1,0 +1,273 @@
+
+;DISASSEMBLY
+
+DISASS JSR EATSPC
+      LDA #0
+      STA OPTION
+      JSR MATCH
+      BCC DASM1
+      STA RPNT            ; START ADDRESS
+      STX RPNT+1
+DASM1 LDA #',
+      JSR MATCH
+      BCC DASM2
+      LDA #0
+      JSR MATCH
+      BCS DASM3
+DASM2 LDA #16             ; DISASM 16 LINES
+      STA OPTION
+DASM3 STA TPNT
+      STX TPNT+1
+
+DASM4 JSR SCROLL
+      JSR DISASM
+      JSR ADVADR
+      PHP 
+      LDA OPTION
+      BEQ DASM5           ; TEST FOR ADDRESS
+      PLP 
+      DEC OPTION          ; COUNT LINES
+      BNE DASM4
+      JMP DEBU3
+DASM5 PLP 
+      BEQ DASM4
+      BCC DASM4
+      JMP DEBU3
+
+DISASM LDY #0
+      JSR GETBYT
+      STA NCOUNT          ; SAVE OPCODE
+      LDX #43             ; IMPLIED/SPECIAL OPS
+DISAS1 CMP OPTAB1,X
+      BEQ DISA11
+      DEX 
+      BPL DISAS1
+      LDX #8              ; ILLEGAL OPS?
+DISAS2 CMP OPTAB2,X
+      BEQ DISAS3
+      DEX 
+      BPL DISAS2
+      AND #$0F            ; TRANSFORM OPCODES
+      TAX 
+      LDA NCOUNT
+      LSR A
+      LSR A
+      LSR A
+      LSR A
+      ORA TRANTB,X
+      BPL DISAS5
+DISAS3 LDA #57            ; ILLEGAL OP
+      BNE DISA13
+DISAS5 PHA 
+      LSR A
+      BCC DISAS6
+      ORA #$40
+DISAS6 LSR A
+      LSR A
+      LSR A
+      TAX 
+      LDA MODETB,X        ; GET MODE
+      TAY 
+      PLA 
+      CMP #$69            ; SOME EXCEPTIONS
+      BEQ DISAS7
+      CMP #$6B
+      BEQ DISAS7
+      CMP #$7B
+      BNE DISAS8
+      LDY #9              ; ABS,Y
+      BNE DISAS8
+DISAS7 LDY #12            ; ZP,Y
+DISAS8 LSR A              ; GET MNEMONIC INDEX
+      CMP #$30
+      BCC DISAS9
+      AND #7
+      TAX 
+      LDA MNTAB1,X
+      BNE DISA13
+DISAS9 CMP #$20
+      BCC DISA10
+      AND #7
+      TAX 
+      LDA MNTAB2,X
+      BNE DISA13
+DISA10 AND #7
+      TAX 
+      LDA MNTAB3,X
+      BNE DISA13
+DISA11 LDY #11            ; ASSUME IND?
+      CPX #43
+      BEQ DISA12
+      LDY #1              ; ASSUME ABS
+      CPX #41
+      BCS DISA12
+      DEY                 ; ASSUME IMM
+      CPX #37
+      BCS DISA12
+      LDY #10             ; ASSUME REL
+      CPX #29
+      BCS DISA12
+      LDY #3              ; ASSUME ACCUM
+      CPX #25
+      BCS DISA12
+      LDY #4              ; IMPLIED
+DISA12 TXA 
+DISA13 CMP #57            ; A=MNEMONIC IDX
+      BNE DISA14
+      LDY #4              ; ILLEGAL ALWAYS IMP
+DISA14 PHA 
+      TYA 
+      PHA 
+      LDA LENTAB,Y
+      STA NCOUNT
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #$20
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDY #0
+DISA15 STY NAME+3
+      JSR GETBYT
+      LDY NAME+3
+      STA NAME,Y
+      JSR PRTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDY NAME+3
+      INY 
+      DEC NCOUNT
+      BNE DISA15
+DISA16 LDA #$20
+      JSR PUTBYT
+      LDA DCOUNT
+      CMP #20
+      BNE DISA16
+      PLA 
+      TAY 
+      PLA 
+      STA NCOUNT
+      ASL A
+      ADC NCOUNT
+      TAX 
+      STY NCOUNT
+      LDY #3
+DISA17 LDA MNETAB,X
+      JSR PUTBYT
+      INX 
+      DEY 
+      BNE DISA17
+      LDA #$20
+      JSR PUTBYT
+      LDX NCOUNT
+      LDA PRFTAB,X
+      STA NCOUNT
+      LDA LENTAB,X
+      STA NAME+3
+
+      LDA #7
+      STA NAME+4
+DISA18 ASL NCOUNT
+      BCC DISA25
+      LDY NAME+4
+      LDA DPRTTB,Y
+      BEQ DISA21          ; PRINT ADR OR DEST
+      BMI DISA20          ; PRINT BYTE
+      CMP #'X
+      BCC DISA19          ; PRINT CHAR
+      PHA 
+      LDA #',             ; PRINT ,X OR ,Y
+      JSR PUTBYT
+      PLA 
+DISA19 JSR PUTBYT
+      JMP DISA25
+DISA20 LDA #'$
+      JSR PUTBYT
+      LDA NAME+1
+      JSR PRTBYT
+      JMP DISA25
+DISA21 LDA #'$
+      JSR PUTBYT
+      LDA NAME+1
+      LDX NAME+2
+      LDY NAME+3
+      CPY #2
+      BNE DISA24
+      LDX RPNT+1          ; CALC DEST
+      TAY 
+      BPL DISA22
+      DEX 
+DISA22 SEC 
+      ADC RPNT
+      BCC DISA23
+      INX 
+DISA23 CLC 
+      ADC #1
+      BCC DISA24
+      INX 
+DISA24 JSR PRTADR
+DISA25 DEC NAME+4
+      BPL DISA18
+DISA28 LDA NAME+3
+      RTS 
+
+DPRTTB .BYTE "Y)X",0,$80,"(#A"
+
+MNETAB .BYTE "BRKCLCCLDCLI"
+      .BYTE "CLVDEXDEYINX"
+      .BYTE "INYNOPPHAPHP"
+      .BYTE "PLAPLPRTIRTS"
+      .BYTE "SECSEDSEITAX"
+      .BYTE "TAYTSXTXATXS"
+      .BYTE "TYAASLROLLSR"
+      .BYTE "RORBCCBCSBEQ"
+      .BYTE "BMIBNEBPLBVC"
+      .BYTE "BVSLDXLDYCPX"
+      .BYTE "CPYJSRJMPJMP"
+      .BYTE "ADCANDCMPDEC"
+      .BYTE "EORINCLDAORA"
+      .BYTE "SBCSTASTXSTY"
+      .BYTE "BIT???"
+
+OPTAB1 .BYTE $00,$18,$D8,$58
+      .BYTE $B8,$CA,$88,$E8
+      .BYTE $C8,$EA,$48,$08
+      .BYTE $68,$28,$40,$60
+      .BYTE $38,$F8,$78,$AA
+      .BYTE $A8,$BA,$8A,$9A
+      .BYTE $98,$0A,$2A,$4A
+      .BYTE $6A,$90,$B0,$F0
+      .BYTE $30,$D0,$10,$50
+      .BYTE $70,$A2,$A0,$E0
+      .BYTE $C0,$20,$4C,$6C
+
+OPTAB2 .BYTE $89,$9E,$9C,$34
+      .BYTE $3C,$D4,$DC,$F4,$FC
+
+TRANTB .BYTE $80,$10,$80,$80
+      .BYTE $50,$20,$60,$80
+      .BYTE $80,$00,$80,$80
+      .BYTE $40,$30,$70,$80
+
+MNTAB1 .BYTE 25,26,27,28
+      .BYTE 54,37,47,49
+
+MNTAB2 .BYTE 57,56,57,57
+      .BYTE 55,38,40,39
+
+MNTAB3 .BYTE 51,45,48,44
+      .BYTE 53,50,46,52
+
+MODETB .BYTE 0,5,2,1,1,2,2,1
+      .BYTE 9,6,7,8,8,7,7,8
+
+LENTAB .BYTE 2,3,2,1,1,2,2,2
+      .BYTE 3,3,2,3,2
+
+PRFTAB .BYTE $50,$08,$10,$80
+      .BYTE $00,$36,$33,$14
+      .BYTE $0C,$09,$08,$2A,$11
+

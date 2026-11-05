@@ -1,0 +1,1089 @@
+;-------------------------------
+
+;DELETE FILE HANDLER
+
+DELF  JSR GFNAME
+      BCC DELFX
+      JSR GETOPT
+      JSR FDELET
+DELFX JMP DEBU3
+
+; check for D:/Dx: and set DRIVENO
+; CY=1 if OK, CY=0 on illegal drive number
+
+SETDRVN LDA #1
+      STA DRIVENO
+      LDX NCOUNT
+      CPX #38
+      BCS SETDR1
+      LDA CMDLINE,X
+      CMP #'D-$20
+      BNE SETDR1 ; no "D" at beginning, leave driveno at 1
+      LDA CMDLINE+1,X
+      CMP #':-$20
+      BNE SETDR2
+      INC NCOUNT ; skip over "D:"
+      INC NCOUNT
+SETDR1 SEC
+      RTS
+
+SETDR2 LDA CMDLINE+2,X
+      CMP #':-$20
+      BNE SETDR1 ; no "Dx:", return
+
+      LDA CMDLINE+1,X
+      CMP #'1-$20
+      BCC SETDR3 ; invalid drive number
+      CMP #'9-$20
+      BCS SETDR3 ; invalid drive number
+      SEC
+      SBC #$10
+      STA DRIVENO
+      INC NCOUNT ; skip over "Dx:"
+      INC NCOUNT
+      INC NCOUNT
+      SEC	; OK
+      RTS
+SETDR3 CLC	; ERROR
+      RTS
+
+; decode filename, check for D:/Dx: and set DRIVENO
+FDECDR JSR SETDRVN
+       BCS FDECOD
+       RTS
+
+;DECODE FILENAME FROM (NCOUNT)
+;TO /NAME/. CY=1 ALWAYS
+
+FDECOD LDY #0
+      LDX NCOUNT
+      LDA #8
+      STA FILENO
+FDECO1 CPX #40
+      BCC FDECO0
+      INX
+      BNE FDECO3
+FDECO0 LDA CMDLINE,X
+      INX
+      CLC
+      ADC #$20
+FDECO2 CMP #$20
+      BEQ FDECO3
+      CMP #'/
+      BEQ FDECO3
+      CMP #',
+      BNE FDECO7          ; NO TERMINAL
+FDECO3 CPY #11
+      BCS FDECO4
+      LDA #$20
+      STA NAME,Y
+      INY
+      BNE FDECO3
+FDECO4 DEX
+      STX NCOUNT
+      LDA NAME
+      CMP #$20
+      BNE FDECO6
+      LDY #10
+FDECO5 LDA #'?
+      STA NAME,Y
+      DEY
+      BPL FDECO5
+;     CLC ; this was old code
+FDECO6 SEC
+      RTS
+FDECO7 CPY FILENO
+      BNE FDECO9
+      CMP #'.
+      BNE FDECO1
+FDECO8 LDA #11
+      STA FILENO
+      BNE FDECO1
+FDECO9 CMP #'.
+      BEQ FDEC10
+      CMP #'*
+      BEQ FDEC11
+      STA NAME,Y
+      INY
+      BNE FDECO1
+FDEC10 LDA #$20
+      BNE FDEC12
+FDEC11 LDA #'?
+FDEC12 STA NAME,Y
+      INY
+      CPY FILENO
+      BNE FDEC12
+      CMP #$20
+      BEQ FDECO8
+      BNE FDECO1
+
+;PRINT FILE NAME
+
+PRTNAM LDX #0
+PRTNA1 LDA DENTRY+5,X
+      JSR PUTBYT
+      INX
+      CPX #8
+      BNE PRTNA1
+      LDA #'.
+      JSR PUTBYT
+PRTNA2 LDA DENTRY+5,X
+      JSR PUTBYT
+      INX
+      CPX #11
+      BNE PRTNA2
+      LDA #$20
+      JSR PUTBYT
+      SEC	; flag OK
+      RTS
+
+;GET CMD LINE OPTIONS
+
+GETOPT LDX NCOUNT
+      LDA CMDLINE,X
+      CMP #'/-$20
+      BNE GETOP1          ; NO OPTION
+      INC NCOUNT
+      INC NCOUNT
+      LDA CMDLINE+1,X
+      CLC
+      ADC #$20
+GETOP2 STA OPTION
+      RTS
+GETOP1 LDA #0
+      BEQ GETOP2
+
+;-------------------------------
+;RENAME FILE
+
+RENCMD JSR GFNAME
+      BCC RENCMX
+      INC NCOUNT
+      LDX #10
+RENCM1 LDA NAME,X
+      STA VTOC,X
+      DEX 
+      BPL RENCM1
+      JSR FDECOD
+      LDX #10
+RENCM2 LDA NAME,X
+      LDY VTOC,X
+      STA VTOC,X
+      TYA 
+      STA NAME,X
+      DEX 
+      BPL RENCM2
+      JSR GETOPT
+      JSR RENAME
+RENCMX JMP DEBU3
+
+RENAME JSR IUTILS
+RENAM1 JSR SEARC1
+      BCC RENAM5          ; NO MATCH, EXIT
+      LDA DENTRY
+      AND #$20
+      BNE RENAM3          ; LOCKED, SKIP
+      LDA #7
+      JSR QUERY
+      BNE RENAM3          ; DON'T RENAME
+RENAM2 JSR DIRACC
+      LDY #0
+RENAM6 LDA VTOC,Y         ; REPLACE PATTERN
+      CMP #'?
+      BNE RENAM7
+      LDA DENTRY+5,Y
+RENAM7 STA DBUF+5,X
+      INX 
+      INY 
+      CPY #11
+      BNE RENAM6
+      JSR WSEC
+RENAM3 JSR NEXENT
+      BCC RENAM1
+RENAM5 RTS 
+
+;-------------------------------
+;UNLOCK FILES
+
+COMU  CMP #'N-$20
+      BNE COMU1
+      CPX #'L-$20
+      BEQ COMU2
+COMU1 JMP DEBU3
+
+COMU2 JSR GFNAME
+      BCC COMU1
+      JSR GETOPT
+      JSR UNLOCK
+      JMP DEBU3
+
+UNLOCK JSR IUTILS
+UNLOC1 JSR SEARC1
+      BCC UNLOC5          ; NO MATCH, EXIT
+      LDA DENTRY
+      AND #$20
+      BEQ UNLOC3          ; UNLOCKED, SKIP
+      LDA #9
+      JSR QUERY
+      BNE UNLOC3          ; DON'T UNLOCK
+UNLOC2 JSR DIRACC
+      LDA DBUF,X
+      AND #$DF
+      STA DBUF,X
+      JSR WSEC
+UNLOC3 JSR NEXENT
+      BCC UNLOC1
+UNLOC5 RTS 
+
+;LOCK FILES
+
+FLOCK JSR GFNAME
+      BCC FLOCKX
+      JSR GETOPT
+      JSR LOCK
+FLOCKX JMP DEBU3
+
+LOCK  JSR IUTILS
+LOC1  JSR SEARC1
+      BCC LOC5            ; NO MATCH, EXIT
+      LDA DENTRY
+      AND #$20
+      BNE LOC3            ; LOCKED, SKIP
+      LDA #8
+      JSR QUERY
+      BNE LOC3            ; DON'T LOCK
+LOC2  JSR DIRACC
+      LDA DBUF,X
+      ORA #$20
+      STA DBUF,X
+      JSR WSEC
+LOC3  JSR NEXENT
+      BCC LOC1
+LOC5  RTS 
+
+;LOCK/LOAD FILE, DISASM COMMANDS
+
+COML  CMP #'O-$20
+      BNE COML2
+      CPX #'C-$20
+      BNE COML1
+      JMP FLOCK
+COML1 CPX #'A-$20
+      BNE COML2
+      JMP BLOAD
+
+COML2 JMP DISASS
+
+;FORMAT DISK
+
+COMF  CMP #'M-$20
+      BNE COMF1
+      LDY #0
+      CPX #'S-$20
+      BEQ COMF4
+      CPX #'E-$20
+      BEQ COMF3
+      CPX #'D-$20
+      BEQ COMF2
+COMF1 JMP DEBU3
+COMF2 INY 
+COMF3 INY 
+COMF4 STY OPTION          ; FORMAT SD,ED,DD
+      LDA #4
+      STA NCOUNT
+      JSR EATSPC
+      JSR SETDRVN
+      BCC COMF1
+      JSR DENSTY          ; FOR TURFLG
+      LDA #12             ; GET PERCOM BLOCK
+      STA SIZE
+      LDA #$4E
+      LDX #$40
+      JSR WSE1
+      DEY 
+      BNE COMF8           ; NOT PERCOM
+      LDY OPTION
+      LDA #$1A
+      CPY #1
+      BEQ COMF5
+      LDA #$12
+COMF5 STA DBUF+3
+      LDA #0
+      CPY #0
+      BEQ COMF6
+      LDA #4
+COMF6 STA DBUF+5
+      LDA #1
+      LDX #0
+      CPY #2
+      BEQ COMF7
+      LDA #0
+      LDX #$80
+COMF7 STA DBUF+6
+      STX DBUF+7
+      LDA #$4F
+      LDX #$80
+      JSR WSE1
+      JSR DENSTY
+      LDY DENTYP
+      CPY OPTION
+      BNE COMF1
+      CPY #1
+      BEQ COMFE ; always format ED disks with CMD $22
+      LDA #$21
+      BNE COMF9
+
+COMF8 LDA #$21
+      LDY OPTION
+      BEQ COMF9
+COMFE LDA #$22
+      DEY 
+      BNE COMF1
+COMF9 PHA 
+      LDA OPTION
+      STA DENTYP
+      JSR IBOOT
+      PLA 
+      LDX #$40
+      JSR WSE1
+      DEY 
+      BEQ COMF91
+      JMP DEBU3
+
+COMF91
+
+; This was a bug in the original freezer ROM:
+; JSR DENTYP was assembled to opcode $FF instead of $20.
+; Actually, this should have been "JSR DENSTY"
+; Matthias Reichl
+
+;      JSR DENTYP
+      JSR DENSTY
+
+;DISK FORMATTED, BUILD VTOC
+
+      LDA #0
+      TAX 
+COF10 STA VTOC,X
+      INX 
+      BNE COF10
+      LDA #2
+      STA VTOC
+      STA VTOC+2
+      STA VTOC+4
+      LDA #$C3
+      STA VTOC+1
+      STA VTOC+3
+      LDA #$0F
+      STA VTOC+$0A
+      LDA #$64
+      LDX DENTYP
+      DEX 
+      BNE COF11
+      LDA #$F2
+      STA VTOC+1
+      INC VTOC+2
+      LDA #$2F
+      STA VTOC+$8A
+      INC VTOC+$8B
+      LDA #$8A
+COF11 STA OPTION
+      LDX #$0B
+      LDA #$FF
+COF12 STA VTOC,X
+      INX 
+      CPX OPTION
+      BNE COF12
+      INC VTOC+$37
+      LSR VTOC+$38
+      LDA #$FF
+      STA FILENO
+      JSR WVTOC
+
+; Hias: write boot sector
+      LDY #127
+      LDA #0
+COF13 STA DBUF,Y
+      DEY
+      BPL COF13
+      LDY #8
+COF14 LDA BOOTSEC,Y
+      STA DBUF,Y
+      DEY
+      BPL COF14
+
+      LDA #128
+      STA SIZE
+      LDX #1
+      STX DAUX1
+      DEX
+      STX DAUX2
+      JSR WSEC
+
+      LDY #10
+      JSR FDECO5
+      JSR SCROLL
+      JSR DDIR
+      JMP DEBU3
+
+; Hias: dummy boot sector: just set carry and return
+; (this will display "BOOT ERROR")
+
+BOOTSEC .BYTE 0,1,0,7,6,7
+      SEC
+      RTS
+
+;READ/WRITE SECTOR
+
+COMS  CMP #'A-$20
+      BEQ COMS2
+      CMP #'R-$20
+      BEQ COMS3
+      CMP #'W-$20
+      BEQ COMS5
+      CMP #'I-$20
+      BNE COMS1
+      CPX #'O-$20
+      BNE COMS1
+      INC NCOUNT
+      INC NCOUNT
+      JMP COMSIO
+COMS1 JMP DEBU3
+COMS2 CPX #'V-$20
+      BNE COMS1
+      JMP BSAVE
+COMS3 INC NCOUNT          ; READ SECTOR
+      JSR EATSPC
+      JSR SETDRVN
+      BCC COMS1
+      JSR EATSPC
+      LDA #0
+      JSR MATCH
+      BCC COMS41
+
+      PHA
+      TXA
+      PHA
+      JSR DENSTY
+      PLA
+      STA DAUX2
+      PLA
+      STA DAUX1
+
+COMS4 JSR CHKSLEN
+      JSR RSEC
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'S
+      JSR PUTBYT
+      LDA #'R
+      JSR PUTBYT
+      JSR COMS9
+COMS41 JMP DEBU3
+
+COMS5 INC NCOUNT          ; WRITE SECTOR
+      JSR EATSPC
+      JSR SETDRVN
+      BCC COMS41
+      JSR EATSPC
+      LDA #0
+      JSR MATCH
+      BCC COMS81
+
+      PHA
+      TXA
+      PHA
+
+      LDA #1
+      STA DRIVENO
+
+      LDX #0
+COMS6 LDA DBUF,X
+      STA VTOC,X
+      DEX 
+      BNE COMS6
+      JSR DENSTY
+      LDX #0
+COMS7 LDA VTOC,X
+      STA DBUF,X
+      DEX 
+      BNE COMS7
+
+      PLA
+      STA DAUX2
+      PLA
+      STA DAUX1
+
+COMS8 JSR CHKSLEN
+      JSR WSEC
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'S
+      JSR PUTBYT
+      LDA #'W
+      JSR PUTBYT
+      JSR COMS9
+COMS81 JMP DEBU3
+
+COMS9 LDA #'D
+      JSR PUTBYT
+      CLC
+      LDA DRIVENO
+      ADC #'0
+      JSR PUTBYT
+      LDA #':
+      JSR PUTBYT
+      LDA DAUX1
+      LDX DAUX2
+      JMP PRTADR
+
+; check sector length - first 3 sectors are always 128 bytes
+CHKSLEN LDX DENTYP
+      LDA SIZTAB,X
+      STA SIZE
+
+      LDA DAUX2
+      BNE CHKSL1
+      LDA DAUX1
+      CMP #4
+      BCS CHKSL1
+      LDA #$80
+      STA SIZE
+CHKSL1 RTS
+
+; direct SIO command
+
+COMSIO LDA #'R
+      JSR MATCH
+      BCC COMSI0
+; reset highspeed sio table
+      LDA #0
+      STA DUNIT
+      JSR HISIO
+      JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA #'S
+      JSR PUTBYT
+      LDA #'I
+      JSR PUTBYT
+      LDA #'O
+      JSR PUTBYT
+      LDA #'R
+      JSR PUTBYT
+      JMP DEBU3
+
+COMSI0 JSR EATSPC
+      LDA #0
+      STA OPTION
+COMSI1 LDA OPTION
+      CMP #7
+      BEQ COMSI4
+      LDA #',
+      JSR MATCH
+      BCS COMSI3
+
+      LDA #0
+      JSR MATCH
+      BCC COMSI4
+      PHA
+      TXA
+      LDX OPTION
+      LDY COMSII,X
+      CPX #5
+      BCC COMSI2
+      STA SIOCMDB+1,Y
+COMSI2 PLA
+      STA SIOCMDB,Y
+      LDA #',
+      JSR MATCH
+      BCC COMSI4
+
+COMSI3 INC OPTION
+      BNE COMSI1
+    
+COMSI4 LDA SIOCMDB+9 ; check for maximum length of $0100
+      CMP #1
+      BCC COMSI5
+      BNE COMSI41
+      LDA SIOCMDB+8
+      BEQ COMSI5
+COMSI41 JMP DEBU3
+
+COMSI5 LDA #0
+      STA OPTION
+      JSR SCROLL
+COMSI6 LDY OPTION
+      CPY #5
+      BEQ COMSI7
+      LDA COMSIT,Y
+      JSR PUTBYT
+      INC OPTION
+      BNE COMSI6
+
+COMSI7 LDA #0
+      STA OPTION
+COMSI8 LDA OPTION
+      CMP #7
+      BEQ COMSI12
+      CMP #0
+      BEQ COMSI9
+      LDA #',
+      JSR PUTBYT
+COMSI9 LDX OPTION
+      LDY COMSII,X
+      LDA SIOCMDB,Y
+      CPX #5
+      BCC COMSI10
+      LDX SIOCMDB+1,Y
+      JSR PRTADR
+      JMP COMSI11
+COMSI10 JSR PRTBYT
+COMSI11 INC OPTION
+      BNE COMSI8
+
+COMSI12 LDA #$20
+      JSR PUTBYT
+      LDA #':
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+
+      LDX #$0B
+COMSI15 LDA SIOCMDB,X
+      STA DDEVIC,X
+      DEX
+      BPL COMSI15
+
+      JSR DSIO
+      CPY #1
+      BEQ COMSI13
+      TYA
+      JSR PRTBYT
+      JMP COMSI14
+COMSI13 LDA #'O
+      JSR PUTBYT
+      LDA #'K
+      JSR PUTBYT
+COMSI14 
+      JMP DEBU3
+
+COMSIT .BYTE " SIO "
+
+; index table for SIO parameters (relative to $0300)
+COMSII .BYTE $00,$01,$02,$03,$06,$08,$0A
+
+
+;FILE DELETE
+
+FDELET JSR IUTILS
+      JSR RVTOC
+FDELE1 JSR SEARC1
+      BCC FDELE5          ; NO MATCH, EXIT
+      LDA DENTRY
+      AND #$20
+      BNE FDELE3
+      LDA #5
+      JSR QUERY
+      BNE FDELE3          ; DON'T DELETE
+FDELE2 JSR DELETE
+      LDA #$80
+      STA DENTRY
+      JSR WVTOC
+FDELE3 JSR NEXENT
+      BCC FDELE1
+FDELE5 RTS 
+
+;GET FILE NAME
+
+GFNAME LDA #4
+      STA NCOUNT
+      JSR EATSPC
+      JMP FDECDR
+
+;INIT DUP UTILS
+
+IUTILS JSR DENSTY
+      JSR IVTOC
+      LDX #$FF
+      STX MAPMSK
+      INX 
+      STX FILENO
+      RTS 
+
+;QUERY A
+
+QUERY PHA 
+      LDA OPTION
+      CMP #'Q
+      BNE QUERY2
+      JSR SCROLL
+      PLA 
+      TAY 
+      JSR PRTSTR
+      JSR PRTNAM
+      LDA #'?
+      JSR PUTBYT
+      JSR GETKEY
+      PHA 
+      LDA #'-
+      JSR PUTBYT
+      PLA 
+      CMP #'Y
+      BEQ QUERY1
+      LDA #'N
+QUERY1 PHA 
+      JSR PUTBYT
+      PLA 
+      CMP #'Y
+      RTS 
+QUERY2 PLA 
+      LDA #0
+      RTS 
+
+;NEXT ENTRY FOR DUP UTILS
+;CONTINUE IF CY=0
+
+NEXENT LDA OPTION
+      CMP #'A
+      BEQ NEXEN1
+      CMP #'Q
+      BEQ NEXEN1
+      SEC 
+      RTS 
+NEXEN1 INC FILENO
+      LDA FILENO
+      CMP #$40
+      RTS 
+
+BSAVEX JMP DEBU3
+BSAVE JSR GFNAME
+      BCC BSAVEX
+      JSR GETOPT
+      LDA #',
+      JSR MATCH
+      BCC BSAVEX
+      LDA #0
+      JSR MATCH
+      BCC BSAVEX
+      STA RPNT
+      STX RPNT+1
+      LDA #',
+      JSR MATCH
+      BCC BSAVEX
+      LDA #0
+      JSR MATCH
+      BCC BSAVEX
+      JSR DENSTY
+      JSR RVTOC
+      JSR SEARCH
+      BCS BSAV1
+      BIT FILENO
+      BPL BSAV3           ; FOUND HOLE
+      LDY #7
+      JMP ERROR
+BSAV1 LDX #10
+BSAV2 LDA DENTRY+5,X
+      STA NAME,X
+      DEX 
+      BPL BSAV2
+      JSR DELETE
+BSAV3 JSR IWFILE
+      LDA #0
+      STA MAPIDX          ; BYTE INDEX
+      LDA OPTION
+      CMP #'N
+      BEQ BSAV4
+      LDA #$FF
+      JSR PDIBYT
+      LDA #$FF
+      JSR PDIBYT
+      LDA RPNT
+      JSR PDIBYT
+      LDA RPNT+1
+      JSR PDIBYT
+      LDA TPNT
+      JSR PDIBYT
+      LDA TPNT+1
+      JSR PDIBYT
+BSAV4 SEC
+      LDA TPNT
+      SBC RPNT
+      STA TPNT
+      LDA TPNT+1
+      SBC RPNT+1
+      STA TPNT+1
+      INC TPNT
+      BNE BSAV5
+      INC TPNT+1
+      BEQ BSAV6 ; handle 0,ffff correctly
+BSAV5 LDA TPNT+1
+      BEQ BSAV7 ; last block - write 0..255 bytes
+BSAV6 LDA #0
+      BEQ BSAV8 ; write 256 bytes
+BSAV7 LDA TPNT
+      BEQ BSAV9 ; handle x*256 byte blocks
+BSAV8 PHA
+      PHA
+      JSR BLKGETA
+      PLA
+      JSR PDIBLK
+      DEC TPNT+1
+      PLA
+      BEQ BSAV5
+
+BSAV9 LDX NCOUNT
+      LDA FILENO          ; CLOSE FILE
+      ASL A
+      ASL A
+      STA DBUF,X
+      INX 
+      LDA #0
+      STA DBUF,X
+      INX 
+      LDA MAPIDX
+      STA DBUF,X
+      JSR WSEC
+      JSR WVTOC
+      JSR SCROLL
+      JSR DDIR
+      JMP DEBU3
+
+BLOAD 
+;      DBGTXT "Load    "
+      JSR GFNAME
+      BCC BLOAX
+      JSR GETOPT
+      LDX #0
+      LDA OPTION
+      CMP #'N
+      BNE BLOA01
+      LDX #$80
+BLOA01 STX OPTION
+      LDA #',
+      JSR MATCH
+      BCC BLOA0
+      LDA #0
+      JSR MATCH
+      BCC BLOA0
+      STA RPNT
+      STX RPNT+1
+;      DBGADR 4, RPNT
+      INC OPTION
+       
+BLOA0 JSR IUTILS
+      JSR SEARCH
+      BCS BLOA1
+      LDY #0
+      JMP ERROR
+BLOA1 JSR IRFILE
+      LDA #$FF            ; FORCE READ OF NEW
+      STA MAPIDX          ; SECTOR
+BLOA2 LDA OPTION
+      AND #1
+      BNE BLOAR
+BLOA3 LDA #2
+      JSR GDIBLK
+      BCC BLOA4
+BLOAX JMP DEBU3
+BLOA4 LDA BLKBUF
+      STA RPNT
+      LDA BLKBUF+1
+      STA RPNT+1
+      AND RPNT
+      CMP #$FF
+      BEQ BLOA3
+      LDA #2
+      JSR GDIBLK
+      BCS BLOAX
+
+      JSR SCROLL          ; PRINT FROM-TO
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #'-
+      JSR PUTBYT
+      LDA BLKBUF
+      LDX BLKBUF+1
+      JSR PRTADR
+      SEC
+      LDA BLKBUF
+      SBC RPNT
+      STA TPNT
+      LDA BLKBUF+1
+      SBC RPNT+1
+      STA TPNT+1
+      INC TPNT
+      BNE BLOA5
+      INC TPNT+1
+
+BLOA5 LDA TPNT
+      ORA TPNT+1
+      BEQ BLOA3
+
+      LDA #0
+      LDX TPNT+1
+      BNE BLOA6
+      LDA TPNT
+BLOA6 JSR GDIBLK
+      BCS BLOAX
+      TXA
+      BIT OPTION
+      BMI BLOA7
+      JSR BLKPUTA
+BLOA7 DEC TPNT+1
+      LDA TPNT+1
+      CMP #$FF
+      BNE BLOA5
+      BEQ BLOA3
+
+; raw load
+
+BLOAR JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #'-
+      JSR PUTBYT
+
+BLOAR1 LDA #$FF
+      JSR GDIBLK
+      BCC BLOAR2
+      CPX #0
+      BEQ BLOAR4
+BLOAR2 TXA
+      PHA
+      BIT OPTION
+      BMI BLOAR3
+      JSR BLKPUT
+BLOAR3 PLA
+      CLC
+      ADC RPNT
+      STA RPNT
+      BCC BLOAR1
+      INC RPNT+1
+      JMP BLOAR1
+      
+BLOAR4 SEC
+      LDA RPNT
+      SBC #1
+      TAY
+      LDA RPNT+1
+      SBC #0
+      TAX
+      TYA
+      JSR PRTADR
+      JMP DEBU3
+
+;GET DISK BYTE
+
+GDIBYT LDX NCOUNT
+      LDY MAPIDX
+      TYA
+      CMP DBUF+2,X
+      BCC GDIBY2
+      LDA DAUX1
+      ORA DAUX2
+      BEQ GDIBY1
+      JSR RDISK
+      LDA #0
+      STA MAPIDX
+      BEQ GDIBYT
+GDIBY1 SEC
+      RTS
+GDIBY2 LDA DBUF,Y
+      INC MAPIDX
+      RTS
+
+; get number of bytes in disk block
+
+GDILEN LDX NCOUNT
+      SEC
+      LDA DBUF+2,X
+      SBC MAPIDX
+      BEQ GDILE0
+      BCS GDILE2
+GDILE0 LDA DAUX1
+      ORA DAUX2
+      BEQ GDILE1
+      JSR RDISK
+      LDA #0
+      STA MAPIDX
+      BEQ GDILEN
+GDILE1 SEC
+      RTS
+GDILE2 CLC
+      RTS
+
+; get block from disk (A=len)
+; carry = error (X holds number of bytes transferred)
+
+GDIBLK STA TPNT2
+      LDX #0
+GDIBL1 LDY NCOUNT
+      LDA DBUF+2,Y
+      STA TPNT2+1
+GDIBL2 LDY MAPIDX
+      CPY TPNT2+1
+      BCC GDIBL4
+      STX TPNT2+1
+      LDA DAUX1
+      ORA DAUX2
+      BEQ GDIBL3
+      JSR RDISK
+      LDX TPNT2+1
+      LDA #0
+      STA MAPIDX
+      BEQ GDIBL1
+GDIBL3 SEC
+      RTS
+GDIBL4 LDA DBUF,Y
+      STA BLKBUF,X
+      INX
+      INC MAPIDX
+      DEC TPNT2
+      BNE GDIBL2
+      CLC
+      RTS 
+
+
+;PUT BYTE TO DISK
+
+PDIBYT LDY MAPIDX
+      CPY NCOUNT
+      BCC PDIBY1
+      PHA 
+      JSR WDISK
+      PLA 
+      LDY #0
+      STY MAPIDX
+PDIBY1 STA DBUF,Y
+      INC MAPIDX
+      RTS 
+
+; put block to disk (A=len)
+
+PDIBLK STA TPNT2
+      LDX #0
+PDIBL1 LDY MAPIDX
+      CPY NCOUNT
+      BCC PDIBL2
+      STX TPNT2+1
+      JSR WDISK
+      LDX TPNT2+1
+      LDY #0
+      STY MAPIDX
+PDIBL2 LDA BLKBUF,X
+      STA DBUF,Y
+      INX
+      INC MAPIDX
+      DEC TPNT2
+      BNE PDIBL1
+      RTS 
+

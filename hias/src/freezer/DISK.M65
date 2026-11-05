@@ -1,0 +1,485 @@
+;-------------------------------
+;     DISK DEVICE HANDLER
+;-------------------------------
+
+;ENTRY --- SAVE DISK FILE
+
+SAVFIL
+      DBGTXT "sFI     " 
+      JSR DENSTY
+      JSR RVTOC
+      JSR SEARCH
+      BCS SAVFI0          ; FOUND, DELETE
+      BIT FILENO          ; FOUND HOLE?
+      BPL SAVFI1          ; YES
+      LDY #7              ; DIRECTORY FULL
+      JMP ERROR
+SAVFI0 LDX #10            ; GET REAL NAME
+SAVFI3 LDA DENTRY+5,X
+      STA NAME,X
+      DEX 
+      BPL SAVFI3
+      JSR DELETE          ; DELETE FILE
+SAVFI1 JSR IWFILE
+      JSR SAVE
+      JSR WVTOC
+SAVFI2 JMP ENDCMD
+
+;ENTRY --- EXEC DISK FILE
+
+EXEFIL
+      DBGTXT "eFI     " 
+      JSR DENSTY
+      JSR IVTOC
+      JSR SEARCH
+      BCS *+7
+      LDY #0              ; FILE NOT FOUND
+      JMP ERROR
+      JSR IRFILE
+      JSR LOAD
+      JMP RSTART
+
+;READ DISK BLOCK
+
+RDISK JSR RSEC
+      BIT FILENO          ; BOOT?
+      BMI RDIS1           ; YES
+      LDX NCOUNT
+      LDA DBUF,X
+      LSR A
+      LSR A
+      EOR FILENO
+      AND #$3F
+      BEQ *+7
+      LDY #1              ; FILE STRUCTURE DAMAGED
+      JMP ERROR
+      LDA DBUF,X
+      AND #3
+      STA DAUX2
+      INX 
+      LDA DBUF,X
+      STA DAUX1
+      RTS 
+RDIS1 INC DAUX1
+      BNE RDIS2
+      INC DAUX2
+RDIS2 RTS 
+
+;WRITE BLOCK TO DISK
+
+WDISK BIT FILENO          ; BOOT?
+      BMI WDIS2           ; YES
+      LDA NEXT            ; LAST SECTOR?
+      ORA NEXT+1
+      BEQ WDIS1           ; YES
+      JSR ALLOCS          ; ALLOCATE SECTOR
+WDIS1 LDX NCOUNT          ; SET UP LINK BYTES
+      LDA FILENO
+      ASL A
+      ASL A
+      ORA NEXT+1
+      STA DBUF,X
+      INX 
+      LDA NEXT
+      STA DBUF,X
+      INX 
+      LDA NCOUNT
+      STA DBUF,X
+WDIS2 JSR WSEC
+      BIT FILENO          ; BOOT?
+      BMI RDIS1           ; YES
+      LDA NEXT
+      STA DAUX1
+      LDA NEXT+1
+      STA DAUX2
+      RTS 
+
+;INIT FOR FILE LOAD
+
+IRFILE LDA #1
+      STA NEXT
+      STA DEVICE
+      LDX DENTYP
+      LDA SIZTAB,X
+      STA SIZE
+
+      LDA LNKTAB,X
+      STA NCOUNT
+      LDA #0
+      STA NEXT+1
+      LDA DENTRY+3
+      STA DAUX1
+      LDA DENTRY+4
+      STA DAUX2
+      RTS 
+
+;INIT FOR FILE WRITE
+
+IWFILE LDA #0
+      STA DENTRY+1
+      STA DENTRY+2
+      STA DENTRY+3
+      STA DENTRY+4
+      LDA #$42
+      STA DENTRY
+      LDX #10
+IWFIL1 LDA NAME,X
+      STA DENTRY+5,X
+      DEX 
+      BPL IWFIL1
+      JSR ALLOCS
+      LDA NEXT
+      STA DENTRY+3
+      LDA NEXT+1
+      STA DENTRY+4
+      LDA DENTRY
+      PHA
+      LDA #$43           ; mark directory entry open for write
+      STA DENTRY
+      JSR WDENTRY
+      PLA
+      STA DENTRY
+      JMP IRFILE
+
+SIZTAB .BYTE 128,128,0
+LNKTAB .BYTE 125,125,253
+
+;INIT FOR VTOC READ/WRITE
+
+IVTOC LDX DENTYP
+      LDA SIZTAB,X
+      STA SIZE
+      LDA #$68
+      STA DAUX1
+      LDA #1
+      STA DAUX2
+      RTS 
+
+;READ VTOC
+
+RVTOC JSR IVTOC
+      JSR RSEC
+      LDX #0
+      STX VTOC+$8A
+      STX VTOC+$8B
+RVTO1 LDA DBUF,X
+      STA VTOC,X
+      INX 
+      BPL RVTO1
+      LDA #0
+RVTO2 STA VTOC,X
+      INX 
+      BNE RVTO2
+      LDX DENTYP          ; ED?
+      DEX 
+      BNE RVTO4           ; NO
+      LDA VTOC            ; DOS 2.5 FORMAT?
+      CMP #2
+      BNE RVTO4           ; NO
+      JSR SVTOC2          ; SET DAUX=VTOC2
+      JSR RSEC
+      LDX #0
+RVTO3 LDA DBUF,X
+      STA VTOC+$10,X
+      INX 
+      BPL RVTO3
+RVTO4 RTS 
+
+SVTOC2 LDA #0
+      STA DAUX1
+      LDA #4
+      STA DAUX2
+      RTS 
+
+;WRITE VTOC & UPDATE DIRECTORY
+
+WVTOC JSR IVTOC
+      LDX DENTYP          ; ED?
+      DEX 
+      BNE WVTO3           ; NO
+      LDA VTOC            ; DOS 2.5 FORMAT?
+      CMP #2
+      BNE WVTO3           ; NO
+      LDX #0
+WVTO1 LDA VTOC+$10,X
+      STA DBUF,X
+      INX 
+      BPL WVTO1
+      JSR SVTOC2
+      JSR WSEC
+      JSR IVTOC
+      LDA #0
+      LDX #$64
+WVTO2 STA VTOC,X
+      INX 
+      BPL WVTO2
+WVTO3 LDX #0
+WVTO4 LDA VTOC,X
+      STA DBUF,X
+      INX 
+      BNE WVTO4
+      JSR WSEC
+      BIT FILENO
+      BVS WVTO6
+      JSR WDENTRY
+WVTO6 RTS 
+
+; write directory entry to disk
+
+WDENTRY JSR DIRACC
+      TXA                 ; SAVE INDEX
+      PHA 
+      JSR RSEC            ; DIRECTORY SECTOR LESEN
+      PLA 
+      TAX                 ; COPY DENTRY TO DIRECTORY
+      LDY #0
+WDEN1 LDA DENTRY,Y
+      STA DBUF,X
+      INX 
+      INY 
+      CPY #16
+      BNE WDEN1
+      JSR WSEC            ; DIRECTORY SECTOR SCHREIBEN
+WDEN2 RTS 
+
+;ALLOCATE SECTOR
+
+ALLOCS LDX #10            ; SEARCH VTOC FOR FREE SECTOR
+ALLOC1 LDA VTOC,X
+      BNE ALLOC2          ; FOUND
+      INX 
+      BNE ALLOC1
+      LDA #$80            ; mark directory entry deleted
+      STA DENTRY
+      JSR WDENTRY
+      LDY #5              ; DISK FULL
+      JMP ERROR
+ALLOC2 LDY #0             ; CALC SECTOR NO
+ALLOC3 ASL A
+      BCS ALLOC4
+      INY 
+      BNE ALLOC3
+ALLOC4 LDA VTOC,X         ; CLEAR BIT
+      EOR BITMSK,Y
+      STA VTOC,X
+      STY NEXT
+      LDA #0
+      STA NEXT+1
+      TXA 
+      SEC 
+      SBC #10
+      ASL A
+      ROL NEXT+1
+      ASL A
+      ROL NEXT+1
+      ASL A
+      ROL NEXT+1
+      ORA NEXT
+      STA NEXT
+      INC DENTRY+1
+      BNE ALLOC5
+      INC DENTRY+2
+ALLOC5 CPX #$64           ; DEC FREE SECTOR COUNT
+      BCC ALLOC7          ; VTOC1
+      LDA #3              ; SET VTOC2 USED FLAG
+      STA DENTRY
+      LDA VTOC+$8A
+      BNE ALLOC6
+      DEC VTOC+$8B
+ALLOC6 DEC VTOC+$8A
+      RTS 
+ALLOC7 LDA VTOC+3
+      BNE ALLOC8
+      DEC VTOC+4
+ALLOC8 DEC VTOC+3
+      RTS 
+
+BITMSK .BYTE $80,$40,$20,$10,8,4,2,1
+
+;ACCESS DIRECTORY SECTOR:
+;SET DAUX1,2 FROM FILENO
+;X=ENTRY INDEX
+
+DIRACC LDA FILENO
+      AND #$3F
+      LSR A
+      LSR A
+      LSR A
+      SEC 
+      ADC #$68
+      STA DAUX1
+      LDA #1
+      STA DAUX2
+      LDA FILENO
+      AND #7
+      ASL A
+      ASL A
+      ASL A
+      ASL A
+      TAX 
+      RTS 
+
+;DELETE FILE
+
+DELETE LDA DENTRY
+      AND #$20            ; LOCKED?
+      BEQ DELET1
+      LDY #6              ; FILE LOCKED
+      JMP ERROR
+DELET1 JSR IRFILE
+DELET2 LDA DAUX1
+      TAX 
+      AND #7
+      TAY 
+      LDA DAUX2
+      STA NEXT
+      TXA 
+      LSR NEXT
+      ROR A
+      LSR NEXT
+      ROR A
+      LSR NEXT
+      ROR A
+      CLC 
+      ADC #10
+      TAX 
+      LDA VTOC,X          ; SET VTOC BIT
+      ORA BITMSK,Y
+      STA VTOC,X
+DELET3 CPX #$64
+      BCC DELET4
+      INC VTOC+$8A
+      BNE DELET5
+      INC VTOC+$8B
+      BNE DELET5          ; ALWAYS
+DELET4 INC VTOC+3
+      BNE DELET5
+      INC VTOC+4
+DELET5 JSR RSEC           ; READ SECTOR
+      LDX NCOUNT
+      LDA DBUF,X
+      LSR A
+      LSR A
+      EOR FILENO
+      AND #$3F
+      BEQ DELET6
+      LDY #1              ; FILE STRUCTURE DAMAGED
+      JMP ERROR
+DELET6 LDA DBUF,X
+      AND #3
+      STA DAUX2
+      INX 
+      LDA DBUF,X
+      STA DAUX1
+      ORA DAUX2
+      BNE DELET2
+      RTS 
+
+;SEARCH FILE NAME IN DIRECTORY
+;IF FOUND, COPY TO DENTRY, CY=1
+;IF NOT FOUND, FILENO=HOLE, CY=0
+
+SEARCH LDX #$FF           ; INIT HOLE
+      STX MAPMSK
+      INX 
+      STX FILENO
+SEARC1 JSR DIRACC
+      CPX #0
+      BNE SEARC2          ; SAME SECTOR
+      JSR RSEC            ; NEW SECTOR
+      LDX #0
+SEARC2 LDY #0             ; COPY ENTRY TO DENTRY
+SEARC3 LDA DBUF,X
+      STA DENTRY,Y
+      INX 
+      INY 
+      CPY #16
+      BNE SEARC3
+      LDA DENTRY          ; LOOK AT FLAG
+      BMI SEARC8          ; DELETED, HOLE, SKIP
+      BEQ SEARC8          ; LAST, HOLE, EXIT
+      AND #$41
+      BEQ SEARC8          ; FREE, HOLE, SKIP
+      CMP #$41
+      BEQ SEARC9          ; TRASH, AVOID, SKIP
+      LDX #10             ; FOUND LIVE ENTRY
+SEARC4 LDA NAME,X         ; COMPARE NAMES
+      CMP #'?
+      BEQ SEARC5
+      CMP DENTRY+5,X
+      BNE SEARC9          ; NO MATCH
+SEARC5 DEX 
+      BPL SEARC4
+      SEC 
+      RTS 
+SEARC8 BIT MAPMSK         ; FIRST HOLE?
+      BPL SEARC9          ; NO
+      LDA FILENO
+      STA MAPMSK
+SEARC9 INC FILENO         ; GO TO NEXT ENTRY
+      BIT FILENO
+      BVS SEAR10
+      LDA DENTRY
+      BNE SEARC1
+SEAR10 LDA MAPMSK         ; GET HOLE
+      STA FILENO
+      CLC 
+      RTS 
+
+;PRINT DIRECTORY
+
+DDIR  JSR DENSTY
+      JSR IVTOC
+      LDX #$FF
+      STX MAPMSK
+      INX 
+      STX FILENO
+
+DDI1  JSR SEARC1
+      BCC DDI2            ; NOT FOUND, END
+      JSR DDI6            ; PRINT DENTRY
+      INC FILENO
+      BIT FILENO
+      BVC DDI1
+
+DDI2  JSR RVTOC
+      LDA VTOC+3
+      CLC 
+      ADC VTOC+$8A
+      STA TPNT
+      LDA VTOC+4
+      ADC VTOC+$8B
+      STA TPNT+1
+
+DDI5  LDA DCOUNT
+      BEQ DDI11
+      JSR SCROLL
+DDI11 LDY DENTYP
+      JSR PRTSTR
+      LDY #3
+      JSR PRTSTR
+      JSR PRTTPN
+      LDY #4
+      JMP PRTSTR
+
+DDI6  LDA DCOUNT
+      CMP #21
+      BCC DDI10
+      JSR SCROLL
+DDI10 LDA #$20
+      TAX 
+      JSR PUTBYT
+      LDA DENTRY
+      AND #$20
+      BEQ DDI7
+      LDX #'*             ; LOCKED
+DDI7  TXA 
+      JSR PUTBYT
+      JSR PRTNAM
+      LDA DENTRY+1
+      LDX DENTRY+2
+      STA TPNT
+      STX TPNT+1
+      JMP PRTTPN
+      LDA #$20
+      JMP PUTBYT

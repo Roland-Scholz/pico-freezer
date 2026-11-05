@@ -1,0 +1,451 @@
+;-------------------------------
+;RTI PAGE: THE HARDWARE WILL "BEND" THE VECTORS
+;           TO THIS PAGE DURING FREEZER STARTUP
+;-------------------------------
+	.MACRO XRTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	RTI
+	.ENDM
+
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+	XRTI
+
+;-------------------------------
+;STOP PAGE: THE HARDWARE WILL
+;           "BEND" THE VECTORS
+;           TO THIS PAGE, HIGH
+;           BYTES ONLY.
+;-------------------------------
+       NOX  
+
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      JMP STOP
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+      NOP 
+
+
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+       NOX  
+
+;-------------------------------
+;SAVE SYSTEM STATUS, RESET THE
+;CUSTOM CHIPS AND SHOW MENU.
+;-------------------------------
+
+STOP  CLD	; just to be sure...
+      STA REGA
+      LDA VCOUNT
+      STA VCNT
+      LDA NMIST
+      STA NMIF
+      LDA #0
+      STA NMIEN
+      STA POKMSK
+      STA IRQEN
+      STA DMACTL
+      STA GRACTL
+      STA COLBK
+      STA GRAFM
+      STA GRAFP0
+      STA GRAFP1
+      STA GRAFP2
+      STA GRAFP3
+      STX REGX
+      STY REGY
+      TSX 
+      STX REGS
+      LDX #$FF
+      TXS 
+
+; new for freezer 2011: signal end of startup process
+      STA STUCPL
+
+      LDA VCNT
+      STA FRZVCNT	; save original vcount
+; check for entry via IRQ or VBI
+      LDA #8
+      STA FRZINT
+
+; setup SRBUF so that bit 0/1 reflect A4/5
+      LDX #3
+      STX SRBUF1+$30
+      DEX
+      STX SRBUF1+$20
+      DEX
+      STX SRBUF1+$10
+      DEX
+      STX SRBUF1
+      STX FRZVEC
+      STX FRZVEC+1
+      STX DPOKEYF
+
+; set A4 to state of A2 at activation (FREEZER 2005+2011)
+; A5 to dualpokey switch (FREEZER 2011 only)
+      LDA VECTA4
+      LDA SRBUF1
+      CMP SRBUF1+16
+      BNE OLDLOGIC	; huh, this must be really old logic...
+
+      STA VECTA4	; set A4/A5 normal
+      LSR
+      BCC ISNMI
+      LDX #4
+ISNMI
+.if .def FREEZER2011
+      LSR		; shift dualpokey switch into C
+      ROL DPOKEYF	; set dualpokey flag
+.endif
+      LDA $FFFB,X
+      STA FRZVEC+1
+      LDA $FFFA,X
+      STA FRZVEC
+      STX FRZINT
+
+;.IF .DEF HWDEBUG
+;      LDA #'N
+;      CPX #0
+;      BEQ ISNMI1
+;      LDA #'I
+;ISNMI1 DBGASC 0
+;      LDA FRZVEC
+;      LDX #2
+;      DBGA
+;
+;      LDA VCNT
+;      LDX #4
+;      DBGA
+;.ENDIF
+
+      LDA FRZVEC
+      CMP #$19
+      BCC OLDLOGIC	; don't adjust vcount if short slide
+      EOR #$FF
+      STA TPNT
+      LDX #0
+      CMP #VCYCRND+(VCYCLES*2)
+      BCC VCY1
+      INX
+VCY1  CMP #VCYCRND+VCYCLES
+      BCC VCY2
+      INX
+VCY2  CMP #VCYCRND
+      BCC VCY3
+      INX
+VCY3
+      STX TPNT
+
+      SEC
+      LDA VCNT
+      SBC TPNT
+      BCS VCYOK
+      LDA #0
+VCYOK STA VCNT
+
+OLDLOGIC STA VECTA4	; set A4 normal
+      LDA DPOKEYF	; invert DPOKEY flag (0=dual pokey, other=single pokey)
+      EOR #1
+      STA DPOKEYF
+
+;.IF .DEF HWDEBUG
+;      LDA VCNT
+;      LDX #6
+;      DBGA
+;.ENDIF
+
+;SAVE PIA REGISTERS
+
+      LDA PACTL-OFFSET
+      STA SCTLA
+      LDA PBCTL-OFFSET
+      STA SCTLB
+      LDA #$38            ; ACCESS DIRC
+      STA PACTL
+      STA PBCTL
+      LDA PORTA
+      STA SDIRA
+      LDA PORTB
+      STA SDIRB
+      LDA #$FF
+      STA PORTA
+      STA PORTB
+      LDA #$3C            ; ACCESS PORTS
+      STA PACTL
+      STA PBCTL
+      LDA PORTA
+      STA SPORTA
+      LDA PORTB
+      STA SPORTB
+
+;SAVE ANTIC, POKEY, GTIA REGS
+
+      LDX #15
+SAPGR LDA GTIA-OFFSET,X
+      STA SGTIA,X
+      LDA GTIA-OFFSET+$10,X
+      STA SGTIA+$10,X
+      LDA POKEY-OFFSET,X
+      STA SPOKEY,X
+      LDA POKEY-OFFSET+$10,X	; yes, second pokey shadow (only valid if DPOKEYF=0)
+SAPGR1 STA SPOKEY2,X
+      LDA ANTIC-OFFSET,X
+      STA SANTIC,X
+      DEX 
+      BPL SAPGR
+
+;RESET ANTIC, POKEY AND GTIA
+
+RES   LDX #15
+      LDA #0
+RES1  STA GTIA,X
+      STA GTIA+$10,X
+      STA ANTIC,X
+      LDY DPOKEYF
+      BNE RES11
+      STA POKEY+$10,X
+RES11 STA POKEY,X
+      DEX 
+      BPL RES1
+
+;RESET PIA
+
+      LDY #$38
+      STY PACTL
+      STY PBCTL
+      STA PORTA
+      STX PORTB
+      LDY #$3C
+      STY PACTL
+      STY PBCTL
+      STX PORTB
+
+;SET COLORS
+
+      LDX #4
+RES2  LDA COLTAB,X
+      STA COLPF0,X
+      DEX 
+      BPL RES2
+
+;INIT HIGHSPEED SIO TAB
+      LDA #0
+      STA DUNIT
+      JSR HISIO
+
+; setup PBMEM (PORTB) for accessing Atari memory to match
+; current PIA status, also take direction register into account
+      LDA SDIRB
+      EOR #$FF
+      ORA SPORTB
+      STA PBMEM
+
+; init persistent data (command line history)
+
+      JSR PERSINI
+
+; init keyboard caps/inverse status
+      LDA #0
+      STA KBCAPS
+      STA DRIVENO
+
+; disable printer
+      STA PRFLAG
+
+; set SIO command buffer default values (read sector)
+
+      LDX #$0B
+RESSIO LDA SIODEF,X
+      STA SIOCMDB,X
+      DEX
+      BPL RESSIO
+
+;DISPLAY LIST
+
+RES3  LDA #<MENUDL
+      STA DLISTL
+      LDA #>MENUDL
+      STA DLISTH
+
+;CHARACTER BASE
+
+      LDA #$E0
+      STA CHBASE
+
+      LDA #2
+      STA CHACTL
+
+      JSR INISCR ; copy dlist and screen to RAM
+
+;DMA ON
+
+      JSR DMAON
+
+;TO COMMAND PROCESSOR
+
+      JMP KEY
+
+; init screen for main menu
+INISCR LDX #0
+INISC1 LDA MENU,X
+       STA SCREEN,X
+       INX
+       CPX #(MENUEND-MENU)
+       BNE INISC1
+
+; init display list for main menu
+INIDL  LDX #0
+INIDL1 LDA DLIST,X
+       STA MENUDL,X
+       INX
+       CPX #(DLEND-DLIST)
+       BNE INIDL1
+       RTS
+
+; init short display list for load/save/error
+INIDLS LDX #0
+INIDL2 LDA DLISTS,X
+       STA MENUDL+(DLISTM-DLIST),X
+       INX
+       CPX #(DLISTSE-DLISTS)
+       BNE INIDL2
+       RTS
+
+PERSINI LDX #3
+PERSI1 LDA PMAGIC,X
+      CMP PMAGV,X
+      BNE PERSI7
+      DEX
+      BPL PERSI1
+
+      LDA HISTIDX
+      CMP #4
+      BCS PERSI7
+
+      LDX #4
+PERSI2 LDA HISTCSR,X
+      CMP #$FF
+      BEQ PERSI3
+      CMP #40
+      BCS PERSI7
+PERSI3 DEX
+      BPL PERSI2
+      RTS
+
+PERSI7 LDX #3
+PERSI8 LDA PMAGV,X
+      STA PMAGIC,X
+      DEX
+      BPL PERSI8
+
+      LDA #$FF
+      LDX #4
+PERSI9 STA HISTCSR,X
+      DEX
+      BPL PERSI9
+      LDA #0
+      STA HISTIDX
+      RTS
+
+PMAGV .BYTE $5C,$93,$25,$CA
+
+SIODEF .BYTE $31,$01,$53,$40
+       .WORD DBUF
+       .BYTE $07,$00
+       .WORD $0004,$0000
+
+COLTAB .BYTE $D8,$0A,$C2,$88,$C2
+
+DLIST .BYTE $70,$70,$70,$70,$70
+      .BYTE $70,$70,$70,$70
+      .BYTE $30
+      .BYTE $49
+      .WORD BARLIN-DLIST+MENUDL
+      .BYTE 6,2,$49
+      .WORD BARLIN-DLIST+MENUDL
+DLISTM .BYTE $42
+      .WORD SCREEN
+      .BYTE 2,2,2,2,2,$49
+      .WORD BARLIN-DLIST+MENUDL
+      .BYTE $41
+      .WORD MENUDL
+
+BARLIN .BYTE $FF,$FF,$FF,$FF,$FF
+      .BYTE $FF,$FF,$FF
+      .SBYTE "TURBO-FREEZER XL"
+;     .SBYTE "COPYRIGHT 1987  BY BERNHARD ENGL"
+      .SBYTE "(C) 1987-2012  B.ENGL & M.REICHL"
+
+DLEND
+
+; short display list for save/load/error
+; replaces DLISTM
+DLISTS .BYTE 0,$42
+      .WORD SCREEN
+      .BYTE 0,2,0,$49
+      .WORD BARLIN-DLIST+MENUDL
+      .BYTE $41
+      .WORD MENUDL
+DLISTSE
+
+;MENU  .SBYTE "[S] SAVE EXTERN [R] SAVE RAMDISK"
+;MENU2 .SBYTE "[E] EXEC EXTERN [X] EXEC RAMDISK"
+;MENU3 .SBYTE "[F] SAVE FRZRAM [C] EXEC FRZRAM "
+;      .SBYTE "[Z] ZERO OS RAM [D] DOS/DEBUGGER"
+
+MENU  .SBYTE "[S] SAVE EXTERN [E] EXEC EXTERN "
+MENU2 .SBYTE "[F] SAVE FRZRAM [C] EXEC FRZRAM "
+MENU3 .SBYTE "[R] SAVE RAMDSK [X] EXEC RAMDSK "
+MENU4 .SBYTE "[W] SWAP FRZRAM [A] SWAP RAMDSK "
+      .SBYTE "[Z] ZERO OS RAM [D] DOS/DEBUGGER"
+      .SBYTE "[K] CART EMU    SPC EXIT        "
+MENUEND
+

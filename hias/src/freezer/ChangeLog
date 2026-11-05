@@ -1,0 +1,326 @@
+Turbo Freezer XL Software
+(c) 1987 by Bernhard Engl
+ATasm version (c) 2004-2012 by Matthias Reichl <hias@horus.com>
+
+Version 3.10
+--------------------------
+- support startup handshake of new Turbo Freezer 2011
+
+- Freezer 2005 flasher: fix programming Freezer RAM
+  (last available bank is 13, not 63)
+
+- new flasher for Freezer 2011
+
+- new cartemu menu for Freezer 2005 and Freezer 2011
+
+- support dual pokey mode with Turbo Freezer 2011
+
+- reverse effect of SHIFT key when starting CartEmu from Freezer menu:
+  K starts CartEmu via a cold boot (JMP $E477)
+  SHIFT-K starts CartEmu via a warm boot (JMP $E474)
+
+- Turbo Freezer 2011 cartemu menu: store settings in battery-backuped
+  Freezer RAM
+
+- added 'PR' debugger command to enable outputting to printer
+  ('PR<0' disables it, 'PR<1' to 'PR<8' enable P1: - P8:)
+
+- added ';' debugger command to print raw text to the debugger
+  screen (and optionally the printer). All text following the
+  semicolon is output as is.
+
+- Support aborting of long-running commands (eg 'D0,FFFF') with
+  'ESC', in addition to 'BREAK' (needed when printer output
+  is enabled, 'BREAK' aborts the SIO transfer).
+
+- 'PB' debugger command now controls PORTB for all memory accesses
+  above $4000 (excluding custom chip area). It is initialized with
+  PIA PORTB state when the freezer was activated. The state of the
+  direction register is also taken into account (pins set to input
+  mode are treated as high due to the pullup resistors).
+  
+
+Version 3.03 (2010-11-25)
+--------------------------
+- Updated highspeed SIO code to V1.30
+
+- Updated MyPicoDos to 4.05
+
+
+Version 3.02 (2008-06-30):
+--------------------------
+- fixed save of complete memory (SAV FILE,0,FFFF)
+
+- new MyPicoDos 4.04 final
+
+- fixed "save extern" and "exec extern": KBCAPS wasn't properly
+  initialized and thus the Turbo Freezer didn't recognize the
+  key properly and jumped back to the main menu.
+
+- added 'VEC' debugger command to display OS vectors in page 0 and 2
+
+- added 'HAT' debugger command to print contents of HATABS
+
+- fixed debugger command parser so that only 'UNL' executes the
+  'unlock' DOS function (before any command starting with 'U'
+  ran 'unlock')
+
+- extended online help
+
+- added 'K' command to main menu to start the CartEmu menu.
+  By default it is started with a soft-reset (JMP $E474),
+  shift-'K' starts it with a hard-reset.
+
+- added 'K' commands to debugger to control the CartEmu
+
+- fixed handling of Dx: in debugger: only D:, D1: - D8:
+  are allowed, anything else aborts the command
+
+- changed parameters of block commands from address,len
+  to address,end
+
+- commands "Dadr,", "D,", "Iadr," and "I," display a screen full
+  of data (128 bytes).
+
+- Updated highspeed SIO code
+
+Version 3.02pre5 (2006-07-30):
+------------------------------
+
+- fixed corrupted screen on I/O errors
+
+
+Version 3.02pre4 (2006-06-10):
+------------------------------
+
+- fixed swap function (memory at $4100-$4113 was overwritten before
+  saving the current Atari state to ramdisk / freezer ram)
+
+- fixed slow disassembly of $0000-$3FFF, $C000-$CFFF and $D000-$FFFF
+
+- fixed "[Z]" not restored back to normal video in main menu
+  after clearing OS-RAM
+
+- clear decimal flag at the very beginning of freezer activation
+
+
+Version 3.02pre3 (2006-06-10):
+------------------------------
+
+- split code into 3 banks
+
+- LOA command speedup
+
+- added dummy load (com file trace) function (LOA file/N)
+
+- added raw data load function (LOA file,adr)
+
+- changed cold-boot code to set COLDST instead of PUPBT1
+
+- GETBYT and STOBYT are now only wrappers for BLKGET and
+  BLKPUT, the old code was completely discarded
+
+- support for extended memory ('ramdisk') access with
+  new 'PB' command which sets portb to the specified
+  value before accessing $4000-$7FFF (default: 'PB FF')
+
+- Added 'swap' function to main menu:
+  'W' swaps current Atari state with snapshot in freezer RAM,
+  'A' with snapshot in ramdisk
+
+- Extended online help
+
+- Command history is kept accross freezer sessions
+
+
+Version 3.02pre2 (2006-05-13):
+------------------------------
+
+- New block move ('BM'), block set ('BS') and block compare
+  ('BC') debugger commands
+
+- The search routine, save file and display memory commands
+  now use the new 'BLKGET' routine
+
+- Moved some variables out of the zero page
+
+- Changed boot code to save some memory
+
+- Fixed MyPicoDos
+
+
+Version 3.02pre1 (2006-05-11):
+------------------------------
+
+- Fixed search routine
+
+- Fixed endless loop if ending address is $FFFF
+
+- New highspeed SIO code with bugfixes and support for 810 Happy
+
+- Added 'M' debugger command to display memory usage map
+
+- Added boot code to load a "boot" snapshot without a freezer
+  - freezer boot disks are now really bootable :-)
+  First byte of boot sector contains page where the loader
+  should be relocated to (default is $C0, valid values are
+  $05-$C9 and $D8-$F9)
+
+- Updated integrated MyPicoDos to 4.04
+
+- Pressing the HELP key in the debugger displays a short
+  online help page
+
+
+Version 3.01 (2005-11-22):
+--------------------------
+
+- Added 'VER' debugger command to display software version
+
+
+Version 3.0 (2005-11-12):
+-------------------------
+
+- The code is split up into two ROM banks to make space for
+  future code extensions.
+
+- The new highspeed SIO routine also supports ultra speed drives
+  like 1050 Speedy and AtariSIO/APE/SIO2PC.
+
+- Two new menu items were added: Save to and exec from Freezer RAM
+
+- Fixed disk format routine: dummy boot sectors are now written
+
+- Fixed crash when writing to $D1xx and $D6xx
+
+- Enabled read/write access from/to $D5xx
+
+- Added 'search bytes' command to debugger
+
+- Added option '/N' to 'SAV' debugger command to write a raw data file
+  without COM-header
+
+- Addresses and values prefixed with '%' are now interpreted as
+  decimal values (instead of hex).
+
+- Added bit mask to 'search bytes' command
+
+- Fixed 'delete' key in debugger
+
+- FME now uses cmd $22 also on enhanced drives
+
+- Directory entries are now marked as open for write before
+  any data is written.
+
+- If an address is prefixed with '*', the bytes in address and
+  address+1 are returned instead. The asterisk can also be used
+  multiple time (eg D**E0), just like in C :-)
+
+- Added 'DL' command ("disassemble" display list) to debugger
+
+- Added 'I' command to debugger: like 'D' command, but display
+  characters as in internal (screen) format.
+
+- Fixed 'SR' and 'SW' debugger commands so that the first three
+  sectors of DD disks can be read/written.
+
+- 'SR' and 'SW' debugger commands now print a log to the screen
+  if they were completed successfully.
+
+- 'SR' and 'SW' debugger commands used sector $168 (the VTOC) by
+  default if no sector number was given. These commands now require
+  an explicitly specified sector number to prevent accidential
+  data corruption,
+
+- Shift+Clear now clears the debugger command line.
+
+- With CursorUp and CursorDown the last 4 commands entered into
+  the debugger can be recalled. The currently edited command line
+  is also saved, so it is possible to view older commands and then
+  continue editing a new command. New command history entries
+  are stored when return is pressed, but only if the command line
+  differs from the last stored command line (to save space).
+
+- Added new 'SIO' command to debugger. Parameters are:
+  Device,Unit,Command,Direction,Timeout,Length,Daux
+  Length and Daux are 16-bit words (maximum length is $0100),
+  Buffer address is set to the default sector buffer ($D100).
+  Parameters can be omitted (in this case the last specified
+  parameters are used). BEWARE: always specify a full set
+  of parameters when invoking SIO the first time you enter
+  the debugger and after any other IO operation! Otherwise
+  you might accidentially overwrite data or format a disk!
+
+- Updated 'DL' debugger command so that menmonics match the official
+  ANTIC specs (CHR/MAP instead of MODE, BLK instead of BLANK,
+  JMP instead of JUMP, JVB instead of JVBI). LMS addresses are
+  now prefixed with 'LMS'
+
+- Added two new value input formats: ' followed by a character
+  gives the ATASCI code of that character, @ followed by a character
+  gives the internal (screen) code of that character
+
+- Updated keyboard input so that lower case, graphics and inverse
+  characters can be entered
+
+- Fixed handling of backspace character and last character in
+  filename input routine
+
+- Fixed small bug in '*' input method (TPNT wasn't set appropriately
+  which caused the value logged to the monitor screen to be 0)
+
+- Added support for determining the interrupt source (NMI/IRQ) and
+  experimental code for adjusting the scanline position. These features
+  only work with the new logic (from May 04 2005)!
+
+- Added new 'V' command. Without parameters, the interrupt source,
+  original interrupt vector, original scan line and adjusted scan
+  line are displayed. 'V<xx' sets the adjusted scan line.
+
+- Bugfix: buffer for last SIO command was one byte too small.
+
+- Pressing Shift while issuing one of the commands that leave the
+  Freezer menu (space/E/X/C) clears the PM collision register just
+  before resuming the program. This is needed for some games that
+  use DLIs to display more players, but may have negative effects with
+  other programs.
+
+- Added AtariSIO remote control command 'a'
+
+- Added highspeed SIO routine for XF551
+
+- Fixed some small bugs in the keyboard handler
+
+- Added "DIO" command to enable direct access to custom chip
+  I/O area $D000-D6FF.
+
+- Moved sector buffer from $D1xx to $D7xx
+
+- Fixed GETBYT routine: reading unavailable addresses ($D1xx, $D5xx,
+  $D6xx) now returns $FF instead of $00.
+
+- Fixed Search routine: sector buffer is now searched, too
+
+- Moved search routine from bank 2 to bank 1
+
+- Command history now excludes empty lines
+
+- New "SIOR" command to reset highspeed SIO table
+
+- Added support for Dx: in filenames and in SR, SW, FMx commands
+
+- Spaces between a debugger command and the first parameter is now ignored
+
+- Spaces are now also removed at the beginning of the 'a' command
+
+- If Control is pressed when using one of the exec commands in the
+  Freezer menu (E/X/C) the program isn't started automatically after
+  loading.
+
+- Fixed bug in highspeed SIO routine: OK/Error byte wasn't read after
+  transmitting a data frame to the floppy.
+
+- Fixed bug in search routine: no search was performed if more than 7
+  search bytes were entered. At most 8 search bytes are allowed, additional
+  bytes are ignored.
+

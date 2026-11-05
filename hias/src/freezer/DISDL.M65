@@ -1,0 +1,200 @@
+;-------------------------------
+; "disassemble" display list
+
+; memory locations used by DLASM
+
+      DLLEN  = NAME
+      DLMODE = NAME+1
+
+COMDL JSR EATSPC
+      LDA #0
+      STA OPTION
+      JSR MATCH
+      BCC DLASM1
+      STA RPNT            ; START ADDRESS
+      STX RPNT+1
+DLASM1 LDA #',
+      JSR MATCH
+      BCC DLASM2
+      LDA #0
+      JSR MATCH
+      BCS DLASM3
+DLASM2 LDA #16             ; DISASM 16 LINES
+      STA OPTION
+DLASM3 STA TPNT
+      STX TPNT+1
+
+DLASM4 JSR SCROLL
+      JSR DLDIS
+      JSR ADVADR
+      PHP 
+      LDA OPTION
+      BEQ DLASM5           ; TEST FOR ADDRESS
+      PLP 
+      DEC OPTION          ; COUNT LINES
+      BNE DLASM4
+      JMP DEBU3
+DLASM5 PLP 
+      BEQ DLASM4
+      BCC DLASM4
+      JMP DEBU3
+
+DLDIS LDY #1
+      STY DLLEN
+      DEY
+      JSR GETBYT
+      STA DLMODE
+      AND #$0F
+      BEQ DLDIS2 ; blank line(s) are always 1 byte
+      CMP #1
+      BEQ DLDIS1
+      LDA DLMODE
+      AND #$40   ; mode 2-$F: 3 bytes if LMS
+      BEQ DLDIS2
+DLDIS1 LDA #3
+      STA DLLEN
+
+DLDIS2 
+      LDA #$20
+      JSR PUTBYT
+      LDA RPNT
+      LDX RPNT+1
+      JSR PRTADR
+      LDA #$20
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDA #0
+      STA NCOUNT
+DLDIS3 LDY NCOUNT
+      CPY DLLEN
+      BEQ DLDIS4
+      JSR GETBYT
+      JSR PRTBYT
+      LDA #$20
+      JSR PUTBYT
+      INC NCOUNT
+      BNE DLDIS3
+DLDIS4 LDA DCOUNT
+      CMP #17
+      BEQ DLDIS5
+      LDA #$20
+      JSR PUTBYT
+      JMP DLDIS4
+DLDIS5 LDA #0
+      STA NCOUNT
+
+      LDA DLMODE
+      AND #$0F
+      BNE DLDIS6
+
+; blank line(s)
+      LDX #0
+      JSR DLDPOP
+
+      LDA DLMODE
+      AND #$70
+      LSR
+      LSR
+      LSR
+      LSR
+      CLC
+      ADC #'1
+      JSR PUTBYT
+      LDA DLMODE
+      AND #$80
+      STA DLMODE
+      JMP DLDIS11
+
+DLDIS6 CMP #1
+      BNE DLDIS8
+
+; jmp/jvb
+      
+      LDX #4
+      LDA DLMODE
+      AND #$40
+      BEQ DLDIS7
+      LDX #8
+DLDIS7 JSR DLDPOP
+      JSR DLDPAD
+      LDA DLMODE
+      AND #$BF
+      STA DLMODE
+      JMP DLDIS11
+
+; chr/map
+
+DLDIS8 LDX #12
+      CMP #8
+      BCC DLDIS9
+      LDX #16
+DLDIS9 JSR DLDPOP
+      LDA DLMODE
+      AND #$0F
+      CMP #10
+      BCC DLDIS10
+      ADC #6
+DLDIS10 CLC
+      ADC #'0
+      JSR PUTBYT
+
+; print options
+
+DLDIS11 LDA #$20
+      JSR PUTBYT
+      LDA #$20
+      JSR PUTBYT
+      LDA DLMODE
+      AND #$40
+      BEQ DLDIS18
+
+      LDX #20
+      JSR DLDPOP
+      JSR DLDPAD
+
+DLDIS18 LDA DLMODE
+      AND #$10
+      BEQ DLDIS19
+      LDA #$20
+      JSR PUTBYT
+      LDA #'H
+      JSR PUTBYT
+DLDIS19 LDA DLMODE
+      AND #$20
+      BEQ DLDIS20
+      LDA #$20
+      JSR PUTBYT
+      LDA #'V
+      JSR PUTBYT
+DLDIS20 LDA DLMODE
+      BPL DLDIS21
+      LDA #$20
+      JSR PUTBYT
+      LDA #'I
+      JSR PUTBYT
+DLDIS21 LDA DLLEN
+      RTS
+
+DLDPOP LDY #4
+DLDPOP1 LDA DLDOP,X
+      JSR PUTBYT
+      INX
+      DEY
+      BNE DLDPOP1
+      RTS
+
+DLDPAD LDA #'$
+      JSR PUTBYT
+      LDY #1
+      JSR GETBYT
+      PHA
+      LDY #2
+      JSR GETBYT
+      TAX
+      PLA
+      JSR PRTADR
+      RTS
+
+DLDOP .BYTE "BLK JMP JVB CHR MAP LMS "
+

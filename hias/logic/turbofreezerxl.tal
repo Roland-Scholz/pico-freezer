@@ -1,0 +1,93 @@
+
+
+Design Name = turbofreezerxl.tt4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+*******************
+* TIMING ANALYSIS *
+*******************
+
+Timing Analysis KEY:
+One unit of delay time is equivalent to one pass 
+     through the Central Switch Matrix.
+..   Delay ( in this column ) not applicable to the indicated signal.
+TSU, Set-Up Time ( 0 for input-paired signals ),
+     represents the number of switch matrix passes between
+     an input pin and a register setup before clock.
+     TSU is reported on the register.
+TCO, Clocked Output-to-Pin Time ( 0 for output-paired signals ),
+     represents the number of switch matrix passes between
+     a clocked register and an output pin.
+     TCO is reported on the register.
+TPD, Propagation Delay Time ( calculated only for combinatorial eqns.),
+     represents the number of switch matrix passes between
+     an input pin and an output pin.
+     TPD is reported on the output pin.
+TCR, Clocked Output-to-Register Time,
+     represents the number of switch matrix passes between
+     a clocked register and the register it drives ( before clock ).
+     TCR is reported on the driving register.
+
+                    TSU       TCO       TPD       TCR
+                  #passes   #passes   #passes   #passes
+SIGNAL NAME       min  max  min  max  min  max  min  max
+           a_12_   0    0    1    2   ..   ..    2    3   
+           a_11_   0    0    1    2   ..   ..    2    3   
+           a_15_   0    0    1    2   ..   ..    2    3   
+           a_10_   0    0    1    2   ..   ..    2    3   
+            a_9_   0    0    1    2   ..   ..    2    3   
+            a_8_   0    0    1    2   ..   ..    2    3   
+            a_7_   0    0    2    2   ..   ..    1    3   
+            a_6_   0    0    2    2   ..   ..    2    3   
+            a_5_   0    0    2    2   ..   ..    1    3   
+            a_4_   0    0    1    2   ..   ..    1    3   
+           a_14_   0    0    1    2   ..   ..    2    3   
+           a_13_   0    0    1    2   ..   ..    2    3   
+   ram_rom_a_18_  ..   ..   ..   ..    1    2   ..   ..   
+activate_inputreg   0    0    2    2   ..   ..    2    2   
+            a_3_   0    0    2    2   ..   ..    1    2   
+         refresh  ..   ..   ..   ..    1    2   ..   ..   
+   ram_rom_a_17_  ..   ..   ..   ..    1    2   ..   ..   
+          ram_ce  ..   ..   ..   ..    2    2   ..   ..   
+   ram_rom_a_16_  ..   ..   ..   ..    1    2   ..   ..   
+          rom_ce  ..   ..   ..   ..    1    2   ..   ..   
+   ram_rom_a_15_  ..   ..   ..   ..    1    2   ..   ..   
+   ram_rom_a_14_  ..   ..   ..   ..    1    2   ..   ..   
+   ram_rom_a_13_  ..   ..   ..   ..    1    2   ..   ..   
+   ram_rom_a_12_  ..   ..   ..   ..    1    2   ..   ..   
+    cart_mode_0_  ..   ..    1    2   ..   ..    2    2   
+    cart_mode_1_  ..   ..    1    2   ..   ..    2    2   
+    oss_bank_12_  ..   ..    1    2   ..   ..   ..   ..   
+    oss_bank_13_  ..   ..    2    2   ..   ..   ..   ..   
+              rw   1    1    1    2   ..   ..    1    2   
+inst_cart_write_enable  ..   ..    2    2   ..   ..   ..   ..   
+ inst_sdx_enable  ..   ..    1    2   ..   ..   ..   ..   
+inst_flash_enable   1    1    2    2   ..   ..   ..   ..   
+   cart_bank_13_  ..   ..    2    2   ..   ..   ..   ..   
+            a_2_   0    0   ..   ..   ..   ..    1    1   
+            a_1_   0    0   ..   ..   ..   ..    1    1   
+            a_0_   0    0   ..   ..   ..   ..    1    1   
+inst_use_vector_bankno  ..   ..    1    1   ..   ..   ..   ..   
+inst_cart_mode_ram  ..   ..    1    1   ..   ..   ..   ..   
+   reset_cartemu  ..   ..   ..   ..    1    1   ..   ..   
+   cart_bank_14_  ..   ..    1    1   ..   ..   ..   ..   
+   cart_bank_15_  ..   ..    1    1   ..   ..   ..   ..   
+   cart_bank_16_  ..   ..    1    1   ..   ..   ..   ..   
+   cart_bank_17_  ..   ..    1    1   ..   ..   ..   ..   
+   cart_bank_18_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_ram_bank_12_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_ram_bank_13_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_ram_bank_14_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_ram_bank_15_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_ram_bank_16_  ..   ..    1    1   ..   ..   ..   ..   
+  inst_vector_a2  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_13_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_14_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_15_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_16_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_17_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_rom_bank_18_  ..   ..    1    1   ..   ..   ..   ..   
+freezer_state_0_  ..   ..    1    1   ..   ..    1    1   
+freezer_state_1_  ..   ..    1    1   ..   ..    1    1   
+cart_access_un13_flash_enable_n  ..   ..   ..   ..    1    1   ..   ..   

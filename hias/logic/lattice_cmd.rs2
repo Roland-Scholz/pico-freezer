@@ -1,0 +1,1 @@
+-src turbofreezerxl.tt4 -type PLA -devfile "D:\ispTOOLS4_1\ispcpld/dat/mach4a/mach463ace.dev" -lci "turbofreezerxl.lct" -touch "turbofreezerxl.tt4"

@@ -1,0 +1,217 @@
+;SEARCH BYTES COMMAND PROCESSOR
+
+COMSR LDA #'/
+      JSR MATCH
+      BCC COMSR0
+      LDX #0
+      STX SRADR
+      STX SRADR+1
+      STX SRMODE
+      DEX
+      STX SREND
+      STX SREND+1
+      BNE SRVAL1
+COMSR0 LDA #0
+      JSR MATCH
+      BCS COMSR1
+      JMP SRINIT
+COMSR1 STA SRADR
+      STX SRADR+1
+      LDA #0
+      STA SRMODE
+      LDA #',
+      JSR MATCH
+      BCS SRRANG
+      INC SRMODE
+      BNE SRGVAL
+SRRANG LDA #0
+      JSR MATCH
+      BCC SRXIT1
+      STA SREND
+      STX SREND+1
+SRGVAL LDA #'/
+      JSR MATCH
+      BCS SRVAL1
+SRXIT1 JMP DEBU3
+SRVAL1 LDA #0
+      STA SRCOUNT
+SRVLP LDA SRCOUNT
+      CMP #8
+      BEQ SRVAL2
+      LDA #',
+      JSR MATCH
+      BCC SRVAL3
+      LDX SRCOUNT
+      LDA #0
+      STA SRVAL,X
+      STA SRMSK,X
+      INC SRCOUNT
+      BNE SRVLP
+SRVAL3 LDA #0
+      JSR MATCH
+      BCC SRVAL2
+      LDX SRCOUNT
+      STA SRVAL,X
+      LDA #$FF
+      STA SRMSK,X
+      LDA #$26        ; check for &mask
+      JSR MATCH
+      BCC SRVAL4
+      LDA #0
+      JSR MATCH
+      BCC SRXIT2
+      LDX SRCOUNT
+      STA SRMSK,X
+SRVAL4 INC SRCOUNT
+      LDA #',
+      JSR MATCH
+      BCS SRVLP
+
+SRVAL2 LDA SRMODE
+      BEQ SREN1
+      SEC
+      LDA #1
+      SBC SRCOUNT
+      STA SREND
+      LDA #0
+      SBC #0
+      STA SREND+1
+      JMP SRINIT
+SREN1 CLC
+      LDA SREND
+      ADC #2
+      STA SRTMP
+      LDA SREND+1
+      ADC #0
+      STA SRTMP+1
+      SEC
+      LDA SRTMP
+      SBC SRCOUNT
+      STA SREND
+      LDA SRTMP+1
+      SBC #0
+      STA SREND+1
+
+SRINIT LDA SRCOUNT
+      BNE SRINI1
+SRXIT2 JMP DEBU3
+
+SRINI1 LDA SRADR+1
+      JSR SRGBUF
+      LDA SRADR
+      BEQ SRLOOP
+      CLC
+      LDA SRADR+1
+      ADC #1
+      JSR SRGBUF
+
+SRLOOP LDA IRQST
+      BPL SRXIT
+      LDA SRADR
+      BNE SRLOOP1
+      CLC
+      LDA SRADR+1
+      ADC #1
+      JSR SRGBUF
+      
+SRLOOP1 LDA SRADR
+      STA RPNT
+      LDA #>SRBUF1
+      STA RPNT+1
+      
+      LDY SRCOUNT
+      DEY
+SRMATLP LDA (RPNT),Y
+      AND SRMSK,Y
+      CMP SRVAL,Y
+      BNE SRNOMAT
+      DEY
+      BPL SRMATLP
+      JSR SRPMAT
+      JSR SRADV
+      BCS SRXIT
+      LDA SRMODE
+      BEQ SRLOOP
+      
+SRXIT LDA SRADR+1
+      STA RPNT+1 
+      JMP DEBU3
+
+SRNOMAT JSR SRADV
+      BCS SRXIT
+      BCC SRLOOP
+
+SRADV INC SRADR
+      BNE SRADV1
+      INC SRADR+1
+SRADV1 LDA SRADR+1
+      CMP SREND+1
+      BNE SRADV2
+      LDA SRADR
+      CMP SREND
+      BNE SRADV2
+      SEC
+      RTS
+SRADV2 CLC
+      RTS
+
+SRPMAT JSR SCROLL
+      LDA #$20
+      JSR PUTBYT
+      LDA SRADR
+      LDX SRADR+1
+      JSR PRTADR
+      LDA #$20
+      JSR PUTBYT
+
+      LDA #0
+      STA SRTMP
+SRPLP1 LDA #$20
+      JSR PUTBYT
+      LDY SRTMP
+      LDA (RPNT),Y
+      JSR PRTBYT
+      INC SRTMP
+      LDA SRTMP
+      CMP SRCOUNT
+      BNE SRPLP1
+      
+      SEC
+      LDA #8
+      SBC SRCOUNT
+      STA SRTMP
+      ASL
+      ADC SRTMP
+      STA SRTMP
+SRPLP2 DEC SRTMP
+      BMI SRPLP3
+      LDA #$20
+      JSR PUTBYT
+      JMP SRPLP2
+
+SRPLP3 LDA #0
+      STA SRTMP
+      LDA #$20
+      JSR PUTBYT
+
+SRPLP4 LDY SRTMP
+      LDA (RPNT),Y
+      JSR PUTBYT
+      INC SRTMP
+      LDA SRTMP
+      CMP SRCOUNT
+      BNE SRPLP4
+      RTS
+
+; move SRBUF2 to SRBUF1 and fill SRBUF2 with page=A
+
+SRGBUF STA RPNT+1
+      LDY #0
+      STY RPNT
+SRGBUF1 LDA SRBUF2,Y
+      STA SRBUF1,Y
+      INY
+      BNE SRGBUF1
+      TYA
+      JMP BLKGET
+

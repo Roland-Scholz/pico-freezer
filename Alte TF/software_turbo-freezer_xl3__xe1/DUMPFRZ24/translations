@@ -1,0 +1,26 @@
+#!/bin/sed -f
+s/I00/A4/g
+s/I01/A10/g
+s/I02/A6/g
+s/I03/A11/g
+s/I04/A9/g
+s/I05/A8/g
+s/I06/A5/g
+s/I07/A7/g
+s/I08/A12/g
+s/I09/A14/g
+s/I10/PHI2/g
+s/I11/A13/g
+s/I12/A15/g
+s/I13/RW/g
+s/I14/A3-button/g
+s/I15/OS-select/g
+s/F0/RAM-A7/g
+s/F1/RAM-A6/g
+s/F2/RAM-A5,ROM-A13/g
+s/F3/RAM-A4,ROM-A14/g
+s/F4/\/Refresh/g
+s/F5/\/RAM-CE/g
+s/F6/\/RAM-WE/g
+s/F7/\/ROM-CE/g
+

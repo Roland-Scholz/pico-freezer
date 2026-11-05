@@ -1,0 +1,68 @@
+	ROMBNK1 = $D77C
+	ROMBNK2 = $D77D
+	ROMBNK3 = $D77B
+	UNUSED  = $1234
+
+	RAMBNK	= $D780
+	VECTA4	= $D710
+
+	.MACRO B1JMP
+	.IF %0 <> 1
+	.ERROR "B1JMP needs one parameter"
+	.ELSE
+	STA ROMBNK1
+	JMP %1
+	.ENDIF
+	.ENDM
+
+	.MACRO B2JMP
+	.IF %0 <> 1
+	.ERROR "B2JMP needs one parameter"
+	.ELSE
+	STA ROMBNK2
+	JMP %1
+	.ENDIF
+	.ENDM
+
+	.MACRO B3JMP
+	.IF %0 <> 1
+	.ERROR "B3JMP needs one parameter"
+	.ELSE
+	STA ROMBNK3
+	JMP %1
+	.ENDIF
+	.ENDM
+
+	.MACRO B1JSR
+	.IF %0 <> 1
+	.ERROR "B1JSR needs one parameter"
+	.ELSE
+	STA ROMBNK1
+	JSR %1
+	STA ROMBNK1
+	RTS
+	.ENDIF
+	.ENDM
+
+	.MACRO B2JSR
+	.IF %0 <> 1
+	.ERROR "B2JSR needs one parameter"
+	.ELSE
+	STA ROMBNK2
+	JSR %1
+	STA ROMBNK2
+	RTS
+	.ENDIF
+	.ENDM
+
+	.MACRO B3JSR
+	.IF %0 <> 1
+	.ERROR "B3JSR needs one parameter"
+	.ELSE
+	STA ROMBNK3
+	JSR %1
+	STA ROMBNK3
+	RTS
+	.ENDIF
+	.ENDM
+
