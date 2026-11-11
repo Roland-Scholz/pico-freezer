@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "raspberry-pi.raspberry-pi-pico",
+        "dan-c-underwood.arm",
         "ms-vscode.cpptools",
         "ms-vscode.vscode-serial-monitor",
         "marus25.cortex-debug",

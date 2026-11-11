@@ -17,6 +17,7 @@ typedef struct
     uint32_t state;
     uint8_t *freezer_rom;
     uint8_t *freezer_ram;
+    uint8_t rom_bank;
 } vars_t;
 
 vars_t freezer_vars;
@@ -57,6 +58,7 @@ int main()
     freezer_vars.state = ST_DISABLED;
     freezer_vars.freezer_rom = freezer_rom_data;
     freezer_vars.freezer_ram = freezer_ram_data;
+    freezer_vars.rom_bank = 0;
 
     multicore_launch_core1(freezer_function);
 
