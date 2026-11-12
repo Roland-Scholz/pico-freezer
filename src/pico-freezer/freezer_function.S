@@ -32,7 +32,7 @@
 .equ MASK_8K, 0x00001fff
 .equ MASK_E000, 0x0000e000
 .equ MASK_0000, 0x00000000
-.equ MASK_2000, 0x00020000
+.equ MASK_2000, 0x00002000
 
 .equ FREEZER_STATE, 0x00
 .equ FREEZER_ROM, 0x04
@@ -219,8 +219,33 @@ wait_84ns:
 @ freezer enabled respond to
 @ RAM : $0000-$1FFF
 @ ROM : $2000-$3FFF
+@ 43-48 cycles from PHI2 low to this point
 @--------------------------------------------------
 do_enabled:
+
+    ldr r2, =MASK_E000              @ 2     
+    ands r3, r2                     @ 1
+    ldr r2, #0                      @ 1
+    cmp r3, r2                      @ 1
+    bne do_enabled_ram              @ 2     taken / 1 not taken
+
+    ldr r2, =MASK_2000              @ 2
+    cmp r3, r2                      @ 1
+    bne wait_phi2_high              @ 1/2
+
+do_enabled_rom:
+    ldr r2, =RW_MASK                @ 2     check if RW high
+    tst r0, r2                      @ 1
+    beq wait_phi2_high              @ 1/2   exit if low
+
+    ldr r2, =MASK_8K                @ 2
+    ands r0, r2                     @ 1
+    ldr r2, [r7, #FREEZER_ROM]      @ 2
+    ldrb r2, [r0, r2]               @ 2
+
+@
+
+do_enabled_ram:
 
 
     b state_done                    @ 2
